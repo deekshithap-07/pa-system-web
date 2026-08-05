@@ -1,0 +1,85 @@
+{
+  "meta": {
+    "title": "Transformation Scorecard",
+    "subtitle": "Institutional analytics across the PA network",
+    "period": "2024",
+    "lastUpdated": "2024-09-15"
+  },
+  "overview": {
+    "headline": "Measuring transformation across Africa",
+    "description": "The PA Transformation Scorecard aggregates ministry impact data across seven network countries — communities, households, projects, and leadership development. All figures are mock data for frontend demonstration; backend API integration points are marked throughout.",
+    "highlights": [
+      { "label": "Network countries", "value": "7" },
+      { "label": "Reporting period", "value": "Jan – Sep 2024" },
+      { "label": "Data sources", "value": "Field reports · Community surveys" }
+    ]
+  },
+  "kpis": [
+    { "id": "countries", "label": "Countries", "value": 7, "trend": "stable", "direction": "neutral" },
+    { "id": "communities", "label": "Communities", "value": 59, "trend": "+5", "direction": "up" },
+    { "id": "households", "label": "Households", "value": 253000, "trend": "+14%", "direction": "up" },
+    { "id": "projects", "label": "Active Projects", "value": 148, "trend": "+12", "direction": "up" },
+    { "id": "lives", "label": "Lives Impacted", "value": 335000, "trend": "+9%", "direction": "up" },
+    { "id": "shalom", "label": "Shalom Groups", "value": 86, "trend": "+8", "direction": "up" },
+    { "id": "leadership", "label": "Leadership Teams", "value": 59, "trend": "+4", "direction": "up" },
+    { "id": "growth", "label": "YoY Growth", "value": 0, "text": "+14%", "trend": "on track", "direction": "up" }
+  ],
+  "growthTrends": {
+    "communityGrowth": { "type": "line", "title": "Community Growth", "labels": ["2021", "2022", "2023", "2024"], "data": [32, 41, 52, 59], "color": "#002B5C" },
+    "householdReach": { "type": "area", "title": "Household Reach", "labels": ["2021", "2022", "2023", "2024"], "data": [120000, 165000, 210000, 253000], "color": "#009FDA" },
+    "shalomGroups": { "type": "line", "title": "Shalom Groups Over Time", "labels": ["2021", "2022", "2023", "2024"], "data": [28, 42, 68, 86], "color": "#002B5C" },
+    "projectDelivery": { "type": "bar", "title": "Project Delivery", "labels": ["Q1", "Q2", "Q3", "Q4"], "data": [28, 35, 42, 43], "color": "#0077B6" }
+  },
+  "countryStats": [
+    { "slug": "kenya", "name": "Kenya", "communities": 23, "pastors": 627, "households": 3, "shalomGroups": 2, "projects": 42, "growth": 14, "progress": 72, "status": "Active" },
+    { "slug": "malawi", "name": "Malawi", "communities": 21, "pastors": 754, "households": 0, "shalomGroups": 0, "projects": 38, "growth": 11, "progress": 68, "status": "Active" },
+    { "slug": "ethiopia", "name": "Ethiopia", "communities": 11, "households": 0, "projects": 28, "pastors": 272, "growth": 9, "progress": 55, "status": "Growing" },
+    { "slug": "zambia", "name": "Zambia", "communities": 10, "pastors": 224, "households": 0, "shalomGroups": 0, "projects": 14, "growth": 6, "progress": 41, "status": "Emerging" },
+    { "slug": "tanzania", "name": "Tanzania", "communities": 0, "households": 0, "projects": 6, "growth": 5, "progress": 28, "status": "Emerging" },
+    { "slug": "burundi", "name": "Burundi", "communities": 0, "households": 0, "projects": 2, "growth": 2, "progress": 18, "status": "Emerging" },
+    { "slug": "rwanda", "name": "Rwanda", "communities": 0, "households": 0, "projects": 4, "growth": 4, "progress": 22, "status": "Emerging" }
+  ],
+  "communityStats": [
+    { "name": "Kanana", "country": "Kenya", "catchment": "Kwale South", "households": 1, "progress": 81, "stage": "Implementation" },
+    { "name": "Dzombo", "country": "Kenya", "catchment": "Kwale South", "households": 0, "progress": 72, "stage": "Training" },
+    { "name": "Benga", "country": "Malawi", "catchment": "Nkhotakota South", "households": 0, "progress": 68, "stage": "Training" },
+    { "name": "Mare", "country": "Ethiopia", "catchment": "Hossana", "households": 0, "pastors": 36, "progress": 0, "stage": "Inactive" },
+    { "name": "Chaambwa", "country": "Zambia", "catchment": "—", "households": 0, "progress": 41, "stage": "Awareness" }
+  ],
+  "progressIndicators": [
+    { "id": "awareness", "label": "Awareness", "score": 88, "target": 90 },
+    { "id": "training", "label": "Training", "score": 74, "target": 80 },
+    { "id": "implementation", "label": "Implementation", "score": 62, "target": 75 },
+    { "id": "multiplication", "label": "Multiplication", "score": 45, "target": 60 }
+  ],
+  "comparisons": [
+    { "title": "Kenya vs Malawi", "metric": "Community growth", "a": { "label": "Kenya", "value": 23 }, "b": { "label": "Malawi", "value": 20 } },
+    { "title": "Household reach", "metric": "Top performers", "a": { "label": "Kenya", "value": "125K" }, "b": { "label": "Malawi", "value": "48K" } },
+    { "title": "Project density", "metric": "Projects per community", "a": { "label": "Kenya", "value": "1.8" }, "b": { "label": "Ethiopia", "value": "2.3" } }
+  ],
+  "performanceMetrics": [
+    { "sector": "Education", "score": 52, "trend": "+8%", "status": "improving" },
+    { "sector": "Health", "score": 41, "trend": "+5%", "status": "improving" },
+    { "sector": "Agriculture", "score": 78, "trend": "+18%", "status": "strong" },
+    { "sector": "Water", "score": 85, "trend": "+22%", "status": "strong" },
+    { "sector": "Livelihood", "score": 58, "trend": "+11%", "status": "improving" },
+    { "sector": "Leadership", "score": 67, "trend": "+4pts", "status": "on track" }
+  ],
+  "insights": [
+    { "id": "growth", "title": "Network Expansion", "metric": "59 communities", "score": 76, "trend": "+14%", "summary": "Community count grew 14% year-over-year across active catchments." },
+    { "id": "water", "title": "Water Infrastructure", "metric": "34 projects", "score": 85, "trend": "+22%", "summary": "Trench dam and borehole programmes driving strongest sector outcomes." },
+    { "id": "leadership", "title": "Pastor Leaders", "metric": "67 avg score", "score": 67, "trend": "+4pts", "summary": "Leadership development progressing through two-year journey framework." },
+    { "id": "livelihood", "title": "Economic Productivity", "metric": "86 CHIP groups", "score": 58, "trend": "+11%", "summary": "Person-to-person skill transfer accelerating household income." }
+  ],
+  "reports": [
+    { "id": "sep-2024", "title": "September 2024 Ministry Report", "summary": "Monthly field update across Kenya, Malawi, and Ethiopia.", "year": "2024", "type": "Monthly", "href": "#/resources" },
+    { "id": "annual-2024", "title": "Annual Transformation Report 2024", "summary": "Year-in-review across communities and leadership development.", "year": "2024", "type": "Annual", "href": "#/resources" },
+    { "id": "q3-2024", "title": "Q3 Performance Brief", "summary": "Quarterly KPI summary and catchment comparisons.", "year": "2024", "type": "Quarterly", "href": "#/resources" }
+  ],
+  "apiPlaceholders": [
+    { "endpoint": "GET /api/scorecard/overview", "description": "Aggregate KPIs and period metadata" },
+    { "endpoint": "GET /api/scorecard/countries", "description": "Country-level statistics and trends" },
+    { "endpoint": "GET /api/scorecard/communities", "description": "Community progress and journey stages" },
+    { "endpoint": "GET /api/scorecard/charts/{metric}", "description": "Time-series chart data by metric key" }
+  ]
+}

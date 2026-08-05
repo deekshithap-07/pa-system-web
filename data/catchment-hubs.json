@@ -1,0 +1,525 @@
+{
+  "hubs": {
+    "kwale-south": {
+      "catchmentId": "kwale_south",
+      "description": "Coastal Kenya catchment where pastor leaders coordinate five communities addressing water scarcity and economic resilience.",
+      "overview": "Kwale South is a PA catchment area spanning five communities along Kenya's coast. Pastor-led Shalom groups, PPP water projects, and CHIP economic programmes drive transformation. Kanana leads with the first irrigation PPP, while Dzombo and Vanga advance through training phases.",
+      "heroTagline": "Coastal Kenya · Kwale County",
+      "growthStatus": "Inactive",
+      "kpis": [
+        { "id": "communities", "label": "Communities", "value": 5, "trend": "stable", "direction": "neutral" },
+        { "id": "pastors", "label": "Pastors", "value": 168, "trend": "stable", "direction": "neutral" },
+        { "id": "shalom", "label": "Shalom Groups", "value": 1, "trend": "stable", "direction": "neutral" },
+        { "id": "households", "label": "Households", "value": 1, "trend": "stable", "direction": "neutral" },
+        { "id": "growth", "label": "Growth Status", "value": 0, "text": "Inactive", "direction": "neutral" }
+      ],
+      "activities": [
+        { "date": "2024-09-12", "community": "Kanana", "project": "Trench dam irrigation", "status": "Completed" },
+        { "date": "2024-09-05", "community": "Dzombo", "project": "Leadership training cohort", "status": "Ongoing" },
+        { "date": "2024-08-20", "community": "Vanga", "project": "Fishing cooperative setup", "status": "Active" },
+        { "date": "2024-08-10", "community": "Magombani", "project": "Youth mentoring launch", "status": "Active" }
+      ],
+      "insights": [
+        { "id": "education", "title": "Education", "metric": "2 school partnerships", "score": 45, "trend": "+10%", "summary": "After-school support through church-school partnerships in coastal communities." },
+        { "id": "health", "title": "Health", "metric": "1 health outreach", "score": 38, "trend": "new", "summary": "Nutrition awareness programmes through Shalom groups." },
+        { "id": "agriculture", "title": "Agriculture", "metric": "8 farming initiatives", "score": 75, "trend": "+20%", "summary": "Irrigation and crop diversification across Kwale South." },
+        { "id": "water", "title": "Water", "metric": "3 trench dam projects", "score": 90, "trend": "+35%", "summary": "Community-led water infrastructure addressing seasonal scarcity." },
+        { "id": "livelihood", "title": "Livelihood", "metric": "15 income activities", "score": 52, "trend": "+8%", "summary": "Fishing cooperatives and small business training." },
+        { "id": "leadership", "title": "Leadership", "metric": "73 avg score", "score": 73, "trend": "+4pts", "summary": "Pastor leader development across five communities." }
+      ],
+      "charts": {
+        "communityGrowth": { "type": "bar", "title": "Community Growth", "labels": ["2021", "2022", "2023", "2024"], "data": [3, 4, 5, 5], "color": "#002B5C" },
+        "householdReach": { "type": "area", "title": "Household Reach", "labels": ["2021", "2022", "2023", "2024"], "data": [0, 0, 0, 1], "color": "#009FDA" },
+        "projectProgress": { "type": "bar", "title": "Project Progress", "labels": ["Water", "Agriculture", "Economic", "Youth", "Health"], "data": [90, 75, 52, 45, 38], "color": "#009FDA" },
+        "leadershipDev": { "type": "line", "title": "Leadership Development", "labels": ["Jan", "Apr", "Jul", "Oct"], "data": [62, 68, 71, 73], "color": "#0077B6" }
+      },
+      "communityMap": {
+        "viewBox": "0 0 220 200",
+        "catchmentPath": "M20,30 L200,25 L205,175 L25,180 Z",
+        "communities": [
+          { "id": "dzombo", "slug": "dzombo", "name": "Dzombo", "path": "M30,120 L80,115 L85,165 L35,170 Z", "status": "Training", "progress": 72 },
+          { "id": "kanana", "slug": "kanana", "name": "Kanana", "path": "M90,100 L140,95 L145,150 L95,155 Z", "status": "Implementation", "progress": 81 },
+          { "id": "magombani", "slug": "magombani", "name": "Magombani", "path": "M150,110 L195,105 L190,160 L155,165 Z", "status": "Engagement", "progress": 65 },
+          { "id": "mwereni", "slug": "mwereni", "name": "Mwereni", "path": "M40,50 L90,45 L95,100 L45,105 Z", "status": "Awareness", "progress": 32 },
+          { "id": "vanga", "slug": "vanga", "name": "Vanga", "path": "M100,40 L150,35 L155,90 L105,95 Z", "status": "Training", "progress": 70 }
+        ]
+      },
+      "storyIds": ["story-kenya-dams"],
+      "reportIds": ["sep-2024"]
+    },
+    "nkhotakota-south": {
+      "catchmentId": "mw_nkhotakota_south",
+      "description": "Nkhotakota South catchment on the lakeshore with four communities.",
+      "overview": "Benga, Khwapu, Mkaika, and Mwansambo — 146 pastors across four lakeshore communities.",
+      "heroTagline": "Lakeshore Region · Nkhotakota",
+      "growthStatus": "Inactive",
+      "kpis": [
+        { "id": "communities", "label": "Communities", "value": 4, "trend": "stable", "direction": "neutral" },
+        { "id": "pastors", "label": "Pastors", "value": 146, "trend": "stable", "direction": "neutral" },
+        { "id": "shalom", "label": "Shalom Groups", "value": 0, "trend": "stable", "direction": "neutral" },
+        { "id": "households", "label": "Households", "value": 0, "trend": "—", "direction": "neutral" },
+        { "id": "growth", "label": "Growth Status", "value": 0, "text": "Inactive", "direction": "neutral" }
+      ],
+      "activities": [],
+      "insights": [],
+      "charts": {},
+      "communityMap": {
+        "viewBox": "0 0 200 180",
+        "catchmentPath": "M25,25 L175,20 L180,160 L30,165 Z",
+        "communities": [
+          { "id": "mw_benga", "slug": "benga", "name": "Benga", "path": "M30,120 L80,115 L85,165 L35,170 Z", "status": "Inactive", "progress": 0 },
+          { "id": "mw_khwapu", "slug": "khwapu", "name": "Khwapu", "path": "M90,100 L140,95 L145,150 L95,155 Z", "status": "Inactive", "progress": 0 },
+          { "id": "mw_mkaika", "slug": "mkaika", "name": "Mkaika", "path": "M150,110 L195,105 L190,160 L155,165 Z", "status": "Inactive", "progress": 0 },
+          { "id": "mw_mwansambo", "slug": "mwansambo", "name": "Mwansambo", "path": "M40,50 L90,45 L95,100 L45,105 Z", "status": "Inactive", "progress": 0 }
+        ]
+      },
+      "storyIds": ["story-malawi-mary"],
+      "reportIds": ["sep-2024", "aug-2024"]
+    },
+    "mwimba": {
+      "catchmentId": "mw_mwimba",
+      "description": "Mwimba catchment in Malawi's Central West region.",
+      "overview": "Chinkhoma, Kamphulu, Kawamba, and Njombwa — 151 pastors across four communities.",
+      "heroTagline": "Central West Region · Malawi",
+      "growthStatus": "Inactive",
+      "kpis": [
+        { "id": "communities", "label": "Communities", "value": 4, "trend": "stable", "direction": "neutral" },
+        { "id": "pastors", "label": "Pastors", "value": 151, "trend": "stable", "direction": "neutral" },
+        { "id": "shalom", "label": "Shalom Groups", "value": 0, "trend": "stable", "direction": "neutral" },
+        { "id": "households", "label": "Households", "value": 0, "trend": "—", "direction": "neutral" },
+        { "id": "growth", "label": "Growth Status", "value": 0, "text": "Inactive", "direction": "neutral" }
+      ],
+      "activities": [],
+      "insights": [],
+      "charts": {},
+      "communityMap": {
+        "viewBox": "0 0 220 200",
+        "catchmentPath": "M20,30 L200,25 L205,175 L25,180 Z",
+        "communities": [
+          { "id": "mw_chinkhoma", "slug": "chinkhoma", "name": "Chinkhoma", "path": "M30,120 L80,115 L85,165 L35,170 Z", "status": "Inactive", "progress": 0 },
+          { "id": "mw_kamphulu", "slug": "kamphulu", "name": "Kamphulu", "path": "M90,100 L140,95 L145,150 L95,155 Z", "status": "Inactive", "progress": 0 },
+          { "id": "mw_kawamba", "slug": "kawamba", "name": "Kawamba", "path": "M150,110 L195,105 L190,160 L155,165 Z", "status": "Inactive", "progress": 0 },
+          { "id": "mw_njombwa", "slug": "njombwa", "name": "Njombwa", "path": "M40,50 L90,45 L95,100 L45,105 Z", "status": "Inactive", "progress": 0 }
+        ]
+      },
+      "storyIds": [],
+      "reportIds": []
+    },
+    "kapiri": {
+      "catchmentId": "mw_kapiri",
+      "description": "Kapiri catchment in Malawi's Central West region.",
+      "overview": "Kamwendo, Kapiri, and Santhe — 144 pastors across three communities.",
+      "heroTagline": "Central West Region · Malawi",
+      "growthStatus": "Inactive",
+      "kpis": [
+        { "id": "communities", "label": "Communities", "value": 3, "trend": "stable", "direction": "neutral" },
+        { "id": "pastors", "label": "Pastors", "value": 144, "trend": "stable", "direction": "neutral" },
+        { "id": "shalom", "label": "Shalom Groups", "value": 0, "trend": "stable", "direction": "neutral" },
+        { "id": "households", "label": "Households", "value": 0, "trend": "—", "direction": "neutral" },
+        { "id": "growth", "label": "Growth Status", "value": 0, "text": "Inactive", "direction": "neutral" }
+      ],
+      "activities": [],
+      "insights": [],
+      "charts": {},
+      "communityMap": {
+        "viewBox": "0 0 220 200",
+        "catchmentPath": "M20,30 L200,25 L205,175 L25,180 Z",
+        "communities": [
+          { "id": "mw_kamwendo", "slug": "kamwendo", "name": "Kamwendo", "path": "M30,120 L80,115 L85,165 L35,170 Z", "status": "Inactive", "progress": 0 },
+          { "id": "mw_kapiri_community", "slug": "kapiri-community", "name": "Kapiri", "path": "M90,100 L140,95 L145,150 L95,155 Z", "status": "Inactive", "progress": 0 },
+          { "id": "mw_santhe", "slug": "santhe", "name": "Santhe", "path": "M150,110 L195,105 L190,160 L155,165 Z", "status": "Inactive", "progress": 0 }
+        ]
+      },
+      "storyIds": [],
+      "reportIds": []
+    },
+    "nkhotakota-central": {
+      "catchmentId": "mw_nkhotakota_central",
+      "description": "Nkhotakota-Central catchment on the lakeshore.",
+      "overview": "Chia, Linga, and Mpamantha — 114 pastors across three communities.",
+      "heroTagline": "Lakeshore Region · Nkhotakota",
+      "growthStatus": "Inactive",
+      "kpis": [
+        { "id": "communities", "label": "Communities", "value": 3, "trend": "stable", "direction": "neutral" },
+        { "id": "pastors", "label": "Pastors", "value": 114, "trend": "stable", "direction": "neutral" },
+        { "id": "shalom", "label": "Shalom Groups", "value": 0, "trend": "stable", "direction": "neutral" },
+        { "id": "households", "label": "Households", "value": 0, "trend": "—", "direction": "neutral" },
+        { "id": "growth", "label": "Growth Status", "value": 0, "text": "Inactive", "direction": "neutral" }
+      ],
+      "activities": [],
+      "insights": [],
+      "charts": {},
+      "communityMap": {
+        "viewBox": "0 0 220 200",
+        "catchmentPath": "M20,30 L200,25 L205,175 L25,180 Z",
+        "communities": [
+          { "id": "mw_chia", "slug": "chia", "name": "Chia", "path": "M30,120 L80,115 L85,165 L35,170 Z", "status": "Inactive", "progress": 0 },
+          { "id": "mw_linga", "slug": "linga", "name": "Linga", "path": "M90,100 L140,95 L145,150 L95,155 Z", "status": "Inactive", "progress": 0 },
+          { "id": "mw_mpamantha", "slug": "mpamantha", "name": "Mpamantha", "path": "M150,110 L195,105 L190,160 L155,165 Z", "status": "Inactive", "progress": 0 }
+        ]
+      },
+      "storyIds": [],
+      "reportIds": []
+    },
+    "kasiya": {
+      "catchmentId": "mw_kasiya",
+      "description": "Kasiya catchment in Malawi's Central West region.",
+      "overview": "Kabudula, Kasiya, and Malembo — 112 pastors across three communities.",
+      "heroTagline": "Central West Region · Malawi",
+      "growthStatus": "Inactive",
+      "kpis": [
+        { "id": "communities", "label": "Communities", "value": 3, "trend": "stable", "direction": "neutral" },
+        { "id": "pastors", "label": "Pastors", "value": 112, "trend": "stable", "direction": "neutral" },
+        { "id": "shalom", "label": "Shalom Groups", "value": 0, "trend": "stable", "direction": "neutral" },
+        { "id": "households", "label": "Households", "value": 0, "trend": "—", "direction": "neutral" },
+        { "id": "growth", "label": "Growth Status", "value": 0, "text": "Inactive", "direction": "neutral" }
+      ],
+      "activities": [],
+      "insights": [],
+      "charts": {},
+      "communityMap": {
+        "viewBox": "0 0 220 200",
+        "catchmentPath": "M20,30 L200,25 L205,175 L25,180 Z",
+        "communities": [
+          { "id": "mw_kabudula", "slug": "kabudula", "name": "Kabudula", "path": "M30,120 L80,115 L85,165 L35,170 Z", "status": "Inactive", "progress": 0 },
+          { "id": "mw_kasiya_community", "slug": "kasiya-community", "name": "Kasiya", "path": "M90,100 L140,95 L145,150 L95,155 Z", "status": "Inactive", "progress": 0 },
+          { "id": "mw_malembo", "slug": "malembo", "name": "Malembo", "path": "M150,110 L195,105 L190,160 L155,165 Z", "status": "Inactive", "progress": 0 }
+        ]
+      },
+      "storyIds": [],
+      "reportIds": []
+    },
+    "nkhotakota-north": {
+      "catchmentId": "mw_nkhotakota_north",
+      "description": "Nkhotakota-North catchment on the lakeshore.",
+      "overview": "Liwaladzi, Lozi, and Msenjere — 87 pastors across three communities.",
+      "heroTagline": "Lakeshore Region · Nkhotakota",
+      "growthStatus": "Inactive",
+      "kpis": [
+        { "id": "communities", "label": "Communities", "value": 3, "trend": "stable", "direction": "neutral" },
+        { "id": "pastors", "label": "Pastors", "value": 87, "trend": "stable", "direction": "neutral" },
+        { "id": "shalom", "label": "Shalom Groups", "value": 0, "trend": "stable", "direction": "neutral" },
+        { "id": "households", "label": "Households", "value": 0, "trend": "—", "direction": "neutral" },
+        { "id": "growth", "label": "Growth Status", "value": 0, "text": "Inactive", "direction": "neutral" }
+      ],
+      "activities": [],
+      "insights": [],
+      "charts": {},
+      "communityMap": {
+        "viewBox": "0 0 220 200",
+        "catchmentPath": "M20,30 L200,25 L205,175 L25,180 Z",
+        "communities": [
+          { "id": "mw_liwaladzi", "slug": "liwaladzi", "name": "Liwaladzi", "path": "M30,120 L80,115 L85,165 L35,170 Z", "status": "Inactive", "progress": 0 },
+          { "id": "mw_lozi", "slug": "lozi", "name": "Lozi", "path": "M90,100 L140,95 L145,150 L95,155 Z", "status": "Inactive", "progress": 0 },
+          { "id": "mw_msenjere", "slug": "msenjere", "name": "Msenjere", "path": "M150,110 L195,105 L190,160 L155,165 Z", "status": "Inactive", "progress": 0 }
+        ]
+      },
+      "storyIds": [],
+      "reportIds": []
+    },
+    "kajiado": {
+      "catchmentId": "kajiado",
+      "description": "Kajiado catchment spanning six communities in Kenya's rift valley pastoral region.",
+      "overview": "Kajiado catchment coordinates pastor leaders across six communities focused on livestock, agriculture, and leadership development. Koitiko has reached multiplication stage with a livestock cooperative PPP.",
+      "heroTagline": "Rift Valley · Kajiado County",
+      "growthStatus": "Inactive",
+      "kpis": [
+        { "id": "communities", "label": "Communities", "value": 6, "trend": "stable", "direction": "neutral" },
+        { "id": "pastors", "label": "Pastors", "value": 123, "trend": "stable", "direction": "neutral" },
+        { "id": "shalom", "label": "Shalom Groups", "value": 0, "trend": "stable", "direction": "neutral" },
+        { "id": "households", "label": "Households", "value": 0, "trend": "—", "direction": "neutral" },
+        { "id": "growth", "label": "Growth Status", "value": 0, "text": "Inactive", "direction": "neutral" }
+      ],
+      "activities": [
+        { "date": "2024-09-05", "community": "Koitiko", "project": "Livestock cooperative", "status": "Active" },
+        { "date": "2024-08-15", "community": "Isinya", "project": "Agriculture training", "status": "Ongoing" }
+      ],
+      "insights": [
+        { "id": "education", "title": "Education", "metric": "3 partnerships", "score": 50, "trend": "+5%", "summary": "School support programmes." },
+        { "id": "health", "title": "Health", "metric": "2 outreaches", "score": 42, "trend": "+3%", "summary": "Community health awareness." },
+        { "id": "agriculture", "title": "Agriculture", "metric": "10 farming groups", "score": 70, "trend": "+12%", "summary": "Pastoral and crop diversification." },
+        { "id": "water", "title": "Water", "metric": "4 initiatives", "score": 48, "trend": "+6%", "summary": "Water access for livestock." },
+        { "id": "livelihood", "title": "Livelihood", "metric": "20 income activities", "score": 62, "trend": "+10%", "summary": "Livestock cooperatives and trade." },
+        { "id": "leadership", "title": "Leadership", "metric": "71 avg score", "score": 71, "trend": "+3pts", "summary": "Strong pastoral leadership network." }
+      ],
+      "charts": {
+        "communityGrowth": { "type": "bar", "title": "Community Growth", "labels": ["2021", "2022", "2023", "2024"], "data": [4, 5, 5, 6], "color": "#002B5C" },
+        "householdReach": { "type": "area", "title": "Household Reach", "labels": ["2021", "2022", "2023", "2024"], "data": [0, 0, 0, 0], "color": "#009FDA" },
+        "projectProgress": { "type": "bar", "title": "Project Progress", "labels": ["Livestock", "Agriculture", "Leadership", "Water"], "data": [78, 70, 71, 48], "color": "#009FDA" },
+        "leadershipDev": { "type": "line", "title": "Leadership Development", "labels": ["Jan", "Apr", "Jul", "Oct"], "data": [60, 65, 68, 71], "color": "#0077B6" }
+      },
+      "communityMap": {
+        "viewBox": "0 0 220 200",
+        "catchmentPath": "M20,30 L200,25 L205,175 L25,180 Z",
+        "communities": [
+          { "id": "isinya", "slug": "isinya", "name": "Isinya", "path": "M30,100 L80,95 L85,150 L35,155 Z", "status": "Inactive", "progress": 0 },
+          { "id": "isinet", "slug": "isinet", "name": "Isinet", "path": "M90,110 L140,105 L145,160 L95,165 Z", "status": "Inactive", "progress": 0 },
+          { "id": "koitiko", "slug": "koitiko", "name": "Koitiko", "path": "M150,90 L200,85 L195,140 L155,145 Z", "status": "Inactive", "progress": 0 },
+          { "id": "oloshaiki", "slug": "oloshaiki", "name": "Oloshaiki", "path": "M40,50 L90,45 L95,100 L45,105 Z", "status": "Inactive", "progress": 0 },
+          { "id": "olugulului", "slug": "olugulului", "name": "Olugulului", "path": "M100,40 L150,35 L155,90 L105,95 Z", "status": "Inactive", "progress": 0 },
+          { "id": "skarida", "slug": "skarida", "name": "Skarida", "path": "M160,50 L200,45 L195,100 L165,105 Z", "status": "Inactive", "progress": 0 }
+        ]
+      },
+      "storyIds": [],
+      "reportIds": ["sep-2024"]
+    },
+    "kwale-west": {
+      "catchmentId": "kwale_west",
+      "description": "Kwale West catchment with four coastal communities.",
+      "overview": "Kwale West spans Kilibasi, Mackinnon Road, Samburu, and Taru. Tracking data shows 163 pastors across four communities.",
+      "heroTagline": "Coastal Kenya · Kwale County",
+      "growthStatus": "Inactive",
+      "kpis": [
+        { "id": "communities", "label": "Communities", "value": 4, "trend": "stable", "direction": "neutral" },
+        { "id": "pastors", "label": "Pastors", "value": 163, "trend": "stable", "direction": "neutral" },
+        { "id": "shalom", "label": "Shalom Groups", "value": 1, "trend": "stable", "direction": "neutral" },
+        { "id": "households", "label": "Households", "value": 2, "trend": "stable", "direction": "neutral" },
+        { "id": "growth", "label": "Growth Status", "value": 0, "text": "Inactive", "direction": "neutral" }
+      ],
+      "activities": [],
+      "insights": [],
+      "charts": {},
+      "communityMap": {
+        "viewBox": "0 0 220 200",
+        "catchmentPath": "M20,30 L200,25 L205,175 L25,180 Z",
+        "communities": [
+          { "id": "kilibasi", "slug": "kilibasi", "name": "Kilibasi", "path": "M30,120 L80,115 L85,165 L35,170 Z", "status": "Inactive", "progress": 0 },
+          { "id": "mackinnon-road", "slug": "mackinnon-road", "name": "Mackinnon Road", "path": "M90,100 L140,95 L145,150 L95,155 Z", "status": "Inactive", "progress": 0 },
+          { "id": "samburu", "slug": "samburu", "name": "Samburu", "path": "M150,110 L195,105 L190,160 L155,165 Z", "status": "Inactive", "progress": 0 },
+          { "id": "taru", "slug": "taru", "name": "Taru", "path": "M40,50 L90,45 L95,100 L45,105 Z", "status": "Inactive", "progress": 0 }
+        ]
+      },
+      "storyIds": [],
+      "reportIds": []
+    },
+    "baringo": {
+      "catchmentId": "baringo",
+      "description": "Baringo catchment with four communities in the Rift Valley.",
+      "overview": "Baringo includes Eldama Ravine, Kabarnet, Keiyo South, and Marigat — 104 pastors across four communities.",
+      "heroTagline": "Rift Valley · Baringo County",
+      "growthStatus": "Inactive",
+      "kpis": [
+        { "id": "communities", "label": "Communities", "value": 4, "trend": "stable", "direction": "neutral" },
+        { "id": "pastors", "label": "Pastors", "value": 104, "trend": "stable", "direction": "neutral" },
+        { "id": "shalom", "label": "Shalom Groups", "value": 0, "trend": "stable", "direction": "neutral" },
+        { "id": "households", "label": "Households", "value": 0, "trend": "—", "direction": "neutral" },
+        { "id": "growth", "label": "Growth Status", "value": 0, "text": "Inactive", "direction": "neutral" }
+      ],
+      "activities": [],
+      "insights": [],
+      "charts": {},
+      "communityMap": {
+        "viewBox": "0 0 220 200",
+        "catchmentPath": "M20,30 L200,25 L205,175 L25,180 Z",
+        "communities": [
+          { "id": "eldama-ravine", "slug": "eldama-ravine", "name": "Eldama Ravine", "path": "M30,120 L80,115 L85,165 L35,170 Z", "status": "Inactive", "progress": 0 },
+          { "id": "kabarnet", "slug": "kabarnet", "name": "Kabarnet", "path": "M90,100 L140,95 L145,150 L95,155 Z", "status": "Inactive", "progress": 0 },
+          { "id": "keiyo-south", "slug": "keiyo-south", "name": "Keiyo South", "path": "M150,110 L195,105 L190,160 L155,165 Z", "status": "Inactive", "progress": 0 },
+          { "id": "marigat", "slug": "marigat", "name": "Marigat", "path": "M40,50 L90,45 L95,100 L45,105 Z", "status": "Inactive", "progress": 0 }
+        ]
+      },
+      "storyIds": [],
+      "reportIds": []
+    },
+    "kericho": {
+      "catchmentId": "kericho",
+      "description": "Kericho catchment with four communities in the highlands.",
+      "overview": "Kericho includes Chebwagan, Kabartegan, Kipkelion West, and Roret — 69 pastors across four communities.",
+      "heroTagline": "Highlands · Kericho County",
+      "growthStatus": "Inactive",
+      "kpis": [
+        { "id": "communities", "label": "Communities", "value": 4, "trend": "stable", "direction": "neutral" },
+        { "id": "pastors", "label": "Pastors", "value": 69, "trend": "stable", "direction": "neutral" },
+        { "id": "shalom", "label": "Shalom Groups", "value": 0, "trend": "stable", "direction": "neutral" },
+        { "id": "households", "label": "Households", "value": 0, "trend": "—", "direction": "neutral" },
+        { "id": "growth", "label": "Growth Status", "value": 0, "text": "Inactive", "direction": "neutral" }
+      ],
+      "activities": [],
+      "insights": [],
+      "charts": {},
+      "communityMap": {
+        "viewBox": "0 0 220 200",
+        "catchmentPath": "M20,30 L200,25 L205,175 L25,180 Z",
+        "communities": [
+          { "id": "chebwagan", "slug": "chebwagan", "name": "Chebwagan", "path": "M30,120 L80,115 L85,165 L35,170 Z", "status": "Inactive", "progress": 0 },
+          { "id": "kabartegan", "slug": "kabartegan", "name": "Kabartegan", "path": "M90,100 L140,95 L145,150 L95,155 Z", "status": "Inactive", "progress": 0 },
+          { "id": "kipkelion-west", "slug": "kipkelion-west", "name": "Kipkelion West", "path": "M150,110 L195,105 L190,160 L155,165 Z", "status": "Inactive", "progress": 0 },
+          { "id": "roret", "slug": "roret", "name": "Roret", "path": "M40,50 L90,45 L95,100 L45,105 Z", "status": "Inactive", "progress": 0 }
+        ]
+      },
+      "storyIds": [],
+      "reportIds": []
+    },
+    "eastern-province": {
+      "catchmentId": "zm_eastern_province",
+      "description": "Eastern Province catchment in Zambia.",
+      "overview": "Nyimba, Petauke, and Sinda — 84 pastors across three communities.",
+      "heroTagline": "Eastern Province · Zambia",
+      "growthStatus": "Inactive",
+      "kpis": [
+        { "id": "communities", "label": "Communities", "value": 3, "trend": "stable", "direction": "neutral" },
+        { "id": "pastors", "label": "Pastors", "value": 84, "trend": "stable", "direction": "neutral" },
+        { "id": "shalom", "label": "Shalom Groups", "value": 0, "trend": "stable", "direction": "neutral" },
+        { "id": "households", "label": "Households", "value": 0, "trend": "—", "direction": "neutral" },
+        { "id": "growth", "label": "Growth Status", "value": 0, "text": "Inactive", "direction": "neutral" }
+      ],
+      "activities": [],
+      "insights": [],
+      "charts": {},
+      "communityMap": {
+        "viewBox": "0 0 220 200",
+        "catchmentPath": "M20,30 L200,25 L205,175 L25,180 Z",
+        "communities": [
+          { "id": "zm_nyimba", "slug": "nyimba", "name": "Nyimba", "path": "M30,120 L80,115 L85,165 L35,170 Z", "status": "Inactive", "progress": 0 },
+          { "id": "zm_petauke", "slug": "petauke", "name": "Petauke", "path": "M90,100 L140,95 L145,150 L95,155 Z", "status": "Inactive", "progress": 0 },
+          { "id": "zm_sinda", "slug": "sinda", "name": "Sinda", "path": "M150,110 L195,105 L190,160 L155,165 Z", "status": "Inactive", "progress": 0 }
+        ]
+      },
+      "storyIds": [],
+      "reportIds": []
+    },
+    "copperbelt": {
+      "catchmentId": "zm_copperbelt",
+      "description": "Copperbelt catchment in Zambia.",
+      "overview": "Baluba, Kawama, and Masaiti — 73 pastors across three communities.",
+      "heroTagline": "Copperbelt · Zambia",
+      "growthStatus": "Inactive",
+      "kpis": [
+        { "id": "communities", "label": "Communities", "value": 3, "trend": "stable", "direction": "neutral" },
+        { "id": "pastors", "label": "Pastors", "value": 73, "trend": "stable", "direction": "neutral" },
+        { "id": "shalom", "label": "Shalom Groups", "value": 0, "trend": "stable", "direction": "neutral" },
+        { "id": "households", "label": "Households", "value": 0, "trend": "—", "direction": "neutral" },
+        { "id": "growth", "label": "Growth Status", "value": 0, "text": "Inactive", "direction": "neutral" }
+      ],
+      "activities": [],
+      "insights": [],
+      "charts": {},
+      "communityMap": {
+        "viewBox": "0 0 220 200",
+        "catchmentPath": "M20,30 L200,25 L205,175 L25,180 Z",
+        "communities": [
+          { "id": "zm_baluba", "slug": "baluba", "name": "Baluba", "path": "M30,120 L80,115 L85,165 L35,170 Z", "status": "Inactive", "progress": 0 },
+          { "id": "zm_kawama", "slug": "kawama", "name": "Kawama", "path": "M90,100 L140,95 L145,150 L95,155 Z", "status": "Inactive", "progress": 0 },
+          { "id": "zm_masaiti", "slug": "masaiti", "name": "Masaiti", "path": "M150,110 L195,105 L190,160 L155,165 Z", "status": "Inactive", "progress": 0 }
+        ]
+      },
+      "storyIds": [],
+      "reportIds": []
+    },
+    "central-province": {
+      "catchmentId": "zm_central_province",
+      "description": "Central Province catchment in Zambia.",
+      "overview": "Luano, Mkushi, Nangoma, and Serenje — 67 pastors across four communities.",
+      "heroTagline": "Central Province · Zambia",
+      "growthStatus": "Inactive",
+      "kpis": [
+        { "id": "communities", "label": "Communities", "value": 4, "trend": "stable", "direction": "neutral" },
+        { "id": "pastors", "label": "Pastors", "value": 67, "trend": "stable", "direction": "neutral" },
+        { "id": "shalom", "label": "Shalom Groups", "value": 0, "trend": "stable", "direction": "neutral" },
+        { "id": "households", "label": "Households", "value": 0, "trend": "—", "direction": "neutral" },
+        { "id": "growth", "label": "Growth Status", "value": 0, "text": "Inactive", "direction": "neutral" }
+      ],
+      "activities": [],
+      "insights": [],
+      "charts": {},
+      "communityMap": {
+        "viewBox": "0 0 220 200",
+        "catchmentPath": "M20,30 L200,25 L205,175 L25,180 Z",
+        "communities": [
+          { "id": "zm_luano", "slug": "luano", "name": "Luano", "path": "M30,120 L80,115 L85,165 L35,170 Z", "status": "Inactive", "progress": 0 },
+          { "id": "zm_mkushi", "slug": "mkushi", "name": "Mkushi", "path": "M90,100 L140,95 L145,150 L95,155 Z", "status": "Inactive", "progress": 0 },
+          { "id": "zm_nangoma", "slug": "nangoma", "name": "Nangoma", "path": "M150,110 L195,105 L190,160 L155,165 Z", "status": "Inactive", "progress": 0 },
+          { "id": "zm_serenje", "slug": "serenje", "name": "Serenje", "path": "M40,50 L90,45 L95,100 L45,105 Z", "status": "Inactive", "progress": 0 }
+        ]
+      },
+      "storyIds": [],
+      "reportIds": []
+    },
+    "hossana": {
+      "catchmentId": "et_hossana",
+      "description": "Hossana catchment in southern Ethiopia with five pastor-led communities.",
+      "overview": "Hossana spans five communities — Belesa/Lemo, Jajura, Mare, Misha/Wasgebtea, and Soro/Gimbichu. All communities are currently inactive in the tracking dashboard with 121 pastors across the catchment.",
+      "heroTagline": "Southern Ethiopia · Hossana",
+      "growthStatus": "Inactive",
+      "kpis": [
+        { "id": "communities", "label": "Communities", "value": 5, "trend": "stable", "direction": "neutral" },
+        { "id": "pastors", "label": "Pastors", "value": 121, "trend": "stable", "direction": "neutral" },
+        { "id": "shalom", "label": "Shalom Groups", "value": 0, "trend": "stable", "direction": "neutral" },
+        { "id": "households", "label": "Households", "value": 0, "trend": "stable", "direction": "neutral" },
+        { "id": "growth", "label": "Growth Status", "value": 0, "text": "Inactive", "direction": "neutral" }
+      ],
+      "activities": [],
+      "insights": [],
+      "charts": {},
+      "communityMap": {
+        "viewBox": "0 0 220 200",
+        "catchmentPath": "M20,30 L200,25 L205,175 L25,180 Z",
+        "communities": [
+          { "id": "et_belesa_lemo", "slug": "belesa-lemo", "name": "Belesa/Lemo", "path": "M30,120 L80,115 L85,165 L35,170 Z", "status": "Inactive", "progress": 0 },
+          { "id": "et_jajura", "slug": "jajura", "name": "Jajura", "path": "M90,100 L140,95 L145,150 L95,155 Z", "status": "Inactive", "progress": 0 },
+          { "id": "et_mare", "slug": "mare", "name": "Mare", "path": "M150,110 L195,105 L190,160 L155,165 Z", "status": "Inactive", "progress": 0 },
+          { "id": "et_misha_wasgebtea", "slug": "misha-wasgebtea", "name": "Misha/Wasgebtea", "path": "M40,50 L90,45 L95,100 L45,105 Z", "status": "Inactive", "progress": 0 },
+          { "id": "et_soro_gimbichu", "slug": "soro-gimbichu", "name": "Soro/Gimbichu", "path": "M100,40 L150,35 L155,90 L105,95 Z", "status": "Inactive", "progress": 0 }
+        ]
+      },
+      "storyIds": [],
+      "reportIds": []
+    },
+    "gurage": {
+      "catchmentId": "et_gurage",
+      "description": "Gurage catchment with three pastor-led communities in central Ethiopia.",
+      "overview": "Gurage includes Agena/Ezha, Embdiber/Cheha, and Gumer — 63 pastors across three communities. All currently inactive in the dashboard.",
+      "heroTagline": "Central Ethiopia · Gurage",
+      "growthStatus": "Inactive",
+      "kpis": [
+        { "id": "communities", "label": "Communities", "value": 3, "trend": "stable", "direction": "neutral" },
+        { "id": "pastors", "label": "Pastors", "value": 63, "trend": "stable", "direction": "neutral" },
+        { "id": "shalom", "label": "Shalom Groups", "value": 0, "trend": "stable", "direction": "neutral" },
+        { "id": "households", "label": "Households", "value": 0, "trend": "stable", "direction": "neutral" },
+        { "id": "growth", "label": "Growth Status", "value": 0, "text": "Inactive", "direction": "neutral" }
+      ],
+      "activities": [],
+      "insights": [],
+      "charts": {},
+      "communityMap": {
+        "viewBox": "0 0 220 200",
+        "catchmentPath": "M20,30 L200,25 L205,175 L25,180 Z",
+        "communities": [
+          { "id": "et_agena_ezha", "slug": "agena-ezha", "name": "Agena/Ezha", "path": "M30,120 L90,115 L95,175 L35,180 Z", "status": "Inactive", "progress": 0 },
+          { "id": "et_embdiber_cheha", "slug": "embdiber-cheha", "name": "Embdiber/Cheha", "path": "M100,100 L160,95 L165,165 L105,170 Z", "status": "Inactive", "progress": 0 },
+          { "id": "et_gumer", "slug": "gumer", "name": "Gumer", "path": "M165,40 L200,35 L195,95 L170,100 Z", "status": "Inactive", "progress": 0 }
+        ]
+      },
+      "storyIds": [],
+      "reportIds": []
+    },
+    "durame": {
+      "catchmentId": "et_durame",
+      "description": "Durame catchment with three communities in the Kembata region.",
+      "overview": "Durame includes Damboya, Kedida Gemela, and Shinshicho — 88 pastors across three communities. All currently inactive in the dashboard.",
+      "heroTagline": "Southern Ethiopia · Durame",
+      "growthStatus": "Inactive",
+      "kpis": [
+        { "id": "communities", "label": "Communities", "value": 3, "trend": "stable", "direction": "neutral" },
+        { "id": "pastors", "label": "Pastors", "value": 88, "trend": "stable", "direction": "neutral" },
+        { "id": "shalom", "label": "Shalom Groups", "value": 0, "trend": "stable", "direction": "neutral" },
+        { "id": "households", "label": "Households", "value": 0, "trend": "stable", "direction": "neutral" },
+        { "id": "growth", "label": "Growth Status", "value": 0, "text": "Inactive", "direction": "neutral" }
+      ],
+      "activities": [],
+      "insights": [],
+      "charts": {},
+      "communityMap": {
+        "viewBox": "0 0 220 200",
+        "catchmentPath": "M20,30 L200,25 L205,175 L25,180 Z",
+        "communities": [
+          { "id": "et_damboya", "slug": "damboya", "name": "Damboya", "path": "M30,120 L90,115 L95,175 L35,180 Z", "status": "Inactive", "progress": 0 },
+          { "id": "et_kedida_gemela", "slug": "kedida-gemela", "name": "Kedida Gemela", "path": "M100,100 L160,95 L165,165 L105,170 Z", "status": "Inactive", "progress": 0 },
+          { "id": "et_shinshicho", "slug": "shinshicho", "name": "Shinshicho", "path": "M165,40 L200,35 L195,95 L170,100 Z", "status": "Inactive", "progress": 0 }
+        ]
+      },
+      "storyIds": [],
+      "reportIds": []
+    }
+  }
+}

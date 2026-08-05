@@ -1,0 +1,90 @@
+{
+  "categories": [
+    { "id": "reports", "title": "Ministry Reports", "description": "Monthly, quarterly, and annual field reports from across the PA network.", "icon": "📊" },
+    { "id": "case-studies", "title": "Case Studies", "description": "Documented transformation outcomes with measurable community impact.", "icon": "📋" },
+    { "id": "insights", "title": "Structured Insights", "description": "Downloadable analysis packs — trends, comparisons, and performance data.", "icon": "💡" },
+    { "id": "programmes", "title": "Programme Materials", "description": "Leadership, discipleship, economic productivity, youth, and citizenship resources.", "icon": "🎯" }
+  ],
+  "programs": [
+    "Transformational Leadership",
+    "Discipleship",
+    "Economic Productivity",
+    "Youth Mentoring",
+    "Responsible Citizenship"
+  ],
+  "focusAreas": [
+    { "id": "reports", "label": "Ministry Reports", "href": "#res-catalog" },
+    { "id": "case-studies", "label": "Case Studies", "href": "#res-case-studies" },
+    { "id": "programmes", "label": "Programme Materials", "href": "#res-categories" }
+  ],
+  "socialLinks": [
+    { "id": "facebook", "label": "Facebook", "href": "https://www.facebook.com/PossibilitiesAfricaPA" },
+    { "id": "x", "label": "X", "href": "https://x.com/PossibilitiesK" },
+    { "id": "youtube", "label": "YouTube", "href": "https://www.youtube.com/@possibilitiesafrica5288" },
+    { "id": "instagram", "label": "Instagram", "href": "https://www.instagram.com/possibilitiesafrica/" }
+  ],
+  "caseStudies": [
+    {
+      "id": "cs-kwale-water",
+      "slug": "kwale-water-resilience",
+      "title": "Water resilience in Kwale South",
+      "type": "case-study",
+      "program": "Responsible Citizenship",
+      "countryId": "ken",
+      "catchmentId": "kwale_south",
+      "summary": "Trench dam construction across five communities reduced seasonal water scarcity and enabled year-round irrigation.",
+      "outcomes": ["14 water initiatives", "34 farming groups formed", "22% household income increase"],
+      "downloadUrl": "#download-insight-pack"
+    },
+    {
+      "id": "cs-malawi-economic",
+      "slug": "malawi-economic-productivity",
+      "title": "Economic productivity in Nkhotakota",
+      "type": "case-study",
+      "program": "Economic Productivity",
+      "countryId": "mw",
+      "catchmentId": "mw_nkhotakota_south",
+      "summary": "Person-to-person skill transfer and cooperative models lifted household income in Benga and surrounding communities.",
+      "outcomes": ["210 income activities", "Scone business model replicated", "18% agriculture sector growth"],
+      "downloadUrl": "#download-insight-pack"
+    },
+    {
+      "id": "cs-ethiopia-leadership",
+      "slug": "ethiopia-pastor-leadership",
+      "title": "Pastor leadership amid conflict",
+      "type": "case-study",
+      "program": "Transformational Leadership",
+      "countryId": "et",
+      "catchmentId": null,
+      "summary": "Pastor-led networks sustained community engagement and discipleship programmes through conflict-affected regions.",
+      "outcomes": ["12 active communities", "Leadership score avg 55", "Shalom groups forming"],
+      "downloadUrl": "#download-insight-pack"
+    }
+  ],
+  "insightPacks": [
+    {
+      "id": "pack-network-2024",
+      "title": "Network Performance Pack 2024",
+      "description": "Aggregate KPIs, country stats, and growth trends across all PA network countries.",
+      "format": "JSON",
+      "size": "24 KB",
+      "topics": ["KPIs", "Trends", "Country comparison"]
+    },
+    {
+      "id": "pack-shalom-trends",
+      "title": "Shalom Groups Trend Analysis",
+      "description": "Time-series data on Shalom group formation and household reach expansion.",
+      "format": "JSON",
+      "size": "8 KB",
+      "topics": ["Shalom groups", "Household reach"]
+    },
+    {
+      "id": "pack-cbc-readiness",
+      "title": "CBC Index & Readiness Levels",
+      "description": "Community Balanced Scorecard scores and journey-stage readiness by community.",
+      "format": "JSON",
+      "size": "12 KB",
+      "topics": ["CBC", "Readiness", "Journey stages"]
+    }
+  ]
+}

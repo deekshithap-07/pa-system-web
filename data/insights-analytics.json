@@ -1,0 +1,100 @@
+{
+  "meta": {
+    "title": "Analysis & Insights",
+    "subtitle": "Trends, comparisons, and performance scoring across the PA network",
+    "period": "2021 – 2024",
+    "lastUpdated": "2024-09-15"
+  },
+  "trendAnalysis": {
+    "shalomGroups": {
+      "type": "line",
+      "title": "Shalom Groups Over Time",
+      "description": "Growth of Shalom groups across the PA network — a key indicator of community cohesion and discipleship depth.",
+      "labels": ["2021", "2022", "2023", "2024"],
+      "data": [28, 42, 68, 86],
+      "color": "#002B5C"
+    },
+    "householdReach": {
+      "type": "area",
+      "title": "Household Reach Expansion",
+      "description": "Cumulative households engaged in transformation programmes across all network countries.",
+      "labels": ["2021", "2022", "2023", "2024"],
+      "data": [120000, 165000, 210000, 253000],
+      "color": "#009FDA"
+    },
+    "resourceMobilization": {
+      "type": "bar",
+      "title": "Resource Mobilization by Programme",
+      "description": "Projects and resources mobilized across programme areas — guides where investment is needed.",
+      "labels": ["Leadership", "Discipleship", "Economic", "Youth", "Citizenship"],
+      "data": [28, 22, 34, 18, 26],
+      "color": "#0077B6"
+    }
+  },
+  "countryComparison": {
+    "metrics": ["communities", "households", "projects", "growth", "shalomGroups", "leadershipScore"],
+    "metricLabels": {
+      "communities": "Communities",
+      "households": "Households",
+      "projects": "Projects",
+      "growth": "Growth %",
+      "shalomGroups": "Shalom Groups",
+      "leadershipScore": "Leadership Score"
+    },
+    "countries": [
+      { "slug": "kenya", "name": "Kenya", "communities": 23, "households": 125000, "projects": 42, "growth": 14, "shalomGroups": 48, "leadershipScore": 74 },
+      { "slug": "malawi", "name": "Malawi", "communities": 21, "households": 0, "pastors": 754, "projects": 38, "growth": 11, "shalomGroups": 0, "leadershipScore": 68 },
+      { "slug": "ethiopia", "name": "Ethiopia", "communities": 11, "households": 0, "projects": 28, "growth": 9, "pastors": 272, "shalomGroups": 0, "leadershipScore": 55 },
+      { "slug": "zambia", "name": "Zambia", "communities": 10, "households": 0, "pastors": 224, "projects": 14, "growth": 6, "shalomGroups": 0, "leadershipScore": 41 }
+    ]
+  },
+  "communityComparison": {
+    "communities": [
+      { "id": "kanana", "name": "Kanana", "country": "Kenya", "catchment": "Kwale South", "households": 1, "shalomGroups": 5, "shalomLeaders": 42, "leadershipScore": 81, "stage": "Implementation", "projects": 3, "growth": 18 },
+      { "id": "dzombo", "name": "Dzombo", "country": "Kenya", "catchment": "Kwale South", "households": 0, "shalomGroups": 3, "shalomLeaders": 38, "leadershipScore": 72, "stage": "Training", "projects": 2, "growth": 12 },
+      { "id": "magombani", "name": "Magombani", "country": "Kenya", "catchment": "Kwale South", "households": 0, "shalomGroups": 2, "shalomLeaders": 35, "leadershipScore": 65, "stage": "Engagement", "projects": 1, "growth": 8 },
+      { "id": "mw_benga", "name": "Benga", "country": "Malawi", "catchment": "Nkhotakota South", "households": 0, "shalomGroups": 0, "pastors": 42, "leadershipScore": 0, "stage": "Inactive", "projects": 0, "growth": -5 },
+      { "id": "koitiko", "name": "Koitiko", "country": "Kenya", "catchment": "Kajiado", "households": 0, "shalomGroups": 6, "shalomLeaders": 50, "leadershipScore": 88, "stage": "Multiplication", "projects": 4, "growth": 22 }
+    ]
+  },
+  "cbcIndex": {
+    "title": "Community Balanced Scorecard (CBC) Visual Index",
+    "description": "Holistic community performance across six transformation dimensions. Scores are aggregated from field tracking data.",
+    "dimensions": [
+      { "id": "spiritual", "label": "Spiritual Formation", "score": 78, "trend": "+6%" },
+      { "id": "leadership", "label": "Leadership Development", "score": 67, "trend": "+4pts" },
+      { "id": "economic", "label": "Economic Productivity", "score": 58, "trend": "+11%" },
+      { "id": "social", "label": "Social Cohesion", "score": 72, "trend": "+8%" },
+      { "id": "citizenship", "label": "Responsible Citizenship", "score": 65, "trend": "+9%" },
+      { "id": "youth", "label": "Youth Engagement", "score": 54, "trend": "+7%" }
+    ],
+    "communityScores": [
+      { "name": "Kanana", "country": "Kenya", "overall": 81, "spiritual": 85, "leadership": 81, "economic": 78, "social": 82, "citizenship": 76, "youth": 68 },
+      { "name": "Koitiko", "country": "Kenya", "overall": 88, "spiritual": 90, "leadership": 88, "economic": 85, "social": 86, "citizenship": 82, "youth": 74 },
+      { "name": "Benga", "country": "Malawi", "overall": 82, "spiritual": 84, "leadership": 82, "economic": 80, "social": 79, "citizenship": 75, "youth": 70 }
+    ]
+  },
+  "readinessLevels": {
+    "title": "Community Readiness Levels",
+    "description": "Journey-stage readiness framework — from Awareness through Multiplication. Communities progress as leadership, groups, and projects mature.",
+    "stages": [
+      { "id": "awareness", "label": "Awareness", "description": "Community identified; initial pastor engagement", "count": 8, "avgScore": 42, "color": "#94a3b8" },
+      { "id": "engagement", "label": "Engagement", "description": "Active participation; Shalom groups forming", "count": 12, "avgScore": 58, "color": "#009FDA" },
+      { "id": "training", "label": "Training", "description": "Structured leadership and discipleship programmes", "count": 18, "avgScore": 71, "color": "#0077B6" },
+      { "id": "implementation", "label": "Implementation", "description": "PPP projects active; measurable household outcomes", "count": 14, "avgScore": 79, "color": "#002B5C" },
+      { "id": "multiplication", "label": "Multiplication", "description": "Replicating transformation in neighbouring communities", "count": 7, "avgScore": 88, "color": "#16a34a" }
+    ],
+    "progressDrivers": [
+      { "driver": "Pastor leadership engagement", "impact": "high", "correlation": 0.84 },
+      { "driver": "Shalom group formation", "impact": "high", "correlation": 0.79 },
+      { "driver": "Water & agriculture PPPs", "impact": "medium", "correlation": 0.71 },
+      { "driver": "Youth mentoring programmes", "impact": "medium", "correlation": 0.62 }
+    ]
+  },
+  "whyProgressing": [
+    { "area": "Kwale South, Kenya", "reason": "Strong pastor leadership + water PPPs driving fastest household reach growth (+22%).", "score": 85 },
+    { "area": "Kajiado, Kenya", "reason": "Livestock cooperatives and multiplication-stage communities (Koitiko) accelerating replication.", "score": 82 },
+    { "area": "Nkhotakota South, Malawi", "reason": "Economic productivity programmes showing highest CBC economic dimension scores.", "score": 78 },
+    { "area": "Ethiopia network", "reason": "Emerging Shalom groups; leadership training correlates with engagement stage advancement.", "score": 55 }
+  ]
+}

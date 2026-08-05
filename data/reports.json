@@ -1,0 +1,8 @@
+{
+  "reports": [
+    { "id": "sep-2024", "slug": "september-2024", "title": "September '24 Ministry Report", "type": "monthly", "period": "2024-09", "summary": "Field updates from Kenya, Ethiopia, Malawi and Zambia.", "downloadUrl": "#", "countryIds": ["ken", "et", "mw", "zm"], "program": null },
+    { "id": "aug-2024", "slug": "august-2024", "title": "August 2024 Ministry Report", "type": "monthly", "period": "2024-08", "summary": "Holistic ministry outcomes across seven nations.", "downloadUrl": "#", "countryIds": ["ken", "et", "mw", "zm", "bi", "rw", "tz"], "program": null },
+    { "id": "annual-2024", "slug": "annual-2024", "title": "Annual Impact Summary 2024", "type": "annual", "period": "2024", "summary": "Year-over-year impact metrics and programme highlights.", "downloadUrl": "#", "countryIds": ["ken", "mw", "et", "zm"], "program": null },
+    { "id": "q3-2024", "slug": "q3-2024", "title": "Q3 Performance Brief", "type": "quarterly", "period": "2024-Q3", "summary": "Quarterly KPI summary and catchment comparisons.", "downloadUrl": "#", "countryIds": ["ken", "mw", "et"], "program": null }
+  ]
+}

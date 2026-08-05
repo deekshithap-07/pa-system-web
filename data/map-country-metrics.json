@@ -1,0 +1,16 @@
+{
+  "metrics": {
+    "KE": { "households": 125000, "projects": 42, "growth": 14, "status": "Active", "latestUpdate": "2024-09-12", "progress": 72 },
+    "MW": { "households": 48000, "projects": 38, "growth": 11, "status": "Active", "latestUpdate": "2024-09-08", "progress": 68 },
+    "ET": { "households": 0, "projects": 28, "pastors": 272, "communities": 11, "growth": 9, "status": "Growing", "latestUpdate": "2026-07-17", "progress": 55 },
+    "ZM": { "households": 12000, "projects": 14, "growth": 6, "status": "Emerging", "latestUpdate": "2024-08-22", "progress": 41 },
+    "BI": { "households": 0, "projects": 2, "growth": 2, "status": "Emerging", "latestUpdate": "2024-07-15", "progress": 18 },
+    "RW": { "households": 0, "projects": 4, "growth": 4, "status": "Emerging", "latestUpdate": "2024-07-10", "progress": 22 },
+    "TZ": { "households": 0, "projects": 6, "growth": 5, "status": "Emerging", "latestUpdate": "2024-08-01", "progress": 28 },
+    "NG": { "households": 0, "projects": 0, "growth": 0, "status": "Context", "latestUpdate": null, "progress": 0 },
+    "ZA": { "households": 0, "projects": 0, "growth": 0, "status": "Context", "latestUpdate": null, "progress": 0 },
+    "EG": { "households": 0, "projects": 0, "growth": 0, "status": "Context", "latestUpdate": null, "progress": 0 },
+    "GH": { "households": 0, "projects": 0, "growth": 0, "status": "Context", "latestUpdate": null, "progress": 0 },
+    "UG": { "households": 0, "projects": 0, "growth": 0, "status": "Context", "latestUpdate": null, "progress": 0 }
+  }
+}

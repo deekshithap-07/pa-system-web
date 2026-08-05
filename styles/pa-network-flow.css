@@ -1,0 +1,451 @@
+/* ==========================================================================
+   PA Network Flow — horizontal flowing flowchart
+   PA → Country → Catchment → Community
+   ========================================================================== */
+
+.pa-flow {
+  position: relative;
+  padding: 5rem 0 5.5rem;
+  background: linear-gradient(180deg, #f4f7fb 0%, #eef2f7 45%, #f8fafc 100%);
+  overflow: hidden;
+}
+
+.pa-flow__bg {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.pa-flow__ring {
+  position: absolute;
+  left: 50%;
+  top: 48%;
+  transform: translate(-50%, -50%);
+  border: 1px solid rgba(0, 43, 92, 0.06);
+  border-radius: 50%;
+}
+
+.pa-flow__ring--1 { width: 520px; height: 520px; }
+.pa-flow__ring--2 { width: 780px; height: 780px; opacity: 0.7; }
+.pa-flow__ring--3 { width: 1040px; height: 1040px; opacity: 0.45; }
+
+.pa-flow__inner {
+  position: relative;
+  z-index: 1;
+}
+
+.pa-flow__head {
+  text-align: center;
+  max-width: 40rem;
+  margin: 0 auto 2.5rem;
+}
+
+.pa-flow__head h2 {
+  font-size: clamp(1.6rem, 3.2vw, 2.35rem);
+  font-weight: 700;
+  color: var(--pa-navy);
+  letter-spacing: -0.02em;
+  margin-top: 0.35rem;
+  line-height: 1.15;
+}
+
+.pa-flow__desc {
+  margin-top: 0.65rem;
+  color: var(--pa-muted);
+  font-size: 0.95rem;
+  line-height: 1.65;
+}
+
+/* ---- Horizontal row ---- */
+
+.pa-flow__canvas {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 0 0.5rem;
+}
+
+.pa-flow__row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: nowrap;
+  gap: 0;
+  padding: 1rem 0 0.5rem;
+}
+
+/* ---- Cards ---- */
+
+.pa-flow__card {
+  position: relative;
+  flex: 0 0 auto;
+  width: 148px;
+  background: #fff;
+  border-radius: 18px;
+  padding: 1rem 0.85rem;
+  border: 1px solid rgba(0, 43, 92, 0.08);
+  box-shadow: 0 8px 28px rgba(0, 43, 92, 0.07);
+  text-align: center;
+  opacity: 0.35;
+  transform: scale(0.94);
+  transition: box-shadow 0.35s ease, border-color 0.35s ease;
+}
+
+.pa-flow__card:first-child {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.pa-flow__card.is-lit {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.pa-flow__card.is-active {
+  border-color: rgba(0, 159, 218, 0.35);
+  box-shadow: 0 12px 36px rgba(0, 159, 218, 0.18);
+}
+
+.pa-flow__card-glow {
+  position: absolute;
+  inset: -2px;
+  border-radius: 20px;
+  background: radial-gradient(circle at 50% 0%, rgba(0, 159, 218, 0.2), transparent 70%);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.4s ease;
+}
+
+.pa-flow__card.is-active .pa-flow__card-glow {
+  opacity: 1;
+}
+
+.pa-flow.is-looping .pa-flow__card.is-active .pa-flow__card-glow {
+  animation: pa-flow-glow-pulse 1.2s ease;
+}
+
+@keyframes pa-flow-glow-pulse {
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 1; }
+}
+
+.pa-flow__card:hover {
+  transform: translateY(-4px) scale(1);
+  box-shadow: 0 14px 36px rgba(0, 43, 92, 0.11);
+}
+
+.pa-flow__card--root {
+  border-color: rgba(0, 159, 218, 0.25);
+  box-shadow: 0 10px 32px rgba(0, 159, 218, 0.12);
+}
+
+.pa-flow__card--country { border-top: 3px solid var(--pa-blue); }
+.pa-flow__card--catchment { border-top: 3px solid rgba(0, 119, 182, 0.55); }
+.pa-flow__card--community {
+  border-top: 3px solid rgba(0, 159, 218, 0.45);
+  width: 158px;
+}
+
+.pa-flow__card-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.4rem;
+  height: 2.4rem;
+  border-radius: 12px;
+  background: linear-gradient(135deg, var(--pa-navy), #0a4a8a);
+  color: #fff;
+  font-size: 0.72rem;
+  font-weight: 700;
+  margin-bottom: 0.45rem;
+  transition: transform 0.35s ease;
+}
+
+.pa-flow__card.is-active .pa-flow__card-icon {
+  transform: scale(1.08);
+}
+
+.pa-flow__card--root .pa-flow__card-icon {
+  background: linear-gradient(135deg, var(--pa-blue), #0077b6);
+}
+
+.pa-flow__card--catchment .pa-flow__card-icon,
+.pa-flow__card--community .pa-flow__card-icon {
+  width: 2rem;
+  height: 2rem;
+  font-size: 0.65rem;
+  background: linear-gradient(135deg, #0077b6, #009fda);
+}
+
+.pa-flow__card-label {
+  font-size: 0.74rem;
+  font-weight: 700;
+  color: var(--pa-navy);
+  line-height: 1.25;
+}
+
+.pa-flow__card-desc {
+  margin-top: 0.25rem;
+  font-size: 0.62rem;
+  color: var(--pa-muted);
+  line-height: 1.35;
+}
+
+.pa-flow__card-tags {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.3rem;
+  margin-top: 0.45rem;
+}
+
+.pa-flow__tag {
+  display: inline-block;
+  font-size: 0.55rem;
+  font-weight: 600;
+  padding: 0.15rem 0.4rem;
+  border-radius: 999px;
+  line-height: 1.2;
+}
+
+.pa-flow__tag--hh {
+  background: rgba(92, 158, 173, 0.15);
+  color: #3d7a8a;
+}
+
+.pa-flow__tag--ps {
+  background: rgba(0, 43, 92, 0.08);
+  color: var(--pa-navy);
+}
+
+/* ---- Flowing connectors ---- */
+
+.pa-flow__connector {
+  flex: 0 0 52px;
+  height: 12px;
+  position: relative;
+  overflow: visible;
+}
+
+.pa-flow__connector-track,
+.pa-flow__connector-progress {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  height: 2px;
+  margin-top: -1px;
+  border-radius: 1px;
+}
+
+.pa-flow__connector-track {
+  background: repeating-linear-gradient(
+    90deg,
+    rgba(0, 43, 92, 0.15) 0,
+    rgba(0, 43, 92, 0.15) 5px,
+    transparent 5px,
+    transparent 10px
+  );
+}
+
+.pa-flow__connector-progress {
+  transform: scaleX(0);
+  transform-origin: left center;
+  background: linear-gradient(90deg, var(--pa-blue), #0077b6);
+  box-shadow: 0 0 8px rgba(0, 159, 218, 0.35);
+}
+
+.pa-flow.is-complete .pa-flow__connector-progress {
+  transform: scaleX(1);
+}
+
+.pa-flow__pulse {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 10px;
+  height: 10px;
+  margin: -5px 0 0 -5px;
+  border-radius: 50%;
+  background: var(--pa-blue);
+  border: 2px solid #fff;
+  box-shadow: 0 0 0 2px rgba(0, 159, 218, 0.25), 0 2px 8px rgba(0, 159, 218, 0.4);
+  opacity: 0;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.pa-flow.is-looping .pa-flow__connector-track {
+  animation: pa-flow-march 1.2s linear infinite;
+}
+
+@keyframes pa-flow-march {
+  from { background-position: 0 0; }
+  to { background-position: 20px 0; }
+}
+
+/* ---- Legend ---- */
+
+.pa-flow__legend {
+  text-align: center;
+  margin-top: 1.75rem;
+  font-size: 0.72rem;
+  color: var(--pa-muted);
+  line-height: 1.6;
+  max-width: 36rem;
+  margin-left: auto;
+  margin-right: auto;
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.pa-flow.is-complete .pa-flow__legend {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.pa-flow__legend strong {
+  color: var(--pa-navy);
+  font-weight: 600;
+}
+
+/* ---- CTA ---- */
+
+.pa-flow__footer {
+  text-align: center;
+  margin-top: 2.5rem;
+}
+
+.pa-flow__cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.65rem;
+  padding: 0.75rem 1.35rem 0.75rem 1.5rem;
+  border-radius: 999px;
+  background: var(--pa-navy);
+  color: #fff;
+  font-size: 0.875rem;
+  font-weight: 600;
+  text-decoration: none;
+  box-shadow: 0 8px 24px rgba(0, 43, 92, 0.2);
+  transition: transform 0.2s, box-shadow 0.2s, background 0.2s;
+}
+
+.pa-flow__cta:hover {
+  background: #003d7a;
+  transform: translateY(-2px);
+  box-shadow: 0 12px 28px rgba(0, 43, 92, 0.25);
+  text-decoration: none;
+  color: #fff;
+}
+
+.pa-flow__cta-arrow {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.75rem;
+  height: 1.75rem;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.15);
+  font-size: 1rem;
+  transition: transform 0.2s;
+}
+
+.pa-flow__cta:hover .pa-flow__cta-arrow {
+  transform: translateX(3px);
+}
+
+/* ---- Responsive ---- */
+
+@media (max-width: 700px) {
+  .pa-flow__row {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .pa-flow__connector {
+    flex: none;
+    width: 12px;
+    height: 40px;
+  }
+
+  .pa-flow__connector-track,
+  .pa-flow__connector-progress {
+    left: 50%;
+    right: auto;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    height: auto;
+    margin: 0 0 0 -1px;
+  }
+
+  .pa-flow__connector-progress {
+    transform: scaleY(0);
+    transform-origin: center top;
+  }
+
+  .pa-flow.is-complete .pa-flow__connector-progress {
+    transform: scaleY(1);
+  }
+
+  .pa-flow__pulse {
+    left: 50%;
+    top: 0;
+    margin: -5px 0 0 -5px;
+  }
+
+  .pa-flow.is-looping .pa-flow__connector-track {
+    animation: pa-flow-march-v 1.2s linear infinite;
+  }
+
+  @keyframes pa-flow-march-v {
+    from { background-position: 0 0; }
+    to { background-position: 0 20px; }
+  }
+
+  .pa-flow__connector-track {
+    background: repeating-linear-gradient(
+      180deg,
+      rgba(0, 43, 92, 0.15) 0,
+      rgba(0, 43, 92, 0.15) 5px,
+      transparent 5px,
+      transparent 10px
+    );
+  }
+
+  .pa-flow__connector-progress {
+    background: linear-gradient(180deg, var(--pa-blue), #0077b6);
+  }
+
+  .pa-flow__card,
+  .pa-flow__card--community {
+    width: min(220px, 100%);
+  }
+}
+
+@media (max-width: 560px) {
+  .pa-flow { padding: 3.5rem 0 4rem; }
+  .pa-flow__ring--1 { width: 320px; height: 320px; }
+  .pa-flow__ring--2,
+  .pa-flow__ring--3 { display: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pa-flow__card,
+  .pa-flow__legend {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  .pa-flow__connector-progress {
+    transform: scaleX(1) !important;
+  }
+
+  .pa-flow__pulse,
+  .pa-flow.is-looping .pa-flow__connector-track {
+    animation: none !important;
+    display: none;
+  }
+}

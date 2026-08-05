@@ -1,0 +1,183 @@
+/* ==========================================================================
+   Homepage — Simplified IA (Hero + Impact Overview)
+   ========================================================================== */
+
+.home-page {
+  background: var(--pa-white);
+  min-height: calc(100vh - var(--header-h));
+}
+
+/* ---- Section 1: Hero Placeholder ---- */
+.home-hero {
+  position: relative;
+  min-height: 52vh;
+  display: flex;
+  align-items: flex-end;
+  padding-top: var(--header-h);
+  overflow: hidden;
+}
+
+.home-hero__bg {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, #e8ecf0 0%, #d4dce6 50%, #c5d0dc 100%);
+  display: grid;
+  place-items: center;
+}
+
+.home-hero__bg-label {
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: rgba(0, 43, 92, 0.35);
+}
+
+.home-hero__content {
+  position: relative;
+  z-index: 1;
+  padding: 3rem 0 3.5rem;
+  max-width: 44rem;
+}
+
+.home-hero__title {
+  font-size: clamp(2rem, 4.5vw, 3rem);
+  font-weight: 700;
+  color: var(--pa-navy);
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+}
+
+.home-hero__desc {
+  margin-top: 1rem;
+  font-size: 1rem;
+  line-height: 1.65;
+  color: var(--pa-slate);
+}
+
+.home-hero__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 1.75rem;
+}
+
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.65rem 1.25rem;
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  border: 1px solid rgba(0, 43, 92, 0.2);
+  background: white;
+  color: var(--pa-navy);
+  text-decoration: none;
+  transition: border-color 0.2s, color 0.2s;
+}
+
+.btn-secondary:hover {
+  border-color: var(--pa-blue);
+  color: var(--pa-blue);
+  text-decoration: none;
+}
+
+/* ---- Section 2: Impact Overview ---- */
+.impact-overview {
+  padding: 4.5rem 0 5rem;
+  background: var(--pa-bg);
+}
+
+.impact-overview__head {
+  text-align: center;
+  max-width: 32rem;
+  margin: 0 auto 2.5rem;
+}
+
+.impact-overview__head h2 {
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  font-weight: 700;
+  color: var(--pa-navy);
+  letter-spacing: -0.02em;
+}
+
+.impact-overview__head p {
+  margin-top: 0.5rem;
+  color: var(--pa-muted);
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
+.impact-kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 1rem;
+  max-width: 960px;
+  margin: 0 auto;
+}
+
+.impact-kpi {
+  background: white;
+  border-radius: var(--radius);
+  padding: 1.5rem 1.25rem;
+  text-align: center;
+  border: 1px solid rgba(0, 43, 92, 0.06);
+  box-shadow: var(--shadow);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.impact-kpi:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+}
+
+.impact-kpi__value {
+  display: block;
+  font-size: clamp(1.75rem, 3vw, 2.25rem);
+  font-weight: 700;
+  color: var(--pa-blue);
+  font-variant-numeric: tabular-nums;
+  line-height: 1.2;
+}
+
+.impact-kpi__label {
+  display: block;
+  margin-top: 0.35rem;
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--pa-muted);
+  line-height: 1.35;
+}
+
+.impact-overview__cta {
+  text-align: center;
+  margin-top: 2.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.impact-overview__model-link {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--pa-blue);
+  text-decoration: none;
+}
+
+.impact-overview__model-link:hover {
+  text-decoration: underline;
+}
+
+.impact-overview__cta .btn {
+  padding: 0.7rem 1.75rem;
+  border-radius: 999px;
+}
+
+@media (max-width: 640px) {
+  .home-hero { min-height: 44vh; }
+  .impact-kpi-grid { grid-template-columns: repeat(2, 1fr); }
+}

@@ -1,0 +1,143 @@
+/* ==========================================================================
+   Catchment Hub — Phase 4
+   Extends country-hub patterns for catchment-level drill-down
+   ========================================================================== */
+
+.ch-hero__parent {
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.65);
+  margin-bottom: 0.5rem;
+}
+
+.ch-hero__parent a {
+  color: var(--pa-blue);
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.ch-hero__parent a:hover {
+  text-decoration: underline;
+}
+
+.cth-summary-section .ch-summary {
+  margin-bottom: 1.25rem;
+}
+
+.cth-kpi-wrap {
+  margin-top: 0.5rem;
+}
+
+.cth-kpi-wrap .ch-kpi-grid {
+  margin-top: 0;
+}
+
+/* Catchment outline on community map */
+.cth-catchment-outline {
+  fill: rgba(0, 43, 92, 0.06);
+  stroke: var(--pa-navy);
+  stroke-width: 2;
+}
+
+.cth-community-path {
+  fill: rgba(0, 159, 218, 0.4);
+  stroke: white;
+  stroke-width: 1.5;
+  cursor: pointer;
+  transition: fill 0.2s;
+}
+
+.cth-community-path.is-hovered,
+.cth-community-path:hover {
+  fill: var(--pa-blue);
+}
+
+.cth-community-path:focus-visible {
+  outline: 2px solid var(--pa-blue);
+  outline-offset: 2px;
+}
+
+/* Community list cards */
+.cth-community-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 1rem;
+}
+
+.cth-community-card {
+  background: white;
+  border-radius: var(--radius);
+  padding: 1.15rem;
+  border: 1px solid rgba(0, 43, 92, 0.06);
+  box-shadow: var(--shadow);
+  transition: border-color 0.15s, transform 0.15s;
+}
+
+.cth-community-card:hover {
+  border-color: var(--pa-blue);
+  transform: translateY(-2px);
+}
+
+.cth-community-card__head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 0.5rem;
+}
+
+.cth-community-card__head h3 {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--pa-navy);
+}
+
+.cth-community-card__eyebrow {
+  font-size: 0.62rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--pa-blue);
+  margin-bottom: 0.15rem;
+}
+
+.cth-community-card__status {
+  font-size: 0.6rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  padding: 0.15rem 0.4rem;
+  border-radius: 3px;
+  background: var(--pa-blue-light);
+  color: var(--pa-blue);
+  white-space: nowrap;
+}
+
+.cth-community-card__stats {
+  display: flex;
+  gap: 1rem;
+  margin-top: 0.5rem;
+  font-size: 0.8rem;
+  color: var(--pa-slate);
+}
+
+.cth-community-card__stats strong {
+  color: var(--pa-navy);
+}
+
+.cth-community-card__link {
+  display: inline-block;
+  margin-top: 0.65rem;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--pa-blue);
+  text-decoration: none;
+}
+
+.cth-community-card__link:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 640px) {
+  .cth-community-card__stats {
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+}

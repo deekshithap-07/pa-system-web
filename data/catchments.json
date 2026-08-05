@@ -1,0 +1,22 @@
+{
+  "catchments": [
+    { "id": "kwale_south", "slug": "kwale-south", "countryId": "ken", "name": "Kwale South", "region": "Kenya", "status": "inactive", "summary": { "communities": 5, "shalomGroups": 1, "pastors": 168, "households": 1 } },
+    { "id": "kwale_west", "slug": "kwale-west", "countryId": "ken", "name": "Kwale West", "region": "Kenya", "status": "inactive", "summary": { "communities": 4, "shalomGroups": 1, "pastors": 163, "households": 2 } },
+    { "id": "kajiado", "slug": "kajiado", "countryId": "ken", "name": "Kajiado", "region": "Kajiado Region", "status": "inactive", "summary": { "communities": 6, "shalomGroups": 0, "pastors": 123, "households": 0 } },
+    { "id": "baringo", "slug": "baringo", "countryId": "ken", "name": "Baringo", "region": "Kenya", "status": "inactive", "summary": { "communities": 4, "shalomGroups": 0, "pastors": 104, "households": 0 } },
+    { "id": "kericho", "slug": "kericho", "countryId": "ken", "name": "Kericho", "region": "Kericho Region", "status": "inactive", "summary": { "communities": 4, "shalomGroups": 0, "pastors": 69, "households": 0 } },
+    { "id": "mw_mwimba", "slug": "mwimba", "countryId": "mw", "name": "Mwimba", "region": "Central West Region", "status": "inactive", "summary": { "communities": 4, "shalomGroups": 0, "pastors": 151, "households": 0 } },
+    { "id": "mw_nkhotakota_south", "slug": "nkhotakota-south", "countryId": "mw", "name": "Nkhotakota South", "region": "Lakeshore Region", "status": "inactive", "summary": { "communities": 4, "shalomGroups": 0, "pastors": 146, "households": 0 } },
+    { "id": "mw_kapiri", "slug": "kapiri", "countryId": "mw", "name": "Kapiri", "region": "Central West Region", "status": "inactive", "summary": { "communities": 3, "shalomGroups": 0, "pastors": 144, "households": 0 } },
+    { "id": "mw_nkhotakota_central", "slug": "nkhotakota-central", "countryId": "mw", "name": "Nkhotakota-Central", "region": "Lakeshore Region", "status": "inactive", "summary": { "communities": 3, "shalomGroups": 0, "pastors": 114, "households": 0 } },
+    { "id": "mw_kasiya", "slug": "kasiya", "countryId": "mw", "name": "Kasiya", "region": "Central West Region", "status": "inactive", "summary": { "communities": 3, "shalomGroups": 0, "pastors": 112, "households": 0 } },
+    { "id": "mw_nkhotakota_north", "slug": "nkhotakota-north", "countryId": "mw", "name": "Nkhotakota-North", "region": "Lakeshore Region", "status": "inactive", "summary": { "communities": 3, "shalomGroups": 0, "pastors": 87, "households": 0 } },
+    { "id": "zm_eastern_province", "slug": "eastern-province", "countryId": "zm", "name": "Eastern Province", "region": "Zambia", "status": "inactive", "summary": { "communities": 3, "shalomGroups": 0, "pastors": 84, "households": 0 } },
+    { "id": "zm_copperbelt", "slug": "copperbelt", "countryId": "zm", "name": "Copperbelt", "region": "Zambia", "status": "inactive", "summary": { "communities": 3, "shalomGroups": 0, "pastors": 73, "households": 0 } },
+    { "id": "zm_central_province", "slug": "central-province", "countryId": "zm", "name": "Central Province", "region": "Zambia", "status": "inactive", "summary": { "communities": 4, "shalomGroups": 0, "pastors": 67, "households": 0 } },
+
+    { "id": "et_hossana", "slug": "hossana", "countryId": "et", "name": "Hossana", "region": "Ethiopia", "status": "inactive", "summary": { "communities": 5, "shalomGroups": 0, "pastors": 121, "households": 0 } },
+    { "id": "et_gurage", "slug": "gurage", "countryId": "et", "name": "Gurage", "region": "Ethiopia", "status": "inactive", "summary": { "communities": 3, "shalomGroups": 0, "pastors": 63, "households": 0 } },
+    { "id": "et_durame", "slug": "durame", "countryId": "et", "name": "Durame", "region": "Ethiopia", "status": "inactive", "summary": { "communities": 3, "shalomGroups": 0, "pastors": 88, "households": 0 } }
+  ]
+}

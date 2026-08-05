@@ -1,0 +1,363 @@
+/* ==========================================================================
+   About / Ministry Model page (Sections 8–11)
+   ========================================================================== */
+
+.about-page {
+  padding-top: var(--header-h);
+}
+
+.about-hero {
+  background: linear-gradient(135deg, var(--pa-navy), #003d7a);
+  color: white;
+  padding: 3rem 0 2.5rem;
+}
+
+.about-hero h1 {
+  font-size: clamp(1.75rem, 4vw, 2.25rem);
+  font-weight: 700;
+  margin: 0.35rem 0;
+}
+
+.about-hero__tagline {
+  font-size: 1.05rem;
+  line-height: 1.65;
+  max-width: 42rem;
+  margin-top: 0.75rem;
+  color: rgba(255, 255, 255, 0.92);
+}
+
+.about-hero__sub {
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.7);
+  margin-top: 0.5rem;
+}
+
+.about-hero__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 1.5rem;
+}
+
+.about-hero .btn-secondary {
+  background: rgba(255, 255, 255, 0.12);
+  color: white;
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.about-section {
+  padding: 2.5rem 0;
+}
+
+.about-section--alt {
+  background: #f5f7fa;
+}
+
+.about-section--dark {
+  background: var(--pa-navy);
+  color: white;
+}
+
+.about-section--dark h2 {
+  color: white;
+}
+
+.about-section h2 {
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: var(--pa-navy);
+  margin-bottom: 0.35rem;
+}
+
+.about-section__desc {
+  font-size: 0.9rem;
+  color: var(--pa-muted);
+  max-width: 40rem;
+  line-height: 1.6;
+  margin-bottom: 1.5rem;
+}
+
+.about-section--dark .about-section__desc {
+  color: rgba(255, 255, 255, 0.75);
+}
+
+/* Hierarchy flow */
+.hierarchy-flow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: stretch;
+  gap: 0.5rem;
+}
+
+.hierarchy-step {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex: 1;
+  min-width: 140px;
+}
+
+.hierarchy-step__arrow {
+  color: var(--pa-blue);
+  font-size: 1.25rem;
+  flex-shrink: 0;
+}
+
+.hierarchy-step__card {
+  flex: 1;
+  background: white;
+  border: 1px solid rgba(0, 43, 92, 0.1);
+  border-radius: var(--radius);
+  padding: 0.85rem;
+}
+
+.hierarchy-step__card strong {
+  display: block;
+  font-size: 0.85rem;
+  color: var(--pa-navy);
+}
+
+.hierarchy-step__card p {
+  font-size: 0.72rem;
+  color: var(--pa-muted);
+  margin-top: 0.25rem;
+  line-height: 1.4;
+}
+
+/* Pillars */
+.pillar-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 1rem;
+}
+
+.pillar-card {
+  background: white;
+  padding: 1.25rem;
+  border-radius: var(--radius);
+  border: 1px solid rgba(0, 43, 92, 0.08);
+  border-top: 3px solid var(--pa-blue);
+}
+
+.pillar-card__metric {
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--pa-blue);
+}
+
+.pillar-card h3 {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--pa-navy);
+  margin: 0.35rem 0;
+}
+
+.pillar-card p {
+  font-size: 0.8rem;
+  color: var(--pa-slate);
+  line-height: 1.55;
+}
+
+/* Journey timeline */
+.journey-timeline {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  position: relative;
+  padding-left: 1.5rem;
+  border-left: 2px solid var(--pa-blue);
+  max-width: 36rem;
+}
+
+.journey-stage {
+  position: relative;
+  padding: 0 0 1.25rem 1.25rem;
+}
+
+.journey-stage__dot {
+  position: absolute;
+  left: -1.65rem;
+  top: 0.25rem;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--pa-blue);
+  border: 2px solid white;
+  box-shadow: 0 0 0 2px var(--pa-blue);
+}
+
+.journey-stage__month {
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--pa-blue);
+}
+
+.journey-stage strong {
+  display: block;
+  font-size: 0.9rem;
+  color: var(--pa-navy);
+  margin: 0.15rem 0;
+}
+
+.journey-stage p {
+  font-size: 0.78rem;
+  color: var(--pa-muted);
+  line-height: 1.5;
+}
+
+/* Triple-A */
+.triple-a-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 1rem;
+}
+
+.triple-a-card {
+  background: white;
+  padding: 1.25rem;
+  border-radius: var(--radius);
+  text-align: center;
+  border: 1px solid rgba(0, 43, 92, 0.08);
+}
+
+.triple-a-card__letter {
+  display: inline-flex;
+  width: 2.5rem;
+  height: 2.5rem;
+  align-items: center;
+  justify-content: center;
+  background: var(--pa-navy);
+  color: white;
+  font-size: 1.1rem;
+  font-weight: 700;
+  border-radius: 50%;
+  margin-bottom: 0.5rem;
+}
+
+.triple-a-card h3 {
+  font-size: 0.9rem;
+  color: var(--pa-navy);
+}
+
+.triple-a-card p {
+  font-size: 0.78rem;
+  color: var(--pa-muted);
+  margin-top: 0.35rem;
+  line-height: 1.5;
+}
+
+/* Differentiators */
+.diff-shift {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+  font-size: 0.95rem;
+}
+
+.diff-shift__from {
+  color: var(--pa-muted);
+  text-decoration: line-through;
+}
+
+.diff-shift__arrow {
+  color: var(--pa-blue);
+  font-size: 1.25rem;
+}
+
+.diff-shift__to {
+  font-weight: 700;
+  color: var(--pa-navy);
+}
+
+.diff-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 1rem;
+}
+
+.diff-card {
+  background: white;
+  padding: 1.15rem;
+  border-radius: var(--radius);
+  border-left: 3px solid var(--pa-blue);
+  box-shadow: 0 1px 3px rgba(0, 43, 92, 0.06);
+}
+
+.diff-card h3 {
+  font-size: 0.88rem;
+  color: var(--pa-navy);
+}
+
+.diff-card p {
+  font-size: 0.78rem;
+  color: var(--pa-slate);
+  margin-top: 0.35rem;
+  line-height: 1.5;
+}
+
+/* Outcomes */
+.outcome-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 1rem;
+}
+
+.outcome-card {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: var(--radius);
+  padding: 1.25rem;
+}
+
+.outcome-card__audience {
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--pa-blue);
+}
+
+.outcome-card h3 {
+  font-size: 1rem;
+  color: white;
+  margin: 0.35rem 0;
+}
+
+.outcome-card p {
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.75);
+  line-height: 1.55;
+}
+
+.about-cta {
+  padding: 2rem 0 3rem;
+  text-align: center;
+  background: #f5f7fa;
+}
+
+.about-cta p {
+  font-size: 0.9rem;
+  color: var(--pa-slate);
+  margin-bottom: 0.5rem;
+}
+
+.about-cta a {
+  color: var(--pa-blue);
+  font-weight: 600;
+}
+
+@media (max-width: 768px) {
+  .hierarchy-flow {
+    flex-direction: column;
+  }
+
+  .hierarchy-step__arrow {
+    display: none;
+  }
+}

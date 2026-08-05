@@ -1,0 +1,144 @@
+{
+  "templates": {
+    "country": {
+      "charts": ["householdsTrend", "programMix", "povertyComparison", "sectorRadar", "fundingArea", "impactHeatmap"],
+      "sectors": ["education", "health", "agriculture", "climate", "water", "employment"]
+    },
+    "catchment": {
+      "charts": ["communityGrowth", "journeyStages", "leadershipScores", "sectorBar", "timelineArea"],
+      "sectors": ["education", "health", "agriculture", "water", "employment"]
+    },
+    "community": {
+      "charts": ["householdTrend", "programPie", "leadershipRadar", "impactLine"],
+      "sectors": ["education", "health", "agriculture", "water"]
+    }
+  },
+  "dashboards": {
+    "country:ken": {
+      "hero": { "tagline": "PA Network · East Africa", "description": "23 communities across 5 catchments driving holistic transformation." },
+      "kpis": [
+        { "label": "Communities", "value": 23, "trend": "+8%", "direction": "up" },
+        { "label": "Households Reached", "value": 12500, "trend": "+14%", "direction": "up" },
+        { "label": "Lives Impacted", "value": 180000, "trend": "+11%", "direction": "up" },
+        { "label": "Leadership Score", "value": 74, "trend": "+3pts", "direction": "up" }
+      ],
+      "insights": [
+        "Kwale South shows highest household engagement growth in Q3 2024.",
+        "Leadership development correlates with catchments reaching Implementation stage.",
+        "Water and agriculture programmes account for 42% of community PPPs."
+      ],
+      "charts": {
+        "householdsTrend": { "type": "line", "title": "Households Reached", "labels": ["2020", "2021", "2022", "2023", "2024"], "data": [4200, 6800, 9100, 11200, 12500], "color": "#009FDA" },
+        "programMix": { "type": "pie", "title": "Program Mix", "labels": ["Leadership", "Discipleship", "Economic", "Youth", "Citizenship"], "data": [28, 22, 20, 14, 16] },
+        "povertyComparison": { "type": "bar", "title": "Catchment vs National Poverty", "labels": ["Kwale S", "Kwale W", "Kajiado", "Baringo", "Kericho", "National"], "data": [38, 41, 35, 44, 32, 33.4] },
+        "sectorRadar": { "type": "radar", "title": "Sector Impact Index", "labels": ["Education", "Health", "Agriculture", "Water", "Employment", "Climate"], "data": [72, 65, 81, 78, 58, 62] },
+        "fundingArea": { "type": "area", "title": "Programme Investment Trend", "labels": ["Q1", "Q2", "Q3", "Q4"], "data": [120, 145, 168, 192] },
+        "impactHeatmap": { "type": "bar", "title": "Impact by Catchment (mock heatmap)", "labels": ["Kwale S", "Kwale W", "Kajiado", "Baringo", "Kericho"], "data": [88, 72, 91, 54, 79] }
+      },
+      "sectors": {
+        "education": { "score": 72, "metric": "12 schools supported", "trend": "+5%" },
+        "health": { "score": 65, "metric": "8 health outreaches", "trend": "+2%" },
+        "agriculture": { "score": 81, "metric": "34 farming groups", "trend": "+18%" },
+        "climate": { "score": 62, "metric": "6 climate resilience projects", "trend": "+9%" },
+        "water": { "score": 78, "metric": "14 water initiatives", "trend": "+22%" },
+        "employment": { "score": 58, "metric": "210 income activities", "trend": "+15%" }
+      },
+      "timeline": [
+        { "year": "2004", "title": "PA enters Kenya", "description": "First pastor networks established in Kwale." },
+        { "year": "2012", "title": "Catchment expansion", "description": "Kajiado and Kericho catchments launched." },
+        { "year": "2020", "title": "Digital tracking", "description": "Community journey stages introduced." },
+        { "year": "2024", "title": "23 communities", "description": "Highest network density in PA Africa." }
+      ],
+      "programs": ["Transformational Leadership", "Spiritual Discipleship", "Economic Productivity", "Youth Mentoring", "Responsible Citizenship"],
+      "funding": { "total": "$1.2M", "sources": [{ "name": "Partner grants", "pct": 45 }, { "name": "Church giving", "pct": 30 }, { "name": "Individual donors", "pct": 25 }] },
+      "storyIds": ["story-kenya-dams"],
+      "reportIds": ["sep-2024", "annual-2024"],
+      "gallery": ["assets/gallery-1.jpg", "assets/gallery-2.jpg", "assets/gallery-3.jpg"]
+    },
+    "catchment:kwale_south": {
+      "hero": { "tagline": "Coastal Kenya", "description": "5 communities addressing water scarcity and economic resilience." },
+      "kpis": [
+        { "label": "Communities", "value": 5, "trend": "stable", "direction": "neutral" },
+        { "label": "Households", "value": 1, "trend": "+1", "direction": "up" },
+        { "label": "Avg Leadership", "value": 73, "trend": "+4pts", "direction": "up" },
+        { "label": "PPPs Active", "value": 3, "trend": "+2", "direction": "up" }
+      ],
+      "insights": ["Kanana leads in irrigation PPP implementation.", "Dzombo entering training phase with 72 leadership score."],
+      "charts": {
+        "communityGrowth": { "type": "bar", "title": "Community Engagement", "labels": ["Dzombo", "Kanana", "Magombani", "Mwereni", "Vanga"], "data": [65, 88, 54, 32, 71] },
+        "journeyStages": { "type": "pie", "title": "Journey Stage Distribution", "labels": ["Awareness", "Engagement", "Training", "Implementation", "Multiplication"], "data": [1, 1, 2, 1, 0] },
+        "leadershipScores": { "type": "line", "title": "Leadership Score Trend", "labels": ["Jan", "Apr", "Jul", "Oct"], "data": [62, 68, 71, 73] },
+        "sectorBar": { "type": "bar", "title": "Sector Activity", "labels": ["Water", "Agriculture", "Education", "Health", "Employment"], "data": [90, 75, 45, 38, 52] },
+        "timelineArea": { "type": "area", "title": "Household Growth", "labels": ["2021", "2022", "2023", "2024"], "data": [0, 0, 0, 1] }
+      },
+      "sectors": {
+        "education": { "score": 45, "metric": "2 school partnerships", "trend": "+10%" },
+        "health": { "score": 38, "metric": "1 health outreach", "trend": "new" },
+        "agriculture": { "score": 75, "metric": "8 farming initiatives", "trend": "+20%" },
+        "water": { "score": 90, "metric": "3 trench dam projects", "trend": "+35%" },
+        "employment": { "score": 52, "metric": "15 income activities", "trend": "+8%" }
+      },
+      "timeline": [
+        { "year": "2010", "title": "Kwale South launched", "description": "First communities identified." },
+        { "year": "2018", "title": "Water programme", "description": "Trench dam initiative begins." },
+        { "year": "2024", "title": "Kanana irrigation", "description": "First household irrigation PPP." }
+      ],
+      "programs": ["Responsible Citizenship", "Economic Productivity"],
+      "funding": { "total": "$180K", "sources": [{ "name": "Grants", "pct": 60 }, { "name": "Local", "pct": 40 }] },
+      "storyIds": ["story-kenya-dams"],
+      "reportIds": ["sep-2024"],
+      "gallery": ["assets/gallery-1.jpg"]
+    },
+    "community:kanana": {
+      "hero": { "tagline": "Kwale South, Kenya", "description": "Community-led irrigation transforming household livelihoods." },
+      "kpis": [
+        { "label": "Households", "value": 1, "trend": "+1", "direction": "up" },
+        { "label": "Leadership Score", "value": 81, "trend": "+6pts", "direction": "up" },
+        { "label": "Journey Stage", "value": 0, "trend": "", "direction": "neutral", "text": "Implementation" },
+        { "label": "Shalom Groups", "value": 0, "trend": "pending", "direction": "neutral" }
+      ],
+      "insights": ["First community in catchment to complete irrigation PPP.", "Leadership score above catchment average by 8 points."],
+      "charts": {
+        "householdTrend": { "type": "line", "title": "Household Engagement", "labels": ["2022", "2023", "2024"], "data": [0, 0, 1] },
+        "programPie": { "type": "pie", "title": "Active Programmes", "labels": ["Citizenship", "Economic", "Water"], "data": [40, 35, 25] },
+        "leadershipRadar": { "type": "radar", "title": "Leadership Dimensions", "labels": ["Vision", "Servanthood", "Community", "Discipleship", "Stewardship"], "data": [85, 78, 82, 80, 79] },
+        "impactLine": { "type": "line", "title": "Impact Index", "labels": ["Q1", "Q2", "Q3", "Q4"], "data": [45, 58, 72, 81] }
+      },
+      "sectors": {
+        "education": { "score": 40, "metric": "After-school support", "trend": "planned" },
+        "health": { "score": 35, "metric": "Nutrition awareness", "trend": "new" },
+        "agriculture": { "score": 88, "metric": "Irrigation scheme", "trend": "+40%" },
+        "water": { "score": 95, "metric": "Trench dam operational", "trend": "+50%" }
+      },
+      "timeline": [
+        { "year": "2022", "title": "Community identified", "description": "Pastor network selects Kanana." },
+        { "year": "2023", "title": "Training phase", "description": "Leadership development begins." },
+        { "year": "2024", "title": "Irrigation PPP", "description": "Women-led trench dam completed." }
+      ],
+      "programs": ["Responsible Citizenship", "Economic Productivity"],
+      "ppps": ["Irrigation"],
+      "chips": ["Economic"],
+      "storyIds": ["story-kenya-dams"],
+      "reportIds": ["sep-2024"],
+      "gallery": ["assets/gallery-1.jpg"]
+    }
+  },
+  "defaultDashboard": {
+    "hero": { "tagline": "Regional context", "description": "Possibilities Africa does not currently operate in this region. Contextual data is shown for reference." },
+    "kpis": [
+      { "label": "Poverty Rate", "value": 0, "trend": "", "direction": "neutral", "useStats": "povertyRate" },
+      { "label": "Population", "value": 0, "trend": "", "direction": "neutral", "useStats": "population" },
+      { "label": "Data Year", "value": 0, "trend": "", "direction": "neutral", "useStats": "dataYear" }
+    ],
+    "insights": ["PA ministry data not yet available for this region."],
+    "charts": {
+      "povertyComparison": { "type": "bar", "title": "Poverty Rate", "labels": ["This country", "Africa avg"], "data": [40, 38] }
+    },
+    "sectors": {},
+    "timeline": [],
+    "programs": [],
+    "storyIds": [],
+    "reportIds": [],
+    "gallery": []
+  }
+}

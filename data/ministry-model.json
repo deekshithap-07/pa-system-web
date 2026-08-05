@@ -1,0 +1,99 @@
+{
+  "tagline": "A dynamic, data-driven platform where users can explore Africa, drill into communities, and see real-time progress of holistic transformation.",
+  "subtitle": "Explore Africa → Understand Communities → Measure Transformation",
+  "hierarchy": {
+    "title": "Geographic structure",
+    "description": "The platform mirrors how PA organises ministry on the ground — from continent to community.",
+    "levels": [
+      { "id": "africa", "label": "Africa", "description": "Continental overview and network-wide metrics" },
+      { "id": "country", "label": "Country", "description": "National pastor networks and country-level coordination" },
+      { "id": "catchment", "label": "Catchment Area", "description": "3–5 communities grouped for coordinated pastor leadership" },
+      { "id": "community", "label": "Community", "description": "A local area led by a pastor leader on a 2-year transformation journey" },
+      { "id": "shalom", "label": "Shalom Groups", "description": "30–50 leaders per community in discipleship and cohesion groups" }
+    ]
+  },
+  "pillars": [
+    {
+      "id": "catchments",
+      "title": "Catchment Areas",
+      "metric": "3–5 communities",
+      "description": "Pastor leaders coordinate transformation across a cluster of neighbouring communities — the bridge between country strategy and community action.",
+      "tracks": ["communities", "catchments"]
+    },
+    {
+      "id": "shalom",
+      "title": "Shalom Groups",
+      "metric": "30–50 leaders",
+      "description": "Each community develops Shalom groups of 30–50 leaders who drive discipleship, cohesion, and local initiative.",
+      "tracks": ["shalomGroups", "leadership"]
+    },
+    {
+      "id": "journey",
+      "title": "2-Year Transformation Journey",
+      "metric": "5 stages",
+      "description": "Every community progresses through a structured two-year journey from Awareness to Multiplication — tracked in the community tracking system.",
+      "tracks": ["journeyStage", "readiness"]
+    },
+    {
+      "id": "ppp-chips",
+      "title": "Community-Led Development",
+      "metric": "PPPs & CHIPs",
+      "description": "Pastor-Planned Projects (PPPs) and Church-initiated Projects (CHIPs) are community-owned initiatives — water, agriculture, livelihood, and more.",
+      "tracks": ["ppps", "chips", "projects"]
+    },
+    {
+      "id": "triple-a",
+      "title": "Triple-A Leadership",
+      "metric": "Awareness · Ability · Action",
+      "description": "Pastor leaders develop through Awareness (vision), Ability (skills), and Action (implementation) — measured via leadership scores and engagement.",
+      "tracks": ["leadershipScore", "leadership"]
+    },
+    {
+      "id": "resources",
+      "title": "Resource Mobilization",
+      "metric": "Local ownership",
+      "description": "Communities mobilise local resources and partnerships. The platform tracks mobilization to guide where support is most needed.",
+      "tracks": ["resourceMobilization", "projects"]
+    }
+  ],
+  "journey": {
+    "title": "The 2-Year Transformation Journey",
+    "duration": "24 months",
+    "stages": [
+      { "id": "awareness", "label": "Awareness", "month": "1–3", "description": "Community identified; pastor engagement begins" },
+      { "id": "engagement", "label": "Engagement", "month": "4–6", "description": "Active participation; Shalom groups forming" },
+      { "id": "training", "label": "Training", "month": "7–12", "description": "Structured leadership and discipleship programmes" },
+      { "id": "implementation", "label": "Implementation", "month": "13–18", "description": "PPP & CHIP projects active; measurable outcomes" },
+      { "id": "multiplication", "label": "Multiplication", "month": "19–24", "description": "Replicating transformation in neighbouring communities" }
+    ]
+  },
+  "tripleA": {
+    "title": "Triple-A Leadership Model",
+    "description": "How pastor leaders grow through the transformation journey.",
+    "dimensions": [
+      { "id": "awareness", "label": "Awareness", "description": "Vision for holistic community transformation; understanding the journey framework" },
+      { "id": "ability", "label": "Ability", "description": "Skills in leadership, discipleship, facilitation, and programme delivery" },
+      { "id": "action", "label": "Action", "description": "Implementing PPPs, mobilizing Shalom groups, and driving measurable community outcomes" }
+    ]
+  },
+  "differentiators": {
+    "title": "What makes this different",
+    "from": "A communication website",
+    "to": "A transformation intelligence platform",
+    "points": [
+      { "label": "Shows real data", "description": "Field tracking data feeds dashboards — not just stories and photos" },
+      { "label": "Tracks real progress", "description": "Journey stages, leadership scores, and project outcomes updated regularly" },
+      { "label": "Connects geography to impact", "description": "Africa → Country → Catchment → Community — drill down to see where work happens" },
+      { "label": "Enables analysis", "description": "Trends, comparisons, CBC index, and readiness levels for informed decisions" }
+    ]
+  },
+  "outcomes": {
+    "title": "Expected outcomes",
+    "items": [
+      { "id": "leadership", "audience": "Leadership", "benefit": "See performance clearly", "description": "Scorecards, catchment dashboards, and trend analysis for strategic decisions" },
+      { "id": "partners", "audience": "Partners", "benefit": "Trust through transparency", "description": "Reports, case studies, and live data that verify ministry outcomes" },
+      { "id": "supporters", "audience": "Supporters", "benefit": "Engage with real impact", "description": "Stories connected to metrics — see exactly where investment makes a difference" },
+      { "id": "ministry", "audience": "The Ministry", "benefit": "Scale with structure and data", "description": "A shared intelligence layer aligned with how PA actually works on the ground" }
+    ]
+  }
+}

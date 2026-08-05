@@ -1,0 +1,224 @@
+{
+  "hubs": {
+    "kenya": {
+      "countryName": "Kenya",
+      "description": "Pastor-led holistic transformation across coastal and rift valley communities — from Kwale to Kericho.",
+      "overview": "Kenya is Possibilities Africa's largest network, with 23 communities across 5 catchments (Kwale South, Kwale West, Kajiado, Baringo, and Kericho). Data reflects the live tracking system — pastors, Shalom groups, and households are tracked separately at community level.",
+      "heroTagline": "PA Network · East Africa",
+      "kpis": [
+        { "id": "communities", "label": "Communities", "value": 23, "trend": "stable", "direction": "neutral" },
+        { "id": "catchments", "label": "Catchment Areas", "value": 5, "trend": "stable", "direction": "neutral" },
+        { "id": "pastors", "label": "Pastors", "value": 627, "trend": "stable", "direction": "neutral" },
+        { "id": "households", "label": "Households", "value": 3, "trend": "stable", "direction": "neutral" },
+        { "id": "shalom", "label": "Shalom Groups", "value": 2, "trend": "stable", "direction": "neutral" },
+        { "id": "ppp", "label": "PPP Projects", "value": 18, "trend": "+4", "direction": "up" },
+        { "id": "chips", "label": "CHIPs", "value": 12, "trend": "+2", "direction": "up" },
+        { "id": "leadership", "label": "Leadership Teams", "value": 23, "trend": "+2", "direction": "up" },
+        { "id": "volunteers", "label": "Volunteers", "value": 340, "trend": "+28", "direction": "up" },
+        { "id": "growth", "label": "Growth", "value": 14, "suffix": "%", "prefix": "+", "trend": "YoY", "direction": "up" },
+        { "id": "programs", "label": "Programs", "value": 5, "trend": "active", "direction": "neutral" },
+        { "id": "activity", "label": "Latest Activity", "value": 0, "text": "Sep 2024", "direction": "neutral" }
+      ],
+      "activities": [
+        { "date": "2024-09-12", "community": "Kanana", "project": "Trench dam irrigation", "status": "Completed" },
+        { "date": "2024-09-05", "community": "Koitiko", "project": "Livestock cooperative", "status": "Active" },
+        { "date": "2024-08-28", "community": "Dzombo", "project": "Leadership training cohort", "status": "Ongoing" },
+        { "date": "2024-08-15", "community": "Magombani", "project": "Youth mentoring launch", "status": "Active" }
+      ],
+      "insights": [
+        { "id": "education", "title": "Education", "metric": "12 schools supported", "score": 72, "trend": "+5%", "summary": "Pastor networks partnering with local schools for after-school support and literacy programmes." },
+        { "id": "health", "title": "Health", "metric": "8 health outreaches", "score": 65, "trend": "+2%", "summary": "Community health awareness and nutrition programmes led through church networks." },
+        { "id": "agriculture", "title": "Agriculture", "metric": "34 farming groups", "score": 81, "trend": "+18%", "summary": "Irrigation and crop diversification driving household income across Kwale catchments." },
+        { "id": "climate", "title": "Climate", "metric": "6 resilience projects", "score": 62, "trend": "+9%", "summary": "Water conservation and climate-adaptive farming practices in drought-prone regions." },
+        { "id": "water", "title": "Water", "metric": "14 water initiatives", "score": 78, "trend": "+22%", "summary": "Trench dams and community water points addressing seasonal scarcity." },
+        { "id": "livelihood", "title": "Livelihood", "metric": "210 income activities", "score": 58, "trend": "+15%", "summary": "Economic productivity programmes connecting households to markets and cooperatives." },
+        { "id": "leadership", "title": "Leadership", "metric": "74 avg score", "score": 74, "trend": "+3pts", "summary": "Transformational leadership development correlates with communities reaching Implementation stage." },
+        { "id": "community", "title": "Community Development", "metric": "23 active communities", "score": 76, "trend": "+8%", "summary": "Asset-based community development led by pastor leaders across five catchments." }
+      ],
+      "charts": {
+        "growthOverTime": { "type": "line", "title": "Growth Over Time", "labels": ["2020", "2021", "2022", "2023", "2024"], "data": [8, 10, 11, 12, 14], "color": "#009FDA" },
+        "communitiesAdded": { "type": "bar", "title": "Communities Added", "labels": ["2020", "2021", "2022", "2023", "2024"], "data": [14, 17, 19, 21, 23], "color": "#002B5C" },
+        "householdsReached": { "type": "area", "title": "Households Reached", "labels": ["2020", "2021", "2022", "2023", "2024"], "data": [4200, 6800, 9100, 11200, 12500], "color": "#009FDA" },
+        "leadershipDev": { "type": "line", "title": "Leadership Development", "labels": ["Q1", "Q2", "Q3", "Q4"], "data": [62, 68, 71, 74], "color": "#0077B6" },
+        "projectImpl": { "type": "bar", "title": "Project Implementation", "labels": ["Water", "Agriculture", "Economic", "Youth", "Health"], "data": [14, 12, 8, 6, 5], "color": "#009FDA" },
+        "programActivity": { "type": "pie", "title": "Program Activity", "labels": ["Leadership", "Discipleship", "Economic", "Youth", "Citizenship"], "data": [28, 22, 20, 14, 16] }
+      },
+      "catchmentMap": {
+        "viewBox": "0 0 200 240",
+        "countryPath": "M40,60 L160,50 L175,120 L150,200 L60,210 L30,140 Z",
+        "catchments": [
+          { "id": "kwale_south", "name": "Kwale South", "path": "M60,150 L100,145 L110,190 L70,195 Z", "status": "inactive" },
+          { "id": "kwale_west", "name": "Kwale West", "path": "M30,140 L60,150 L70,195 L40,180 Z", "status": "inactive" },
+          { "id": "kajiado", "name": "Kajiado", "path": "M100,80 L160,75 L150,130 L110,140 Z", "status": "inactive" },
+          { "id": "baringo", "name": "Baringo", "path": "M110,140 L150,130 L150,200 L100,190 Z", "status": "inactive" },
+          { "id": "kericho", "name": "Kericho", "path": "M60,60 L100,55 L110,100 L70,110 Z", "status": "inactive" }
+        ]
+      },
+      "storyIds": ["story-kenya-dams"],
+      "reportIds": ["sep-2024", "annual-2024"]
+    },
+    "malawi": {
+      "countryName": "Malawi",
+      "description": "Central Malawi transformation through pastor-led networks in Nkhotakota and Mwimba catchments.",
+      "overview": "Malawi has 21 communities across 6 catchments — Mwimba, Nkhotakota South, Kapiri, Nkhotakota-Central, Kasiya, and Nkhotakota-North. Data reflects the live tracking system with pastors, Shalom groups, and households tracked separately.",
+      "heroTagline": "PA Network · Southern Africa",
+      "kpis": [
+        { "id": "communities", "label": "Communities", "value": 21, "trend": "stable", "direction": "neutral" },
+        { "id": "catchments", "label": "Catchment Areas", "value": 6, "trend": "stable", "direction": "neutral" },
+        { "id": "pastors", "label": "Pastors", "value": 754, "trend": "stable", "direction": "neutral" },
+        { "id": "households", "label": "Households", "value": 0, "trend": "stable", "direction": "neutral" },
+        { "id": "shalom", "label": "Shalom Groups", "value": 0, "trend": "stable", "direction": "neutral" },
+        { "id": "ppp", "label": "PPP Projects", "value": 11, "trend": "+2", "direction": "up" },
+        { "id": "chips", "label": "CHIPs", "value": 8, "trend": "+1", "direction": "up" },
+        { "id": "leadership", "label": "Leadership Teams", "value": 20, "trend": "+1", "direction": "up" },
+        { "id": "volunteers", "label": "Volunteers", "value": 185, "trend": "+15", "direction": "up" },
+        { "id": "growth", "label": "Growth", "value": 11, "suffix": "%", "prefix": "+", "trend": "YoY", "direction": "up" },
+        { "id": "programs", "label": "Programs", "value": 5, "trend": "active", "direction": "neutral" },
+        { "id": "activity", "label": "Latest Activity", "value": 0, "text": "Sep 2024", "direction": "neutral" }
+      ],
+      "activities": [
+        { "date": "2024-09-08", "community": "Benga", "project": "Scone business training", "status": "Active" },
+        { "date": "2024-08-20", "community": "Mwimba", "project": "Shalom group expansion", "status": "Ongoing" },
+        { "date": "2024-08-10", "community": "Kapiri", "project": "Leadership cohort", "status": "Active" }
+      ],
+      "insights": [
+        { "id": "education", "title": "Education", "metric": "6 school partnerships", "score": 58, "trend": "+4%", "summary": "Literacy and after-school programmes through church-school partnerships." },
+        { "id": "health", "title": "Health", "metric": "5 health outreaches", "score": 52, "trend": "+3%", "summary": "Nutrition and maternal health awareness in rural communities." },
+        { "id": "agriculture", "title": "Agriculture", "metric": "18 farming groups", "score": 70, "trend": "+12%", "summary": "Crop diversification and smallholder support programmes." },
+        { "id": "climate", "title": "Climate", "metric": "3 resilience projects", "score": 48, "trend": "+5%", "summary": "Climate-smart agriculture adoption in Nkhotakota region." },
+        { "id": "water", "title": "Water", "metric": "7 water points", "score": 55, "trend": "+8%", "summary": "Community boreholes and water access improvements." },
+        { "id": "livelihood", "title": "Livelihood", "metric": "95 income activities", "score": 72, "trend": "+20%", "summary": "Scone businesses and cooperative models driving household income." },
+        { "id": "leadership", "title": "Leadership", "metric": "68 avg score", "score": 68, "trend": "+2pts", "summary": "Pastor leader development across six catchments." },
+        { "id": "community", "title": "Community Development", "metric": "20 active communities", "score": 71, "trend": "+6%", "summary": "Holistic community transformation through pastor-led networks." }
+      ],
+      "charts": {
+        "growthOverTime": { "type": "line", "title": "Growth Over Time", "labels": ["2020", "2021", "2022", "2023", "2024"], "data": [5, 7, 8, 10, 11], "color": "#009FDA" },
+        "communitiesAdded": { "type": "bar", "title": "Communities Added", "labels": ["2020", "2021", "2022", "2023", "2024"], "data": [12, 14, 16, 18, 20], "color": "#002B5C" },
+        "householdsReached": { "type": "area", "title": "Households Reached", "labels": ["2020", "2021", "2022", "2023", "2024"], "data": [1800, 2800, 3600, 4200, 4800], "color": "#009FDA" },
+        "leadershipDev": { "type": "line", "title": "Leadership Development", "labels": ["Q1", "Q2", "Q3", "Q4"], "data": [58, 62, 65, 68], "color": "#0077B6" },
+        "projectImpl": { "type": "bar", "title": "Project Implementation", "labels": ["Economic", "Agriculture", "Water", "Youth", "Health"], "data": [10, 8, 5, 4, 3], "color": "#009FDA" },
+        "programActivity": { "type": "pie", "title": "Program Activity", "labels": ["Leadership", "Discipleship", "Economic", "Youth", "Citizenship"], "data": [24, 20, 28, 12, 16] }
+      },
+      "catchmentMap": {
+        "viewBox": "0 0 160 200",
+        "countryPath": "M50,30 L120,25 L140,100 L120,170 L50,175 L30,90 Z",
+        "catchments": [
+          { "id": "mw_mwimba", "name": "Mwimba", "path": "M50,90 L90,85 L95,130 L55,135 Z", "status": "inactive" },
+          { "id": "mw_nkhotakota_south", "name": "Nkhotakota South", "path": "M55,130 L95,125 L100,170 L60,168 Z", "status": "inactive" },
+          { "id": "mw_kapiri", "name": "Kapiri", "path": "M90,85 L130,80 L125,125 L95,125 Z", "status": "inactive" },
+          { "id": "mw_nkhotakota_central", "name": "Nkhotakota-Central", "path": "M95,125 L125,120 L120,165 L100,168 Z", "status": "inactive" },
+          { "id": "mw_kasiya", "name": "Kasiya", "path": "M50,30 L90,28 L95,70 L55,75 Z", "status": "inactive" },
+          { "id": "mw_nkhotakota_north", "name": "Nkhotakota-North", "path": "M90,28 L130,25 L125,70 L95,70 Z", "status": "inactive" }
+        ]
+      },
+      "storyIds": ["story-malawi-mary"],
+      "reportIds": ["sep-2024", "aug-2024", "annual-2024"]
+    },
+    "ethiopia": {
+      "countryName": "Ethiopia",
+      "description": "Transformational leadership continuing amid challenging conditions in central Ethiopia.",
+      "overview": "Ethiopia has 11 communities across 3 catchments — Hossana, Gurage, and Durame. Data reflects the live tracking system with pastors, Shalom groups, and households tracked separately. All communities are currently inactive in the dashboard.",
+      "heroTagline": "PA Network · Horn of Africa",
+      "kpis": [
+        { "id": "communities", "label": "Communities", "value": 11, "trend": "stable", "direction": "neutral" },
+        { "id": "catchments", "label": "Catchment Areas", "value": 3, "trend": "stable", "direction": "neutral" },
+        { "id": "pastors", "label": "Pastors", "value": 272, "trend": "stable", "direction": "neutral" },
+        { "id": "households", "label": "Households", "value": 0, "trend": "stable", "direction": "neutral" },
+        { "id": "shalom", "label": "Shalom Groups", "value": 0, "trend": "stable", "direction": "neutral" },
+        { "id": "ppp", "label": "PPP Projects", "value": 6, "trend": "+1", "direction": "up" },
+        { "id": "chips", "label": "CHIPs", "value": 4, "trend": "stable", "direction": "neutral" },
+        { "id": "leadership", "label": "Leadership Teams", "value": 11, "trend": "stable", "direction": "neutral" },
+        { "id": "volunteers", "label": "Volunteers", "value": 95, "trend": "+8", "direction": "up" },
+        { "id": "growth", "label": "Growth", "value": 9, "suffix": "%", "prefix": "+", "trend": "YoY", "direction": "up" },
+        { "id": "programs", "label": "Programs", "value": 4, "trend": "active", "direction": "neutral" },
+        { "id": "activity", "label": "Latest Activity", "value": 0, "text": "Jul 2026", "direction": "neutral" }
+      ],
+      "activities": [
+        { "date": "2026-07-17", "community": "Mare", "project": "Pastor network coordination", "status": "Inactive" },
+        { "date": "2026-07-17", "community": "Gumer", "project": "Leadership training", "status": "Inactive" },
+        { "date": "2026-07-17", "community": "Damboya", "project": "Community engagement", "status": "Inactive" }
+      ],
+      "insights": [
+        { "id": "education", "title": "Education", "metric": "4 school partnerships", "score": 45, "trend": "+2%", "summary": "Education support through church networks." },
+        { "id": "health", "title": "Health", "metric": "3 health outreaches", "score": 40, "trend": "new", "summary": "Basic health awareness programmes." },
+        { "id": "agriculture", "title": "Agriculture", "metric": "8 farming groups", "score": 52, "trend": "+6%", "summary": "Smallholder farming support initiatives." },
+        { "id": "climate", "title": "Climate", "metric": "2 resilience projects", "score": 38, "trend": "+3%", "summary": "Drought adaptation practices." },
+        { "id": "water", "title": "Water", "metric": "3 water initiatives", "score": 42, "trend": "+5%", "summary": "Community water access projects." },
+        { "id": "livelihood", "title": "Livelihood", "metric": "45 income activities", "score": 48, "trend": "+8%", "summary": "Economic productivity programmes." },
+        { "id": "leadership", "title": "Leadership", "metric": "272 pastors", "score": 62, "trend": "+4pts", "summary": "Resilient pastoral leadership amid regional challenges." },
+        { "id": "community", "title": "Community Development", "metric": "11 active communities", "score": 55, "trend": "+4%", "summary": "Pastor-led community transformation across 3 catchments." }
+      ],
+      "charts": {
+        "growthOverTime": { "type": "line", "title": "Growth Over Time", "labels": ["2020", "2021", "2022", "2023", "2024"], "data": [4, 5, 6, 8, 9], "color": "#009FDA" },
+        "communitiesAdded": { "type": "bar", "title": "Communities Added", "labels": ["2020", "2021", "2022", "2023", "2024"], "data": [6, 8, 9, 10, 11], "color": "#002B5C" },
+        "householdsReached": { "type": "area", "title": "Households Reached", "labels": ["2020", "2021", "2022", "2023", "2024"], "data": [0, 0, 0, 0, 0], "color": "#009FDA" },
+        "leadershipDev": { "type": "line", "title": "Leadership Development", "labels": ["Q1", "Q2", "Q3", "Q4"], "data": [52, 56, 59, 62], "color": "#0077B6" },
+        "projectImpl": { "type": "bar", "title": "Project Implementation", "labels": ["Leadership", "Economic", "Water", "Health", "Youth"], "data": [8, 4, 3, 2, 2], "color": "#009FDA" },
+        "programActivity": { "type": "pie", "title": "Program Activity", "labels": ["Leadership", "Discipleship", "Economic", "Youth", "Citizenship"], "data": [35, 25, 15, 10, 15] }
+      },
+      "catchmentMap": {
+        "viewBox": "0 0 180 220",
+        "countryPath": "M40,40 L140,35 L160,110 L140,190 L50,195 L30,100 Z",
+        "catchments": [
+          { "id": "et_hossana", "name": "Hossana", "path": "M50,120 L95,115 L100,185 L55,190 Z", "status": "inactive" },
+          { "id": "et_gurage", "name": "Gurage", "path": "M95,50 L145,45 L150,115 L100,120 Z", "status": "inactive" },
+          { "id": "et_durame", "name": "Durame", "path": "M100,120 L150,115 L145,185 L95,190 Z", "status": "inactive" }
+        ]
+      },
+      "storyIds": ["story-ethiopia-abdisa"],
+      "reportIds": ["sep-2024", "aug-2024"]
+    },
+    "zambia": {
+      "countryName": "Zambia",
+      "description": "Emerging PA network with pastor-led crop diversification and community programmes.",
+      "overview": "Zambia has 10 communities across 3 catchment areas — Eastern Province, Copperbelt, and Central Province. Each catchment groups local communities such as Nyimba, Petauke, and Baluba.",
+      "heroTagline": "PA Network · Southern Africa",
+      "kpis": [
+        { "id": "communities", "label": "Communities", "value": 10, "trend": "stable", "direction": "neutral" },
+        { "id": "catchments", "label": "Catchment Areas", "value": 3, "trend": "stable", "direction": "neutral" },
+        { "id": "pastors", "label": "Pastors", "value": 224, "trend": "stable", "direction": "neutral" },
+        { "id": "households", "label": "Households", "value": 0, "trend": "stable", "direction": "neutral" },
+        { "id": "shalom", "label": "Shalom Groups", "value": 0, "trend": "stable", "direction": "neutral" },
+        { "id": "ppp", "label": "PPP Projects", "value": 3, "trend": "stable", "direction": "neutral" },
+        { "id": "chips", "label": "CHIPs", "value": 2, "trend": "stable", "direction": "neutral" },
+        { "id": "leadership", "label": "Leadership Teams", "value": 4, "trend": "stable", "direction": "neutral" },
+        { "id": "volunteers", "label": "Volunteers", "value": 42, "trend": "+5", "direction": "up" },
+        { "id": "growth", "label": "Growth", "value": 6, "suffix": "%", "prefix": "+", "trend": "YoY", "direction": "up" },
+        { "id": "programs", "label": "Programs", "value": 3, "trend": "active", "direction": "neutral" },
+        { "id": "activity", "label": "Latest Activity", "value": 0, "text": "Aug 2024", "direction": "neutral" }
+      ],
+      "activities": [
+        { "date": "2024-08-22", "community": "Chaambwa", "project": "Crop diversification", "status": "Completed" }
+      ],
+      "insights": [
+        { "id": "education", "title": "Education", "metric": "2 school partnerships", "score": 35, "trend": "new", "summary": "Early education support programmes." },
+        { "id": "health", "title": "Health", "metric": "1 health outreach", "score": 30, "trend": "new", "summary": "Community health awareness." },
+        { "id": "agriculture", "title": "Agriculture", "metric": "6 farming groups", "score": 65, "trend": "+10%", "summary": "Crop diversification driving outcomes." },
+        { "id": "climate", "title": "Climate", "metric": "1 resilience project", "score": 28, "trend": "new", "summary": "Climate-adaptive farming introduction." },
+        { "id": "water", "title": "Water", "metric": "2 water initiatives", "score": 32, "trend": "+4%", "summary": "Community water access." },
+        { "id": "livelihood", "title": "Livelihood", "metric": "18 income activities", "score": 55, "trend": "+8%", "summary": "Pastor-led economic programmes." },
+        { "id": "leadership", "title": "Leadership", "metric": "58 avg score", "score": 58, "trend": "+2pts", "summary": "Growing pastoral leadership capacity." },
+        { "id": "community", "title": "Community Development", "metric": "4 active communities", "score": 48, "trend": "+3%", "summary": "Emerging community transformation network." }
+      ],
+      "charts": {
+        "growthOverTime": { "type": "line", "title": "Growth Over Time", "labels": ["2020", "2021", "2022", "2023", "2024"], "data": [2, 3, 4, 5, 6], "color": "#009FDA" },
+        "communitiesAdded": { "type": "bar", "title": "Communities Added", "labels": ["2020", "2021", "2022", "2023", "2024"], "data": [1, 2, 2, 3, 4], "color": "#002B5C" },
+        "householdsReached": { "type": "area", "title": "Households Reached", "labels": ["2020", "2021", "2022", "2023", "2024"], "data": [200, 400, 600, 900, 1200], "color": "#009FDA" },
+        "leadershipDev": { "type": "line", "title": "Leadership Development", "labels": ["Q1", "Q2", "Q3", "Q4"], "data": [48, 52, 55, 58], "color": "#0077B6" },
+        "projectImpl": { "type": "bar", "title": "Project Implementation", "labels": ["Agriculture", "Economic", "Leadership", "Water", "Youth"], "data": [4, 2, 3, 1, 1], "color": "#009FDA" },
+        "programActivity": { "type": "pie", "title": "Program Activity", "labels": ["Leadership", "Discipleship", "Economic", "Youth", "Citizenship"], "data": [30, 20, 30, 10, 10] }
+      },
+      "catchmentMap": {
+        "viewBox": "0 0 160 200",
+        "countryPath": "M50,40 L120,35 L135,120 L110,180 L45,175 L35,100 Z",
+        "catchments": [
+          { "id": "zm_eastern_province", "name": "Eastern Province", "path": "M90,120 L130,115 L135,170 L95,175 Z", "status": "inactive" },
+          { "id": "zm_copperbelt", "name": "Copperbelt", "path": "M40,50 L90,45 L95,100 L45,105 Z", "status": "inactive" },
+          { "id": "zm_central_province", "name": "Central Province", "path": "M50,90 L100,85 L105,140 L55,145 Z", "status": "inactive" }
+        ]
+      },
+      "storyIds": ["story-zambia-crops"],
+      "reportIds": ["sep-2024"]
+    }
+  }
+}
