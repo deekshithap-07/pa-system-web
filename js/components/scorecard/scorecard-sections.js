@@ -7,7 +7,7 @@ const NAV = [
   { id: "sc-countries", label: "Countries" },
   { id: "sc-communities", label: "Communities" },
   { id: "sc-progress", label: "Journey progress" },
-  { id: "sc-analysis", label: "Analysis" },
+  { id: "sc-analysis", label: "Sector outcomes" },
   { id: "sc-reports", label: "Reports" },
 ];
 
@@ -20,6 +20,7 @@ export function renderScorecardSidebar() {
       </nav>
       <div class="sc-sidebar__footer">
         <a href="#/" class="sc-sidebar__back" data-link>&larr; Back to home</a>
+        <a href="#/insights" class="sc-sidebar__insights-link" data-link>Deep analysis &rarr;</a>
       </div>
     </aside>`;
 }
@@ -73,10 +74,6 @@ export function renderScorecardHeader(meta, overview) {
     </header>`;
 }
 
-export function renderScorecardOverview() {
-  return "";
-}
-
 export function renderScorecardKPIs(kpis) {
   const items = (kpis || [])
     .map((k) => {
@@ -102,23 +99,37 @@ export function renderScorecardKPIs(kpis) {
 }
 
 export function renderScorecardGrowthCharts(charts) {
-  const cards = Object.entries(charts || {})
+  const entries = Object.entries(charts || {});
+  const [primary, ...secondary] = entries;
+  const primaryCard = primary
+    ? `<article class="sc-chart-feature" data-chart="${primary[0]}">
+        <div class="sc-chart-feature__head"><h3>${primary[1].title}</h3><span class="sc-chart-feature__badge">Primary trend</span></div>
+        <div class="sc-chart-wrap sc-chart-wrap--feature"><canvas></canvas></div>
+      </article>`
+    : "";
+
+  const secondaryCards = secondary
     .map(
-      ([key, c]) => `<article class="sc-chart-card" data-chart="${key}">
+      ([key, c]) => `<article class="sc-chart-mini" data-chart="${key}">
         <h3>${c.title}</h3>
-        <div class="sc-chart-wrap"><canvas></canvas></div>
+        <div class="sc-chart-wrap sc-chart-wrap--mini"><canvas></canvas></div>
       </article>`
     )
     .join("");
 
   return `
-    <section class="sc-section" id="sc-growth" data-reveal-section>
+    <section class="sc-section sc-section--growth" id="sc-growth" data-reveal-section>
       <div class="sc-section__inner">
-        <div class="sc-section__head">
-          <h2>Growth trends</h2>
-          <p class="sc-section__desc">Time-series performance across communities, households, and programmes</p>
+        <div class="sc-section__head sc-section__head--row">
+          <div>
+            <h2>Growth trends</h2>
+            <p class="sc-section__desc">Time-series performance across communities, households, and programmes</p>
+          </div>
         </div>
-        <div class="sc-chart-grid">${cards}</div>
+        <div class="sc-growth-layout">
+          ${primaryCard}
+          <div class="sc-growth-side">${secondaryCards}</div>
+        </div>
       </div>
     </section>`;
 }
@@ -132,211 +143,158 @@ function formatChange(value, suffix = "%") {
 
 export function renderScorecardCountryStats(countries) {
   const rows = (countries || [])
-    .map((c) => {
+    .map((c, i) => {
       const changeClass = c.growth > 0 ? "is-up" : "is-down";
+      const barW = Math.min(100, c.progress || 0);
       return `<tr>
+        <td class="sc-td-rank">${i + 1}</td>
         <th scope="row"><a href="#/country/${c.slug}" data-link>${c.name}</a></th>
         <td class="sc-td-num">${c.communities}</td>
         <td class="sc-td-num">${formatNumber(c.households)}</td>
         <td class="sc-td-num">${c.projects}</td>
         <td class="sc-td-change ${changeClass}">${formatChange(c.growth)}</td>
-        <td class="sc-td-num"><span class="sc-progress-pill">${c.progress}%</span></td>
+        <td class="sc-td-bar"><span class="sc-inline-bar" style="width:${barW}%"></span><em>${c.progress}%</em></td>
         <td><span class="sc-status sc-status--${c.status.toLowerCase()}">${c.status}</span></td>
       </tr>`;
     })
     .join("");
 
   return `
-    <section class="sc-section" id="sc-countries" data-reveal-section>
+    <section class="sc-section sc-section--countries" id="sc-countries" data-reveal-section>
       <div class="sc-section__inner">
         <div class="sc-section__head">
           <h2>Country performance</h2>
-          <p class="sc-section__desc">Network countries ranked by communities, projects, and growth</p>
+          <p class="sc-section__desc">Ranked network countries by communities, projects, and growth</p>
         </div>
-        <div class="sc-market-table">
+        <div class="sc-market-table sc-market-table--ranked">
           <table class="sc-table">
             <thead>
               <tr>
+                <th scope="col" class="sc-th-rank">#</th>
                 <th scope="col">Country</th>
                 <th scope="col" class="sc-th-num">Communities</th>
                 <th scope="col" class="sc-th-num">Households</th>
                 <th scope="col" class="sc-th-num">Projects</th>
                 <th scope="col" class="sc-th-num">Change</th>
-                <th scope="col" class="sc-th-num">Progress</th>
+                <th scope="col">Progress</th>
                 <th scope="col">Status</th>
               </tr>
             </thead>
             <tbody>${rows}</tbody>
           </table>
-          <p class="sc-market-table__note">Network data · minimum reporting lag 30 days</p>
         </div>
       </div>
     </section>`;
 }
 
 export function renderScorecardCommunityStats(communities) {
-  const rows = (communities || [])
+  const items = (communities || [])
     .map(
-      (c) => `<tr>
-        <th scope="row">${c.name}</th>
-        <td>${c.country}</td>
-        <td>${c.catchment}</td>
-        <td class="sc-td-num">${c.households}</td>
-        <td>${c.stage}</td>
-        <td class="sc-td-num"><span class="sc-progress-pill">${c.progress}%</span></td>
-      </tr>`
+      (c) => `<li class="sc-community-row">
+        <div class="sc-community-row__main">
+          <strong>${c.name}</strong>
+          <span>${c.country} · ${c.catchment}</span>
+        </div>
+        <div class="sc-community-row__stage">${c.stage}</div>
+        <div class="sc-community-row__meter" aria-hidden="true"><span style="width:${c.progress}%"></span></div>
+        <div class="sc-community-row__pct">${c.progress}%</div>
+      </li>`
     )
     .join("");
 
   return `
-    <section class="sc-section sc-section--alt" id="sc-communities" data-reveal-section>
+    <section class="sc-section sc-section--communities" id="sc-communities" data-reveal-section>
       <div class="sc-section__inner">
         <div class="sc-section__head">
           <h2>Community highlights</h2>
           <p class="sc-section__desc">Selected communities with tracked journey stage and progress</p>
         </div>
-        <div class="sc-market-table">
-          <table class="sc-table">
-            <thead>
-              <tr>
-                <th scope="col">Community</th>
-                <th scope="col">Country</th>
-                <th scope="col">Catchment</th>
-                <th scope="col" class="sc-th-num">Households</th>
-                <th scope="col">Stage</th>
-                <th scope="col" class="sc-th-num">Progress</th>
-              </tr>
-            </thead>
-            <tbody>${rows}</tbody>
-          </table>
-        </div>
+        <ol class="sc-community-list">${items}</ol>
       </div>
     </section>`;
 }
 
 export function renderScorecardProgress(indicators) {
-  const bars = (indicators || [])
+  const meters = (indicators || [])
     .map(
-      (p) => `<article class="sc-progress-card">
-        <div class="sc-progress-card__head"><span>${p.label}</span><strong>${p.score}%</strong></div>
-        <div class="sc-progress-bar"><div class="sc-progress-bar__fill" style="width:${p.score}%"></div></div>
-        <span class="sc-progress-card__target">Target ${p.target}%</span>
-      </article>`
+      (p) => `<div class="sc-journey-meter">
+        <div class="sc-journey-meter__label"><span>${p.label}</span><strong>${p.score}%</strong></div>
+        <div class="sc-journey-meter__track"><div class="sc-journey-meter__fill" style="width:${p.score}%"></div><div class="sc-journey-meter__target" style="left:${p.target}%"></div></div>
+        <span class="sc-journey-meter__target-label">Target ${p.target}%</span>
+      </div>`
     )
     .join("");
 
   return `
-    <section class="sc-section" id="sc-progress" data-reveal-section>
+    <section class="sc-section sc-section--journey" id="sc-progress" data-reveal-section>
       <div class="sc-section__inner">
         <div class="sc-section__head">
           <h2>Journey progress</h2>
           <p class="sc-section__desc">Completion rates across the two-year transformation framework</p>
         </div>
-        <div class="sc-progress-grid">${bars}</div>
+        <div class="sc-journey-strip">${meters}</div>
       </div>
     </section>`;
 }
 
 export function renderScorecardAnalysis(insights, comparisons, performance) {
-  const insightCards = (insights || [])
-    .slice(0, 3)
-    .map(
-      (ins) => `<article class="sc-brief-card">
-        <p class="sc-brief-card__eyebrow">${ins.metric}</p>
-        <h3>${ins.title}</h3>
-        <p class="sc-brief-card__summary">${ins.summary}</p>
-        <div class="sc-brief-card__footer">
-          <span class="sc-brief-card__score">${ins.score}</span>
-          <span class="sc-brief-card__trend">${ins.trend}</span>
-        </div>
-      </article>`
-    )
-    .join("");
-
   const sectorRows = (performance || [])
     .map(
       (m) => `<tr>
         <th scope="row">${m.sector}</th>
         <td class="sc-td-num"><strong>${m.score}</strong></td>
+        <td class="sc-td-bar"><span class="sc-inline-bar sc-inline-bar--sector" style="width:${m.score}%"></span></td>
         <td class="sc-td-change is-up">${m.trend}</td>
         <td><span class="sc-status sc-status--${m.status.replace(" ", "-")}">${m.status}</span></td>
       </tr>`
     )
     .join("");
 
-  const compareCards = (comparisons || [])
-    .map(
-      (c) => `<article class="sc-compare-card">
-        <h3>${c.title}</h3>
-        <p class="sc-compare-card__metric">${c.metric}</p>
-        <div class="sc-compare-card__values">
-          <div><span>${c.a.label}</span><strong>${c.a.value}</strong></div>
-          <div><span>${c.b.label}</span><strong>${c.b.value}</strong></div>
-        </div>
-      </article>`
-    )
-    .join("");
-
   return `
-    <section class="sc-section sc-section--alt" id="sc-analysis" data-reveal-section>
+    <section class="sc-section sc-section--sectors" id="sc-analysis" data-reveal-section>
       <div class="sc-section__inner">
-        <div class="sc-section__head">
-          <h2>Network analysis</h2>
-          <p class="sc-section__desc">Insights, sector performance, and country comparisons</p>
-        </div>
-        <div class="sc-brief-grid">${insightCards}</div>
-        <div class="sc-analysis-split">
-          <div class="sc-market-table">
-            <h3 class="sc-subhead">Sector outcomes</h3>
-            <table class="sc-table sc-table--compact">
-              <thead>
-                <tr><th scope="col">Sector</th><th scope="col" class="sc-th-num">Score</th><th scope="col" class="sc-th-num">Change</th><th scope="col">Status</th></tr>
-              </thead>
-              <tbody>${sectorRows}</tbody>
-            </table>
+        <div class="sc-section__head sc-section__head--split">
+          <div>
+            <h2>Sector outcomes</h2>
+            <p class="sc-section__desc">Programme-area performance across the network</p>
           </div>
-          <div class="sc-compare-grid">${compareCards}</div>
+          <a href="#/insights" class="sc-insights-cta" data-link>Country &amp; community comparisons, CBC index &rarr;</a>
+        </div>
+        <div class="sc-sector-table">
+          <table class="sc-table">
+            <thead>
+              <tr><th scope="col">Sector</th><th scope="col" class="sc-th-num">Score</th><th scope="col">Distribution</th><th scope="col" class="sc-th-num">Change</th><th scope="col">Status</th></tr>
+            </thead>
+            <tbody>${sectorRows}</tbody>
+          </table>
         </div>
       </div>
     </section>`;
 }
 
-export function renderScorecardComparisons() {
-  return "";
-}
-
-export function renderScorecardPerformance() {
-  return "";
-}
-
-export function renderScorecardInsights() {
-  return "";
-}
-
 export function renderScorecardReports(reports) {
-  const cards = (reports || [])
+  const items = (reports || [])
     .map(
-      (r) => `<article class="sc-report-card">
-        <div class="sc-report-card__meta"><span>${r.year}</span><span>${r.type}</span></div>
-        <h3>${r.title}</h3>
-        <p>${r.summary}</p>
-        <a href="${r.href}" class="sc-report-card__link" data-link>Read report &rarr;</a>
-      </article>`
+      (r) => `<li class="sc-report-row">
+        <div class="sc-report-row__year">${r.year}</div>
+        <div class="sc-report-row__body">
+          <span class="sc-report-row__type">${r.type}</span>
+          <h3>${r.title}</h3>
+          <p>${r.summary}</p>
+        </div>
+        <a href="${r.href}" class="sc-report-row__link" data-link>Read &rarr;</a>
+      </li>`
     )
     .join("");
 
   return `
-    <section class="sc-section" id="sc-reports" data-reveal-section>
+    <section class="sc-section sc-section--reports" id="sc-reports" data-reveal-section>
       <div class="sc-section__inner">
         <div class="sc-section__head">
           <h2>Reports &amp; briefs</h2>
           <p class="sc-section__desc">Downloadable ministry reports and quarterly performance summaries</p>
         </div>
-        <div class="sc-report-grid">${cards}</div>
+        <ul class="sc-report-timeline">${items}</ul>
       </div>
     </section>`;
-}
-
-export function renderScorecardApiPlaceholders() {
-  return "";
 }

@@ -13,7 +13,6 @@ const NAV_ITEMS = [
 export function renderCatchmentSidebar(countrySlug) {
   return `
     <aside class="ch-sidebar" aria-label="Catchment hub navigation">
-      <div id="context-map-root" class="ch-sidebar__context-map"></div>
       <nav class="ch-sidebar__nav">
         <p class="ch-sidebar__title">Navigate</p>
         <ul>${NAV_ITEMS.map((i) => `<li><a href="#${i.id}" class="ch-sidebar__link" data-ch-nav="${i.id}">${i.label}</a></li>`).join("")}</ul>
@@ -33,10 +32,6 @@ export function bindCatchmentSidebar(root, countrySlug) {
       e.preventDefault();
       document.getElementById(link.dataset.chNav)?.scrollIntoView({ behavior: "smooth", block: "start" });
     });
-  });
-
-  root.querySelector("[data-back-country]")?.addEventListener("click", () => {
-    location.hash = `#/country/${countrySlug}`;
   });
 
   if (!sections.length) return;

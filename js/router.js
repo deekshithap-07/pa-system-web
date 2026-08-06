@@ -1,13 +1,16 @@
 import { transitionTo } from "./utils/transitions.js";
+import {
+  saveScrollPosition,
+  markProgrammaticNavigation,
+  resolveNavigationIntent,
+  applyRouteScroll,
+} from "./utils/scroll-nav.js";
 import { renderHome, mountHome, destroyHome } from "./views/home.js";
 import { renderAfricaIntelligence, mountAfricaIntelligence, destroyAfricaIntelligence } from "./views/africa-intelligence.js";
 import { renderCountryHub, mountCountryHub, destroyCountryHub } from "./views/country-hub.js";
 import { renderCatchmentHub, mountCatchmentHub, destroyCatchmentHub } from "./views/catchment-hub.js";
-import {
-  renderCommunityDashboard,
-  mountDashboardView,
-  teardownDashboard,
-} from "./views/dashboard.js";
+import { renderCommunityHub, mountCommunityHub, destroyCommunityHub } from "./views/community-hub.js";
+import { teardownDashboard } from "./views/dashboard.js";
 import { renderScorecard, mountScorecard, destroyScorecard } from "./views/scorecard.js";
 import { renderResources, mountResources } from "./views/resources-hub.js";
 import { renderInsights, mountInsights, destroyInsights } from "./views/insights-hub.js";
@@ -27,6 +30,9 @@ export function initRouter(data) {
     bindGlobalLinks();
     linksBound = true;
   }
+  if ("scrollRestoration" in history) {
+    history.scrollRestoration = "manual";
+  }
   window.addEventListener("hashchange", handleRoute);
   handleRoute();
 }
@@ -37,8 +43,17 @@ function parseRoute() {
   return { parts, raw: hash };
 }
 
-async function navigate(path, useTransition = true) {
+function routeKeyFromParts(parts) {
+  return parts.join("/") || "home";
+}
+
+async function navigate(path, options = {}) {
+  const opts = typeof options === "boolean" ? { useTransition: options } : options;
+  const { useTransition = true, isBack = false } = opts;
   const hash = path === "/" || path === "" ? "#/" : `#/${path.replace(/^\//, "")}`;
+
+  if (lastRouteKey) saveScrollPosition(lastRouteKey);
+  markProgrammaticNavigation(isBack);
 
   const apply = () => {
     if (location.hash !== hash) location.hash = hash;
@@ -46,7 +61,7 @@ async function navigate(path, useTransition = true) {
   };
 
   if (useTransition && currentView && currentView !== "landing" && currentView !== "africa") {
-    await transitionTo(apply);
+    await transitionTo(apply, { scrollToTop: !isBack });
   } else {
     apply();
   }
@@ -59,7 +74,7 @@ function updateNavActive(parts) {
     const nav = el.dataset.nav;
     let active = false;
     if (nav === "home") active = parts.length === 0;
-    else if (nav === "africa") active = parts[0] === "africa" || parts[0] === "country" || parts[0] === "catchment";
+    else if (nav === "africa") active = parts[0] === "africa" || parts[0] === "country" || parts[0] === "catchment" || parts[0] === "community";
     else active = parts[0] === nav;
     el.classList.toggle("is-active", active);
   });
@@ -67,11 +82,15 @@ function updateNavActive(parts) {
 
 function handleRoute() {
   const { parts } = parseRoute();
-  const routeKey = parts.join("/") || "home";
+  const routeKey = routeKeyFromParts(parts);
 
   if (routeKey === lastRouteKey && currentView && document.getElementById("app")?.innerHTML) {
     return;
   }
+
+  if (lastRouteKey) saveScrollPosition(lastRouteKey);
+  const { restore } = resolveNavigationIntent(routeKey);
+
   lastRouteKey = routeKey;
 
   const app = document.getElementById("app");
@@ -80,11 +99,11 @@ function handleRoute() {
   teardownDashboard();
   destroyCountryHub(app);
   destroyCatchmentHub(app);
+  destroyCommunityHub(app);
   destroyScorecard(app);
   destroyInsights();
   const header = document.getElementById("site-header");
   let html = "";
-  let dash = null;
   let hub = null;
   let view = "landing";
 
@@ -109,9 +128,9 @@ function handleRoute() {
     hub = result.hub;
   } else if (parts[0] === "community" && parts[1] && parts[2] && parts[3]) {
     view = "community";
-    const result = renderCommunityDashboard(parts[1], parts[2], parts[3], appData);
+    const result = renderCommunityHub(parts[1], parts[2], parts[3], appData);
     html = result.html;
-    dash = result.dash;
+    hub = result.hub;
   } else if (parts[0] === "scorecard") {
     view = "scorecard";
     html = renderScorecard(appData);
@@ -139,8 +158,8 @@ function handleRoute() {
     requestAnimationFrame(() => mountHome(appData));
   } else if (view === "africa") {
     requestAnimationFrame(() => mountAfricaIntelligence(appData, navigate));
-  } else if (dash) {
-    requestAnimationFrame(() => mountDashboardView(app, dash));
+  } else if (view === "community" && hub) {
+    requestAnimationFrame(() => mountCommunityHub(app, hub));
   } else if (view === "country" && hub) {
     requestAnimationFrame(() => mountCountryHub(app, hub, appData, navigate));
   } else if (view === "scorecard") {
@@ -154,6 +173,7 @@ function handleRoute() {
   }
 
   bindAnchorScroll(app);
+  applyRouteScroll(routeKey, restore);
 }
 
 function bindGlobalLinks() {
@@ -168,16 +188,33 @@ function bindGlobalLinks() {
     const back = e.target.closest("[data-back]");
     if (back) {
       e.preventDefault();
-      navigate("/");
+      navigate("/", { isBack: true });
       return;
     }
     const backMap = e.target.closest("[data-back-map]");
     if (backMap) {
       e.preventDefault();
-      navigate("africa", false);
+      navigate("africa", { isBack: true, useTransition: false });
+      return;
+    }
+    const backCountry = e.target.closest("[data-back-country]");
+    if (backCountry) {
+      e.preventDefault();
+      const slug = backCountry.dataset.countrySlug;
+      if (slug) navigate(`country/${slug}`, { isBack: true, useTransition: false });
+      return;
+    }
+    const backCatchment = e.target.closest("[data-back-catchment]");
+    if (backCatchment) {
+      e.preventDefault();
+      const { countrySlug, catchmentSlug } = backCatchment.dataset;
+      if (countrySlug && catchmentSlug) {
+        navigate(`catchment/${countrySlug}/${catchmentSlug}`, { isBack: true, useTransition: false });
+      }
     }
   });
 }
+
 function bindAnchorScroll(root) {
   root.querySelectorAll('a[href^="#"]:not([data-link])').forEach((el) => {
     const href = el.getAttribute("href");

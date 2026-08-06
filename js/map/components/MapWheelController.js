@@ -1,15 +1,16 @@
 /**
- * Smooth wheel zoom toward cursor — charity:water-style continuous zoom.
- * Does not scroll the page.
+ * Smooth wheel zoom via SVG viewBox — keeps labels crisp (no CSS scale blur).
  */
+import { wheelZoomViewBox, clampViewBoxWidth } from "../utils/geo.js";
+
 export class MapWheelController {
-  constructor(canvasEl, { getViewState, applyView, onScaleChange, minScale = 0.85, maxScale = 8 }) {
+  constructor(canvasEl, { getViewState, applyView, onZoomChange, minWidth, maxWidth }) {
     this.canvas = canvasEl;
     this.getViewState = getViewState;
     this.applyView = applyView;
-    this.onScaleChange = onScaleChange;
-    this.minScale = minScale;
-    this.maxScale = maxScale;
+    this.onZoomChange = onZoomChange;
+    this.minWidth = minWidth ?? 40;
+    this.maxWidth = maxWidth ?? 2000;
     this.targetView = null;
     this._rafId = null;
     this._onWheel = this.handleWheel.bind(this);
@@ -27,7 +28,7 @@ export class MapWheelController {
     e.stopPropagation();
 
     const state = this.targetView || this.getViewState();
-    if (!state) return;
+    if (!state?.width) return;
 
     const rect = this.canvas.getBoundingClientRect();
     const mx = e.clientX - rect.left;
@@ -37,17 +38,15 @@ export class MapWheelController {
     if (e.deltaMode === 1) delta *= 20;
     else if (e.deltaMode === 2) delta *= 120;
 
-    const sensitivity = 0.00032;
+    const sensitivity = 0.00085;
     const factor = Math.exp(-delta * sensitivity);
-    const newScale = Math.max(this.minScale, Math.min(this.maxScale, state.scale * factor));
 
-    if (Math.abs(newScale - state.scale) < 0.0001) return;
+    let next = wheelZoomViewBox(state, mx, my, rect.width, rect.height, factor);
+    next = clampViewBoxWidth(next, this.minWidth, this.maxWidth);
 
-    const ratio = newScale / state.scale;
-    const x = mx - (mx - state.x) * ratio;
-    const y = my - (my - state.y) * ratio;
+    if (Math.abs(next.width - state.width) < 0.01) return;
 
-    this.targetView = { x, y, scale: newScale };
+    this.targetView = next;
     this.startTick();
   }
 
@@ -57,7 +56,7 @@ export class MapWheelController {
     const tick = () => {
       const current = this.getViewState();
       const target = this.targetView;
-      if (!current || !target) {
+      if (!current?.width || !target?.width) {
         this._rafId = null;
         return;
       }
@@ -66,21 +65,20 @@ export class MapWheelController {
       const next = {
         x: current.x + (target.x - current.x) * lerp,
         y: current.y + (target.y - current.y) * lerp,
-        scale: current.scale + (target.scale - current.scale) * lerp,
+        width: current.width + (target.width - current.width) * lerp,
+        height: current.height + (target.height - current.height) * lerp,
       };
 
-      const prevScale = current.scale;
       this.applyView(next, false);
-      this.onScaleChange?.(next.scale, prevScale);
+      this.onZoomChange?.();
 
       const settled =
-        Math.hypot(target.x - next.x, target.y - next.y) < 0.35 &&
-        Math.abs(target.scale - next.scale) < 0.0008;
+        Math.hypot(target.x - next.x, target.y - next.y) < 0.2 &&
+        Math.abs(target.width - next.width) < 0.15;
 
       if (settled) {
-        const finalPrev = next.scale;
         this.applyView(target, false);
-        this.onScaleChange?.(target.scale, finalPrev);
+        this.onZoomChange?.();
         this._rafId = null;
         return;
       }
@@ -98,9 +96,9 @@ export class MapWheelController {
     }
   }
 
-  setScaleBounds(min, max) {
-    this.minScale = min;
-    this.maxScale = max;
+  setWidthBounds(minWidth, maxWidth) {
+    this.minWidth = minWidth;
+    this.maxWidth = maxWidth;
   }
 
   destroy() {

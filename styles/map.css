@@ -620,6 +620,12 @@
   margin-top: 0.35rem;
 }
 
+.context-map--hero {
+  margin-bottom: 0;
+  padding-bottom: 0;
+  border-bottom: none;
+}
+
 .ch-sidebar__context-map {
   padding: 0 0.5rem;
 }

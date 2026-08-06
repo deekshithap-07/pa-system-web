@@ -8,7 +8,7 @@ export function initTransitions() {
   overlay = document.getElementById("transition-overlay");
 }
 
-export function transitionTo(callback) {
+export function transitionTo(callback, { scrollToTop = true } = {}) {
   return new Promise((resolve) => {
     const tl = gsap.timeline({
       onComplete: () => {
@@ -20,7 +20,7 @@ export function transitionTo(callback) {
           onComplete: () => {
             overlay.classList.remove("is-active");
             gsap.set("#app", { opacity: 1, y: 0 });
-            window.scrollTo(0, 0);
+            if (scrollToTop) window.scrollTo(0, 0);
             resolve();
           },
         });

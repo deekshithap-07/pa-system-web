@@ -24,7 +24,10 @@ export function renderCountryKPIGrid(kpis) {
     .join("");
 
   return `
-    <section class="ch-kpi-section" aria-label="Key metrics">
+    <section class="ch-kpi-section" id="ch-kpi-section" aria-label="Country-specific data and metrics">
+      <div class="ch-section__head">
+        <h2>Country-specific data &amp; metrics</h2>
+      </div>
       <div class="ch-kpi-grid">${cards}</div>
     </section>`;
 }

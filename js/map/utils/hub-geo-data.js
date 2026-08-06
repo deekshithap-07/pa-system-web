@@ -111,50 +111,73 @@ export function buildCatchmentGeoMapModel({
   catchmentSlug,
 }) {
   const commLocs = geoLocations?.communities || {};
-  const geoCommunities = (communities || []).map((c) => attachGeoPoint({ ...c }, commLocs[c.id]));
+  let geoCommunities = (communities || []).map((c) => attachGeoPoint({ ...c }, commLocs[c.id]));
+
+  if (communityMap?.communities?.length) {
+    geoCommunities = geoCommunities.map((c) => {
+      const mapEntry = communityMap.communities.find((m) => m.id === c.id || m.slug === c.slug);
+      if (!mapEntry?.path) return c;
+      const bb = pathBBox(mapEntry.path);
+      return { ...c, x: bb.x + bb.width / 2, y: bb.y + bb.height / 2 };
+    });
+
+    const points = geoCommunities.filter((c) => c.x != null);
+    const base = communityMap.viewBox
+      ? (() => {
+          const p = communityMap.viewBox.split(/\s+/).map(Number);
+          return { x: p[0] || 0, y: p[1] || 0, width: p[2] || 220, height: p[3] || 200 };
+        })()
+      : { x: 0, y: 0, width: 220, height: 200 };
+    const viewBox = expandViewBox(base, points, 0.1);
+
+    let bgPath = "";
+    const countryPathRaw = mapPaths?.paths?.[country.isoCode] || "";
+    if (countryPathRaw) {
+      const cb = pathBBox(countryPathRaw);
+      bgPath = projectPathD(countryPathRaw, `${cb.x} ${cb.y} ${cb.width} ${cb.height}`, {
+        x: base.x + base.width * 0.06,
+        y: base.y + base.height * 0.06,
+        width: base.width * 0.88,
+        height: base.height * 0.88,
+      });
+    }
+
+    return {
+      mode: "catchment",
+      layout: "schematic",
+      countryName: country.name,
+      countrySlug,
+      catchmentName: catchment.name,
+      catchmentSlug,
+      countryPath: bgPath,
+      viewBox: viewBox.string,
+      communities: geoCommunities,
+      catchmentZones: [],
+      catchments: [],
+    };
+  }
+
+  const countryPath = mapPaths?.paths?.[country.isoCode] || "";
+  const countryBbox = pathBBox(countryPath || "M0,0 L100,0 L100,100 Z");
 
   const points = geoCommunities.filter((c) => c.x != null);
-  let countryPath = "";
-  let baseBbox;
+  const baseBbox = countryPath ? countryBbox : points.length
+    ? { x: points[0].x - 20, y: points[0].y - 20, width: 40, height: 40 }
+    : { x: 0, y: 0, width: 100, height: 100 };
 
-  if (mapPaths?.paths?.[country.isoCode]) {
-    countryPath = mapPaths.paths[country.isoCode];
-    baseBbox = pathBBox(countryPath);
-  } else if (points.length) {
-    baseBbox = {
-      x: points[0].x - 20,
-      y: points[0].y - 20,
-      width: 40,
-      height: 40,
-    };
-  } else {
-    baseBbox = { x: 0, y: 0, width: 100, height: 100 };
-  }
-
-  const viewBox = expandViewBox(baseBbox, points, 0.28);
-
-  let catchmentOutline = "";
-  if (communityMap?.catchmentPath && communityMap?.viewBox) {
-    const zoneBbox = {
-      x: viewBox.x + viewBox.width * 0.15,
-      y: viewBox.y + viewBox.height * 0.15,
-      width: viewBox.width * 0.7,
-      height: viewBox.height * 0.7,
-    };
-    catchmentOutline = projectPathD(communityMap.catchmentPath, communityMap.viewBox, zoneBbox);
-  }
+  const viewBox = expandViewBox(baseBbox, points, points.length ? 0.22 : 0.28);
 
   const catchLoc = geoLocations?.catchments?.[catchment.id];
   const catchmentPoint = catchLoc ? attachGeoPoint({ ...catchment }, catchLoc) : null;
 
   return {
     mode: "catchment",
+    layout: "geo",
     countryName: country.name,
     countrySlug,
     catchmentName: catchment.name,
     catchmentSlug,
     countryPath,
-    catchmentOutline,
     catchmentPoint,
     viewBox: viewBox.string,
     communities: geoCommunities,

@@ -1,37 +1,36 @@
 const NAV_ITEMS = [
-  { id: "ch-overview", label: "Overview" },
-  { id: "ch-kpi-section", label: "Metrics" },
-  { id: "ch-map", label: "Map" },
-  { id: "ch-charts", label: "Projects & progress" },
-  { id: "ch-reports", label: "Reports & updates" },
+  { id: "cm-profile", label: "Profile" },
+  { id: "cm-projects", label: "Projects & activities" },
+  { id: "cm-leadership", label: "Leadership & engagement" },
+  { id: "cm-progress", label: "Progress indicators" },
 ];
 
-export function renderCountrySidebar() {
+export function renderCommunitySidebar(countrySlug, catchmentSlug) {
   return `
-    <aside class="ch-sidebar" aria-label="Country hub navigation">
+    <aside class="ch-sidebar" aria-label="Community hub navigation">
       <nav class="ch-sidebar__nav">
         <p class="ch-sidebar__title">Navigate</p>
         <ul>
           ${NAV_ITEMS.map(
-            (item) => `<li><a href="#${item.id}" class="ch-sidebar__link" data-ch-nav="${item.id}">${item.label}</a></li>`
+            (item) =>
+              `<li><a href="#${item.id}" class="ch-sidebar__link" data-ch-nav="${item.id}">${item.label}</a></li>`
           ).join("")}
         </ul>
       </nav>
       <div class="ch-sidebar__footer">
-        <button type="button" class="ch-sidebar__back" data-back-map>&larr; Back to Africa map</button>
+        <button type="button" class="ch-sidebar__back" data-back-catchment data-country-slug="${countrySlug}" data-catchment-slug="${catchmentSlug}">&larr; Back to catchment</button>
       </div>
     </aside>`;
 }
 
-export function bindCountrySidebar(root) {
+export function bindCommunitySidebar(root) {
   const links = root.querySelectorAll("[data-ch-nav]");
   const sections = NAV_ITEMS.map((i) => document.getElementById(i.id)).filter(Boolean);
 
   links.forEach((link) => {
     link.addEventListener("click", (e) => {
       e.preventDefault();
-      const target = document.getElementById(link.dataset.chNav);
-      target?.scrollIntoView({ behavior: "smooth", block: "start" });
+      document.getElementById(link.dataset.chNav)?.scrollIntoView({ behavior: "smooth", block: "start" });
     });
   });
 
@@ -52,6 +51,6 @@ export function bindCountrySidebar(root) {
   root._sidebarObserver = observer;
 }
 
-export function destroyCountrySidebar(root) {
+export function destroyCommunitySidebar(root) {
   root._sidebarObserver?.disconnect();
 }

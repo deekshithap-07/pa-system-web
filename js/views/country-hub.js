@@ -1,15 +1,11 @@
 import { buildCountryHubPayload } from "../utils/country-hub-data.js";
+import { getDocCountryCharts, getDocCountryKpis } from "../utils/doc-hub-kpis.js";
 import { buildCountryGeoMapModel } from "../map/utils/hub-geo-data.js";
 import { renderCountryHero } from "../components/country-hub/CountryHero.js";
-import { renderCountrySummary } from "../components/country-hub/CountrySummary.js";
 import { renderCountryKPIGrid } from "../components/country-hub/CountryKPIGrid.js";
 import { renderCountryMap, bindCountryMap } from "../components/country-hub/CountryMap.js";
 import { renderCountryCharts } from "../components/country-hub/CountryCharts.js";
-import { renderCountryActivityFeed } from "../components/country-hub/CountryActivityFeed.js";
-import { renderCountryReports } from "../components/country-hub/CountryReports.js";
-import { renderCountryStories } from "../components/country-hub/CountryStories.js";
-import { renderCountryInsights } from "../components/country-hub/CountryInsights.js";
-import { renderCountryCatchments, bindCountryCatchments } from "../components/country-hub/CountryCommunities.js";
+import { renderCountryReportsAndUpdates } from "../components/country-hub/CountryReportsAndUpdates.js";
 import {
   renderCountrySidebar,
   bindCountrySidebar,
@@ -21,28 +17,6 @@ import {
   teardownCountryHub,
 } from "../components/country-hub/country-hub-mount.js";
 import { ContextMap, destroyContextMap } from "../map/components/ContextMap.js";
-
-function renderDownloads(reports) {
-  if (!reports?.length) return `<section class="ch-section" id="ch-downloads" data-reveal-section><p class="ch-empty">No downloads available.</p></section>`;
-
-  return `
-    <section class="ch-section" id="ch-downloads" data-reveal-section>
-      <div class="ch-section__head">
-        <h2>Downloads</h2>
-        <p class="ch-section__desc">Data exports and printable resources</p>
-      </div>
-      <div class="ch-download-list">
-        ${reports
-          .map(
-            (r) => `<a href="${r.downloadUrl}" class="ch-download-item">
-              <span class="ch-download-item__title">${r.title}</span>
-              <span class="ch-download-item__action">Download &darr;</span>
-            </a>`
-          )
-          .join("")}
-      </div>
-    </section>`;
-}
 
 export function renderCountryHub(slug, data) {
   const hub = buildCountryHubPayload(slug, data);
@@ -59,21 +33,18 @@ export function renderCountryHub(slug, data) {
     geoLocations: data.geoLocations,
   });
 
+  hub.docKpis = getDocCountryKpis(hub);
+  hub.docCharts = getDocCountryCharts(hub.charts);
+
   const html = `
     <div class="ch-hub" data-country-hub data-country-slug="${slug}">
       ${renderCountrySidebar()}
       <main class="ch-main">
         ${renderCountryHero(hub)}
-        ${renderCountryKPIGrid(hub.kpis)}
-        ${renderCountrySummary(hub)}
+        ${renderCountryKPIGrid(hub.docKpis)}
         ${renderCountryMap(hub)}
-        ${renderCountryCatchments(hub.catchments, hub.countryName, slug)}
-        ${renderCountryCharts(hub.charts)}
-        ${renderCountryActivityFeed(hub.activities)}
-        ${renderCountryStories(hub.stories, data.communities)}
-        ${renderCountryReports(hub.reports)}
-        ${renderCountryInsights(hub.insights)}
-        ${renderDownloads(hub.reports)}
+        ${renderCountryCharts(hub.docCharts)}
+        ${renderCountryReportsAndUpdates(hub.reports, hub.activities)}
       </main>
     </div>`;
 
@@ -86,7 +57,6 @@ export function mountCountryHub(root, hub, data, navigate) {
 
   const slug = hubEl.dataset.countrySlug;
   bindCountryMap(hubEl, slug);
-  bindCountryCatchments(hubEl, slug);
   bindCountrySidebar(hubEl);
 
   const ctxMap = new ContextMap();
@@ -107,7 +77,7 @@ export function mountCountryHub(root, hub, data, navigate) {
 
   requestAnimationFrame(() => {
     initCountryHubAnimations(hubEl);
-    if (hub?.charts) mountCountryHubCharts(hubEl, hub.charts);
+    if (hub?.docCharts) mountCountryHubCharts(hubEl, hub.docCharts);
     ScrollTrigger.refresh();
   });
 }

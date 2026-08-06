@@ -16,7 +16,7 @@ export function renderCatchmentMap(hub) {
     <section class="ch-section" id="cth-map" data-reveal-section>
       <div class="ch-section__head">
         <h2>Catchment Map</h2>
-        <p class="ch-section__desc">Communities in ${hub.catchmentName} at their geographic locations</p>
+        <p class="ch-section__desc">Communities in ${hub.catchmentName} — click a community to view its dashboard</p>
       </div>
       ${renderHubGeoMap(hub.geoMap, { variant: "full", mapId: "section" })}
     </section>`;

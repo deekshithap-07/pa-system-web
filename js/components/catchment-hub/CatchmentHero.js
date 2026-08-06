@@ -1,9 +1,6 @@
 import { renderBreadcrumb } from "./Breadcrumb.js";
-import { renderHubGeoMap } from "../../map/components/HubGeoMap.js";
 
 export function renderCatchmentHero(hub) {
-  const heroMap = hub.geoMap ? renderHubGeoMap(hub.geoMap, { variant: "compact", mapId: "hero" }) : "";
-
   return `
     <header class="ch-hero" id="cth-overview">
       <div class="ch-hero__grid">
@@ -17,8 +14,8 @@ export function renderCatchmentHero(hub) {
           <h1>${hub.catchmentName}</h1>
           <p class="ch-hero__summary">${hub.description}</p>
         </div>
-        <div class="ch-hero__visual">
-          ${heroMap || `<div class="ch-hero__image-placeholder"><span>Catchment map</span></div>`}
+        <div class="ch-hero__visual ch-hero__context-map-wrap">
+          <div id="context-map-root" class="ch-hero__context-map" aria-label="Africa context map"></div>
         </div>
       </div>
     </header>`;

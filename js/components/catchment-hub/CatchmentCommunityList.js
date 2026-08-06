@@ -18,7 +18,7 @@ export function renderCatchmentCommunityList(communities, countrySlug, catchment
           ${c.households != null ? `<span><strong>${c.households}</strong> households</span>` : ""}
           ${c.shalomGroups != null ? `<span><strong>${c.shalomGroups}</strong> Shalom groups</span>` : ""}
         </div>
-        <a href="#/community/${countrySlug}/${catchmentSlug}/${c.slug}" class="cth-community-card__link" data-community-preview="${c.slug}">View community dashboard &rarr;</a>
+        <a href="#/community/${countrySlug}/${catchmentSlug}/${c.slug}" class="cth-community-card__link" data-link>View community dashboard &rarr;</a>
       </article>`
     )
     .join("");
@@ -34,15 +34,5 @@ export function renderCatchmentCommunityList(communities, countrySlug, catchment
 }
 
 export function bindCatchmentCommunityList(root) {
-  root.querySelectorAll("[data-community-preview]").forEach((link) => {
-    link.addEventListener("click", (e) => {
-      e.preventDefault();
-      const toast = root.querySelector("#cth-map-toast");
-      if (toast) {
-        toast.textContent = "Community hub coming in Phase 5";
-        toast.classList.add("is-visible");
-        setTimeout(() => toast.classList.remove("is-visible"), 2800);
-      }
-    });
-  });
+  /* Links use data-link navigation to community hub */
 }

@@ -6,73 +6,82 @@ function catchmentIdToSlug(id) {
   return id?.replace(/_/g, "-") || "";
 }
 
-function renderLabel(name, x, y, className, id, fontSize = 12) {
+function renderLabel(name, x, y, className, id, slug, fontSize = 8) {
   const est = estimateLabelSize(name, { fontSize });
   return `
-    <g class="${className}" data-entity-id="${id}" data-anchor-x="${x}" data-anchor-y="${y}"
+    <g class="${className}" data-entity-id="${id}" data-entity-slug="${slug || ""}" data-anchor-x="${x}" data-anchor-y="${y}"
        data-est-width="${est.width}" data-est-height="${est.height}" transform="translate(${x},${y})" role="button" tabindex="0" aria-label="${name}">
-      <text class="${className}__text" text-anchor="middle" dominant-baseline="middle">${name}</text>
+      <text class="${className}__text" font-size="${fontSize}" text-anchor="middle" dominant-baseline="middle">${name}</text>
     </g>`;
 }
 
-export function renderHubGeoMap(model, { variant = "full", mapId = "hub-geo-map" } = {}) {
+function renderMarker(x, y, className, id, slug, r = 4) {
+  return `<circle class="${className}" cx="${x}" cy="${y}" r="${r}"
+    data-entity-id="${id}" data-entity-slug="${slug || ""}" aria-hidden="true" />`;
+}
+
+export function renderHubGeoMap(model, { variant = "full", mapId = "hub-geo-map", displayMode = "default" } = {}) {
   if (!model) {
     return `<div class="hub-geo-map hub-geo-map--empty"><p>Map data unavailable</p></div>`;
   }
 
   const isCompact = variant === "compact";
-  const zones = (model.catchmentZones || [])
-    .map(
-      (z) => `<path class="hub-geo-map__zone hub-geo-map__zone--${z.status || "inactive"}"
-        d="${z.d}" data-catchment-id="${z.id}" data-catchment-slug="${z.slug || catchmentIdToSlug(z.id)}"
-        data-catchment-name="${z.name}" tabindex="0" role="button" aria-label="${z.name} catchment" />`
-    )
-    .join("");
+  const communitiesFocus =
+    model.mode === "catchment" || (displayMode === "communities" && model.mode === "country");
 
-  const catchmentAnchors = (model.catchments || [])
-    .filter((c) => c.x != null)
-    .map(
-      (c) => `<circle class="hub-geo-map__catchment-anchor" cx="${c.x}" cy="${c.y}" r="4"
-        data-catchment-id="${c.id}" aria-hidden="true" />`
-    )
-    .join("");
+  const zones = "";
 
-  const catchmentLabels = (model.catchments || [])
-    .filter((c) => c.x != null && model.mode === "country")
-    .map((c) => renderLabel(c.name, c.x, c.y, "hub-geo-map__catchment-label", c.id, 11))
-    .join("");
+  const catchmentMarkers = communitiesFocus
+    ? ""
+    : (model.catchments || [])
+        .filter((c) => c.x != null)
+        .map((c) => renderMarker(c.x, c.y, "hub-geo-map__catchment-anchor", c.id, c.slug, 3.5))
+        .join("");
 
-  const communityAnchors = (model.communities || [])
-    .filter((c) => c.x != null)
-    .map(
-      (c) => `<circle class="hub-geo-map__community-anchor" cx="${c.x}" cy="${c.y}" r="3.5"
-        data-community-id="${c.id}" data-community-slug="${c.slug}" aria-hidden="true" />`
-    )
-    .join("");
+  const catchmentLabels =
+    !communitiesFocus && model.mode === "country"
+      ? (model.catchments || [])
+          .filter((c) => c.x != null)
+          .map((c) => renderLabel(c.name, c.x, c.y, "hub-geo-map__catchment-label", c.id, c.slug, 5))
+          .join("")
+      : "";
 
-  const communityLabels = (model.communities || [])
-    .filter((c) => c.x != null)
-    .map((c) => renderLabel(c.name, c.x, c.y, "hub-geo-map__community-label", c.id, 10))
-    .join("");
+  const communityMarkers = communitiesFocus
+    ? (model.communities || [])
+        .filter((c) => c.x != null)
+        .map((c) => renderMarker(c.x, c.y, "hub-geo-map__community-anchor", c.id, c.slug, 3.5))
+        .join("")
+    : "";
 
-  const catchmentOutline = model.catchmentOutline
-    ? `<path class="hub-geo-map__zone hub-geo-map__zone--active" d="${model.catchmentOutline}" />`
+  const communityLabels = communitiesFocus
+    ? (model.communities || [])
+        .filter((c) => c.x != null)
+        .map((c) =>
+          renderLabel(c.name, c.x, c.y, "hub-geo-map__community-label", c.id, c.slug, 7)
+        )
+        .join("")
     : "";
 
   const svg = `
     <svg class="hub-geo-map__svg" viewBox="${model.viewBox}" role="img"
       aria-label="${model.mode === "catchment" ? `Map of ${model.catchmentName} communities` : `Map of ${model.countryName} catchments`}">
       ${model.countryPath ? `<path class="hub-geo-map__country" d="${model.countryPath}" />` : ""}
-      ${catchmentOutline}
       <g class="hub-geo-map__zones">${zones}</g>
-      <g class="hub-geo-map__anchors">${catchmentAnchors}${communityAnchors}</g>
+      <g class="hub-geo-map__anchors">${catchmentMarkers}${communityMarkers}</g>
       <g class="hub-geo-map__labels hub-geo-map__labels--catchments">${catchmentLabels}</g>
       <g class="hub-geo-map__labels hub-geo-map__labels--communities">${communityLabels}</g>
     </svg>`;
 
-  const listItems =
-    model.mode === "country"
-      ? (model.catchmentZones || [])
+  const listItems = communitiesFocus
+    ? (model.communities || [])
+        .map(
+          (c) => `<li><button type="button" class="hub-geo-map__list-btn" data-community-nav="${c.slug}">
+              <span class="hub-geo-map__dot hub-geo-map__dot--active"></span>${c.name}
+            </button></li>`
+        )
+        .join("")
+    : model.mode === "country"
+      ? (model.catchments?.length ? model.catchments : model.catchmentZones || [])
           .map(
             (z) => `<li><button type="button" class="hub-geo-map__list-btn" data-catchment-highlight="${z.id}" data-catchment-slug="${z.slug || catchmentIdToSlug(z.id)}">
               <span class="hub-geo-map__dot hub-geo-map__dot--${z.status || "inactive"}"></span>${z.name}
@@ -81,22 +90,28 @@ export function renderHubGeoMap(model, { variant = "full", mapId = "hub-geo-map"
           .join("")
       : (model.communities || [])
           .map(
-            (c) => `<li><button type="button" class="hub-geo-map__list-btn" data-community-highlight="${c.slug}">
+            (c) => `<li><button type="button" class="hub-geo-map__list-btn" data-community-nav="${c.slug}">
               <span class="hub-geo-map__dot hub-geo-map__dot--active"></span>${c.name}
             </button></li>`
           )
           .join("");
 
+  const panelTitle = communitiesFocus
+    ? model.catchmentName || "Communities"
+    : model.mode === "country"
+      ? model.countryName
+      : model.catchmentName || "Communities";
+
   const panel =
     !isCompact && listItems
       ? `<aside class="hub-geo-map__panel">
-          <h3>${model.mode === "country" ? "Catchments" : "Communities"}</h3>
+          <h3>${panelTitle}</h3>
           <ul class="hub-geo-map__list">${listItems}</ul>
         </aside>`
       : "";
 
   return `
-    <div class="hub-geo-map hub-geo-map--${variant} hub-geo-map--${model.mode}"
+    <div class="hub-geo-map hub-geo-map--${variant} hub-geo-map--${model.mode}${model.layout ? ` hub-geo-map--${model.layout}` : ""}${communitiesFocus ? " hub-geo-map--communities-focus" : ""}"
       data-hub-geo-map data-map-id="${mapId}" data-map-mode="${model.mode}">
       <div class="hub-geo-map__canvas">${svg}</div>
       ${panel}
@@ -104,53 +119,28 @@ export function renderHubGeoMap(model, { variant = "full", mapId = "hub-geo-map"
     </div>`;
 }
 
-function decorateLabels(svg) {
-  svg.querySelectorAll(".hub-geo-map__catchment-label, .hub-geo-map__community-label").forEach((g) => {
-    const text = g.querySelector("text");
-    if (!text) return;
-    try {
-      const tb = text.getBBox();
-      if (tb.width <= 0) return;
-      const base = g.classList.contains("hub-geo-map__community-label") ? "hub-geo-map__community-label" : "hub-geo-map__catchment-label";
-      const padX = 6;
-      const padY = 3;
-      const rect = document.createElementNS(SVG_NS, "rect");
-      rect.setAttribute("class", `${base}__bg`);
-      rect.setAttribute("x", tb.x - padX);
-      rect.setAttribute("y", tb.y - padY);
-      rect.setAttribute("width", tb.width + padX * 2);
-      rect.setAttribute("height", tb.height + padY * 2);
-      rect.setAttribute("rx", 3);
-      g.insertBefore(rect, text);
-    } catch {
-      /* bbox unavailable */
-    }
-  });
-}
-
 export function bindHubGeoMap(root, { countrySlug, catchmentSlug, onCatchmentNavigate, onCommunityNavigate } = {}) {
   root.querySelectorAll("[data-hub-geo-map]").forEach((mapEl) => {
     const svg = mapEl.querySelector(".hub-geo-map__svg");
     if (!svg) return;
 
-    decorateLabels(svg);
-
     const catchmentLabels = svg.querySelector(".hub-geo-map__labels--catchments");
     if (catchmentLabels) {
       applyLabelSpread(catchmentLabels, SVG_NS, {
         labelSelector: ".hub-geo-map__catchment-label",
-        spread: 1.6,
-        maxOffset: 48,
-        gap: 8,
+        spread: 1.1,
+        maxOffset: 22,
+        gap: 5,
       });
     }
 
     const communityLabels = svg.querySelector(".hub-geo-map__labels--communities");
     if (communityLabels) {
+      const isCatchment = mapEl.dataset.mapMode === "catchment";
       applyLabelSpread(communityLabels, SVG_NS, {
         labelSelector: ".hub-geo-map__community-label",
-        spread: 2,
-        maxOffset: 42,
+        spread: isCatchment ? 1.1 : 1.4,
+        maxOffset: isCatchment ? 22 : 32,
         gap: 6,
       });
     }
@@ -177,9 +167,28 @@ export function bindHubGeoMap(root, { countrySlug, catchmentSlug, onCatchmentNav
       showToast(`${name} — catchment data not available`);
     };
 
+    const goCommunity = (slug, name) => {
+      if (slug && countrySlug && catchmentSlug) {
+        if (onCommunityNavigate) onCommunityNavigate(slug);
+        else location.hash = `#/community/${countrySlug}/${catchmentSlug}/${slug}`;
+        return;
+      }
+      showToast(`${name} — community page not available`);
+    };
+
     const highlightCatchment = (id) => {
       svg.querySelectorAll(".hub-geo-map__zone").forEach((p) => {
         p.classList.toggle("is-highlighted", p.dataset.catchmentId === id);
+      });
+      svg.querySelectorAll(".hub-geo-map__catchment-anchor, .hub-geo-map__catchment-label").forEach((el) => {
+        el.classList.toggle("is-selected", el.dataset.entityId === id);
+      });
+    };
+
+    const highlightCommunity = (slug) => {
+      svg.querySelectorAll(".hub-geo-map__community-anchor, .hub-geo-map__community-label").forEach((el) => {
+        const match = el.dataset.entitySlug === slug;
+        el.classList.toggle("is-selected", match);
       });
     };
 
@@ -202,12 +211,18 @@ export function bindHubGeoMap(root, { countrySlug, catchmentSlug, onCatchmentNav
       });
     });
 
-    svg.querySelectorAll(".hub-geo-map__catchment-label").forEach((label) => {
-      const id = label.dataset.entityId;
-      const zone = svg.querySelector(`[data-catchment-id="${id}"]`);
-      const slug = zone?.dataset.catchmentSlug;
-      const name = zone?.dataset.catchmentName || label.getAttribute("aria-label");
-      label.addEventListener("click", () => goCatchment(slug, name));
+    svg.querySelectorAll(".hub-geo-map__catchment-label, .hub-geo-map__catchment-anchor").forEach((el) => {
+      const slug = el.dataset.entitySlug;
+      const name = el.getAttribute?.("aria-label") || slug;
+      el.addEventListener("click", () => goCatchment(slug, name));
+    });
+
+    svg.querySelectorAll(".hub-geo-map__community-label, .hub-geo-map__community-anchor").forEach((el) => {
+      const slug = el.dataset.entitySlug;
+      const name = el.getAttribute?.("aria-label") || slug;
+      el.addEventListener("click", () => goCommunity(slug, name));
+      el.addEventListener("mouseenter", () => highlightCommunity(slug));
+      el.addEventListener("mouseleave", () => highlightCommunity(null));
     });
 
     mapEl.querySelectorAll("[data-catchment-highlight]").forEach((btn) => {
@@ -219,11 +234,11 @@ export function bindHubGeoMap(root, { countrySlug, catchmentSlug, onCatchmentNav
       });
     });
 
-    mapEl.querySelectorAll("[data-community-highlight]").forEach((btn) => {
+    mapEl.querySelectorAll("[data-community-nav]").forEach((btn) => {
       btn.addEventListener("click", () => {
-        const slug = btn.dataset.communityHighlight;
-        svg.querySelector(`[data-community-slug="${slug}"]`)?.classList.add("is-pulsed");
-        showToast(`${btn.textContent.trim()} — community hub coming soon`);
+        const slug = btn.dataset.communityNav;
+        highlightCommunity(slug);
+        goCommunity(slug, btn.textContent.trim());
       });
     });
   });

@@ -24,8 +24,7 @@ export function renderCountryCharts(charts) {
   return `
     <section class="ch-section" id="ch-charts">
       <div class="ch-section__head">
-        <h2>Growth &amp; Progress</h2>
-        <p class="ch-section__desc">Transformation trends across ${Object.keys(charts).length} indicators</p>
+        <h2>Projects and progress</h2>
       </div>
       <div class="ch-chart-grid">${cards}</div>
     </section>`;

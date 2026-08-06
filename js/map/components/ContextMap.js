@@ -21,7 +21,7 @@ export class ContextMap {
     this.regions = loadMapRegions({ countries, mapPaths, mapOverlay, mapMetrics });
 
     container.innerHTML = `
-      <div class="context-map">
+      <div class="context-map context-map--hero">
         <nav class="context-map__crumbs" aria-label="Geographic navigation">
           ${breadcrumbs
             .map((b, i) => {
@@ -37,7 +37,7 @@ export class ContextMap {
             <rect class="map-ocean" width="1000" height="1000" fill="transparent"/>
           </svg>
         </div>
-        <p class="context-map__hint">Transformation map · select a country</p>
+        <p class="context-map__hint">Transformation map · ${activeSlug ? "selected country highlighted" : "select a country"}</p>
       </div>`;
 
     const svg = container.querySelector(".context-map__svg");
