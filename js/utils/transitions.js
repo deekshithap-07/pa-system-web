@@ -12,24 +12,20 @@ export function transitionTo(callback, { scrollToTop = true } = {}) {
   return new Promise((resolve) => {
     const tl = gsap.timeline({
       onComplete: () => {
-        callback();
-        gsap.to(overlay, {
-          opacity: 0,
-          duration: 0.5,
-          ease: "power2.inOut",
-          onComplete: () => {
-            overlay.classList.remove("is-active");
-            gsap.set("#app", { opacity: 1, y: 0 });
-            if (scrollToTop) window.scrollTo(0, 0);
-            resolve();
-          },
-        });
+        overlay.classList.remove("is-active");
+        if (scrollToTop) window.scrollTo(0, 0);
+        resolve();
       },
     });
 
     overlay.classList.add("is-active");
     tl.to(overlay, { opacity: 1, duration: 0.45, ease: "power2.inOut" })
-      .to("#app", { opacity: 0, y: -20, duration: 0.3 }, "<0.1");
+      .to("#app", { opacity: 0, y: -20, duration: 0.3 }, "<0.1")
+      .call(() => {
+        gsap.set("#app", { opacity: 1, y: 0, clearProps: "transform" });
+        callback();
+      })
+      .to(overlay, { opacity: 0, duration: 0.5, ease: "power2.inOut" });
   });
 }
 

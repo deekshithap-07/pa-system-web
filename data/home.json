@@ -20,6 +20,7 @@
     ]
   },
   "impactOverview": {
+    "eyebrow": "Network snapshot",
     "title": "Measuring our <strong>impact</strong> and progress",
     "description": "We're tracking how pastor-led communities advance across the PA network — from field stories to measurable transformation data.",
     "scorecardCta": { "label": "See the Scorecard", "target": "#/scorecard" },
@@ -55,6 +56,7 @@
   },
   "level1": {
     "whatsHappening": {
+      "eyebrow": "Latest field activity",
       "title": "What is happening across Africa?",
       "description": "Latest programme activity from pastor-led communities — each links to its country hub.",
       "limit": 6

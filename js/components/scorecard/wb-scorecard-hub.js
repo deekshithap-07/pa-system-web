@@ -1,7 +1,6 @@
 import { formatNumber } from "../../utils/format.js";
 import { renderChart, destroyCharts } from "../charts.js";
 import { buildCommunityHubPath } from "../shared/site-bridge.js";
-import { renderPageEntry } from "../shared/page-entry.js";
 
 const TABS = [
   { id: "overview", label: "Overview" },
@@ -415,11 +414,6 @@ export function renderWbScorecard(data) {
 
   return `
     <div class="wbs-page" data-wb-scorecard>
-      ${renderPageEntry({
-        eyebrow: "Possibilities Africa",
-        title: "Transformation <strong>Scorecard</strong>",
-        subtitle: "Network-wide metrics across seven nations",
-      })}
       <div class="wbs-chrome">
         <header class="wbs-topbar">
           <div class="wbs-topbar__brand">
@@ -519,9 +513,8 @@ export function mountWbScorecard(data, initialTab = "overview") {
     requestAnimationFrame(() => {
       if (id === "data") mountDataCharts(root, sc, ia);
       if (id === "analysis") mountAnalysisCharts(ia);
-      if (id === "overview" && !root.dataset.wbsEntryDone) {
-        root.dataset.wbsEntryDone = "1";
-        animateScorecardEntry(root);
+      if (id === "overview" && !root.dataset.wbsContentRevealed) {
+        scheduleScorecardContentReveal(root);
       }
       ScrollTrigger?.refresh?.();
     });
@@ -548,9 +541,18 @@ export function mountWbScorecard(data, initialTab = "overview") {
 
   bindComparisons(root, ia, data);
   bindCardSelection(root);
-  animateScorecardEntry(root);
+  scheduleScorecardContentReveal(root);
 
   document.getElementById("site-header")?.classList.add("site-header--on-scorecard");
+}
+
+function scheduleScorecardContentReveal(root) {
+  const run = () => animateScorecardContent(root);
+  if (document.querySelector("[data-page-entry]")) {
+    window.addEventListener("page-entry-complete", run, { once: true });
+    return;
+  }
+  run();
 }
 
 function mountDataCharts(root, sc, ia) {
@@ -714,91 +716,34 @@ function bindCardSelection(root) {
   });
 }
 
-function animateScorecardEntry(root) {
-  if (root.dataset.wbsEntryDone) return;
-  root.dataset.wbsEntryDone = "1";
+function animateScorecardContent(root) {
+  if (root.dataset.wbsContentRevealed) return;
+  root.dataset.wbsContentRevealed = "1";
 
-  const entry = root.querySelector("[data-page-entry]");
   const cards = root.querySelectorAll(".wbs-card");
-  const heroCopy = root.querySelector(".wbs-hero-split__copy");
-  const heroVisual = root.querySelector(".wbs-hero-split__visual");
-  const topbar = root.querySelector(".wbs-chrome");
-  const heroSplit = root.querySelector(".wbs-hero-split");
-  const cardsWrap = root.querySelector(".wbs-cards-wrap");
 
   if (typeof gsap === "undefined") {
-    entry?.remove();
     cards.forEach((c) => c.classList.add("is-visible"));
     return;
   }
 
   const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   if (reduced) {
-    entry?.remove();
     cards.forEach((c) => c.classList.add("is-visible"));
     return;
   }
 
   gsap.set(cards, { opacity: 0, y: 28, scale: 0.98 });
-  if (heroCopy) gsap.set(heroCopy, { opacity: 0, x: -24 });
-  if (heroVisual) gsap.set(heroVisual, { opacity: 0, scale: 1.05 });
-  if (topbar) gsap.set(topbar, { opacity: 0, y: -10 });
-  if (heroSplit) gsap.set(heroSplit, { opacity: 0 });
-  if (cardsWrap) gsap.set(cardsWrap, { opacity: 0 });
 
-  const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
-
-  if (entry) {
-    const entryInner = entry.querySelector(".pa-entry__inner");
-    gsap.set(entry, { opacity: 1, visibility: "visible" });
-    if (entryInner) gsap.set(entryInner, { opacity: 0, y: 18, scale: 0.98 });
-
-    tl.to(entryInner, { opacity: 1, y: 0, scale: 1, duration: 0.55 })
-      .to({}, { duration: 0.45 })
-      .to(entry, {
-        yPercent: -100,
-        duration: 0.75,
-        ease: "power3.inOut",
-        onComplete: () => {
-          entry.remove();
-          document.body.classList.remove("pa-entry-active");
-        },
-      })
-      .set(entry, { pointerEvents: "none" }, "<");
-  }
-
-  document.body.classList.add("pa-entry-active");
-
-  if (topbar) {
-    tl.to(topbar, {
-      opacity: 1,
-      y: 0,
-      duration: 0.4,
-      onComplete: () => gsap.set(topbar, { clearProps: "transform" }),
-    }, entry ? "-=0.35" : 0);
-  }
-
-  if (heroSplit) tl.to(heroSplit, { opacity: 1, duration: 0.3 }, "-=0.2");
-
-  if (heroCopy && heroVisual) {
-    tl.to(heroCopy, { opacity: 1, x: 0, duration: 0.6 }, "-=0.15")
-      .to(heroVisual, { opacity: 1, scale: 1, duration: 0.7 }, "-=0.45");
-  }
-
-  if (cardsWrap) tl.to(cardsWrap, { opacity: 1, duration: 0.35 }, "-=0.4");
-
-  tl.to(
-    cards,
-    {
-      opacity: 1,
-      y: 0,
-      scale: 1,
-      duration: 0.48,
-      stagger: { each: 0.05, from: "start" },
-      onComplete: () => cards.forEach((c) => c.classList.add("is-visible")),
-    },
-    "-=0.25"
-  );
+  gsap.to(cards, {
+    opacity: 1,
+    y: 0,
+    scale: 1,
+    duration: 0.48,
+    stagger: { each: 0.05, from: "start" },
+    ease: "power3.out",
+    onComplete: () => cards.forEach((c) => c.classList.add("is-visible")),
+  });
 }
 
 export function destroyWbScorecard() {

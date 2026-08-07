@@ -119,6 +119,7 @@ export function renderImpactOverview(impact) {
       <div class="container">
         <div class="wb-impact__head" data-reveal>
           <div class="wb-impact__head-copy">
+            ${impact.eyebrow ? `<p class="wb-impact__eyebrow">${impact.eyebrow}</p>` : ""}
             <h2 class="wb-impact__title">${impact.title || "Measuring our <strong>impact</strong> and progress"}</h2>
             <p class="wb-impact__desc">${impact.description || ""}</p>
           </div>

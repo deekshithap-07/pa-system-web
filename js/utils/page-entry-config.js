@@ -3,8 +3,8 @@ export function getPageEntryConfig(view, parts, data, hub) {
     case "landing":
       return {
         eyebrow: "Possibilities Africa",
-        title: "Stories &amp; <strong>Transformation Data</strong>",
-        subtitle: "Pastor-led transformation across Africa — stories, geography, and measurable impact.",
+        title: "The whole gospel transforming the whole person and whole community",
+        subtitle: "",
       };
 
     case "africa":
@@ -61,6 +61,13 @@ export function getPageEntryConfig(view, parts, data, hub) {
         eyebrow: "Possibilities Africa",
         title: "About <strong>Us</strong>",
         subtitle: "The ministry model behind pastor-led holistic transformation across Africa.",
+      };
+
+    case "scorecard":
+      return {
+        eyebrow: "Possibilities Africa",
+        title: "Transformation <strong>Scorecard</strong>",
+        subtitle: "Network-wide metrics across seven nations",
       };
 
     default:
