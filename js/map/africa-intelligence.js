@@ -40,6 +40,10 @@ export function setCountrySelectHandler(fn) {
   intelligenceInstance?.setCountrySelectHandler(fn);
 }
 
+export function setCatchmentSelectHandler(fn) {
+  intelligenceInstance?.setCatchmentSelectHandler(fn);
+}
+
 export function destroyAfricaIntelligenceMap() {
   intelligenceInstance?.destroy();
   intelligenceInstance = null;

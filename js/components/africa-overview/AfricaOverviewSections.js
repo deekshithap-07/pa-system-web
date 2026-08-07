@@ -1,21 +1,4 @@
-import { formatNumber } from "../../utils/format.js";
 import { renderNarrativeRibbon } from "../shared/site-bridge.js";
-
-function collectRecentUpdates(countryHubs) {
-  const items = [];
-  for (const [slug, hub] of Object.entries(countryHubs?.hubs || {})) {
-    for (const activity of hub.activities || []) {
-      items.push({ ...activity, countryName: hub.countryName, countrySlug: slug });
-    }
-  }
-  return items
-    .sort((a, b) => new Date(b.date) - new Date(a.date))
-    .slice(0, 6);
-}
-
-function formatUpdateDate(iso) {
-  return new Date(iso).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" });
-}
 
 function renderCountryBrowseGrid(countries) {
   const list = countries?.countries?.filter((c) => c.isPaNetwork) || [];
@@ -36,7 +19,6 @@ export function renderAfricaOverviewSections(data) {
   const overview = data.africaIntelligence?.overview || {};
   const kpis = overview.kpis || [];
   const trends = data.insightsAnalytics?.trendAnalysis || {};
-  const updates = collectRecentUpdates(data.countryHubs);
 
   const metricCards = kpis
     .map(
@@ -59,42 +41,13 @@ export function renderAfricaOverviewSections(data) {
     )
     .join("");
 
-  const updateItems = updates.length
-    ? updates
-        .map(
-          (u) => `<li class="ao-update" data-reveal-section>
-            <time datetime="${u.date}">${formatUpdateDate(u.date)}</time>
-            <div>
-              <strong>${u.project}</strong>
-              <span>${u.community} · ${u.countryName}</span>
-              ${u.countrySlug ? `<a href="#/country/${u.countrySlug}" class="ao-update__link" data-link>View ${u.countryName} &rarr;</a>` : ""}
-            </div>
-            <span class="ao-update__status ao-update__status--${(u.status || "").toLowerCase()}">${u.status}</span>
-          </li>`
-        )
-        .join("")
-    : `<li class="ao-empty">No recent updates available.</li>`;
-
   return `
     <div class="ao-overview">
       <header class="ao-overview__head container" data-reveal-section>
         <p class="eyebrow">Africa Overview</p>
-        <h1>${overview.headline || "What is happening across Africa?"}</h1>
-        <p class="ao-overview__lead">${overview.lead || "Start with recent field activity and stories, then explore continental metrics and country hubs across the PA network."}</p>
+        <h1>${overview.pageTitle || "Africa network overview"}</h1>
+        <p class="ao-overview__lead">${overview.lead || "Network-wide metrics, growth trends, and country hubs across the PA network. Field updates and the interactive map are on the homepage."}</p>
       </header>
-
-      ${renderNarrativeRibbon({
-        variant: "story",
-        eyebrow: "Getting started",
-        text: "This page moves from what's happening on the ground to network-wide data. Field updates come first; metrics and country hubs help you explore further.",
-        cta: { label: "Explore the interactive map", target: "#/#home-africa-map" },
-      })}
-
-      <section class="ao-section container" id="ao-updates" aria-label="Recent updates">
-        <h2 class="ao-section__title">Recent updates</h2>
-        <p class="ao-section__desc">Latest programme activity from pastor-led communities — each links to its country hub.</p>
-        <ol class="ao-update-list">${updateItems}</ol>
-      </section>
 
       ${renderNarrativeRibbon({
         variant: "data",
@@ -115,7 +68,7 @@ export function renderAfricaOverviewSections(data) {
 
       <section class="ao-section container" id="ao-countries" aria-label="Browse countries">
         <h2 class="ao-section__title">Browse countries</h2>
-        <p class="ao-section__desc">Select a country hub for stories, metrics, catchments, and communities. The interactive map is on the <a href="#/#home-africa-map" data-link>homepage</a>.</p>
+        <p class="ao-section__desc">Select a country hub for stories, metrics, catchments, and communities. Field updates are on the <a href="#/#what-happening-africa" data-link>homepage</a>; the interactive map is in the <a href="#/#home-africa-map" data-link>map section</a>.</p>
         <div class="ao-country-grid">${renderCountryBrowseGrid(data.countries)}</div>
       </section>
     </div>`;

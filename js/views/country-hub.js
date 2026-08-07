@@ -59,7 +59,7 @@ export function renderCountryHub(slug, data) {
           text: "Curious how this country compares?",
           links: [
             { label: "Scorecard rankings", target: "#/scorecard#sc-countries" },
-            { label: "Country comparisons", target: "#/insights#ins-comparisons" },
+            { label: "Country comparisons", target: "#/scorecard#tab-analysis" },
           ],
         })}
         ${renderNarrativeRibbon({

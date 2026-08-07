@@ -6,6 +6,9 @@ import {
 export function renderAfricaIntelligence(data) {
   return `
     <div class="africa-intelligence-page africa-intelligence-page--scroll" data-africa-intelligence>
+      <div class="container ao-back-wrap" data-reveal-section>
+        <a href="#/#home-africa-map" class="ao-back-btn" data-link>← Back to interactive map</a>
+      </div>
       ${renderAfricaOverviewSections(data)}
     </div>`;
 }

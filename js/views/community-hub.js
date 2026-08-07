@@ -63,7 +63,7 @@ export function renderCommunityHub(countrySlug, catchmentSlug, communitySlug, da
         ${renderCuriosityStrip({
           text: "How does this community compare to others?",
           links: [
-            { label: "Insights comparisons", target: "#/insights#ins-comparisons" },
+            { label: "Insights comparisons", target: "#/scorecard#tab-analysis" },
             { label: "Scorecard highlights", target: "#/scorecard#sc-communities" },
           ],
         })}

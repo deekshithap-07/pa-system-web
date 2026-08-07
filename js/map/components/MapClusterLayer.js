@@ -28,8 +28,12 @@ export class MapClusterLayer {
     this.layer.setAttribute("id", "cluster-layer");
     this.layer.setAttribute("class", "map-cluster-layer");
     const countries = this.svg.querySelector("#countries-layer");
-    if (countries) {
-      this.svg.insertBefore(this.layer, countries);
+    if (countries?.parentNode) {
+      if (countries.nextSibling) {
+        countries.parentNode.insertBefore(this.layer, countries.nextSibling);
+      } else {
+        countries.parentNode.appendChild(this.layer);
+      }
     } else {
       this.svg.appendChild(this.layer);
     }
@@ -88,8 +92,15 @@ export class MapClusterLayer {
       g.appendChild(circle);
       g.appendChild(text);
 
-      const activate = () => onClusterClick?.(region);
-      g.addEventListener("click", activate);
+      const activate = (e) => {
+        e?.preventDefault?.();
+        e?.stopPropagation?.();
+        onClusterClick?.(region);
+      };
+      g.addEventListener("pointerup", (e) => {
+        if (e.button !== 0) return;
+        activate(e);
+      });
       g.addEventListener("keydown", (e) => {
         if (e.key === "Enter" || e.key === " ") {
           e.preventDefault();

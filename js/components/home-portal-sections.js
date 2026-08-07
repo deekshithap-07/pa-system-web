@@ -73,7 +73,7 @@ export function renderDataSnapshots(section) {
         </header>
         <div class="hp-data__grid">${cards}</div>
         <p class="hp-data__cta" data-reveal>
-          <a href="${section.cta?.target || '#/insights'}" class="btn btn-secondary" data-link>${section.cta?.label || "Explore insights"}</a>
+          <a href="${section.cta?.target || '#/scorecard'}" class="btn btn-secondary" data-link>${section.cta?.label || "Explore scorecard"}</a>
         </p>
       </div>
     </section>`;

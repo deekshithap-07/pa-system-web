@@ -95,5 +95,100 @@
       { "id": "supporters", "audience": "Supporters", "benefit": "Engage with real impact", "description": "Stories connected to metrics — see exactly where investment makes a difference" },
       { "id": "ministry", "audience": "The Ministry", "benefit": "Scale with structure and data", "description": "A shared intelligence layer aligned with how PA actually works on the ground" }
     ]
+  },
+  "atlas": {
+    "hero": {
+      "eyebrow": "Possibilities Africa",
+      "title": "About Us",
+      "lead": "Interactive storytelling and data on pastor-led transformation across Africa — leadership, discipleship, livelihoods, youth, and community development.",
+      "badges": []
+    },
+    "intro": {
+      "title": "The ministry model behind the <strong>data</strong>",
+      "text": "Which communities are progressing fastest, and where is support most needed? This atlas puts transformation at its centre — tracking how pastor-led communities advance across five results areas, from their own starting points, through a structured two-year journey from continent to household."
+    },
+    "featured": [
+      {
+        "subtitle": "Global network view",
+        "title": "Transformation across the PA network",
+        "description": "Explore metrics on communities, households, and leadership — understand where the network is advancing and where catchments need support.",
+        "href": "#/scorecard",
+        "cta": "Explore scorecard"
+      },
+      {
+        "subtitle": "Geographic structure",
+        "title": "From Africa to community",
+        "description": "The platform mirrors how PA organises ministry — drill from continent to country, catchment, and community with relevant data at every level.",
+        "href": "#/africa",
+        "cta": "Browse countries"
+      }
+    ],
+    "themes": [
+      {
+        "id": "leadership",
+        "label": "Leadership",
+        "accent": "#c4842c",
+        "bg": "linear-gradient(180deg, #fdf8f0 0%, #faf3e6 100%)",
+        "ring": { "fill": 0.58, "headline": "1,877", "context": "pastor leaders in the network providing visionary, servant leadership for community-wide transformation" },
+        "stories": [
+          { "tag": "TRANSFORMATIONAL LEADERSHIP", "title": "Triple-A leadership equips pastors for holistic change", "summary": "Pastor leaders grow through Awareness, Ability, and Action — measured via leadership scores across catchments.", "href": "#/scorecard#tab-progress" },
+          { "tag": "CATCHMENT COORDINATION", "title": "Pastor cohorts coordinate transformation across communities", "summary": "Catchment areas group 3–5 communities under coordinated pastor leadership — the bridge between country strategy and local action.", "href": "#/country/kenya" }
+        ],
+        "explore": { "label": "Explore leadership data", "href": "#/scorecard#tab-analysis" }
+      },
+      {
+        "id": "discipleship",
+        "label": "Discipleship",
+        "accent": "#5a9468",
+        "bg": "linear-gradient(180deg, #f0f8f2 0%, #e8f4ec 100%)",
+        "ring": { "fill": 0.48, "headline": "59", "context": "active communities with Shalom groups building cohesion, discipleship depth, and local initiative" },
+        "stories": [
+          { "tag": "SHALOM GROUPS", "title": "30–50 leaders per community in discipleship groups", "summary": "Each community develops Shalom groups that deepen faith, build cohesion, and mobilise households for transformation.", "href": "#/resources#atlas-theme-discipleship" },
+          { "tag": "2-YEAR JOURNEY", "title": "Structured stages from awareness to multiplication", "summary": "Communities progress through five journey stages — tracked in the community transformation system.", "href": "#/scorecard#tab-progress" }
+        ],
+        "explore": { "label": "See journey progress", "href": "#/scorecard#tab-progress" }
+      },
+      {
+        "id": "prosperity",
+        "label": "Prosperity",
+        "accent": "#de8a0a",
+        "bg": "linear-gradient(180deg, #fff9ee 0%, #fdf3dc 100%)",
+        "ring": { "fill": 0.52, "headline": "148", "context": "active projects across water, agriculture, and livelihood sectors through CHIP groups and cooperatives" },
+        "stories": [
+          { "tag": "ECONOMIC PRODUCTIVITY", "title": "CHIP groups teach skills that replicate person-to-person", "summary": "Baking, farming, and small business skills spread across communities — income activities tracked at catchment level.", "href": "#/resources#atlas-theme-prosperity" },
+          { "tag": "LIVELIHOODS", "title": "Women building trench dams for irrigation in Kwale", "summary": "Pastor-led communities mobilise for water and agriculture — pairing stories with tracked project outcomes.", "href": "#/country/kenya" }
+        ],
+        "explore": { "label": "Explore prosperity data", "href": "#/scorecard#tab-outcomes" }
+      },
+      {
+        "id": "youth",
+        "label": "Youth",
+        "accent": "#7b6fad",
+        "bg": "linear-gradient(180deg, #f3f0f8 0%, #ebe6f4 100%)",
+        "ring": { "fill": 0.44, "headline": "7", "context": "nations where youth mentoring connects young people with pastor leaders and community role models" },
+        "stories": [
+          { "tag": "NEXT GENERATION", "title": "Mentoring the next generation of community leaders", "summary": "Programmes focus on character, practical skills, and civic participation — building a pipeline of leaders.", "href": "#/resources" },
+          { "tag": "FIELD STORY", "title": "Pastor Timothy: ministry beyond the church walls", "summary": "After MI training in Arusha, pastors learn that transformation reaches the whole community — not only congregants.", "href": "#/resources#res-case-studies" }
+        ],
+        "explore": { "label": "Read youth stories", "href": "#/resources#res-case-studies" }
+      },
+      {
+        "id": "citizenship",
+        "label": "Citizenship",
+        "accent": "#009fda",
+        "bg": "linear-gradient(180deg, #eef8fc 0%, #e3f4fa 100%)",
+        "ring": { "fill": 0.55, "headline": "335K+", "context": "lives impacted through pastor-planned projects addressing water, health, education, and infrastructure" },
+        "stories": [
+          { "tag": "RESPONSIBLE CITIZENSHIP", "title": "Communities building their own assets through PPPs", "summary": "Pastor-Planned Projects exemplify local ownership — trench dams, irrigation, and health outreaches led by churches.", "href": "#/country/kenya" },
+          { "tag": "RESOURCE MOBILIZATION", "title": "Local resources mobilised for community programmes", "summary": "The platform tracks mobilization to guide where external support complements community-led initiative.", "href": "#/scorecard" }
+        ],
+        "explore": { "label": "Explore citizenship outcomes", "href": "#/scorecard#tab-outcomes" }
+      }
+    ],
+    "acknowledgements": {
+      "title": "About this platform",
+      "text": "The PA Transformation Intelligence platform was designed to reflect how Possibilities Africa organises ministry on the ground — from continent to community. Data visualisations and stories are mock content for frontend demonstration; backend API integration points are marked throughout.",
+      "cta": { "label": "Visit possibilitiesafrica.org", "href": "https://www.possibilitiesafrica.org/" }
+    }
   }
 }

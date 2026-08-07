@@ -16,7 +16,8 @@
   position: relative;
   min-height: 420px;
   display: flex;
-  align-items: flex-end;
+  flex-direction: column;
+  justify-content: flex-end;
   overflow: hidden;
 }
 
@@ -31,17 +32,15 @@
 .wb-hero__spotlight-inner {
   position: relative;
   z-index: 1;
-  display: flex;
-  flex-wrap: wrap;
-  align-items: flex-end;
-  justify-content: space-between;
-  gap: 1.5rem 2rem;
-  padding: 3rem 0 3.25rem;
-  width: 100%;
+  display: block;
+  align-self: center;
+  width: min(100% - 2rem, var(--max-w));
+  margin-inline: auto;
+  padding: 3.25rem 0 3.5rem;
 }
 
 .wb-hero__spotlight-copy {
-  max-width: 36rem;
+  max-width: 42rem;
 }
 
 .wb-hero__spotlight-eyebrow {
@@ -104,6 +103,8 @@
 }
 
 .wb-hero__stories-inner {
+  width: min(100% - 2rem, var(--max-w));
+  margin-inline: auto;
   padding: 1.25rem 0 1.5rem;
 }
 
@@ -122,6 +123,56 @@
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 1rem;
+}
+
+.wb-hero__stories-grid--newsletter {
+  grid-template-columns: 1fr;
+}
+
+.wb-topstory--newsletter {
+  align-items: center;
+  padding: 0.65rem 1rem;
+  background: rgba(255, 255, 255, 0.04);
+  border-radius: 0.5rem;
+}
+
+.wb-topstory--newsletter .wb-topstory__thumb {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+}
+
+.wb-topstory--newsletter .wb-topstory__body {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem 1.25rem;
+}
+
+.wb-topstory--newsletter .wb-topstory__tag {
+  margin-bottom: 0;
+}
+
+.wb-topstory--newsletter .wb-topstory__body h3 {
+  margin: 0;
+  flex: 0 0 auto;
+  max-width: 14rem;
+  -webkit-line-clamp: 2;
+}
+
+.wb-topstory--newsletter .wb-topstory__subscribe {
+  flex: 1 1 16rem;
+  max-width: 28rem;
+}
+
+.wb-topstory--newsletter .wb-topstory__subscribe input {
+  padding: 0.5rem 0.65rem;
+  font-size: 0.8rem;
+}
+
+.wb-topstory--newsletter .wb-topstory__subscribe-btn {
+  padding: 0.5rem 0.85rem;
+  font-size: 0.78rem;
 }
 
 .wb-topstory {
@@ -226,7 +277,256 @@ a.wb-topstory:hover {
   color: #6ee7b7;
 }
 
-/* ---- Data for transformation ---- */
+/* ---- Impact section (World Bank style) ---- */
+.wb-impact {
+  padding: 4rem 0 4.5rem;
+  background: #fff;
+}
+
+.wb-impact__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1.5rem 2rem;
+  margin-bottom: 2.5rem;
+}
+
+.wb-impact__head-copy {
+  flex: 1;
+  min-width: min(100%, 28rem);
+  max-width: 40rem;
+}
+
+.wb-impact__title {
+  margin: 0;
+  font-size: clamp(1.65rem, 3.2vw, 2.35rem);
+  font-weight: 400;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  color: #002b5c;
+}
+
+.wb-impact__title strong {
+  font-weight: 700;
+}
+
+.wb-impact__desc {
+  margin: 0.85rem 0 0;
+  font-size: 0.95rem;
+  line-height: 1.65;
+  color: #5c6b73;
+  max-width: 36rem;
+}
+
+.wb-impact__scorecard-btn {
+  flex-shrink: 0;
+  align-self: center;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.85rem 1.75rem;
+  border-radius: 999px;
+  background: #002b5c;
+  color: #fff;
+  font-size: 0.88rem;
+  font-weight: 600;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: background 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 4px 14px rgba(0, 43, 92, 0.18);
+}
+
+.wb-impact__scorecard-btn:hover {
+  background: #003d7a;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(0, 43, 92, 0.22);
+  text-decoration: none;
+  color: #fff;
+}
+
+.wb-impact__grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+}
+
+.wb-impact-stat {
+  min-width: 0;
+}
+
+.wb-impact-stat__rule {
+  height: 1px;
+  background: #c8d1d9;
+  margin-bottom: 1rem;
+}
+
+.wb-impact-stat__category {
+  margin: 0 0 1.25rem;
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #8a9aa3;
+  line-height: 1.4;
+}
+
+.wb-impact-stat__body {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+}
+
+.wb-impact-stat__icon {
+  flex-shrink: 0;
+  width: 4.5rem;
+  height: 4.5rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid currentColor;
+  background: #fff;
+}
+
+.wb-impact-stat__icon svg {
+  width: 2.5rem;
+  height: 2.5rem;
+}
+
+.wb-impact-stat--gold {
+  --impact-accent: #d4a017;
+}
+
+.wb-impact-stat--green {
+  --impact-accent: #3d8f5f;
+}
+
+.wb-impact-stat--maroon {
+  --impact-accent: #8b3a4a;
+}
+
+.wb-impact-stat__icon {
+  color: var(--impact-accent, #d4a017);
+}
+
+.wb-impact-stat__text {
+  min-width: 0;
+  padding-top: 0.15rem;
+}
+
+.wb-impact-stat__value {
+  display: block;
+  font-size: clamp(1.65rem, 2.8vw, 2.15rem);
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  color: #002b5c;
+  font-variant-numeric: tabular-nums;
+}
+
+.wb-impact-stat__desc {
+  margin: 0.5rem 0 0;
+  font-size: 0.88rem;
+  line-height: 1.55;
+  color: #3d4f58;
+}
+
+/* ---- PA main website intro (WB Who We Are style) ---- */
+.wb-pa-intro {
+  padding: 4.5rem 0 5rem;
+  background: #fff;
+  border-top: 1px solid #e8ecef;
+}
+
+.wb-pa-intro__inner {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3rem 4rem;
+  align-items: center;
+}
+
+.wb-pa-intro__eyebrow {
+  margin: 0 0 1.25rem;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #8a9aa3;
+}
+
+.wb-pa-intro__quote {
+  margin: 0;
+  padding: 0;
+  border: none;
+  font-size: clamp(1.75rem, 3.5vw, 2.65rem);
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  color: #002b5c;
+}
+
+.wb-pa-intro__desc {
+  margin: 1.25rem 0 0;
+  font-size: 0.95rem;
+  line-height: 1.7;
+  color: #5c6b73;
+  max-width: 32rem;
+}
+
+.wb-pa-intro__cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 1.75rem;
+  padding: 0.85rem 1.85rem;
+  border-radius: 999px;
+  background: #002b5c;
+  color: #fff;
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: background 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 4px 14px rgba(0, 43, 92, 0.16);
+}
+
+.wb-pa-intro__cta:hover {
+  background: #003d7a;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(0, 43, 92, 0.22);
+  text-decoration: none;
+  color: #fff;
+}
+
+.wb-pa-intro__visual {
+  min-width: 0;
+}
+
+.wb-pa-intro__image {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  border-radius: 12px;
+  background:
+    linear-gradient(145deg, rgba(0, 43, 92, 0.15) 0%, transparent 50%),
+    linear-gradient(200deg, #0f2d36 0%, #1a4a5c 40%, #2d6a7a 100%);
+  background-size: cover;
+  background-position: center;
+  box-shadow: 0 16px 48px rgba(0, 43, 92, 0.12);
+  position: relative;
+  overflow: hidden;
+}
+
+.wb-pa-intro__image::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 60% 50% at 30% 40%, rgba(0, 212, 212, 0.12), transparent 55%),
+    radial-gradient(ellipse 50% 40% at 80% 70%, rgba(196, 132, 44, 0.1), transparent 50%);
+  pointer-events: none;
+}
+
+/* ---- Legacy data section (unused) ---- */
 .wb-data-section {
   padding: 4rem 0;
   background: linear-gradient(180deg, #f0f7fc 0%, #fff 100%);
@@ -414,8 +714,36 @@ a.wb-topstory:hover {
 }
 
 @media (max-width: 1024px) {
-  .wb-hero__stories-grid {
+  .wb-hero__stories-grid:not(.wb-hero__stories-grid--newsletter) {
     grid-template-columns: repeat(2, 1fr);
+  }
+
+  .wb-topstory--newsletter .wb-topstory__body {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .wb-topstory--newsletter .wb-topstory__subscribe {
+    width: 100%;
+    max-width: none;
+  }
+
+  .wb-impact__grid {
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
+  }
+
+  .wb-impact__scorecard-btn {
+    align-self: flex-start;
+  }
+
+  .wb-pa-intro__inner {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+
+  .wb-pa-intro__visual {
+    order: -1;
   }
 
   .wb-data-section__stats {

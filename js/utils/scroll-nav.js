@@ -14,9 +14,10 @@ export function saveScrollPosition(routeKey) {
 
 export function markProgrammaticNavigation(isBack = false) {
   programmaticNav = true;
-  restoreOnNextRoute = isBack;
+  restoreOnNextRoute = Boolean(isBack);
 }
 
+/** Only explicit back-button navigation restores scroll — not revisiting a route via nav. */
 export function resolveNavigationIntent(routeKey) {
   if (programmaticNav) {
     programmaticNav = false;
@@ -30,26 +31,12 @@ export function resolveNavigationIntent(routeKey) {
     return { restore: false };
   }
 
-  const idx = routeStack.lastIndexOf(routeKey);
-  const isBack = idx >= 0 && idx < routeStack.length - 1;
-  if (isBack) {
-    routeStack.length = idx + 1;
-    return { restore: true };
-  }
   if (routeStack[routeStack.length - 1] !== routeKey) routeStack.push(routeKey);
   return { restore: false };
 }
 
-export function shouldRestoreScroll() {
-  return restoreOnNextRoute;
-}
-
 export function getSavedScroll(routeKey) {
   return scrollByRoute.get(routeKey);
-}
-
-export function clearRestoreFlag() {
-  restoreOnNextRoute = false;
 }
 
 export function applyRouteScroll(routeKey, restore) {
@@ -62,8 +49,8 @@ export function applyRouteScroll(routeKey, restore) {
     } else {
       window.scrollTo(0, 0);
     }
-    clearRestoreFlag();
+    restoreOnNextRoute = false;
   };
 
-  requestAnimationFrame(() => requestAnimationFrame(() => setTimeout(run, 0)));
+  requestAnimationFrame(() => requestAnimationFrame(() => setTimeout(run, 50)));
 }

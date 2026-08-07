@@ -28,9 +28,249 @@ function renderSocialLinks(links = []) {
   return links
     .map(
       (link) =>
-        `<a href="${link.href}" class="res-social-link" target="_blank" rel="noopener noreferrer" aria-label="${link.label}">${SOCIAL_ICONS[link.id] || link.label}</a>`
+        `<a href="${link.href}" class="rlib__social-link" target="_blank" rel="noopener noreferrer" aria-label="${link.label}">${SOCIAL_ICONS[link.id] || link.label}</a>`
     )
     .join("");
+}
+
+function renderResourceLibrary(data, hub, caseStudies, insightPacks, programs, countries, socialLinks) {
+  const lib = hub.library || {};
+  const sections = lib.sections || [];
+  const filters = lib.filters || {};
+
+  const caseCards = caseStudies
+    .map((cs) => {
+      const country = countries.find((c) => c.id === cs.countryId);
+      const catchment = (data.catchments?.catchments || []).find((c) => c.id === cs.catchmentId);
+      const href =
+        country && catchment
+          ? `#/catchment/${country.slug}/${catchment.slug}`
+          : country
+            ? `#/country/${country.slug}`
+            : "#/scorecard";
+      const linkLabel = catchment ? "View catchment" : country ? "View country" : "View data";
+      const topOutcome = cs.outcomes?.[0] || "";
+      return `<article class="rlib-case" data-rlib-item data-filterable="case-studies" data-country-id="${cs.countryId || ""}" data-program="${cs.program || ""}" data-rlib-reveal>
+        <span class="rlib-case__tag">${cs.program}</span>
+        <h3 class="rlib-case__title">${cs.title}</h3>
+        <p class="rlib-case__summary">${cs.summary}</p>
+        ${topOutcome ? `<p class="rlib-case__outcome">${topOutcome}</p>` : ""}
+        <footer class="rlib-case__foot">
+          <span class="rlib-case__meta">${getCountryName(data.countries, cs.countryId)}</span>
+          <a href="${href}" class="rlib-case__link" data-link>${linkLabel} →</a>
+        </footer>
+      </article>`;
+    })
+    .join("");
+
+  const packCards = insightPacks
+    .map(
+      (p) => `<article class="rlib-pack" data-rlib-item data-rlib-reveal>
+        <div class="rlib-pack__icon" aria-hidden="true">📦</div>
+        <div class="rlib-pack__body">
+          <h3 class="rlib-pack__title">${p.title}</h3>
+          <p class="rlib-pack__desc">${p.description}</p>
+          <div class="rlib-pack__actions">
+            <button type="button" class="rlib-pack__btn" data-download-pack="${p.id}">${p.format} · ${p.size}</button>
+            <a href="#/scorecard" class="rlib-pack__link" data-link>Live data →</a>
+          </div>
+        </div>
+      </article>`
+    )
+    .join("");
+
+  return `
+    <div class="atlas-library">
+      <div class="rlib" data-resource-library>
+        <div class="container rlib__inner">
+          <header class="rlib__head" data-rlib-scroll>
+            <h2 class="rlib__title" data-rlib-reveal>${lib.title || "Resource library"}</h2>
+            <p class="rlib__subtitle" data-rlib-reveal>${lib.subtitle || ""}</p>
+          </header>
+
+          <nav class="rlib__nav" aria-label="Library sections" data-rlib-scroll>
+            ${sections
+              .map(
+                (s, i) => `<a href="#${s.anchor}" class="rlib__nav-link${i === 0 ? " is-active" : ""}" data-rlib-nav="${s.id}" data-anchor data-rlib-reveal>${s.label}</a>`
+              )
+              .join("")}
+          </nav>
+
+          <div class="rlib__filters" data-rlib-scroll data-hub-filters>
+            <label class="rlib__filter">
+              <span>${filters.countryLabel || "Country"}</span>
+              <select id="hub-filter-country" aria-label="Filter by country">
+                <option value="all">${filters.allCountries || "All countries"}</option>
+                ${countries.map((c) => `<option value="${c.id}">${c.name}</option>`).join("")}
+              </select>
+            </label>
+            <label class="rlib__filter">
+              <span>${filters.programLabel || "Programme"}</span>
+              <select id="hub-filter-program" aria-label="Filter by programme">
+                <option value="all">${filters.allPrograms || "All programmes"}</option>
+                ${programs.map((p) => `<option value="${p}">${p}</option>`).join("")}
+              </select>
+            </label>
+          </div>
+
+          <section class="rlib__section" id="res-case-studies" data-rlib-section="case-studies" data-rlib-scroll>
+            <h3 class="rlib__section-title" data-rlib-reveal>${sections.find((s) => s.id === "case-studies")?.label || "Case studies"}</h3>
+            <div class="rlib-case-grid" data-filterable="case-studies">${caseCards}</div>
+          </section>
+
+          <section class="rlib__section" id="res-packs" data-rlib-section="packs" data-rlib-scroll>
+            <h3 class="rlib__section-title" data-rlib-reveal>${sections.find((s) => s.id === "packs")?.label || "Data packs"}</h3>
+            <div class="rlib-pack-list">${packCards}</div>
+          </section>
+
+          <section class="rlib__connect" data-rlib-scroll>
+            <div class="rlib__connect-inner" data-rlib-reveal>
+              <h3>${lib.connect?.title || "Connect with us"}</h3>
+              <p>${lib.connect?.description || ""}</p>
+              <div class="rlib__social" aria-label="Possibilities Africa social media">${renderSocialLinks(socialLinks)}</div>
+            </div>
+          </section>
+
+          <p class="rlib__note" data-rlib-reveal>${lib.footerNote || ""}</p>
+        </div>
+      </div>
+    </div>`;
+}
+
+function renderAtlasStoryCard(story, accent) {
+  return `
+    <article class="atlas-story-card" data-atlas-reveal>
+      <h3 class="atlas-story-card__title">${story.title}</h3>
+      <p class="atlas-story-card__summary">${story.summary}</p>
+      ${story.outcomes?.length ? `<ul class="atlas-story-card__outcomes">${story.outcomes.map((o) => `<li>${o}</li>`).join("")}</ul>` : ""}
+      <div class="atlas-story-card__foot">
+        ${story.meta ? `<span class="atlas-story-card__meta">${story.meta}</span>` : ""}
+        ${story.href ? `<a href="${story.href}" class="atlas-story-card__link" data-link style="--atlas-accent:${accent}">Read story ›</a>` : ""}
+      </div>
+    </article>`;
+}
+
+function storiesForTheme(themeId, caseStudies, reports, insightPacks, countries, data) {
+  const stories = [];
+
+  if (themeId === "leadership") {
+    const cs = caseStudies.find((c) => c.program === "Transformational Leadership");
+    if (cs) {
+      const country = countries.find((c) => c.id === cs.countryId);
+      stories.push({
+        ...cs,
+        meta: getCountryName(data.countries, cs.countryId),
+        href: country ? `#/country/${country.slug}` : "#/resources#res-case-studies",
+      });
+    }
+    const report = reports.find((r) => r.type === "quarterly");
+    if (report) {
+      stories.push({
+        title: report.title,
+        summary: report.summary,
+        meta: report.period,
+        href: "#/scorecard#tab-data",
+      });
+    }
+  }
+
+  if (themeId === "communities") {
+    caseStudies
+      .filter((c) => c.program !== "Transformational Leadership")
+      .slice(0, 2)
+      .forEach((cs) => {
+        const country = countries.find((c) => c.id === cs.countryId);
+        stories.push({
+          ...cs,
+          meta: getCountryName(data.countries, cs.countryId),
+          href: country ? `#/country/${country.slug}` : "#/resources#res-case-studies",
+        });
+      });
+  }
+
+  if (themeId === "prosperity") {
+    const cs = caseStudies.find((c) => c.program === "Economic Productivity");
+    if (cs) {
+      const country = countries.find((c) => c.id === cs.countryId);
+      stories.push({
+        ...cs,
+        meta: getCountryName(data.countries, cs.countryId),
+        href: country ? `#/country/${country.slug}` : "#/resources#res-case-studies",
+      });
+    }
+    stories.push({
+      title: "Household income growth",
+      summary: "Network-wide trends in economic productivity and cooperative models across Malawi and Kenya.",
+      meta: "Scorecard · Prosperity",
+      href: "#/scorecard#tab-outcomes",
+    });
+  }
+
+  if (themeId === "water") {
+    const cs = caseStudies.find((c) => c.id === "cs-kwale-water");
+    if (cs) {
+      stories.push({
+        ...cs,
+        meta: "Kenya · Kwale South",
+        href: "#/catchment/kenya/kwale-south",
+      });
+    }
+    stories.push({
+      title: "Water infrastructure outcomes",
+      summary: "Trench dam and borehole programmes driving strongest sector outcomes across coastal catchments.",
+      meta: "Water sector · +22%",
+      href: "#/scorecard#tab-outcomes",
+    });
+  }
+
+  if (themeId === "data") {
+    insightPacks.slice(0, 2).forEach((p) => {
+      stories.push({
+        title: p.title,
+        summary: p.description,
+        meta: `${p.format} · ${p.size}`,
+        href: "#res-packs",
+      });
+    });
+  }
+
+  return stories.slice(0, 2);
+}
+
+function renderThemeSection(theme, caseStudies, reports, insightPacks, countries, data) {
+  const stories = storiesForTheme(theme.id, caseStudies, reports, insightPacks, countries, data);
+  const exploreHref =
+    theme.id === "data"
+      ? "#res-packs"
+      : theme.id === "leadership" || theme.id === "communities" || theme.id === "prosperity" || theme.id === "water"
+        ? "#res-case-studies"
+        : "#res-packs";
+
+  return `
+    <section
+      class="atlas-theme"
+      id="atlas-theme-${theme.id}"
+      data-atlas-theme="${theme.id}"
+      data-atlas-scroll
+      style="--atlas-accent: ${theme.accent}; --atlas-bg: ${theme.bg}"
+    >
+      <div class="container atlas-theme__inner">
+        <div class="atlas-theme__stat-col" data-atlas-reveal>
+          <p class="atlas-theme__label">Stories on <strong>${theme.label}</strong></p>
+          <div class="atlas-theme__stat">
+            <span class="atlas-theme__stat-num" data-atlas-count="${theme.stat.headline}">${theme.stat.headline}</span>
+            <p class="atlas-theme__stat-context">${theme.stat.context}</p>
+          </div>
+          <p class="atlas-theme__intro">${theme.intro}</p>
+        </div>
+        <div class="atlas-theme__stories">
+          ${stories.map((s) => renderAtlasStoryCard(s, theme.accent)).join("")}
+        </div>
+        <a href="${exploreHref}" class="atlas-theme__explore" data-anchor data-atlas-reveal>
+          Explore more on ${theme.label} →
+        </a>
+      </div>
+    </section>`;
 }
 
 export function renderResources(data) {
@@ -40,187 +280,64 @@ export function renderResources(data) {
   const insightPacks = hub.insightPacks || [];
   const programs = hub.programs || [];
   const countries = data.countries?.countries?.filter((c) => c.isPaNetwork) || [];
-  const categories = hub.categories || [];
-  const focusAreas = hub.focusAreas || [];
+  const themes = hub.atlasThemes || [];
+  const featured = hub.featuredStories || [];
   const socialLinks = hub.socialLinks || [];
 
-  const totalCommunities = countries.reduce((s, c) => s + (c.summary?.communities || c.communities || 0), 0);
-  const totalPastors = countries.reduce((s, c) => s + (c.summary?.pastors || c.pastors || 0), 0);
-
   return `
-    <div class="resources-page" data-resources-hub>
-      <section class="res-hero">
-        <div class="container">
-          <p class="res-hero__eyebrow" data-res-reveal>Knowledge &amp; Resource Hub</p>
-          <h1 class="res-hero__title" data-res-reveal>Resources</h1>
-          <p class="res-hero__lead" data-res-reveal>
-            Reports, case studies, and programme materials — the narrative layer behind the metrics. Start here if you want to understand transformation before exploring data.
+    <div class="atlas-page" data-resources-hub>
+      <header class="atlas-hero">
+        <div class="atlas-hero__mesh" aria-hidden="true"></div>
+        <div class="container atlas-hero__inner">
+          <p class="atlas-hero__eyebrow" data-atlas-hero>Knowledge &amp; Resource Hub</p>
+          <h1 class="atlas-hero__title" data-atlas-hero>
+            <span class="atlas-hero__title-line"><strong>Resource</strong> Hub</span>
+          </h1>
+          <p class="atlas-hero__lead" data-atlas-hero>
+            Interactive storytelling and data on pastor-led transformation — leadership, communities, prosperity, water, and field reports across the PA network.
+          </p>
+        </div>
+        <div class="atlas-hero__scroll" aria-hidden="true" data-atlas-hero>
+          <span>Scroll to explore</span>
+          <span class="atlas-hero__scroll-icon">↓</span>
+        </div>
+      </header>
+
+      <nav class="atlas-nav" aria-label="Resource themes">
+        <div class="container atlas-nav__inner">
+          ${themes.map((t) => `<a href="#atlas-theme-${t.id}" class="atlas-nav__link" data-anchor data-theme-nav="${t.id}" style="--atlas-accent:${t.accent}">${t.label}</a>`).join("")}
+        </div>
+      </nav>
+
+      <section class="atlas-intro" data-atlas-scroll>
+        <div class="container atlas-intro__inner">
+          <h2 class="atlas-intro__title" data-atlas-reveal>Data <strong>stories</strong> on transformation</h2>
+          <p class="atlas-intro__text" data-atlas-reveal>
+            Which communities are moving fastest, and which face the greatest challenges? This resource atlas puts progress at its centre — tracking how countries advance across leadership, economic productivity, water access, and discipleship from their own starting points.
           </p>
         </div>
       </section>
 
-      <section class="res-focus-banner" data-res-scroll>
-        <div class="container res-focus-banner__inner">
-          <p class="res-focus-banner__label">Explore resource focus areas</p>
-          <ul class="res-focus-banner__links">
-            ${focusAreas
-              .map((a) => `<li><a href="${a.href}" class="res-focus-link" data-anchor>${a.label}</a></li>`)
-              .join("")}
-          </ul>
-        </div>
-      </section>
-
-      <section class="res-stats" data-res-scroll>
+      <section class="atlas-featured" data-atlas-scroll>
         <div class="container">
-          <p class="res-stats__eyebrow">By the numbers</p>
-          <h2 class="res-stats__title">Transformation intelligence at a glance</h2>
-          <div class="res-stats__grid">
-            <div class="res-stat"><strong>${reports.length}</strong><span>Published reports</span></div>
-            <div class="res-stat"><strong>${caseStudies.length}</strong><span>Case studies</span></div>
-            <div class="res-stat"><strong>${totalCommunities}</strong><span>Communities tracked</span></div>
-            <div class="res-stat"><strong>${totalPastors.toLocaleString()}</strong><span>Pastors in network</span></div>
+          <div class="atlas-featured__grid">
+            ${featured
+              .map(
+                (f, i) => `<article class="atlas-featured-card atlas-featured-card--${i + 1}" data-atlas-reveal>
+              <p class="atlas-featured-card__subtitle">${f.subtitle}</p>
+              <h3 class="atlas-featured-card__title">${f.title}</h3>
+              <p class="atlas-featured-card__desc">${f.description}</p>
+              <a href="${f.href}" class="atlas-featured-card__cta" data-link>${f.cta} →</a>
+            </article>`
+              )
+              .join("")}
           </div>
         </div>
       </section>
 
-      <section class="res-context" data-res-scroll>
-        <div class="container res-context__grid">
-          <div class="res-context__block">
-            <h3>Context</h3>
-            <p>Possibilities Africa coordinates pastor-led holistic transformation across seven nations. From leadership development to economic productivity, communities mobilise local resources while the platform tracks progress toward measurable outcomes.</p>
-          </div>
-          <div class="res-context__block">
-            <h3>Our approach</h3>
-            <p>We monitor and share knowledge that helps countries identify impactful solutions — cutting-edge data, field reports, and structured insight packs guide policy and programme decisions across the network.</p>
-          </div>
-        </div>
-      </section>
+      ${themes.map((t) => renderThemeSection(t, caseStudies, reports, insightPacks, countries, data)).join("")}
 
-      <div class="container res-body">
-        <div class="res-toolbar" data-res-scroll>
-          <div class="res-toolbar__filters hub-filters" data-hub-filters>
-            <label>Country
-              <select id="hub-filter-country" aria-label="Filter by country">
-                <option value="all">All countries</option>
-                ${countries.map((c) => `<option value="${c.id}">${c.name}</option>`).join("")}
-              </select>
-            </label>
-            <label>Programme
-              <select id="hub-filter-program" aria-label="Filter by programme">
-                <option value="all">All programmes</option>
-                ${programs.map((p) => `<option value="${p}">${p}</option>`).join("")}
-              </select>
-            </label>
-          </div>
-        </div>
-
-        <section class="res-categories" id="res-categories" data-res-scroll>
-          <h2 class="res-section-head__title res-section-head__title--sm">Resource categories</h2>
-          <div class="res-cat-strip">
-            ${categories
-              .map(
-                (c) => `<a href="#res-${c.id === "case-studies" ? "case-studies" : c.id === "insights" ? "packs" : c.id === "programmes" ? "categories" : "catalog"}" class="res-cat-pill" data-anchor>
-                  <span class="res-cat-pill__icon">${c.icon}</span>
-                  <span class="res-cat-pill__text"><strong>${c.title}</strong><small>${c.description}</small></span>
-                </a>`
-              )
-              .join("")}
-          </div>
-        </section>
-
-        <section class="res-catalog" id="res-catalog" data-res-scroll>
-          <header class="res-section-head res-section-head--stack">
-            <h2 class="res-section-head__title res-section-head__title--sm">All reports</h2>
-            <p class="res-section-head__desc">Monthly, quarterly, and annual ministry reports from across the PA network.</p>
-          </header>
-          <div class="res-catalog-list" data-filterable="reports">
-            ${reports
-              .map(
-                (r, i) => `<article class="res-catalog-item" data-country-ids="${(r.countryIds || []).join(",")}" data-program="${r.program || ""}">
-                  <a href="#" class="res-catalog-item__cover" aria-hidden="true">${renderCover(i === 0 ? "annual" : "report", r.type)}</a>
-                  <div class="res-catalog-item__body">
-                    <span class="res-catalog-item__type">${r.type}</span>
-                    <h3>${r.title}</h3>
-                    <p>${r.summary}</p>
-                    <div class="res-catalog-item__actions">
-                      <button type="button" class="res-link-cta" data-download-report="${r.id}">Download summary</button>
-                      <span class="res-catalog-item__period">${r.period || ""}</span>
-                    </div>
-                  </div>
-                </article>`
-              )
-              .join("")}
-          </div>
-        </section>
-
-        <section class="res-case-studies" id="res-case-studies" data-res-scroll>
-          <header class="res-section-head res-section-head--stack">
-            <h2 class="res-section-head__title res-section-head__title--sm">Case studies</h2>
-            <p class="res-section-head__desc">Documented transformation outcomes with measurable community impact.</p>
-          </header>
-          <div class="res-case-grid" data-filterable="case-studies">
-            ${caseStudies
-              .map((cs) => {
-                const country = countries.find((c) => c.id === cs.countryId);
-                const catchment = (data.catchments?.catchments || []).find((c) => c.id === cs.catchmentId);
-                const countryHref = country ? `#/country/${country.slug}` : null;
-                const catchmentHref =
-                  country && catchment ? `#/catchment/${country.slug}/${catchment.slug}` : null;
-                return `<article class="res-case-card" data-country-id="${cs.countryId || ""}" data-program="${cs.program || ""}">
-                  <div class="res-case-card__visual">${renderCover("case", "CASE STUDY")}</div>
-                  <div class="res-case-card__body">
-                    <span class="res-case-card__program">${cs.program}</span>
-                    <h3>${cs.title}</h3>
-                    <p>${cs.summary}</p>
-                    <ul class="res-case-card__outcomes">${(cs.outcomes || []).map((o) => `<li>${o}</li>`).join("")}</ul>
-                    <span class="res-case-card__meta">${getCountryName(data.countries, cs.countryId)}</span>
-                    <div class="res-case-card__actions">
-                      ${countryHref ? `<a href="${countryHref}" data-link>View country hub</a>` : ""}
-                      ${catchmentHref ? `<a href="${catchmentHref}" data-link>View catchment</a>` : ""}
-                      <a href="#/insights" data-link>See related data</a>
-                    </div>
-                  </div>
-                </article>`;
-              })
-              .join("")}
-          </div>
-        </section>
-
-        <section class="res-packs" id="res-packs" data-res-scroll>
-          <header class="res-section-head res-section-head--stack">
-            <h2 class="res-section-head__title res-section-head__title--sm">Structured insight packs</h2>
-            <p class="res-section-head__desc">Downloadable analysis packs with trends, comparisons, and performance data.</p>
-          </header>
-          <div class="res-pack-grid">
-            ${insightPacks
-              .map(
-                (p) => `<article class="res-pack-card">
-                  <div class="res-pack-card__icon">${renderCover("pack", "DATA")}</div>
-                  <div class="res-pack-card__body">
-                    <h3>${p.title}</h3>
-                    <p>${p.description}</p>
-                    <div class="res-pack-card__topics">${(p.topics || []).map((t) => `<span class="res-tag">${t}</span>`).join("")}</div>
-                    <button type="button" class="res-btn-pill res-btn-pill--sm" data-download-pack="${p.id}">Download ${p.format} (${p.size})</button>
-                    <a href="#/insights" class="res-pack-card__data-link" data-link>Explore live data &rarr;</a>
-                  </div>
-                </article>`
-              )
-              .join("")}
-          </div>
-        </section>
-
-        <section class="res-connect" data-res-scroll>
-          <div class="res-connect__inner">
-            <h2>Connect with us</h2>
-            <p>Follow Possibilities Africa for field stories, ministry updates, and transformation news.</p>
-            <div class="res-connect__social" aria-label="Possibilities Africa social media">
-              ${renderSocialLinks(socialLinks)}
-            </div>
-          </div>
-        </section>
-
-        <p class="res-note">Full PDF reports will connect to the community tracking system. Current downloads export structured JSON for demonstration.</p>
-      </div>
+      ${renderResourceLibrary(data, hub, caseStudies, insightPacks, programs, countries, socialLinks)}
     </div>`;
 }
 
@@ -236,7 +353,7 @@ export function mountResources(data) {
   root.querySelectorAll("[data-anchor]").forEach((link) => {
     link.addEventListener("click", (e) => {
       const href = link.getAttribute("href");
-      if (href?.startsWith("#") && href.length > 1) {
+      if (href?.startsWith("#") && href.length > 1 && !href.startsWith("#/")) {
         const target = document.querySelector(href);
         if (target) {
           e.preventDefault();
@@ -253,12 +370,14 @@ export function mountResources(data) {
     const countryId = countrySel?.value || "all";
     const program = programSel?.value || "all";
 
-    root.querySelectorAll("[data-filterable] .res-catalog-item, [data-filterable] .res-case-card").forEach((card) => {
+    root.querySelectorAll("[data-filterable] [data-rlib-item]").forEach((card) => {
       const ids = (card.dataset.countryIds || card.dataset.countryId || "").split(",").filter(Boolean);
       const cardProgram = card.dataset.program || "";
       const countryMatch = countryId === "all" || ids.includes(countryId);
       const programMatch = program === "all" || !cardProgram || cardProgram === program;
-      card.style.display = countryMatch && programMatch ? "" : "none";
+      const show = countryMatch && programMatch;
+      card.classList.toggle("is-filtered-out", !show);
+      card.style.display = show ? "" : "none";
     });
   };
 
@@ -277,5 +396,54 @@ export function mountResources(data) {
       const report = data.reports?.reports?.find((r) => r.id === btn.dataset.downloadReport);
       if (report) downloadJson(`${report.slug}.json`, report);
     });
+  });
+
+  const themeSections = root.querySelectorAll("[data-atlas-theme]");
+  const navLinks = root.querySelectorAll("[data-theme-nav]");
+
+  if (themeSections.length && navLinks.length && typeof IntersectionObserver !== "undefined") {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            const id = entry.target.dataset.atlasTheme;
+            navLinks.forEach((link) => {
+              link.classList.toggle("is-active", link.dataset.themeNav === id);
+            });
+          }
+        });
+      },
+      { rootMargin: "-40% 0px -50% 0px", threshold: 0 }
+    );
+    themeSections.forEach((section) => observer.observe(section));
+  }
+
+  const libSections = root.querySelectorAll("[data-rlib-section]");
+  const libNavLinks = root.querySelectorAll("[data-rlib-nav]");
+
+  if (libSections.length && libNavLinks.length && typeof IntersectionObserver !== "undefined") {
+    const libObserver = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            const id = entry.target.dataset.rlibSection;
+            libNavLinks.forEach((link) => {
+              link.classList.toggle("is-active", link.dataset.rlibNav === id);
+            });
+          }
+        });
+      },
+      { rootMargin: "-45% 0px -45% 0px", threshold: 0 }
+    );
+    libSections.forEach((section) => libObserver.observe(section));
+  }
+
+  initLibraryInteractions(root);
+}
+
+function initLibraryInteractions(root) {
+  root.querySelectorAll(".rlib-pub").forEach((row) => {
+    row.addEventListener("mouseenter", () => row.classList.add("is-hovered"));
+    row.addEventListener("mouseleave", () => row.classList.remove("is-hovered"));
   });
 }

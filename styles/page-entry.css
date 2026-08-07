@@ -1,0 +1,88 @@
+/* ==========================================================================
+   Shared page entry curtain (scorecard-style intro)
+   ========================================================================== */
+
+.page-shell {
+  position: relative;
+}
+
+.pa-entry {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(145deg, #002028 0%, #00313c 45%, #004a5c 100%);
+  color: #fff;
+  overflow: hidden;
+}
+
+.pa-entry__mesh {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 70% 55% at 25% 35%, rgba(0, 212, 212, 0.14), transparent 55%),
+    radial-gradient(ellipse 50% 45% at 80% 70%, rgba(0, 159, 218, 0.12), transparent 50%);
+  pointer-events: none;
+}
+
+.pa-entry__inner {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  padding: 2rem;
+  max-width: 36rem;
+}
+
+.pa-entry__eyebrow {
+  margin: 0 0 1rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.55);
+}
+
+.pa-entry__title {
+  margin: 0;
+  font-size: clamp(2.25rem, 6vw, 3.5rem);
+  font-weight: 300;
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+}
+
+.pa-entry__title strong {
+  font-weight: 700;
+  display: block;
+  margin-top: 0.15em;
+}
+
+.pa-entry__sub {
+  margin: 1.1rem 0 0;
+  font-size: 0.92rem;
+  color: rgba(255, 255, 255, 0.72);
+  line-height: 1.6;
+}
+
+body.pa-entry-active {
+  overflow: hidden;
+}
+
+body.pa-entry-active [data-page-entry-content] {
+  visibility: hidden;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pa-entry {
+    display: none;
+  }
+
+  body.pa-entry-active {
+    overflow: auto;
+  }
+
+  body.pa-entry-active [data-page-entry-content] {
+    visibility: visible;
+  }
+}

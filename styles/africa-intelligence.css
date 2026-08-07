@@ -73,7 +73,7 @@ body.africa-map-active .site-footer {
 
   display: grid;
 
-  grid-template-columns: 248px 1fr;
+  grid-template-columns: 280px 1fr;
 
   height: 100%;
 
@@ -91,7 +91,9 @@ body.africa-map-active .site-footer {
 
   border-right: 1px solid #dde1e6;
 
-  overflow: hidden;
+  overflow-x: hidden;
+
+  overflow-y: auto;
 
   display: flex;
 
@@ -100,6 +102,46 @@ body.africa-map-active .site-footer {
   height: 100%;
 
   z-index: 2;
+
+}
+
+
+
+.ai-map__sidebar-level {
+
+  flex-shrink: 0;
+
+  padding: 0.75rem 0.75rem 0;
+
+  border-bottom: 1px solid #e5e7eb;
+
+}
+
+
+
+.ai-map__sidebar-level.ai-map__level-card,
+.ai-map__sidebar-level .ai-map__level-card,
+.ai-map__sidebar .ai-map__level-card {
+
+  position: static;
+
+  right: auto;
+
+  bottom: auto;
+
+  top: auto;
+
+  left: auto;
+
+  max-width: none;
+
+  max-height: none;
+
+  width: 100%;
+
+  pointer-events: auto;
+
+  padding: 0;
 
 }
 
@@ -155,9 +197,9 @@ body.africa-map-active .site-footer {
 
   min-height: 0;
 
-  overflow-y: auto;
+  overflow: visible;
 
-  padding: 0.5rem 0;
+  padding: 0;
 
 }
 
@@ -705,19 +747,19 @@ body.africa-map-active .site-footer {
 }
 
 .catchment-name__text {
-  font-size: 7px;
+  font-size: 5.5px;
   font-weight: 700;
   fill: #002b5c;
   pointer-events: none;
   paint-order: stroke fill;
   stroke: rgba(255, 255, 255, 0.95);
-  stroke-width: 1.5px;
+  stroke-width: 1px;
   stroke-linejoin: round;
   vector-effect: non-scaling-stroke;
 }
 
 .community-name__text {
-  font-size: 12px;
+  font-size: 8px;
   font-weight: 600;
   fill: #002b5c;
   pointer-events: none;
@@ -736,7 +778,7 @@ body.africa-map-active .site-footer {
 .catchment-name.is-selected .catchment-name__text {
   fill: #009fda;
   stroke: #ffffff;
-  stroke-width: 4px;
+  stroke-width: 2px;
   font-weight: 800;
 }
 
@@ -923,7 +965,7 @@ body.africa-map-active .site-footer {
 
 .ai-panel__search {
 
-  padding: 0.75rem 1rem 0.5rem;
+  padding: 0.5rem 0.75rem 0.5rem;
 
   flex-shrink: 0;
 
@@ -1413,6 +1455,186 @@ body.africa-map-active .site-footer {
 
 
 
+/* Compact sidebar: search + selected country only */
+
+.ai-panel--compact {
+  padding: 0.75rem 0.75rem 1rem;
+  gap: 0.75rem;
+}
+
+.ai-panel__search-wrap {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.ai-panel--compact .ai-panel__search {
+  padding: 0;
+}
+
+.ai-panel__search-results {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  right: 0;
+  z-index: 20;
+  max-height: 220px;
+  overflow-y: auto;
+  background: #fff;
+  border: 1px solid #c8cdd3;
+  border-radius: 2px;
+  box-shadow: 0 8px 24px rgba(0, 43, 92, 0.12);
+}
+
+.ai-panel__search-item {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.1rem;
+  width: 100%;
+  padding: 0.55rem 0.75rem;
+  border: none;
+  border-bottom: 1px solid #eef1f4;
+  background: #fff;
+  text-align: left;
+  cursor: pointer;
+  font: inherit;
+}
+
+.ai-panel__search-item:hover,
+.ai-panel__search-item:focus-visible {
+  background: #f0f7fc;
+  outline: none;
+}
+
+.ai-panel__search-item-meta {
+  font-size: 0.68rem;
+  color: #6b7280;
+}
+
+.ai-panel__search-empty {
+  margin: 0;
+  padding: 0.65rem 0.75rem;
+  font-size: 0.75rem;
+  color: #6b7280;
+}
+
+.ai-panel__selected {
+  flex: 1;
+  min-height: 0;
+}
+
+.ai-panel__empty {
+  padding: 1rem 0.25rem;
+}
+
+.ai-panel__empty p {
+  margin: 0;
+  font-size: 0.78rem;
+  line-height: 1.55;
+  color: #6b7280;
+}
+
+.ai-panel__detail {
+  padding-top: 0.15rem;
+}
+
+.ai-panel__detail-breadcrumb {
+  margin: 0 0 0.25rem;
+  font-size: 0.68rem;
+  font-weight: 600;
+  color: #009fda;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.ai-panel__detail-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.ai-panel__detail-title {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #002b5c;
+  line-height: 1.2;
+}
+
+.ai-panel__kpi-grid--detail {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.45rem;
+  margin: 0.75rem 0 0;
+}
+
+.ai-panel__kpi-grid--detail .ai-panel__kpi {
+  background: #f0f7fc;
+  border: 1px solid #dbeafe;
+  border-radius: 3px;
+  padding: 0.45rem 0.5rem;
+  text-align: center;
+}
+
+.ai-panel__kpi-grid--detail .ai-panel__kpi-val {
+  display: block;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #002b5c;
+}
+
+.ai-panel__kpi-grid--detail .ai-panel__kpi-lbl {
+  display: block;
+  margin: 0;
+  font-size: 0.62rem;
+  color: #6b7280;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.ai-panel__tabs {
+  display: flex;
+  gap: 0;
+  margin-top: 0.85rem;
+  border: 1px solid #dde1e6;
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.ai-panel__tab {
+  flex: 1;
+  padding: 0.5rem 0.65rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-align: center;
+  color: #6b7280;
+  background: #f9fafb;
+  border-right: 1px solid #dde1e6;
+  text-decoration: none;
+}
+
+.ai-panel__tab:last-child {
+  border-right: none;
+}
+
+.ai-panel__tab.is-active {
+  color: #002b5c;
+  background: #fff;
+}
+
+.ai-panel__tab--explore {
+  color: #009fda;
+  background: #fff;
+}
+
+.ai-panel__tab--explore:hover {
+  background: #f0f7fc;
+  color: #0077b6;
+}
+
+
+
 @media (max-width: 900px) {
 
   .africa-intelligence-page {
@@ -1529,7 +1751,7 @@ body.africa-map-active .site-footer {
 
 
 
-/* 3-level info cards: Africa → Country → Communities */
+/* 3-level info cards: Africa → Country → Communities (left sidebar) */
 
 .ai-map__level-card {
   position: absolute;
@@ -1542,11 +1764,29 @@ body.africa-map-active .site-footer {
   pointer-events: none;
 }
 
+.ai-map__sidebar .ai-map__level-card,
+.ai-map__sidebar-level.ai-map__level-card {
+  position: static;
+  right: auto;
+  bottom: auto;
+  top: auto;
+  max-width: none;
+  max-height: none;
+  width: 100%;
+  pointer-events: auto;
+}
+
 .ai-map__level-card--communities {
   max-width: min(340px, calc(100% - 2rem));
   top: 3rem;
   bottom: 2.5rem;
   max-height: none;
+}
+
+.ai-map__sidebar .ai-map__level-card--communities {
+  top: auto;
+  bottom: auto;
+  max-width: none;
 }
 
 .ai-map__level-card--communities .ai-level-card {
@@ -1564,13 +1804,12 @@ body.africa-map-active .site-footer {
 
 .ai-level-card {
   pointer-events: auto;
-  background: rgba(255, 255, 255, 0.96);
-  border: 1px solid rgba(0, 43, 92, 0.12);
-  border-right: 4px solid #009fda;
+  background: #fff;
+  border: 1px solid rgba(0, 43, 92, 0.1);
+  border-left: 4px solid #009fda;
   border-radius: 4px;
-  padding: 0.85rem 1rem 0.95rem;
-  box-shadow: 0 8px 28px rgba(0, 43, 92, 0.12);
-  backdrop-filter: blur(8px);
+  padding: 0.85rem 0.75rem 0.95rem;
+  box-shadow: none;
 }
 
 .ai-level-card__type {
@@ -1760,6 +1999,33 @@ body.africa-map-active .site-footer {
 
 .ao-overview {
   padding-bottom: 0.5rem;
+}
+
+.ao-back-wrap {
+  padding: 1.25rem 0 0;
+}
+
+.ao-back-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.5rem 1rem;
+  border-radius: 999px;
+  background: #fff;
+  border: 1px solid #dde5ea;
+  color: #002b5c;
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: background 0.2s, border-color 0.2s, transform 0.2s;
+}
+
+.ao-back-btn:hover {
+  background: #f0f7fa;
+  border-color: #009fda;
+  text-decoration: none;
+  color: #002b5c;
+  transform: translateX(-2px);
 }
 
 .ao-overview__head {

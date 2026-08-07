@@ -87,7 +87,7 @@ export const BRIDGE = {
     cards: [
       { type: "Story layer", title: "Kenya country hub", description: "23 communities, field reports, and catchment maps — see transformation in context.", target: "#/country/kenya", tone: "story" },
       { type: "Data layer", title: "Transformation scorecard", description: "Country rankings, journey progress, and sector outcomes across the network.", target: "#/scorecard", tone: "data" },
-      { type: "Analysis", title: "Insights & comparisons", description: "CBC index, readiness levels, and side-by-side country comparisons.", target: "#/insights", tone: "analysis" },
+      { type: "Analysis", title: "Insights & comparisons", description: "CBC index, readiness levels, and side-by-side country comparisons.", target: "#/scorecard", tone: "analysis" },
     ],
   }),
   country: (slug, name) => ({
@@ -95,7 +95,7 @@ export const BRIDGE = {
     description: "Country data makes more sense alongside stories and deeper analysis. Pick a path below.",
     cards: [
       { type: "Drill down", title: "Catchment areas", description: "Open the map above or browse catchments for community-level stories and metrics.", target: `#ch-map`, tone: "story" },
-      { type: "Network view", title: "Compare countries", description: "See how this country ranks against peers in the scorecard and insights hub.", target: "#/insights#ins-comparisons", tone: "data" },
+      { type: "Network view", title: "Compare countries", description: "See how this country ranks against peers in the scorecard and insights hub.", target: "#/scorecard#tab-analysis", tone: "data" },
       { type: "Read more", title: "Reports & case studies", description: "Field reports and documented outcomes that explain the numbers you see here.", target: "#/resources#res-case-studies", tone: "story" },
     ],
   }),
@@ -105,7 +105,7 @@ export const BRIDGE = {
     cards: [
       { type: "Communities", title: "Browse communities", description: "Each community has a profile, projects timeline, and progress charts.", target: "#cth-communities", tone: "story" },
       { type: "Country", title: `Back to ${countryName}`, description: "National KPIs, country reports, and the full catchment map.", target: `#/country/${countrySlug}`, tone: "default" },
-      { type: "Analysis", title: "Sector insights", description: "Compare catchment performance with network-wide CBC and readiness data.", target: "#/insights", tone: "analysis" },
+      { type: "Analysis", title: "Sector insights", description: "Compare catchment performance with network-wide CBC and readiness data.", target: "#/scorecard", tone: "analysis" },
     ],
   }),
   community: (countrySlug, catchmentSlug, name) => ({
@@ -122,7 +122,7 @@ export const BRIDGE = {
     description: "The scorecard summarizes the network. Stories and country hubs show what the numbers mean on the ground.",
     cards: [
       { type: "Explore", title: "Africa map", description: "Navigate from continent to community and see metrics at each level.", target: "#/#home-africa-map", tone: "default" },
-      { type: "Analysis", title: "Deep insights", description: "Country vs country, CBC index, readiness ladder, and progress hotspots.", target: "#/insights", tone: "analysis" },
+      { type: "Analysis", title: "Deep insights", description: "Country vs country, CBC index, readiness ladder, and progress hotspots.", target: "#/scorecard", tone: "analysis" },
       { type: "Stories", title: "Reports & case studies", description: "Narrative context for the KPIs and rankings you see above.", target: "#/resources", tone: "story" },
     ],
   }),

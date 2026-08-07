@@ -64,9 +64,11 @@
 
 .site-nav__pill--home.is-active { background: #f1f5f9; color: var(--pa-navy); }
 .site-nav__pill--africa.is-active { background: #e0f7fa; color: #0077b6; border-color: #009fda; }
-.site-nav__pill--insights.is-active { background: #ede9fe; color: #5b21b6; border-color: #8b5cf6; }
+.site-nav__pill--scorecard.is-active { background: #e0f4f8; color: #00313c; border-color: #00d4d4; }
 .site-nav__pill--resources.is-active { background: #fff7ed; color: #c2410c; border-color: #f5a623; }
 .site-nav__pill--about.is-active { background: #ecfdf5; color: #047857; border-color: #10b981; }
+
+.site-nav__pill[hidden] { display: none; }
 
 .site-nav a {
   padding: 0.5rem 0.75rem;

@@ -1,12 +1,15 @@
 import { getAllData } from "./utils/data.js";
+import { bindAfricaNavTriggers, restoreAfricaNav } from "./utils/nav-africa.js";
 import { initTransitions } from "./utils/transitions.js";
-import { initRouter } from "./router.js";
+import { initRouter, navigate } from "./router.js";
 import { initSearchModal, openSearchModal } from "./components/search-modal.js";
 
 gsap.registerPlugin(ScrollTrigger);
 
 async function boot() {
   initTransitions();
+  bindAfricaNavTriggers();
+  restoreAfricaNav();
 
   const toggle = document.getElementById("menu-toggle");
   const nav = document.getElementById("site-nav");
@@ -22,7 +25,7 @@ async function boot() {
       }
       e.preventDefault();
       const target = el.getAttribute("href").replace(/^#\/?/, "") || "/";
-      location.hash = target === "/" ? "#/" : `#/${target}`;
+      navigate(target === "/" || target === "" ? "/" : target);
     });
   });
 

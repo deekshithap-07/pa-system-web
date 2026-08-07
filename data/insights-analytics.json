@@ -1,9 +1,51 @@
 {
   "meta": {
-    "title": "Analysis & Insights",
-    "subtitle": "Understand trends and compare performance across countries and communities — with context, not just charts.",
+    "title": "Understanding transformation across Africa",
+    "subtitle": "Analysis that connects field stories to measurable change — comparisons, indices, and the patterns behind progress.",
     "period": "2021 – 2024",
-    "lastUpdated": "2024-09-15"
+    "lastUpdated": "September 2024"
+  },
+  "editorial": {
+    "heroSpotlight": {
+      "value": "253K+",
+      "label": "Households engaged",
+      "context": "Cumulative reach across pastor-led communities — up from 120,000 in 2021."
+    },
+    "intro": "The scorecard tells you where communities stand. Insights explains why — which countries are pulling ahead, which dimensions of transformation are strongest, and what field patterns repeat across the network.",
+    "pullQuote": {
+      "text": "Pastor leadership engagement shows the strongest correlation with community advancement across every country we track.",
+      "attribution": "PA Network Analysis · r = 0.84"
+    },
+    "keyFindings": [
+      {
+        "stat": "86",
+        "unit": "Shalom groups",
+        "change": "+207% since 2021",
+        "text": "Community cohesion and discipleship depth are accelerating as groups multiply across catchments.",
+        "anchor": "#ins-trends"
+      },
+      {
+        "stat": "78",
+        "unit": "Spiritual formation",
+        "change": "Top CBC dimension",
+        "text": "Spiritual formation leads the Community Balanced Scorecard — the foundation other outcomes build on.",
+        "anchor": "#ins-cbc"
+      },
+      {
+        "stat": "7",
+        "unit": "Multiplication-stage",
+        "change": "Communities",
+        "text": "Seven communities are now replicating transformation in neighbouring areas — the highest journey stage.",
+        "anchor": "#ins-readiness"
+      },
+      {
+        "stat": "Kwale",
+        "unit": "South, Kenya",
+        "change": "+22% household reach",
+        "text": "Pastor leadership combined with water PPPs is driving the fastest household reach growth in the network.",
+        "anchor": "#ins-hotspots"
+      }
+    ]
   },
   "trendAnalysis": {
     "shalomGroups": {

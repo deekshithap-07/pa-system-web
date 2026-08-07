@@ -61,7 +61,7 @@ export function renderCatchmentHub(countrySlug, catchmentSlug, data) {
           variant: "data",
           eyebrow: "Analytics",
           text: "Growth charts and sector insights show how this catchment performs within the national network.",
-          cta: { label: "Compare in insights hub", target: "#/insights" },
+          cta: { label: "Compare in insights hub", target: "#/scorecard" },
         })}
         ${renderCatchmentCharts(hub.charts)}
         ${renderCatchmentCommunityList(hub.communityCards, countrySlug, catchmentSlug, hub.catchmentName)}
