@@ -3,11 +3,8 @@
  * Homepage sections: key updates, growth trends, interactive map embed.
  */
 
-import {
-  initAfricaIntelligenceMap,
-  destroyAfricaIntelligenceMap,
-  setCatchmentSelectHandler,
-} from "../map/africa-intelligence.js";
+import { initAfricaIntelligenceMap, destroyAfricaIntelligenceMap } from "../map/africa-intelligence.js";
+import { initAfricaLeafletMap, destroyAfricaLeafletMap } from "../map/africa-leaflet.js";
 
 function collectRecentUpdates(countryHubs, limit = 6) {
   const items = [];
@@ -157,7 +154,31 @@ export function mountHomeGrowthCharts(root, data) {
 
 export function mountAfricaMapSection(data, opts = {}) {
   const rootId = opts.rootId || "home-africa-map-root";
-  if (!document.getElementById(rootId)) return null;
+  const rootEl = document.getElementById(rootId);
+  if (!rootEl) return null;
+
+  const canUseLeaflet = typeof L !== "undefined";
+  if (canUseLeaflet) {
+    rootEl.classList.add("africa-leaflet-host");
+    const lmap = initAfricaLeafletMap({
+      countries: data.countries,
+      mapPaths: data.mapPaths,
+      catchments: data.catchments,
+      communities: data.communities,
+      countryHubs: data.countryHubs,
+      geoLocations: data.geoLocations,
+      config: {
+        ...data.africaIntelligence,
+        hideSidebar: false,
+        pageLayout: true,
+        embedMode: true,
+        navigateOnCatchmentSelect: true,
+      },
+      containerId: rootId,
+    });
+    if (lmap) return lmap;
+    rootEl.classList.remove("africa-leaflet-host");
+  }
 
   const map = initAfricaIntelligenceMap({
     countries: data.countries,
@@ -178,15 +199,12 @@ export function mountAfricaMapSection(data, opts = {}) {
     containerId: rootId,
   });
 
-  setCatchmentSelectHandler((countrySlug, catchmentSlug) => {
-    window.location.hash = `#/catchment/${countrySlug}/${catchmentSlug}`;
-  });
-
   return map;
 }
 
 export const mountHomeAfricaMap = (data) => mountAfricaMapSection(data);
 
 export function destroyHomeAfricaMap() {
+  destroyAfricaLeafletMap();
   destroyAfricaIntelligenceMap();
 }

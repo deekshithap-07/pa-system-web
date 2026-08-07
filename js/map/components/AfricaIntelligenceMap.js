@@ -18,7 +18,7 @@ import {
   clampViewBoxWidth,
 } from "../utils/geo.js";
 import { buildDrillDownData, getMetricValue, PA_SLUGS } from "../utils/drill-down-data.js";
-import { applyLabelSpread, applyMapFeatureLayout, estimateLabelSize } from "../utils/label-layout.js";
+import { applyLabelSpread, estimateLabelSize } from "../utils/label-layout.js";
 import { buildCatchmentZones, getCatchmentDrillBBox } from "../utils/catchment-path-project.js";
 
 const LEVEL_LABELS = ["Africa", "Country", "Catchment", "Community"];
@@ -153,11 +153,6 @@ export class AfricaIntelligenceMap {
     const hub = this.selection.country
       ? this.drillData.byCountry[this.selection.country.slug]
       : null;
-    this.dataPanel?.setSelection({
-      country: this.selection.country,
-      catchment: this.selection.catchment,
-      zoomLevel: this.zoomLevel,
-    });
     this.levelCards?.setLevelFromZoom(this.zoomLevel, {
       drillData: this.drillData,
       paCountries: this.drillData.paCountries,
@@ -170,8 +165,14 @@ export class AfricaIntelligenceMap {
 
   syncClusterLayer() {
     if (!this.clusterLayer) return;
-    this.clusterLayer.setVisible(false);
-    this.clusterLayer.clear();
+    const show = this.zoomLevel === 0;
+    this.clusterLayer.setVisible(show);
+    if (show && !this.clusterLayer.layer?.childElementCount) {
+      this.clusterLayer.render(this.countryRegions, this.drillData, {
+        onClusterClick: (region) => this.selectCountry(region),
+      });
+      this.clusterLayer.animateIn();
+    }
   }
 
   fitCatchmentView(catchment, animate = true) {
@@ -197,7 +198,6 @@ export class AfricaIntelligenceMap {
     this.regions = loadMapRegions({ countries, mapPaths, mapOverlay, mapMetrics });
     this.drillData = buildDrillDownData({ countries, catchments, communities, countryHubs, mapPaths, geoLocations });
     this.activeMetric = config?.defaultMetric || "communities";
-    this.navigateOnCatchmentSelect = config?.navigateOnCatchmentSelect !== false;
 
     root.innerHTML = this.buildHTML();
     this.cacheElements();
@@ -225,9 +225,7 @@ export class AfricaIntelligenceMap {
 
     this.selectionOverlay = new MapSelectionOverlay(this.overlayEl);
     this.clusterLayer = new MapClusterLayer(this.svg);
-    if (this.levelCardEl) {
-      this.levelCards = new MapLevelCards(this.levelCardEl);
-    }
+    this.levelCards = new MapLevelCards(this.levelCardEl);
 
     this.legend = new MapLegend(this.legendEl, { mode: "choropleth" });
     this.controls = new MapControls(this.controlsEl, {
@@ -262,7 +260,10 @@ export class AfricaIntelligenceMap {
 
     requestAnimationFrame(() => {
       this.initMapView();
-      this.syncClusterLayer();
+      this.clusterLayer.render(this.countryRegions, this.drillData, {
+        onClusterClick: (region) => this.selectCountry(region),
+      });
+      this.clusterLayer.animateIn();
       this.updateLevelCard();
       this.controls.setVisible(true);
       this.legend.setVisible(true);
@@ -347,8 +348,6 @@ export class AfricaIntelligenceMap {
       if (region) this.promoteToCountry(region);
       return;
     }
-
-    if (this.navigateOnCatchmentSelect) return;
 
     if (this.zoomLevel === 1 && !this.selection.catchment) {
       const countryFit = this.getCountryFitRatio();
@@ -580,7 +579,6 @@ export class AfricaIntelligenceMap {
     this.syncClusterLayer();
     this.updateLevelCard();
     this.fitCommunitiesView(catchment, true);
-    this.syncLayersForScale(this.getZoomRatio());
     this.updateScrollHint();
   }
 
@@ -589,30 +587,11 @@ export class AfricaIntelligenceMap {
     const catchment = this.selection.catchment
       || this.drillData.byCountry[this.selection.country?.slug]?.catchments
         ?.find((ct) => ct.communities?.some((c) => c.id === community.id));
-    if (catchment && !this.selection.catchment) {
-      this.selection.catchment = catchment;
-    }
-    this.selection.community = community;
-    this.selectionOverlay.setSelection({
-      type: "community",
-      data: {
-        ...community,
-        countrySlug: this.selection.country?.slug,
-        catchmentSlug: this.selection.catchment?.slug,
-      },
-      metric: this.activeMetric,
-    });
-    this.breadcrumb.setItems([
-      { label: "Africa", slug: null, level: "africa" },
-      { label: this.selection.country?.countryName || this.selection.country?.name || "", slug: this.selection.country?.slug, level: "country" },
-      { label: this.selection.catchment?.name || "", slug: this.selection.catchment?.slug, level: "catchment" },
-      { label: community.name, slug: community.slug, level: "community" },
-    ]);
+    this.selection.catchment = catchment || null;
+    this.selection.community = null;
     this._layerKey = null;
     this.updateLevelCard();
-    this.highlightCommunity(community.id);
-    if (this.selection.catchment) this.highlightCatchment(this.selection.catchment.id);
-    this.renderCommunityLayer();
+    if (catchment) this.highlightCatchment(catchment.id);
   }
 
   getCountryRegion() {
@@ -750,7 +729,7 @@ export class AfricaIntelligenceMap {
         ${
           hideSidebar
             ? ""
-            : `<aside class="ai-map__sidebar" id="ai-map-sidebar" aria-label="Map country panel">
+            : `<aside class="ai-map__sidebar" id="ai-map-sidebar" aria-label="PA network countries">
           <div class="ai-map__sidebar-panel" id="ai-map-sidebar-panel"></div>
         </aside>`
         }
@@ -768,12 +747,13 @@ export class AfricaIntelligenceMap {
             <div class="ai-map__canvas" id="ai-map-canvas">
               ${pageLayout ? `<div class="ai-map__breadcrumb-embed" id="ai-map-breadcrumb"></div>` : ""}
               <div class="ai-map__scroll-hint" id="ai-scroll-hint" aria-hidden="true">
-                Scroll or click a country · catchment dots and names appear when zoomed in
+                Scroll or click a country to zoom in · catchment names appear inside
               </div>
               <div class="ai-map__camera" id="ai-map-camera">
                 <svg id="ai-map-svg" role="img" aria-label="Interactive map of Africa"></svg>
               </div>
               <div class="ai-map__overlay" id="ai-map-overlay"></div>
+              <div class="ai-map__level-card" id="ai-map-level-card" aria-live="polite"></div>
               <div id="ai-map-controls"></div>
               <div id="ai-map-legend"></div>
             </div>
@@ -909,8 +889,6 @@ export class AfricaIntelligenceMap {
         return;
       }
 
-      region.setInteractive(true);
-
       region.on("mouseenter", (e) => {
         if (this.animating) return;
         if (this.zoomLevel >= 1 && this.selection.country?.slug !== country.slug) {
@@ -940,24 +918,24 @@ export class AfricaIntelligenceMap {
   }
 
   shouldIgnoreMapClick() {
-    return Date.now() < (this._suppressClicksUntil || 0);
+    return Date.now() < (this._suppressClicksUntil || 0) || this.animating;
   }
 
   bindMapTap(element, handler) {
     let downX = 0;
     let downY = 0;
-    let pointerId = null;
+    let dragged = false;
 
     element.addEventListener("pointerdown", (e) => {
-      if (e.button !== 0) return;
       downX = e.clientX;
       downY = e.clientY;
-      pointerId = e.pointerId;
+      dragged = false;
     });
-    element.addEventListener("pointerup", (e) => {
-      if (e.button !== 0 || e.pointerId !== pointerId) return;
-      if (this.shouldIgnoreMapClick()) return;
-      if (Math.hypot(e.clientX - downX, e.clientY - downY) > 12) return;
+    element.addEventListener("pointermove", (e) => {
+      if (Math.hypot(e.clientX - downX, e.clientY - downY) > 8) dragged = true;
+    });
+    element.addEventListener("click", (e) => {
+      if (dragged || this.shouldIgnoreMapClick()) return;
       handler(e);
     });
   }
@@ -1001,6 +979,7 @@ export class AfricaIntelligenceMap {
     this.fitCountryView(animate);
     this.syncClusterLayer();
     this.updateLevelCard();
+    this.syncLayersForScale(this.getZoomRatio());
   }
 
   selectCatchment(catchment, countrySlug, fromBreadcrumb = false) {
@@ -1060,6 +1039,13 @@ export class AfricaIntelligenceMap {
     this.highlightCommunity(community.id);
     this.highlightCatchment(this.selection.catchment?.id);
     this.renderCommunityLayer();
+    if (community.x != null && community.y != null) {
+      this.panToFeatureBBox(
+        { x: community.x - 30, y: community.y - 30, width: 60, height: 60 },
+        6,
+        true
+      );
+    }
   }
 
   flyToCommunity() {
@@ -1167,8 +1153,7 @@ export class AfricaIntelligenceMap {
   syncLayersForScale(ratio) {
     void ratio;
     const showCatchments = this.zoomLevel >= 1 && this.selection.country;
-    const showCommunities =
-      !this.navigateOnCatchmentSelect && this.zoomLevel >= 2 && this.selection.country;
+    const showCommunities = this.zoomLevel >= 2 && this.selection.country;
 
     if (!showCatchments) {
       if (this._layersVisible) {
@@ -1210,21 +1195,15 @@ export class AfricaIntelligenceMap {
   refreshLabelSpread() {
     const catchLabels = this.catchmentLayer?.querySelector(".catchment-labels");
     if (catchLabels?.childElementCount) {
-      applyMapFeatureLayout(catchLabels, SVG_NS, {
+      applyLabelSpread(catchLabels, SVG_NS, {
         labelSelector: ".catchment-name",
-        anchorSelector: ".catchment-anchor",
-        idKey: "catchmentId",
-        decorateLabel: (label) => this.decorateMapNameLabel(label),
         ...this.getLabelSpreadOptions("catchment"),
       });
     }
     const commLabels = this.communityLayer?.querySelector(".community-labels");
     if (commLabels?.childElementCount) {
-      applyMapFeatureLayout(commLabels, SVG_NS, {
+      applyLabelSpread(commLabels, SVG_NS, {
         labelSelector: ".community-name:not(.is-dimmed)",
-        anchorSelector: ".community-anchor:not(.is-dimmed)",
-        idKey: "communityId",
-        decorateLabel: (label) => this.decorateMapNameLabel(label),
         ...this.getLabelSpreadOptions("community"),
       });
     }
@@ -1395,41 +1374,19 @@ export class AfricaIntelligenceMap {
 
     if (layer === "community") {
       return {
-        spread: 3.5 * zoomFactor,
-        maxOffset: 160 * zoomFactor,
-        gap: 14,
-        minAnchorDistance: 18,
-        anchorMaxNudge: 26,
+        spread: 3 * zoomFactor,
+        maxOffset: 140 * zoomFactor,
+        gap: 10,
         viewScale: ratio,
       };
     }
 
     return {
-      spread: 2.8 * zoomFactor,
-      maxOffset: 90 * zoomFactor,
-      gap: 12,
-      minAnchorDistance: 17,
-      anchorMaxNudge: 24,
+      spread: 1.2 * zoomFactor,
+      maxOffset: 36 * zoomFactor,
+      gap: 5,
       viewScale: ratio,
     };
-  }
-
-  openCatchmentHub(catchment) {
-    const countrySlug = this.selection.country?.slug;
-    if (!countrySlug || !catchment?.slug) return;
-    if (this._catchmentSelectHandler) {
-      this._catchmentSelectHandler(countrySlug, catchment.slug);
-      return;
-    }
-    window.location.hash = `#/catchment/${countrySlug}/${catchment.slug}`;
-  }
-
-  handleCatchmentSelect(catchment) {
-    if (this.navigateOnCatchmentSelect) {
-      this.openCatchmentHub(catchment);
-      return;
-    }
-    this.promoteToCommunities(catchment, null);
   }
 
   renderCatchmentLayer() {
@@ -1452,7 +1409,7 @@ export class AfricaIntelligenceMap {
       const anchor = document.createElementNS(SVG_NS, "circle");
       anchor.setAttribute("cx", ct.x);
       anchor.setAttribute("cy", ct.y);
-      anchor.setAttribute("r", 3);
+      anchor.setAttribute("r", 4);
       anchor.setAttribute("class", "catchment-anchor");
       anchor.setAttribute("data-catchment-id", ct.id);
       anchor.setAttribute("aria-hidden", "true");
@@ -1460,33 +1417,29 @@ export class AfricaIntelligenceMap {
       const hit = document.createElementNS(SVG_NS, "circle");
       hit.setAttribute("cx", ct.x);
       hit.setAttribute("cy", ct.y);
-      hit.setAttribute("r", 12);
+      hit.setAttribute("r", 16);
       hit.setAttribute("class", "catchment-path catchment-path--hit");
       hit.setAttribute("data-catchment-id", ct.id);
       hit.setAttribute("aria-hidden", "true");
 
-      const labelFontSize = 5.5;
-      const labelOffsetY = -11;
-      const est = estimateLabelSize(ct.name, { fontSize: labelFontSize, padX: 8, padY: 4 });
+      const est = estimateLabelSize(ct.name, { fontSize: 7 });
       const label = this.createMapNameLabel({
         name: ct.name,
         x: ct.x,
-        y: ct.y + labelOffsetY,
+        y: ct.y,
         className: "catchment-name",
         entityId: ct.id,
         inactive: ct.status === "inactive",
-        fontSize: labelFontSize,
+        fontSize: 7,
       });
       label.setAttribute("data-catchment-id", ct.id);
-      label.dataset.anchorX = String(ct.x);
-      label.dataset.anchorY = String(ct.y);
       label.dataset.estWidth = String(est.width);
       label.dataset.estHeight = String(est.height);
 
       hit.addEventListener("mouseenter", () => label.classList.add("is-hovered"));
       hit.addEventListener("mouseleave", () => label.classList.remove("is-hovered"));
-      this.bindMapTap(hit, () => this.handleCatchmentSelect(ct));
-      this.bindMapTap(label, () => this.handleCatchmentSelect(ct));
+      this.bindMapTap(hit, () => this.promoteToCommunities(ct, null));
+      this.bindMapTap(label, () => this.promoteToCommunities(ct, null));
 
       labelsG.appendChild(anchor);
       labelsG.appendChild(hit);
@@ -1495,11 +1448,8 @@ export class AfricaIntelligenceMap {
 
     rootG.appendChild(labelsG);
     this.catchmentLayer.appendChild(rootG);
-    applyMapFeatureLayout(labelsG, SVG_NS, {
+    applyLabelSpread(labelsG, SVG_NS, {
       labelSelector: ".catchment-name",
-      anchorSelector: ".catchment-anchor",
-      idKey: "catchmentId",
-      decorateLabel: (label) => this.decorateMapNameLabel(label),
       ...this.getLabelSpreadOptions("catchment"),
     });
 
@@ -1562,74 +1512,67 @@ export class AfricaIntelligenceMap {
 
   renderCommunityLayer() {
     this.communityLayer.innerHTML = "";
-    if (!this.selection.country || this.zoomLevel < 2) return;
+    const countrySlug = this.selection.country?.slug;
+    const hub = this.drillData.byCountry[countrySlug];
+    if (!hub) return;
 
-    const focusCatchmentId = this.selection.catchment?.id;
-    let communities = this.getCommunitiesForCountry();
-    if (focusCatchmentId) {
-      communities = communities.filter((com) => com.catchmentId === focusCatchmentId);
-    }
-    if (!communities.length) return;
+    const pool = this.selection.catchment
+      ? hub.catchments
+          .find((ct) => ct.id === this.selection.catchment.id)
+          ?.communities?.slice() || []
+      : this.getCommunitiesForCountry();
+
+    if (!pool.length) return;
+
+    const rootG = document.createElementNS(SVG_NS, "g");
+    rootG.setAttribute("class", "community-layer-root");
 
     const labelsG = document.createElementNS(SVG_NS, "g");
     labelsG.setAttribute("class", "community-labels");
 
-    communities.forEach((com) => {
+    pool.forEach((com) => {
       if (com.x == null || com.y == null) return;
-
-      const isDimmed = Boolean(
-        focusCatchmentId && com.catchmentId && com.catchmentId !== focusCatchmentId
-      );
 
       const anchor = document.createElementNS(SVG_NS, "circle");
       anchor.setAttribute("cx", com.x);
       anchor.setAttribute("cy", com.y);
-      anchor.setAttribute("r", 3.5);
-      anchor.setAttribute("class", `community-anchor${isDimmed ? " is-dimmed" : ""}`);
+      anchor.setAttribute("r", 4);
+      anchor.setAttribute("class", "community-anchor community-marker");
       anchor.setAttribute("data-community-id", com.id);
       anchor.setAttribute("aria-hidden", "true");
 
       const hit = document.createElementNS(SVG_NS, "circle");
       hit.setAttribute("cx", com.x);
       hit.setAttribute("cy", com.y);
-      hit.setAttribute("r", 10);
-      hit.setAttribute("class", "community-path--hit");
+      hit.setAttribute("r", 14);
+      hit.setAttribute("class", "community-path community-path--hit");
       hit.setAttribute("data-community-id", com.id);
       hit.setAttribute("aria-hidden", "true");
 
-      const est = estimateLabelSize(com.name, { fontSize: 11 });
-      const labelOffsetY = -12;
       const label = this.createMapNameLabel({
         name: com.name,
         x: com.x,
-        y: com.y + labelOffsetY,
-        className: `community-name community-marker${isDimmed ? " is-dimmed" : ""}`,
+        y: com.y,
+        className: "community-name",
         entityId: com.id,
         inactive: com.status === "inactive",
-        fontSize: 11,
+        fontSize: 8,
       });
       label.setAttribute("data-community-id", com.id);
-      label.dataset.anchorX = String(com.x);
-      label.dataset.anchorY = String(com.y);
 
+      const select = () => this.selectCommunity(com, countrySlug);
       hit.addEventListener("mouseenter", () => label.classList.add("is-hovered"));
       hit.addEventListener("mouseleave", () => label.classList.remove("is-hovered"));
-      this.bindMapTap(hit, () => this.focusCommunity(com));
-      this.bindMapTap(label, () => this.focusCommunity(com));
+      this.bindMapTap(hit, select);
+      this.bindMapTap(label, select);
 
       labelsG.appendChild(anchor);
       labelsG.appendChild(hit);
       labelsG.appendChild(label);
     });
 
-    this.communityLayer.appendChild(labelsG);
-    applyMapFeatureLayout(labelsG, SVG_NS, {
-      labelSelector: ".community-name:not(.is-dimmed)",
-      anchorSelector: ".community-anchor:not(.is-dimmed)",
-      idKey: "communityId",
-      decorateLabel: (label) => this.decorateMapNameLabel(label),
-      ...this.getLabelSpreadOptions("community"),
-    });
+    rootG.appendChild(labelsG);
+    this.communityLayer.appendChild(rootG);
 
     if (this.selection.community) {
       this.highlightCommunity(this.selection.community.id);
@@ -1668,15 +1611,11 @@ export class AfricaIntelligenceMap {
   }
 
   updateScrollHint() {
-    /* Guidance lives in the left sidebar level card */
+    /* Guidance lives in the right sidebar card only */
   }
 
   setCountrySelectHandler(fn) {
     this._countrySelectHandler = fn;
-  }
-
-  setCatchmentSelectHandler(fn) {
-    this._catchmentSelectHandler = fn;
   }
 
   destroy() {
@@ -1688,8 +1627,6 @@ export class AfricaIntelligenceMap {
     clearTimeout(this._scaleDebounce);
     this.wheelController?.destroy();
     this.wheelController = null;
-    this.dataPanel?.destroy?.();
-    this.dataPanel = null;
     document.getElementById("site-header")?.classList.remove("site-header--dark");
     if (this.root) this.root.innerHTML = "";
     this.regions = [];

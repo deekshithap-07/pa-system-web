@@ -823,6 +823,56 @@ body.africa-map-active .site-footer {
 
 }
 
+.ai-map__overlay-chip {
+
+  display: inline-flex;
+
+  align-items: center;
+
+  gap: 6px;
+
+  font-size: 0.8rem;
+
+  font-weight: 700;
+
+  color: #002B5C;
+
+  background: rgba(255, 255, 255, 0.92);
+
+  border: 1px solid rgba(0, 43, 92, 0.12);
+
+  border-radius: 999px;
+
+  padding: 4px 10px;
+
+  margin-bottom: 6px;
+
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.12);
+
+  pointer-events: none;
+
+  white-space: nowrap;
+
+}
+
+.ai-map__overlay-chip__dot {
+
+  width: 8px;
+
+  height: 8px;
+
+  border-radius: 50%;
+
+  background: #2d6a4f;
+
+}
+
+.ai-map__overlay--community .ai-map__overlay-chip--status {
+
+  background: #2d6a4f;
+
+}
+
 
 
 .ai-map__hub-link {

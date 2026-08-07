@@ -1,0 +1,322 @@
+/* ============================================================
+   Africa Intelligence Map · Leaflet
+   Premium dark map that blends with the PA navy theme.
+   ============================================================ */
+
+#home-africa-map-root.africa-leaflet-host,
+.africa-leaflet-host {
+  position: relative;
+  height: min(72vh, 720px);
+  min-height: 520px;
+  width: 100%;
+  background: linear-gradient(180deg, #001528 0%, #002b5c 100%);
+  overflow: hidden;
+}
+
+.africa-leaflet-host .leaflet-container {
+  background: #001528;
+  font: inherit;
+}
+
+/* Basemap blend — dark vignette so tiles sit into the navy page */
+.africa-leaflet-host .leaflet-tile-pane::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(circle at 50% 45%, rgba(0, 21, 40, 0) 0%, rgba(0, 16, 34, 0.55) 100%);
+  z-index: 400;
+}
+
+/* Country polygons */
+.al-country {
+  cursor: pointer;
+  transition: fill-opacity 0.2s ease;
+}
+.al-country:hover {
+  cursor: pointer;
+}
+
+/* Markers */
+.al-marker {
+  background: transparent;
+  border: none;
+}
+.al-marker__svg {
+  display: block;
+  filter: drop-shadow(0 1px 3px rgba(0, 0, 0, 0.5));
+}
+.al-marker__ring {
+  animation: al-pulse 2s ease-out infinite;
+  transform-origin: center;
+}
+@keyframes al-pulse {
+  0% { transform: scale(0.6); opacity: 0.9; }
+  70% { transform: scale(1.35); opacity: 0; }
+  100% { transform: scale(1.35); opacity: 0; }
+}
+
+/* Custom markers (Legacy supplemental) */
+.leaflet-marker-icon.al-marker {
+  border: none;
+  background: none;
+}
+
+/* Cluster markers — restyle Leaflet's default markercluster to dark PA theme */
+.africa-leaflet-host .marker-cluster-small,
+.africa-leaflet-host .marker-cluster-medium,
+.africa-leaflet-host .marker-cluster-large {
+  background: radial-gradient(circle at 30% 30%, #1d5f8f, #0e3a66);
+  border: 2px solid #7dd3fc;
+  box-shadow: 0 4px 14px rgba(0, 20, 40, 0.45);
+}
+.africa-leaflet-host .marker-cluster-small div,
+.africa-leaflet-host .marker-cluster-medium div,
+.africa-leaflet-host .marker-cluster-large div {
+  background: rgba(3, 14, 28, 0.55) !important;
+  color: #fff;
+  font: 700 12px/1 "Open Sans", system-ui, sans-serif;
+}
+.africa-leaflet-host .marker-cluster-small div { font-size: 11px; }
+.africa-leaflet-host .marker-cluster-medium div { font-size: 12px; }
+.africa-leaflet-host .marker-cluster-large div { font-size: 13px; }
+
+/* Popups */
+.al-popup .leaflet-popup-content-wrapper {
+  background: rgba(6, 22, 40, 0.96);
+  color: #e7f3ff;
+  border-radius: 12px;
+  border: 1px solid #1e4057;
+  box-shadow: 0 14px 40px rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(6px);
+}
+.al-popup .leaflet-popup-content {
+  margin: 14px 16px;
+  font-family: "Open Sans", system-ui, sans-serif;
+  line-height: 1.4;
+}
+.al-popup .leaflet-popup-tip {
+  background: rgba(6, 22, 40, 0.96);
+  border: 1px solid #1e4057;
+}
+.al-popup a.leaflet-popup-close-button {
+  color: #9fc4dd;
+}
+
+.al-popup__head { margin-bottom: 10px; }
+.al-popup__eyebrow {
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #7dd3fc;
+}
+.al-popup__title {
+  font-size: 18px;
+  font-weight: 700;
+  color: #fff;
+  margin-top: 2px;
+}
+.al-popup__kpis {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin: 10px 0 12px;
+}
+.al-kpi { display: flex; flex-direction: column; }
+.al-kpi-v {
+  font-size: 16px;
+  font-weight: 700;
+  color: #fff;
+  line-height: 1.1;
+}
+.al-kpi-l {
+  font-size: 10px;
+  color: #8fb2cc;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+.al-popup__acts { border-top: 1px solid rgba(125, 211, 252, 0.18); padding-top: 10px; }
+.al-btn {
+  display: inline-flex;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: #7dd3fc;
+  text-decoration: none;
+}
+.al-btn:hover { color: #fff; text-decoration: underline; }
+
+/* Info panel (top-left card) */
+.al-panel {
+  position: absolute;
+  top: 14px;
+  left: 14px;
+  z-index: 800;
+  width: min(288px, calc(100% - 28px));
+  max-height: calc(100% - 120px);
+  overflow: auto;
+  background: rgba(4, 18, 34, 0.86);
+  border: 1px solid rgba(125, 211, 252, 0.22);
+  border-radius: 14px;
+  padding: 16px;
+  color: #e7f3ff;
+  box-shadow: 0 14px 40px rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(8px);
+  pointer-events: auto;
+}
+.al-panel__body { display: flex; flex-direction: column; gap: 8px; }
+.al-panel__eyebrow {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #7dd3fc;
+}
+.al-panel__title {
+  font-size: 22px;
+  font-weight: 800;
+  color: #fff;
+  line-height: 1.15;
+}
+.al-panel__placeholder {
+  font-size: 12px;
+  color: #8fb2cc;
+  line-height: 1.5;
+}
+.al-panel__cta {
+  margin-top: 8px;
+  font-size: 11px;
+  color: #7dd3fc;
+}
+.al-panel__badges { display: flex; flex-wrap: wrap; gap: 6px; margin: 4px 0; }
+.al-badge {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 3px 8px;
+  border-radius: 999px;
+  background: rgba(125, 211, 252, 0.14);
+  border: 1px solid rgba(125, 211, 252, 0.4);
+  color: #7dd3fc;
+}
+.al-badge--active { background: rgba(245, 166, 35, 0.15); border-color: #f5a623; color: #f5a623; }
+.al-badge--growing { background: rgba(0, 196, 140, 0.15); border-color: #00c48c; color: #00c48c; }
+.al-badge--emerging { background: rgba(0, 159, 218, 0.15); border-color: #009fda; color: #34d3ff; }
+.al-badge--network { background: rgba(122, 139, 166, 0.18); border-color: #7a8ba6; color: #c6d4e2; }
+.al-badge--growth { background: transparent; border-color: currentColor; }
+.al-kpis { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin: 6px 0; }
+.al-panel__acts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 8px;
+  padding-top: 10px;
+  border-top: 1px solid rgba(125, 211, 252, 0.16);
+}
+.al-btn--solid {
+  background: #009fda;
+  color: #fff;
+  padding: 7px 12px;
+  border-radius: 8px;
+}
+.al-btn--solid:hover { background: #34d3ff; text-decoration: none; }
+.al-btn--ghost {
+  border: 1px solid rgba(125, 211, 252, 0.4);
+  color: #7dd3fc;
+  padding: 7px 12px;
+  border-radius: 8px;
+}
+.al-btn--ghost:hover { background: rgba(125, 211, 252, 0.1); text-decoration: none; }
+
+/* Breadcrumb (bottom-center chip) */
+.al-breadcrumb {
+  position: absolute;
+  bottom: 18px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 800;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  background: rgba(6, 18, 34, 0.85);
+  border: 1px solid rgba(125, 211, 252, 0.25);
+  border-radius: 999px;
+  color: #9fc6e2;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(6px);
+  font-size: 12px;
+  white-space: nowrap;
+  pointer-events: auto;
+}
+.al-breadcrumb__item--link { cursor: pointer; color: #7dd3fc; }
+.al-breadcrumb__item--link:hover { color: #fff; }
+.al-breadcrumb__item--africa { font-weight: 700; color: #fff; cursor: pointer; }
+.al-breadcrumb__sep { color: #4a6b85; }
+
+/* Legend (bottom-left) */
+.al-legend {
+  position: absolute;
+  bottom: 18px;
+  left: 14px;
+  z-index: 800;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  padding: 10px 12px;
+  background: rgba(6, 18, 34, 0.82);
+  border: 1px solid rgba(125, 211, 252, 0.2);
+  border-radius: 10px;
+  font-size: 11px;
+  color: #bcd6ea;
+  pointer-events: auto;
+}
+.al-legend__item { display: flex; align-items: center; gap: 7px; }
+.al-legend__item i {
+  width: 12px;
+  height: 12px;
+  border-radius: 3px;
+  border: 1px solid transparent;
+  display: inline-block;
+}
+.al-legend__pin {
+  border-radius: 50% !important;
+}
+
+/* Leaflet zoom control (bottom-right) — restyle to dark */
+.africa-leaflet-host .leaflet-bar {
+  border: 1px solid rgba(125, 211, 252, 0.3);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+  border-radius: 10px;
+  overflow: hidden;
+}
+.africa-leaflet-host .leaflet-bar a {
+  background: rgba(6, 18, 34, 0.9);
+  color: #7dd3fc;
+  border-bottom: 1px solid rgba(125, 211, 252, 0.2);
+  width: 30px;
+  height: 30px;
+  line-height: 28px;
+}
+.africa-leaflet-host .leaflet-bar a:hover { background: #0a2a4a; color: #fff; }
+.africa-leaflet-host .leaflet-bar a.leaflet-disabled { color: #4a6b85; background: rgba(6, 18, 34, 0.6); }
+
+/* Attribution */
+.africa-leaflet-host .leaflet-control-attribution {
+  background: rgba(6, 18, 34, 0.7);
+  color: #6f92ac;
+  font-size: 10px;
+}
+.africa-leaflet-host .leaflet-control-attribution a { color: #7dd3fc; }
+
+.africa-leaflet-host .leaflet-container {
+  font: 500 12px/1.5 "Open Sans", system-ui, sans-serif;
+}
+
+@media (max-width: 640px) {
+  .al-panel { width: calc(100% - 20px); left: 10px; top: 10px; padding: 12px; }
+  .al-legend { display: none; }
+  .al-panel__title { font-size: 18px; }
+  .al-kpis { grid-template-columns: repeat(2, 1fr); }
+}
