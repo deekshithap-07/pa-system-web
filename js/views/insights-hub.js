@@ -1,5 +1,6 @@
 import { formatNumber } from "../utils/format.js";
 import { renderChart, destroyCharts } from "../components/charts.js";
+import { buildCommunityHubPath } from "../components/shared/site-bridge.js";
 
 export function renderInsights(data) {
   const ia = data.insightsAnalytics;
@@ -29,7 +30,7 @@ export function renderInsights(data) {
             <a href="#ins-readiness">Readiness</a>
             <a href="#ins-hotspots">Hotspots</a>
           </nav>
-          <a href="#/scorecard" class="ins-hero__cta" data-link>View scorecard snapshot &rarr;</a>
+          <p class="ins-hero__note">Analytical tools — rankings and journey status live on the <a href="#/scorecard" data-link>scorecard</a>.</p>
         </div>
       </header>
 
@@ -49,6 +50,7 @@ export function renderInsights(data) {
                 <label>Country B <select id="compare-country-b">${countries.map((c, i) => `<option value="${c.slug}" ${i === 1 ? "selected" : ""}>${c.name}</option>`).join("")}</select></label>
               </div>
               <div class="ins-compare-results" id="country-compare-results"></div>
+              <div class="ins-compare-hub-links" id="country-compare-links" hidden></div>
             </div>
             <div class="ins-compare-panel">
               <h3>Community vs community</h3>
@@ -58,6 +60,7 @@ export function renderInsights(data) {
                 <label>Community B <select id="compare-community-b">${communities.map((c, i) => `<option value="${c.id}" ${i === 1 ? "selected" : ""}>${c.name}</option>`).join("")}</select></label>
               </div>
               <div class="ins-compare-results" id="community-compare-results"></div>
+              <div class="ins-compare-hub-links" id="community-compare-links" hidden></div>
             </div>
           </div>
         </section>
@@ -224,20 +227,53 @@ export function mountInsights(data) {
 
   const countryResults = root.querySelector("#country-compare-results");
   const communityResults = root.querySelector("#community-compare-results");
+  const countryLinks = root.querySelector("#country-compare-links");
+  const communityLinks = root.querySelector("#community-compare-links");
   const countryA = root.querySelector("#compare-country-a");
   const countryB = root.querySelector("#compare-country-b");
   const commA = root.querySelector("#compare-community-a");
   const commB = root.querySelector("#compare-community-b");
 
+  const renderCountryHubLinks = (slugA, slugB) => {
+    if (!countryLinks) return;
+    const a = countries.find((c) => c.slug === slugA);
+    const b = countries.find((c) => c.slug === slugB);
+    if (!a || !b) {
+      countryLinks.hidden = true;
+      return;
+    }
+    countryLinks.hidden = false;
+    countryLinks.innerHTML = `
+      <a href="#/country/${slugA}" data-link>Open ${a.name} hub</a>
+      <a href="#/country/${slugB}" data-link>Open ${b.name} hub</a>
+      <a href="#/scorecard#sc-countries" data-link>See scorecard rankings</a>`;
+  };
+
+  const renderCommunityHubLinks = (idA, idB) => {
+    if (!communityLinks) return;
+    const pathA = buildCommunityHubPath(idA, data);
+    const pathB = buildCommunityHubPath(idB, data);
+    const a = communities.find((c) => c.id === idA);
+    const b = communities.find((c) => c.id === idB);
+    const links = [];
+    if (pathA && a) links.push(`<a href="#/${pathA}" data-link>Open ${a.name} community</a>`);
+    if (pathB && b) links.push(`<a href="#/${pathB}" data-link>Open ${b.name} community</a>`);
+    links.push(`<a href="#/resources#res-case-studies" data-link>Related case studies</a>`);
+    communityLinks.hidden = !links.length;
+    communityLinks.innerHTML = links.join("");
+  };
+
   const updateCountry = () => {
     if (countryResults) {
       countryResults.innerHTML = renderCountryComparison(countries, countryA.value, countryB.value, labels);
     }
+    renderCountryHubLinks(countryA.value, countryB.value);
   };
   const updateCommunity = () => {
     if (communityResults) {
       communityResults.innerHTML = renderCommunityComparison(communities, commA.value, commB.value);
     }
+    renderCommunityHubLinks(commA.value, commB.value);
   };
 
   countryA?.addEventListener("change", updateCountry);

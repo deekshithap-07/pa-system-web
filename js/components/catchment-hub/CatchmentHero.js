@@ -6,7 +6,7 @@ export function renderCatchmentHero(hub) {
       <div class="ch-hero__grid">
         <div class="ch-hero__content">
           ${renderBreadcrumb([
-            { label: "Africa", href: "#/" },
+            { label: "Africa", href: "#/africa" },
             { label: hub.countryName, href: `#/country/${hub.countrySlug}` },
             { label: hub.catchmentName, href: `#/catchment/${hub.countrySlug}/${hub.catchmentSlug}` },
           ])}

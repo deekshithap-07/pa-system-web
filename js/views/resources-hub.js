@@ -54,7 +54,7 @@ export function renderResources(data) {
           <p class="res-hero__eyebrow" data-res-reveal>Knowledge &amp; Resource Hub</p>
           <h1 class="res-hero__title" data-res-reveal>Resources</h1>
           <p class="res-hero__lead" data-res-reveal>
-            Reports, case studies, structured insights, and programme materials from across the Possibilities Africa network.
+            Reports, case studies, and programme materials — the narrative layer behind the metrics. Start here if you want to understand transformation before exploring data.
           </p>
         </div>
       </section>
@@ -160,8 +160,13 @@ export function renderResources(data) {
           </header>
           <div class="res-case-grid" data-filterable="case-studies">
             ${caseStudies
-              .map(
-                (cs) => `<article class="res-case-card" data-country-id="${cs.countryId || ""}" data-program="${cs.program || ""}">
+              .map((cs) => {
+                const country = countries.find((c) => c.id === cs.countryId);
+                const catchment = (data.catchments?.catchments || []).find((c) => c.id === cs.catchmentId);
+                const countryHref = country ? `#/country/${country.slug}` : null;
+                const catchmentHref =
+                  country && catchment ? `#/catchment/${country.slug}/${catchment.slug}` : null;
+                return `<article class="res-case-card" data-country-id="${cs.countryId || ""}" data-program="${cs.program || ""}">
                   <div class="res-case-card__visual">${renderCover("case", "CASE STUDY")}</div>
                   <div class="res-case-card__body">
                     <span class="res-case-card__program">${cs.program}</span>
@@ -169,9 +174,14 @@ export function renderResources(data) {
                     <p>${cs.summary}</p>
                     <ul class="res-case-card__outcomes">${(cs.outcomes || []).map((o) => `<li>${o}</li>`).join("")}</ul>
                     <span class="res-case-card__meta">${getCountryName(data.countries, cs.countryId)}</span>
+                    <div class="res-case-card__actions">
+                      ${countryHref ? `<a href="${countryHref}" data-link>View country hub</a>` : ""}
+                      ${catchmentHref ? `<a href="${catchmentHref}" data-link>View catchment</a>` : ""}
+                      <a href="#/insights" data-link>See related data</a>
+                    </div>
                   </div>
-                </article>`
-              )
+                </article>`;
+              })
               .join("")}
           </div>
         </section>
@@ -191,6 +201,7 @@ export function renderResources(data) {
                     <p>${p.description}</p>
                     <div class="res-pack-card__topics">${(p.topics || []).map((t) => `<span class="res-tag">${t}</span>`).join("")}</div>
                     <button type="button" class="res-btn-pill res-btn-pill--sm" data-download-pack="${p.id}">Download ${p.format} (${p.size})</button>
+                    <a href="#/insights" class="res-pack-card__data-link" data-link>Explore live data &rarr;</a>
                   </div>
                 </article>`
               )

@@ -1,10 +1,11 @@
 import { formatNumber } from "../../utils/format.js";
+import { renderNarrativeRibbon } from "../shared/site-bridge.js";
 
 function collectRecentUpdates(countryHubs) {
   const items = [];
-  for (const hub of Object.values(countryHubs?.hubs || {})) {
+  for (const [slug, hub] of Object.entries(countryHubs?.hubs || {})) {
     for (const activity of hub.activities || []) {
-      items.push({ ...activity, countryName: hub.countryName });
+      items.push({ ...activity, countryName: hub.countryName, countrySlug: slug });
     }
   }
   return items
@@ -14,6 +15,21 @@ function collectRecentUpdates(countryHubs) {
 
 function formatUpdateDate(iso) {
   return new Date(iso).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" });
+}
+
+function renderCountryBrowseGrid(countries) {
+  const list = countries?.countries?.filter((c) => c.isPaNetwork) || [];
+  if (!list.length) return `<p class="ao-empty">No countries available.</p>`;
+
+  return list
+    .map(
+      (c) => `<a href="#/country/${c.slug}" class="ao-country-card" data-link data-reveal-section>
+        <span class="ao-country-card__name">${c.name}</span>
+        <span class="ao-country-card__meta">${c.summary?.communities || c.communities || 0} communities · ${c.summary?.pastors || c.pastors || 0} pastors</span>
+        <span class="ao-country-card__cta">View country hub &rarr;</span>
+      </a>`
+    )
+    .join("");
 }
 
 export function renderAfricaOverviewSections(data) {
@@ -51,6 +67,7 @@ export function renderAfricaOverviewSections(data) {
             <div>
               <strong>${u.project}</strong>
               <span>${u.community} · ${u.countryName}</span>
+              ${u.countrySlug ? `<a href="#/country/${u.countrySlug}" class="ao-update__link" data-link>View ${u.countryName} &rarr;</a>` : ""}
             </div>
             <span class="ao-update__status ao-update__status--${(u.status || "").toLowerCase()}">${u.status}</span>
           </li>`
@@ -63,7 +80,28 @@ export function renderAfricaOverviewSections(data) {
       <header class="ao-overview__head container" data-reveal-section>
         <p class="eyebrow">Africa Overview</p>
         <h1>${overview.headline || "What is happening across Africa?"}</h1>
+        <p class="ao-overview__lead">${overview.lead || "Start with recent field activity and stories, then explore continental metrics and country hubs across the PA network."}</p>
       </header>
+
+      ${renderNarrativeRibbon({
+        variant: "story",
+        eyebrow: "Getting started",
+        text: "This page moves from what's happening on the ground to network-wide data. Field updates come first; metrics and country hubs help you explore further.",
+        cta: { label: "Explore the interactive map", target: "#/#home-africa-map" },
+      })}
+
+      <section class="ao-section container" id="ao-updates" aria-label="Recent updates">
+        <h2 class="ao-section__title">Recent updates</h2>
+        <p class="ao-section__desc">Latest programme activity from pastor-led communities — each links to its country hub.</p>
+        <ol class="ao-update-list">${updateItems}</ol>
+      </section>
+
+      ${renderNarrativeRibbon({
+        variant: "data",
+        eyebrow: "Data layer",
+        text: "The metrics below summarise transformation across the PA network. Open the scorecard for rankings or insights for comparisons.",
+        cta: { label: "View scorecard", target: "#/scorecard" },
+      })}
 
       <section class="ao-section container" id="ao-metrics" aria-label="Key metrics across Africa">
         <h2 class="ao-section__title">Key metrics across Africa</h2>
@@ -75,16 +113,10 @@ export function renderAfricaOverviewSections(data) {
         <div class="ao-chart-grid">${chartCards}</div>
       </section>
 
-      <section class="ao-section container" id="ao-updates" aria-label="Recent updates">
-        <h2 class="ao-section__title">Recent updates</h2>
-        <ol class="ao-update-list">${updateItems}</ol>
-      </section>
-
-      <section class="ao-section ao-section--map" id="ao-map" aria-label="Interactive Africa map">
-        <div class="ao-section__head container">
-          <h2 class="ao-section__title">Interactive Africa map</h2>
-          <p class="ao-section__desc">Scroll or click a cluster to explore countries and communities.</p>
-        </div>
+      <section class="ao-section container" id="ao-countries" aria-label="Browse countries">
+        <h2 class="ao-section__title">Browse countries</h2>
+        <p class="ao-section__desc">Select a country hub for stories, metrics, catchments, and communities. The interactive map is on the <a href="#/#home-africa-map" data-link>homepage</a>.</p>
+        <div class="ao-country-grid">${renderCountryBrowseGrid(data.countries)}</div>
       </section>
     </div>`;
 }

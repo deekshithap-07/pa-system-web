@@ -3,11 +3,8 @@ import { formatNumber } from "../../utils/format.js";
 const NAV = [
   { id: "sc-overview", label: "Overview" },
   { id: "sc-indices", label: "Network snapshot" },
-  { id: "sc-growth", label: "Trends" },
-  { id: "sc-countries", label: "Countries" },
-  { id: "sc-communities", label: "Communities" },
+  { id: "sc-countries", label: "Country rankings" },
   { id: "sc-progress", label: "Journey progress" },
-  { id: "sc-analysis", label: "Sector outcomes" },
   { id: "sc-reports", label: "Reports" },
 ];
 
@@ -20,7 +17,7 @@ export function renderScorecardSidebar() {
       </nav>
       <div class="sc-sidebar__footer">
         <a href="#/" class="sc-sidebar__back" data-link>&larr; Back to home</a>
-        <a href="#/insights" class="sc-sidebar__insights-link" data-link>Deep analysis &rarr;</a>
+        <a href="#/insights" class="sc-sidebar__insights-link" data-link>Comparisons &amp; indices &rarr;</a>
       </div>
     </aside>`;
 }
@@ -187,19 +184,23 @@ export function renderScorecardCountryStats(countries) {
     </section>`;
 }
 
-export function renderScorecardCommunityStats(communities) {
+export function renderScorecardCommunityStats(communities, hubPaths = {}) {
   const items = (communities || [])
-    .map(
-      (c) => `<li class="sc-community-row">
+    .map((c) => {
+      const path = c.hubPath || hubPaths[c.name];
+      const nameHtml = path
+        ? `<a href="#/${path}" data-link>${c.name}</a>`
+        : c.name;
+      return `<li class="sc-community-row">
         <div class="sc-community-row__main">
-          <strong>${c.name}</strong>
+          <strong>${nameHtml}</strong>
           <span>${c.country} · ${c.catchment}</span>
         </div>
         <div class="sc-community-row__stage">${c.stage}</div>
         <div class="sc-community-row__meter" aria-hidden="true"><span style="width:${c.progress}%"></span></div>
         <div class="sc-community-row__pct">${c.progress}%</div>
-      </li>`
-    )
+      </li>`;
+    })
     .join("");
 
   return `

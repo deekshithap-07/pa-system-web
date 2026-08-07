@@ -1,12 +1,12 @@
 const NAV_ITEMS = [
   { id: "cth-overview", label: "Overview" },
+  { id: "cth-stories", label: "Stories" },
   { id: "cth-summary", label: "Summary" },
   { id: "cth-map", label: "Map" },
   { id: "cth-charts", label: "Growth" },
   { id: "cth-communities", label: "Communities" },
   { id: "cth-activity", label: "Activity" },
   { id: "cth-reports", label: "Reports" },
-  { id: "cth-stories", label: "Stories" },
   { id: "cth-insights", label: "Insights" },
 ];
 

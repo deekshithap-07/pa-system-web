@@ -1,103 +1,164 @@
 {
   "hero": {
-    "title": "The whole gospel transforming the whole person and whole community",
-    "description": "Explore Africa, understand communities, and measure transformation — a data intelligence platform for Possibilities Africa.",
-    "primaryCta": { "label": "Explore Africa", "target": "#/africa" },
-    "secondaryCta": { "label": "View Insights", "target": "#/insights" }
+    "eyebrow": "Africa Overview",
+    "title": "What is happening across Africa?",
+    "description": "See where PA is working, what is happening there, and how communities are progressing — through data, geography, and stories.",
+    "primaryCta": { "label": "Explore the map", "target": "#home-africa-map" },
+    "secondaryCta": { "label": "View scorecard", "target": "#/scorecard" },
+    "featured": {
+      "eyebrow": "Level 1 · Africa Overview",
+      "title": "What is happening across Africa?",
+      "description": "A living platform showing real transformation across Africa — total reach, growth trends, field updates, and an interactive map to explore every country.",
+      "cta": { "label": "Explore the map", "target": "#home-africa-map" }
+    },
+    "topStories": [
+      {
+        "type": "REPORT",
+        "title": "September '24 Ministry Report — field updates from Kenya, Ethiopia, Malawi and Zambia",
+        "href": "#/resources#res-catalog",
+        "theme": "report"
+      },
+      {
+        "type": "STORY",
+        "title": "Women building trench dams to store water for irrigation in Kwale",
+        "href": "#/stories/kenya",
+        "theme": "story"
+      },
+      {
+        "type": "INSIGHT",
+        "title": "CBC index and readiness levels — where communities are progressing fastest",
+        "href": "#/insights#ins-cbc",
+        "theme": "insight"
+      },
+      {
+        "type": "NEWSLETTER",
+        "title": "Subscribe to our newsletter",
+        "isNewsletter": true
+      }
+    ]
   },
   "networkFlow": {
     "eyebrow": "How we work across Africa",
     "title": "From continent to community — pastor-led transformation",
     "description": "Possibilities Africa coordinates ministry from the continental level through countries, catchment areas, and local communities — reaching households through pastor-led networks.",
-    "cta": { "label": "Explore the Africa map", "target": "#/africa" }
+    "cta": { "label": "See the ministry model", "target": "#/about" }
   },
   "developmentTopics": {
-    "eyebrow": "Ministry focus areas",
-    "title": "Holistic transformation across Africa",
-    "description": "Pastor-led programmes addressing leadership, discipleship, livelihoods, youth, and citizenship — tracked from continent to community.",
-    "browseCta": { "label": "Browse all programmes", "target": "#/about" },
+    "eyebrow": "Our priorities",
+    "title": "Five results areas that compound into lasting transformation",
+    "description": "Pastor-led programmes addressing leadership, discipleship, livelihoods, youth, and citizenship — aligned with Possibilities Africa's ministry model.",
     "topics": [
       {
         "id": "leadership",
-        "title": "Transformational Leadership",
-        "category": "Leadership",
-        "summary": "Equipping pastor leaders to coordinate holistic community transformation across catchments.",
+        "panelLabel": "Leadership",
+        "title": "Transformational Leadership Development",
+        "shortTitle": "TL",
+        "summary": "We recruit, organize and equip pastor leaders to provide visionary, servant leadership for sustainable community-wide transformation.",
         "description": "Pastor leaders are the backbone of the PA network. Through structured training, mentorship, and the Triple-A model — Awareness, Ability, Action — leaders guide communities through a two-year transformation journey with measurable leadership scores.",
         "stat": { "value": "1,877", "label": "Pastors in network" },
         "highlights": ["Triple-A leadership model", "Catchment coordination", "Leadership score tracking"],
-        "link": { "label": "View leadership data", "target": "#/scorecard" },
+        "link": { "label": "Learn More", "target": "#/insights#ins-cbc" },
         "theme": "leadership"
       },
       {
         "id": "discipleship",
-        "title": "Discipleship",
-        "category": "People",
-        "summary": "Shalom groups of 30–50 leaders driving discipleship and social cohesion in every community.",
+        "panelLabel": "Discipleship",
+        "title": "Spiritual Discipleship",
+        "shortTitle": "SD",
+        "summary": "Guiding people in Christian faith and practice to build a solid foundation for true, eternal, and holistic community transformation.",
         "description": "Each community develops Shalom groups that deepen faith, build cohesion, and mobilise local initiative. Discipleship programmes connect pastors, lay leaders, and households in sustained spiritual formation.",
         "stat": { "value": "59", "label": "Active communities" },
         "highlights": ["Shalom group formation", "Household engagement", "2-year journey stages"],
-        "link": { "label": "Explore communities", "target": "#/africa" },
+        "link": { "label": "Learn More", "target": "#/africa" },
         "theme": "discipleship"
       },
       {
         "id": "economic",
+        "panelLabel": "Productivity",
         "title": "Economic Productivity",
-        "category": "Prosperity",
-        "summary": "Person-to-person skill transfer, cooperatives, and livelihood programmes lifting household income.",
+        "shortTitle": "EP",
+        "summary": "Empowering rural communities to discover, develop and sustainably utilize local resources.",
         "description": "Economic Productivity CHIP groups teach practical skills — baking, farming, small business — with person-to-person replication across communities. Income activities and cooperative models are tracked at catchment and country level.",
         "stat": { "value": "148", "label": "Active projects" },
         "highlights": ["CHIP skill transfer", "Income activities", "Agriculture & livelihoods"],
-        "link": { "label": "See case studies", "target": "#/resources#res-case-studies" },
+        "link": { "label": "Learn More", "target": "#/resources#res-case-studies" },
         "theme": "economic"
       },
       {
         "id": "youth",
-        "title": "Youth Mentoring",
-        "category": "People",
-        "summary": "Investing in the next generation through pastor-led youth mentorship networks.",
+        "panelLabel": "Next Generation",
+        "title": "Mentoring the Next Generation",
+        "shortTitle": "YN",
+        "summary": "Supporting children and youth with godly values, character and practical life skills.",
         "description": "Youth mentoring connects young people with pastor leaders and community role models. Programmes focus on character, skills, and civic participation — building a pipeline of leaders for tomorrow's communities.",
         "stat": { "value": "7", "label": "Nations reached" },
         "highlights": ["Pastor-youth networks", "Skills & character", "Next-gen leadership"],
-        "link": { "label": "View country hubs", "target": "#/africa" },
+        "link": { "label": "Learn More", "target": "#/africa" },
         "theme": "youth"
       },
       {
         "id": "citizenship",
+        "panelLabel": "Citizenship",
         "title": "Responsible Citizenship",
-        "category": "Community",
-        "summary": "Community-led water, agriculture, and infrastructure projects owned by local people.",
+        "shortTitle": "RC",
+        "summary": "Churches building community programmes addressing education, water, health and infrastructure.",
         "description": "Responsible Citizenship mobilises communities to plan and build their own assets — trench dams, irrigation, health outreaches. Pastor-Planned Projects (PPPs) exemplify local ownership and resource mobilization.",
         "stat": { "value": "335K+", "label": "Lives impacted" },
         "highlights": ["PPP & CHIP projects", "Water & agriculture", "Local resource mobilization"],
-        "link": { "label": "Read transformation stories", "target": "#/country/kenya" },
+        "link": { "label": "Learn More", "target": "#/country/kenya" },
         "theme": "citizenship"
-      },
-      {
-        "id": "measurement",
-        "title": "Measuring Transformation",
-        "category": "Data & insights",
-        "summary": "Real-time dashboards tracking progress from Africa to individual communities.",
-        "description": "The Transformation Intelligence platform connects field tracking data to institutional dashboards — CBC index, readiness levels, growth trends, and scorecards. Decision-makers see exactly where progress is accelerating or needs support.",
-        "stat": { "value": "14%", "label": "Network growth YoY" },
-        "highlights": ["CBC index & readiness", "Country scorecards", "Trend analysis"],
-        "link": { "label": "Open insights hub", "target": "#/insights" },
-        "theme": "measurement"
       }
     ]
   },
   "impactOverview": {
-    "title": "Impact at a glance",
-    "description": "Key transformation metrics across the PA network. Aligned with how PA works — catchments, Shalom groups, and the 2-year journey.",
+    "eyebrow": "By the numbers",
+    "title": "Transformation reach across the PA network",
+    "description": "Key metrics at a glance — open the scorecard for full analytics, rankings, and progress indicators.",
+    "scorecardCta": { "label": "View Scorecard", "target": "#/scorecard" },
+    "dataCta": { "label": "Explore insights & analysis", "target": "#/insights" },
     "modelLink": { "label": "How PA's ministry model works", "target": "#/about" },
     "kpis": [
       { "id": "countries", "label": "Countries Reached", "value": 7, "suffix": "" },
       { "id": "communities", "label": "Communities", "value": 59, "suffix": "" },
       { "id": "households", "label": "Households", "value": 253000, "suffix": "+" },
-      { "id": "projects", "label": "Projects", "value": 148, "suffix": "" },
+      { "id": "projects", "label": "Active Projects", "value": 148, "suffix": "" },
       { "id": "lives", "label": "Lives Impacted", "value": 335000, "suffix": "+" },
-      { "id": "growth", "label": "Growth", "value": 14, "suffix": "%", "prefix": "+" }
-    ],
-    "scorecardCta": { "label": "View Scorecard", "target": "#/scorecard" }
+      { "id": "growth", "label": "Network Growth", "value": 14, "prefix": "+", "suffix": "%" }
+    ]
+  },
+  "level1": {
+    "keyUpdates": {
+      "eyebrow": "Key updates",
+      "title": "Recent activity across countries",
+      "description": "Latest programme activity from pastor-led communities — each links to its country hub.",
+      "limit": 6
+    },
+    "growthTrends": {
+      "eyebrow": "Growth trends",
+      "title": "How the ministry is expanding",
+      "description": "Network-wide trends in Shalom groups, household reach, and programme activity.",
+      "chartKeys": ["shalomGroups", "householdReach"]
+    },
+    "africaMap": {
+      "eyebrow": "Explore Africa",
+      "title": "Interactive map of Africa",
+      "description": "Click a country to explore data and drill into catchments and communities. Use Ctrl + scroll to zoom the map, or scroll normally to continue down the page.",
+      "countriesCta": { "label": "Browse all countries →", "target": "#/africa" }
+    }
+  },
+  "storiesSection": {
+    "description": "Real lives, rewritten — every story paired with tracked impact data from pastor-led communities across Africa.",
+    "cta": { "label": "Read more stories", "target": "#/stories" },
+    "featuredStoryIds": [
+      "story-kenya-dams",
+      "story-malawi-mary",
+      "story-ethiopia-abdisa"
+    ]
+  },
+  "publications": {
+    "eyebrow": "Research & publications",
+    "title": "Reports that explain the data",
+    "description": "Monthly field reports and annual summaries give narrative context to the metrics on this platform."
   },
   "mapOverlay": {
     "KE": { "activeProjects": 42 },

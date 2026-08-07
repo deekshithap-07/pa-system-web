@@ -4,13 +4,14 @@
 import { wheelZoomViewBox, clampViewBoxWidth } from "../utils/geo.js";
 
 export class MapWheelController {
-  constructor(canvasEl, { getViewState, applyView, onZoomChange, minWidth, maxWidth }) {
+  constructor(canvasEl, { getViewState, applyView, onZoomChange, minWidth, maxWidth, embedMode = false }) {
     this.canvas = canvasEl;
     this.getViewState = getViewState;
     this.applyView = applyView;
     this.onZoomChange = onZoomChange;
     this.minWidth = minWidth ?? 40;
     this.maxWidth = maxWidth ?? 2000;
+    this.embedMode = embedMode;
     this.targetView = null;
     this._rafId = null;
     this._onWheel = this.handleWheel.bind(this);
@@ -24,6 +25,11 @@ export class MapWheelController {
   }
 
   handleWheel(e) {
+    // Embedded homepage map: normal scroll moves the page; Ctrl/Cmd + scroll zooms the map.
+    if (this.embedMode && !e.ctrlKey && !e.metaKey) {
+      return;
+    }
+
     e.preventDefault();
     e.stopPropagation();
 

@@ -3,94 +3,290 @@
     {
       "id": "story-kenya-dams",
       "slug": "women-building-dams",
-      "title": "Women building trench dams in Kwale",
+      "title": "Women building trench dams to store water for irrigation",
       "countryId": "ken",
       "catchmentId": "kwale_south",
       "communityId": "kanana",
       "program": "Responsible Citizenship",
-      "excerpt": "In drought-prone Kwale, women built trench dams to store water for irrigation.",
+      "excerpt": "Kwale is one of the counties in Kenya that experiences severe droughts. Whenever this happens, the communities struggle — women from Shalom groups mobilised to build trench dams.",
       "image": "assets/story-placeholder.jpg",
       "body": [
-        "In the dry season, Kanana community faced months without reliable water. Pastor leaders mobilised women from five Shalom groups to plan and build trench dams — a community-led solution that stores rainwater for irrigation.",
-        "Within one season, 14 water initiatives were completed. Farming groups diversified crops and household income rose an estimated 22%. The project exemplifies how pastor-led networks translate citizenship values into tangible community assets.",
+        "Kwale is one of the counties in Kenya that experiences severe droughts. Whenever this happens, the communities struggle without reliable water for irrigation and household use.",
+        "Pastor leaders mobilised women from five Shalom groups to plan and build trench dams — a community-led solution that stores rainwater. Within one season, 14 water initiatives were completed and farming groups diversified crops.",
         "Tracking data shows Kanana has advanced to Implementation stage with a leadership score of 81 — one of the highest in the Kwale South catchment."
       ],
-      "metrics": { "households": 1, "projects": 3, "leadershipScore": 81, "stage": "Implementation" },
+      "metrics": { "waterInitiatives": 14, "projects": 3, "leadershipScore": 81, "incomeChange": 22 },
       "metricsList": [
-        { "label": "Households", "value": "1" },
-        { "label": "PPP projects", "value": "3" },
+        { "label": "Water initiatives", "value": "14" },
+        { "label": "Shalom groups", "value": "5" },
         { "label": "Leadership score", "value": "81/100" },
-        { "label": "Journey stage", "value": "Implementation" }
-      ]
+        { "label": "Income change", "value": "+22%" }
+      ],
+      "dataCard": {
+        "category": "Citizenship",
+        "accent": "infrastructure",
+        "metric": "14",
+        "metricSuffix": "",
+        "text": "water initiatives completed in one season by women from **five Shalom groups** in drought-prone Kwale.",
+        "source": "PA field tracking · Kenya",
+        "sourceTarget": "#/stories/kenya"
+      }
+    },
+    {
+      "id": "story-kenya-namawanga",
+      "slug": "namawanga-origins",
+      "title": "Where Africa's transformation journey began",
+      "countryId": "ken",
+      "catchmentId": null,
+      "communityId": null,
+      "program": "Transformational Leadership",
+      "excerpt": "Africa's transformation journey started in 2005 in Namawanga, Webuye — now spanning 32 constituencies.",
+      "image": "assets/story-placeholder.jpg",
+      "body": [
+        "Kenya is the headquarters of Possibilities Africa. Africa's transformation journey started here in 2005, in Namawanga village in Webuye Constituency, Bungoma County.",
+        "Twenty years on, a network of 300+ committed pastor leaders drives holistic ministry across 32 constituencies — incorporating the whole-gospel model into personal lives, churches, and communities.",
+        "Kenya remains the benchmark for PA's two-year transformation journey with the most mature catchment structures on the continent."
+      ],
+      "metrics": { "constituencies": 32, "pastors": 627, "communities": 23, "years": 20 },
+      "metricsList": [
+        { "label": "Years active", "value": "20+" },
+        { "label": "Constituencies", "value": "32" },
+        { "label": "Pastor leaders", "value": "627" },
+        { "label": "Communities", "value": "23" }
+      ],
+      "dataCard": {
+        "category": "Leadership",
+        "accent": "people",
+        "metric": "32",
+        "metricSuffix": "",
+        "text": "constituencies reached across Kenya where **300+ pastor leaders** drive holistic transformation since 2005.",
+        "source": "PA Kenya network data",
+        "sourceTarget": "#/stories/kenya"
+      }
     },
     {
       "id": "story-malawi-mary",
       "slug": "mary-scone-business",
-      "title": "Mary Mvilera's scone business",
+      "title": "Mary Mvilera's decision to make a living out of selling scones",
       "countryId": "mw",
       "catchmentId": "mw_nkhotakota_south",
       "communityId": "mw_benga",
       "program": "Economic Productivity",
-      "excerpt": "At 35, Mary started a scone business after PA programmes.",
+      "excerpt": "At 35 years old, Mary Mvilera is married with 4 children. Before PA programs were introduced in her community, she had no stable income.",
       "image": "assets/story-placeholder.jpg",
       "body": [
-        "Mary Mvilera joined an Economic Productivity CHIP group in Benga after her pastor introduced PA's person-to-person skill transfer model. She learned baking, pricing, and basic bookkeeping.",
-        "Starting with a single oven, Mary now supplies scones to three local schools and employs two neighbours. Her story has been replicated in two neighbouring communities.",
+        "At 35 years old, Mary Mvilera is married with 4 children. Before PA programs were introduced in her community, she had no stable income source.",
+        "Mary joined an Economic Productivity CHIP group in Benga. Starting with a single oven, she now supplies scones to three local schools and employs two neighbours. Her story has been replicated in two neighbouring communities.",
         "Benga's CBC economic dimension score of 80 reflects the impact of livelihood programmes across Nkhotakota South."
       ],
-      "metrics": { "households": 0, "projects": 2, "leadershipScore": 82, "stage": "Implementation" },
+      "metrics": { "schools": 3, "jobs": 2, "children": 4, "leadershipScore": 82 },
       "metricsList": [
-        { "label": "Income activities", "value": "2" },
-        { "label": "CHIP groups", "value": "1" },
-        { "label": "Leadership score", "value": "82/100" },
+        { "label": "Schools supplied", "value": "3" },
+        { "label": "Jobs created", "value": "2" },
+        { "label": "Children supported", "value": "4" },
         { "label": "Economic CBC", "value": "80/100" }
-      ]
+      ],
+      "dataCard": {
+        "category": "Prosperity",
+        "accent": "prosperity",
+        "metric": "3",
+        "metricSuffix": "",
+        "text": "local schools now supplied by Mary's scone business — **replicated in two neighbouring communities** through CHIP skill transfer.",
+        "source": "PA field tracking · Malawi",
+        "sourceTarget": "#/stories/malawi"
+      }
+    },
+    {
+      "id": "story-malawi-warm-heart",
+      "slug": "malawi-holistic-ministry",
+      "title": "Changing the narrative in the Warm Heart of Africa",
+      "countryId": "mw",
+      "catchmentId": null,
+      "communityId": null,
+      "program": "Spiritual Discipleship",
+      "excerpt": "Since 2012, PA has engaged pastors across Malawi's rural highlands and lake districts through holistic ministry.",
+      "image": "assets/story-placeholder.jpg",
+      "body": [
+        "Malawi, the Warm Heart of Africa, faces systemic challenges despite immense natural resources. Since 2012, Possibilities Africa has been changing this narrative by engaging pastors in rural areas.",
+        "Over 15 communities and 100+ pastor leaders coordinate discipleship, children's activities, and income-generating groups across the network.",
+        "Malawi's PA communities show consistent growth in leadership scores with Nkhotakota South leading on economic productivity metrics."
+      ],
+      "metrics": { "communities": 21, "pastors": 754, "projects": 38, "years": 13 },
+      "metricsList": [
+        { "label": "Years active", "value": "13+" },
+        { "label": "Communities", "value": "21" },
+        { "label": "Pastor leaders", "value": "754" },
+        { "label": "Active projects", "value": "38" }
+      ],
+      "dataCard": {
+        "category": "People",
+        "accent": "people",
+        "metric": "754",
+        "metricSuffix": "",
+        "text": "pastor leaders engaged in holistic ministry across Malawi since **2012** — the Warm Heart of Africa.",
+        "source": "PA Malawi network data",
+        "sourceTarget": "#/stories/malawi"
+      }
     },
     {
       "id": "story-ethiopia-abdisa",
-      "slug": "pastor-abdisa",
-      "title": "Pastor Abdisa amid conflict",
+      "slug": "pastor-abdisa-conflict",
+      "title": "Pastor Abdisa: A man caught between ongoing rebel conflicts",
       "countryId": "et",
       "catchmentId": null,
       "communityId": null,
       "program": "Transformational Leadership",
-      "excerpt": "Pastor-led ministry continues with courage in conflict-affected Ethiopia.",
+      "excerpt": "Inchini, a town in Ethiopia, is plagued by ongoing conflicts that frequently disrupt and sometimes completely halt community life.",
       "image": "assets/story-placeholder.jpg",
       "body": [
-        "Pastor Abdisa leads a network of 11 communities across Hossana, Gurage, and Durame catchments in Ethiopia. Despite regional challenges, pastor leaders coordinate discipleship and community health outreaches.",
-        "PA's Transformational Leadership programme provided structured training that helped pastors navigate crisis while sustaining community engagement. Shalom groups are now forming in three new locations.",
+        "Inchini, a town in Ethiopia, is plagued by ongoing conflicts that frequently disrupt and sometimes completely halt community life. Pastor Abdisa leads ministry with courage amid these challenges.",
+        "Pastor Abdisa coordinates a network of 11 communities across Hossana, Gurage, and Durame catchments. Despite regional instability, pastor leaders sustain discipleship and community health outreaches.",
         "Ethiopia's network readiness is at Engagement stage on average, with leadership scores trending upward (+9% YoY)."
       ],
-      "metrics": { "communities": 11, "leadershipScore": 55, "stage": "Engagement" },
+      "metrics": { "communities": 11, "pastors": 272, "leadershipScore": 55, "growth": 9 },
       "metricsList": [
         { "label": "Communities", "value": "11" },
-        { "label": "Pastors", "value": "272" },
+        { "label": "Pastor leaders", "value": "272" },
         { "label": "Leadership score", "value": "55/100" },
         { "label": "Network growth", "value": "+9%" }
-      ]
+      ],
+      "dataCard": {
+        "category": "Leadership",
+        "accent": "people",
+        "metric": "11",
+        "metricSuffix": "",
+        "text": "communities coordinated by pastor leaders across **Hossana, Gurage, and Durame** despite ongoing conflict.",
+        "source": "PA field tracking · Ethiopia",
+        "sourceTarget": "#/stories/ethiopia"
+      }
     },
     {
-      "id": "story-zambia-crops",
-      "slug": "pastor-growing-crops",
-      "title": "A young pastor growing church and crops",
-      "countryId": "zm",
+      "id": "story-ethiopia-fikre",
+      "slug": "pastor-fikre-ministry-money",
+      "title": "Making decisions around the ministry and money",
+      "countryId": "et",
       "catchmentId": null,
       "communityId": null,
       "program": "Economic Productivity",
-      "excerpt": "Pastor Chaambwa grows crops alongside leading his church.",
+      "excerpt": "\"A pastor cannot mix ministry work with money. This is unspiritual!\" Pastor Fikre found another way.",
       "image": "assets/story-placeholder.jpg",
       "body": [
-        "Pastor Chaambwa models economic productivity by farming alongside his congregation in Zambia's emerging network. Crop diversification demonstrations on church land have inspired four farming groups.",
-        "The community is at Awareness stage but showing early signs of readiness for structured leadership training. Agriculture sector scores are the strongest dimension in Zambia's CBC index.",
-        "Resource mobilization guidance identifies water access as the next priority investment for this catchment."
+        "Pastor Fikre once believed that mixing ministry with economic activity was unspiritual. PA's holistic training challenged this mindset — showing that economic productivity and discipleship work together.",
+        "Pastor Fikre now leads income-generating activities alongside his congregation, teaching table banking and merry-go-round groups that build household economic resilience.",
+        "Ethiopia's 100+ churches and 100+ pastor leaders are 100% community-led, with IGAs tracked across the network."
       ],
-      "metrics": { "communities": 4, "leadershipScore": 41, "stage": "Awareness" },
+      "metrics": { "churches": 100, "pastors": 100, "projects": 28, "communityLed": 100 },
       "metricsList": [
+        { "label": "Churches", "value": "100+" },
+        { "label": "Pastor leaders", "value": "100+" },
+        { "label": "Active projects", "value": "28" },
+        { "label": "Community-led", "value": "100%" }
+      ],
+      "dataCard": {
+        "category": "Prosperity",
+        "accent": "prosperity",
+        "metric": "100+",
+        "metricSuffix": "",
+        "text": "churches where pastor leaders now integrate **ministry and economic productivity** — 100% community-led.",
+        "source": "PA Ethiopia · On the ground",
+        "sourceTarget": "#/stories/ethiopia"
+      }
+    },
+    {
+      "id": "story-ethiopia-koka",
+      "slug": "pastors-planting-koka",
+      "title": "Pastors planting churches and vegetables in Koka",
+      "countryId": "et",
+      "catchmentId": null,
+      "communityId": null,
+      "program": "Spiritual Discipleship",
+      "excerpt": "From a small kiosk in Koka, 20 churches have been planted with cell groups for prayer and Bible reading.",
+      "image": "assets/story-placeholder.jpg",
+      "body": [
+        "From a small kiosk in Koka, 20 churches have been planted with cell groups for prayer and Bible reading. Pastors model holistic ministry by planting vegetables alongside new congregations.",
+        "This story exemplifies how spiritual discipleship and economic productivity compound — churches grow as communities develop sustainable food sources.",
+        "PA Ethiopia has operated since 2019, contextualising the holistic engine for rural villages across 80+ ethnic groups."
+      ],
+      "metrics": { "churchesPlanted": 20, "years": 6, "ethnicGroups": 80, "communityLed": 100 },
+      "metricsList": [
+        { "label": "Churches planted", "value": "20" },
+        { "label": "Cell groups", "value": "20+" },
+        { "label": "Years in Ethiopia", "value": "6+" },
+        { "label": "Community-led", "value": "100%" }
+      ],
+      "dataCard": {
+        "category": "Discipleship",
+        "accent": "digital",
+        "metric": "20",
+        "metricSuffix": "",
+        "text": "churches planted from a small kiosk in Koka with **cell groups for prayer and Bible reading**.",
+        "source": "PA field tracking · Ethiopia",
+        "sourceTarget": "#/stories/ethiopia"
+      }
+    },
+    {
+      "id": "story-zambia-crops",
+      "slug": "pastor-chaambwa-crops",
+      "title": "A young man growing his church and crops",
+      "countryId": "zm",
+      "catchmentId": null,
+      "communityId": null,
+      "program": "Spiritual Discipleship",
+      "excerpt": "Pastor Chaambwa Siachilwena, a young pastor in Zambia, once relied solely on church contributions — now he grows crops alongside leading his church.",
+      "image": "assets/story-placeholder.jpg",
+      "body": [
+        "Pastor Chaambwa Siachilwena, a young pastor in Zambia, once relied solely on church contributions and preaching. PA training showed him how to grow his church and crops together.",
+        "Crop diversification demonstrations on church land have inspired four farming groups across 12 communities near Lusaka.",
+        "PAZ was formally registered in 2022 and began operations in May 2023, recruiting pastors from seven rural communities — growing to 12 communities by early 2024."
+      ],
+      "metrics": { "communities": 12, "farmingGroups": 4, "pastors": 50, "years": 2 },
+      "metricsList": [
+        { "label": "Communities", "value": "12" },
         { "label": "Farming groups", "value": "4" },
-        { "label": "PPP projects", "value": "3" },
-        { "label": "Leadership score", "value": "41/100" },
-        { "label": "Journey stage", "value": "Awareness" }
-      ]
+        { "label": "Pastor leaders", "value": "50+" },
+        { "label": "PPP projects", "value": "14" }
+      ],
+      "dataCard": {
+        "category": "Discipleship",
+        "accent": "digital",
+        "metric": "12",
+        "metricSuffix": "",
+        "text": "communities near Lusaka where pastors grow **church and crops together** — registered PAZ in 2022.",
+        "source": "PA field tracking · Zambia",
+        "sourceTarget": "#/stories/zambia"
+      }
+    },
+    {
+      "id": "story-zambia-water",
+      "slug": "zambia-water-priority",
+      "title": "Water access as the next transformation priority",
+      "countryId": "zm",
+      "catchmentId": null,
+      "communityId": null,
+      "program": "Responsible Citizenship",
+      "excerpt": "Field assessments across 12 Zambian communities identify water access as the critical next investment.",
+      "image": "assets/story-placeholder.jpg",
+      "body": [
+        "Zambia's PA network spans 12 communities with 50+ pastor leaders recruited since PAZ began in 2023. Field assessments show water access as the critical bottleneck for agriculture.",
+        "Three PPP water projects are in planning stages with pastor leaders coordinating community contributions.",
+        "Network growth reflects expanding pastor cohorts completing foundational holistic ministry training."
+      ],
+      "metrics": { "pastors": 50, "projects": 14, "communities": 12, "growth": 6 },
+      "metricsList": [
+        { "label": "Pastor leaders", "value": "50+" },
+        { "label": "Communities", "value": "12" },
+        { "label": "PPP projects", "value": "14" },
+        { "label": "Network growth", "value": "+6%" }
+      ],
+      "dataCard": {
+        "category": "Citizenship",
+        "accent": "infrastructure",
+        "metric": "3",
+        "metricSuffix": "",
+        "text": "PPP water projects in planning — **highest-impact investment** for Zambia's 12 communities.",
+        "source": "PA Zambia readiness data",
+        "sourceTarget": "#/stories/zambia"
+      }
     },
     {
       "id": "story-tanzania-msengi",
@@ -100,25 +296,34 @@
       "catchmentId": null,
       "communityId": null,
       "program": "Transformational Leadership",
-      "excerpt": "After MI training in Arusha, Pastor Timothy expanded ministry to resolve community challenges beyond preaching.",
+      "excerpt": "After MI training in Arusha in 2023, Pastor Timothy learnt that ministry goes beyond the church walls.",
       "image": "assets/story-placeholder.jpg",
       "body": [
-        "Pastor Timothy Msengi leads transformation work in Tanzania's emerging PA network. Training in Arusha challenged pastors to address whole-community needs — water, education, and local conflict mediation.",
-        "Six PPP projects are now tracked across the Tanzania network, with pastors coordinating volunteers and local leaders in three regions.",
+        "After attending the MI training in Arusha in 2023, Pastor Timothy Msengi learnt that ministry goes beyond the church walls. As a pastor, he was called not just for church members, but for the community.",
+        "He was challenged to be involved in resolving community challenges beyond preaching the Gospel. Six PPP projects are now tracked across the Tanzania network.",
         "Network readiness is at Engagement stage with +5% growth year over year as new pastor cohorts complete foundational training."
       ],
-      "metrics": { "projects": 6, "communities": 0, "leadershipScore": 58, "stage": "Engagement" },
+      "metrics": { "projects": 6, "pastors": 48, "leadershipScore": 58, "growth": 5 },
       "metricsList": [
         { "label": "PPP projects", "value": "6" },
         { "label": "Pastor leaders", "value": "48" },
         { "label": "Leadership score", "value": "58/100" },
         { "label": "Network growth", "value": "+5%" }
-      ]
+      ],
+      "dataCard": {
+        "category": "Leadership",
+        "accent": "people",
+        "metric": "6",
+        "metricSuffix": "",
+        "text": "PPP projects as pastors resolve **community challenges beyond preaching** — trained in Arusha 2023.",
+        "source": "PA Tanzania network data",
+        "sourceTarget": "#/stories/tanzania"
+      }
     },
     {
       "id": "story-rwanda-irakoze",
-      "slug": "pastor-irakoze-caidor",
-      "title": "Holistic church development in Burundi network",
+      "slug": "pastor-irakoze-holistic",
+      "title": "Holistic church development in Rwanda",
       "countryId": "rw",
       "catchmentId": null,
       "communityId": null,
@@ -126,17 +331,26 @@
       "excerpt": "Pastor leaders learn to equip congregations for work that breaks cycles of poverty.",
       "image": "assets/story-placeholder.jpg",
       "body": [
-        "Rwanda's emerging pastor network is applying holistic ministry training to help churches take up productive work alongside discipleship.",
+        "Rwanda's emerging pastor network applies holistic ministry training to help churches take up productive work alongside discipleship.",
         "Four tracked PPP initiatives connect leadership development with livelihood programmes as the network establishes its first catchment structures.",
         "Field data shows readiness climbing as pastors report increased confidence in coordinating community-wide transformation."
       ],
-      "metrics": { "projects": 4, "communities": 0, "leadershipScore": 52, "stage": "Awareness" },
+      "metrics": { "projects": 4, "pastors": 36, "leadershipScore": 52, "growth": 4 },
       "metricsList": [
         { "label": "PPP projects", "value": "4" },
         { "label": "Pastor leaders", "value": "36" },
         { "label": "Leadership score", "value": "52/100" },
         { "label": "Network growth", "value": "+4%" }
-      ]
+      ],
+      "dataCard": {
+        "category": "Prosperity",
+        "accent": "prosperity",
+        "metric": "4",
+        "metricSuffix": "",
+        "text": "PPP initiatives linking **leadership development with livelihood programmes** in Rwanda.",
+        "source": "PA Rwanda field data",
+        "sourceTarget": "#/stories/rwanda"
+      }
     },
     {
       "id": "story-burundi-mahembe",
@@ -153,13 +367,22 @@
         "Two PPP projects are active with Shalom group formation beginning in pilot communities.",
         "Burundi's network is at early Awareness stage with leadership scores trending upward as training cohorts complete."
       ],
-      "metrics": { "projects": 2, "communities": 0, "leadershipScore": 48, "stage": "Awareness" },
+      "metrics": { "projects": 2, "pastors": 24, "leadershipScore": 48, "growth": 2 },
       "metricsList": [
         { "label": "PPP projects", "value": "2" },
         { "label": "Pastor leaders", "value": "24" },
         { "label": "Leadership score", "value": "48/100" },
         { "label": "Network growth", "value": "+2%" }
-      ]
+      ],
+      "dataCard": {
+        "category": "People",
+        "accent": "people",
+        "metric": "2",
+        "metricSuffix": "",
+        "text": "PPP projects active with **Shalom group formation** in Burundi's pilot communities.",
+        "source": "PA Burundi field data",
+        "sourceTarget": "#/stories/burundi"
+      }
     }
   ]
 }

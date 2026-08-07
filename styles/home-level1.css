@@ -1,0 +1,261 @@
+/* ==========================================================================
+   Level 1 — Africa Overview sections on homepage
+   ========================================================================== */
+
+.l1-section-head {
+  max-width: 40rem;
+  margin-bottom: 1.75rem;
+}
+
+.l1-section-head h2 {
+  font-size: clamp(1.35rem, 2.8vw, 1.85rem);
+  font-weight: 700;
+  color: var(--pa-navy);
+  margin-top: 0.35rem;
+  letter-spacing: -0.02em;
+}
+
+.l1-section-head p {
+  margin-top: 0.5rem;
+  color: var(--pa-muted);
+  line-height: 1.6;
+  font-size: 0.92rem;
+}
+
+/* Key updates */
+.l1-updates {
+  padding: 4rem 0;
+  background: #fff;
+  border-top: 1px solid rgba(0, 43, 92, 0.06);
+}
+
+.l1-update-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  border: 1px solid rgba(0, 43, 92, 0.08);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+
+.l1-update {
+  display: grid;
+  grid-template-columns: 7rem 1fr auto auto;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 1.25rem;
+  background: #fff;
+  border-bottom: 1px solid rgba(0, 43, 92, 0.06);
+  transition: background 0.2s;
+}
+
+.l1-update:last-child {
+  border-bottom: none;
+}
+
+.l1-update:hover {
+  background: var(--pa-blue-light);
+}
+
+.l1-update__date {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--pa-muted);
+}
+
+.l1-update__title {
+  display: block;
+  font-size: 0.92rem;
+  color: var(--pa-navy);
+}
+
+.l1-update__meta {
+  display: block;
+  font-size: 0.78rem;
+  color: var(--pa-muted);
+  margin-top: 0.15rem;
+}
+
+.l1-update__status {
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 0.25rem 0.55rem;
+  border-radius: 999px;
+  background: rgba(0, 159, 218, 0.1);
+  color: var(--pa-blue);
+}
+
+.l1-update__status--completed {
+  background: rgba(16, 185, 129, 0.12);
+  color: #047857;
+}
+
+.l1-update__status--ongoing,
+.l1-update__status--active {
+  background: rgba(0, 159, 218, 0.1);
+  color: var(--pa-blue);
+}
+
+.l1-update__link {
+  display: grid;
+  place-items: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  border: 1px solid rgba(0, 43, 92, 0.12);
+  color: var(--pa-blue);
+  text-decoration: none;
+  font-size: 1rem;
+}
+
+.l1-update__link:hover {
+  background: var(--pa-navy);
+  color: #fff;
+  text-decoration: none;
+}
+
+.l1-empty {
+  padding: 2rem;
+  text-align: center;
+  color: var(--pa-muted);
+}
+
+/* Growth trends */
+.l1-growth {
+  padding: 4rem 0;
+  background: linear-gradient(180deg, #f4f8fb 0%, #fff 100%);
+}
+
+.l1-trend-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.25rem;
+}
+
+.l1-trend-card {
+  background: #fff;
+  border: 1px solid rgba(0, 43, 92, 0.08);
+  border-radius: var(--radius);
+  padding: 1.25rem 1.35rem 1rem;
+  box-shadow: 0 2px 16px rgba(0, 43, 92, 0.04);
+}
+
+.l1-trend-card h3 {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--pa-navy);
+}
+
+.l1-trend-card p {
+  margin-top: 0.35rem;
+  font-size: 0.82rem;
+  color: var(--pa-muted);
+  line-height: 1.5;
+}
+
+.l1-trend-card__chart {
+  height: 180px;
+  margin-top: 1rem;
+}
+
+/* Embedded Africa map */
+.l1-map {
+  padding: 4rem 0 0;
+  background: #001528;
+}
+
+.l1-map__head-wrap {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1rem 2rem;
+  padding-bottom: 1.5rem;
+}
+
+.l1-map .l1-section-head h2,
+.l1-map .l1-section-head p {
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.l1-map .l1-section-head h2 {
+  color: #fff;
+}
+
+.l1-map .eyebrow {
+  color: #7dd3fc;
+}
+
+.l1-map__full-link {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #7dd3fc;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.l1-map__full-link:hover {
+  color: #fff;
+  text-decoration: underline;
+}
+
+.l1-map__stage {
+  width: 100%;
+}
+
+.l1-map__host {
+  position: relative;
+  min-height: min(72vh, 720px);
+  width: 100%;
+  background: linear-gradient(180deg, #001528 0%, #002b5c 100%);
+}
+
+.l1-map__host .ai-map--embedded {
+  position: relative !important;
+  height: min(72vh, 720px) !important;
+  min-height: 520px;
+}
+
+.l1-map__host .ai-map--embedded .ai-map__canvas {
+  touch-action: pan-y;
+  overscroll-behavior: auto;
+}
+
+.l1-map__scroll-hint {
+  margin: 0;
+  padding: 0.75rem 1rem 1.25rem;
+  text-align: center;
+  font-size: 0.78rem;
+  color: rgba(255, 255, 255, 0.55);
+  letter-spacing: 0.02em;
+}
+
+.l1-map__scroll-hint::before {
+  content: "↓";
+  display: block;
+  font-size: 1rem;
+  margin-bottom: 0.25rem;
+  opacity: 0.7;
+}
+
+@media (max-width: 768px) {
+  .l1-update {
+    grid-template-columns: 1fr auto;
+    grid-template-rows: auto auto;
+  }
+
+  .l1-update__date {
+    grid-column: 1 / -1;
+  }
+
+  .l1-trend-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .l1-map__host {
+    min-height: 480px;
+  }
+}

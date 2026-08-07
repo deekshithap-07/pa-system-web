@@ -54,7 +54,7 @@
           { "id": "kericho", "name": "Kericho", "path": "M60,60 L100,55 L110,100 L70,110 Z", "status": "inactive" }
         ]
       },
-      "storyIds": ["story-kenya-dams"],
+      "storyIds": ["story-kenya-dams", "story-kenya-namawanga"],
       "reportIds": ["sep-2024", "annual-2024"]
     },
     "malawi": {
@@ -111,7 +111,7 @@
           { "id": "mw_nkhotakota_north", "name": "Nkhotakota-North", "path": "M90,28 L130,25 L125,70 L95,70 Z", "status": "inactive" }
         ]
       },
-      "storyIds": ["story-malawi-mary"],
+      "storyIds": ["story-malawi-mary", "story-malawi-warm-heart"],
       "reportIds": ["sep-2024", "aug-2024", "annual-2024"]
     },
     "ethiopia": {
@@ -165,7 +165,7 @@
           { "id": "et_durame", "name": "Durame", "path": "M100,120 L150,115 L145,185 L95,190 Z", "status": "inactive" }
         ]
       },
-      "storyIds": ["story-ethiopia-abdisa"],
+      "storyIds": ["story-ethiopia-abdisa", "story-ethiopia-fikre", "story-ethiopia-koka"],
       "reportIds": ["sep-2024", "aug-2024"]
     },
     "zambia": {
@@ -217,7 +217,7 @@
           { "id": "zm_central_province", "name": "Central Province", "path": "M50,90 L100,85 L105,140 L55,145 Z", "status": "inactive" }
         ]
       },
-      "storyIds": ["story-zambia-crops"],
+      "storyIds": ["story-zambia-crops", "story-zambia-water"],
       "reportIds": ["sep-2024"]
     }
   }

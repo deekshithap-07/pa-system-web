@@ -1,147 +1,145 @@
-function renderTopicThumb(topic, index, active) {
+function renderPriorityPanel(topic, index, isActive) {
+  const panelLabel = topic.panelLabel || topic.shortTitle || topic.title;
+  const link = topic.link || { label: "Learn More", target: "#/about" };
+  const linkAttrs = link.target?.startsWith("#/") ? `href="${link.target}" data-link` : `href="${link.target || "#"}"`;
+
   return `
-    <button
-      type="button"
-      class="dev-topics__thumb${active ? " is-active" : ""}"
-      data-topic-thumb
-      data-topic-id="${topic.id}"
-      data-topic-index="${index}"
-      aria-pressed="${active}"
-      aria-controls="dev-topic-panel"
+    <article
+      class="wb-priority-panel${isActive ? " is-active" : ""}"
+      data-priority
+      data-priority-id="${topic.id}"
+      data-priority-index="${index}"
+      role="presentation"
     >
-      <span class="dev-topics__thumb-ring" aria-hidden="true"></span>
-      <span class="dev-topics__thumb-img dev-topics__thumb-img--${topic.theme}" aria-hidden="true">
-        <span class="dev-topics__thumb-icon">${topic.title.charAt(0)}</span>
-      </span>
-      <span class="dev-topics__thumb-text">
-        <span class="dev-topics__thumb-cat">${topic.category}</span>
-        <span class="dev-topics__thumb-title">${topic.title}</span>
-      </span>
-    </button>`;
-}
-
-function renderTopicPanel(topic) {
-  const highlights = (topic.highlights || [])
-    .map((h) => `<li>${h}</li>`)
-    .join("");
-
-  return `
-    <div class="dev-topics__panel" id="dev-topic-panel" data-topic-panel>
-      <div class="dev-topics__panel-visual" aria-hidden="true">
-        <span class="dev-topics__panel-ring dev-topics__panel-ring--1"></span>
-        <span class="dev-topics__panel-ring dev-topics__panel-ring--2"></span>
-        <span class="dev-topics__panel-img dev-topics__panel-img--${topic.theme}">
-          <span class="dev-topics__panel-icon">${topic.title.charAt(0)}</span>
+      <button
+        type="button"
+        class="wb-priority-panel__btn"
+        aria-expanded="${isActive}"
+        aria-controls="priority-panel-${topic.id}"
+        id="priority-trigger-${topic.id}"
+      >
+        <span
+          class="wb-priority-panel__bg wb-priority-panel__bg--${topic.theme}"
+          ${topic.image ? `style="background-image:url('${topic.image}')"` : ""}
+          aria-hidden="true"
+        ></span>
+        <span class="wb-priority-panel__shade" aria-hidden="true"></span>
+        <span class="wb-priority-panel__inner" id="priority-panel-${topic.id}">
+          <span class="wb-priority-panel__collapsed">
+            <span class="wb-priority-panel__label">${panelLabel}</span>
+            <span class="wb-priority-panel__toggle" aria-hidden="true">
+              <span class="wb-priority-panel__icon">+</span>
+            </span>
+          </span>
+          <span class="wb-priority-panel__expanded">
+            <h3 class="wb-priority-panel__title">${panelLabel}</h3>
+            <p class="wb-priority-panel__desc">${topic.summary}</p>
+            <a ${linkAttrs} class="wb-priority-panel__cta">${link.label || "Learn More"}</a>
+          </span>
         </span>
-      </div>
-      <div class="dev-topics__panel-body" data-topic-body>
-        <span class="dev-topics__panel-cat">${topic.category}</span>
-        <h3 class="dev-topics__panel-title">${topic.title}</h3>
-        <p class="dev-topics__panel-summary">${topic.summary}</p>
-        <p class="dev-topics__panel-desc">${topic.description}</p>
-        ${highlights ? `<ul class="dev-topics__panel-highlights">${highlights}</ul>` : ""}
-        <div class="dev-topics__panel-foot">
-          ${topic.stat ? `<div class="dev-topics__stat"><strong>${topic.stat.value}</strong><span>${topic.stat.label}</span></div>` : ""}
-          ${topic.link ? `<a href="${topic.link.target}" class="dev-topics__panel-link" data-link>${topic.link.label} &rarr;</a>` : ""}
-        </div>
-      </div>
-    </div>`;
+      </button>
+    </article>`;
 }
 
 export function renderDevelopmentTopics(section) {
   const topics = section.topics || [];
   if (!topics.length) return "";
 
-  const thumbs = topics.map((t, i) => renderTopicThumb(t, i, i === 0)).join("");
-  const panel = renderTopicPanel(topics[0]);
+  const panels = topics.map((t, i) => renderPriorityPanel(t, i, i === 0)).join("");
+
+  const titleHtml =
+    section.titleHtml ||
+    `<span class="wb-priorities-band__lead">OUR</span> <strong>PRIORITIES</strong>`;
 
   return `
-    <section class="dev-topics" id="development-topics" aria-labelledby="dev-topics-title" data-dev-topics>
-      <div class="container dev-topics__inner">
-        <header class="dev-topics__head" data-reveal>
-          <p class="eyebrow">${section.eyebrow || "Focus areas"}</p>
-          <h2 id="dev-topics-title">${section.title}</h2>
-          <p class="dev-topics__intro">${section.description}</p>
-          ${section.browseCta ? `<a href="${section.browseCta.target}" class="dev-topics__browse" data-link>${section.browseCta.label} &rarr;</a>` : ""}
-        </header>
-
-        <div class="dev-topics__layout" data-reveal>
-          <div class="dev-topics__nav" role="tablist" aria-label="Ministry focus areas">
-            ${thumbs}
-          </div>
-          ${panel}
+    <section class="wb-priorities-band" id="development-topics" aria-labelledby="dev-topics-title" data-dev-topics>
+      <div class="wb-priorities-band__head-wrap">
+        <div class="container">
+          <header class="wb-priorities-band__head" data-reveal>
+            <h2 id="dev-topics-title" class="wb-priorities-band__title">${titleHtml}</h2>
+            ${section.description ? `<p class="wb-priorities-band__intro">${section.description}</p>` : ""}
+          </header>
         </div>
+      </div>
+      <div class="wb-priorities-accordion" data-priorities-accordion role="tablist" aria-label="Our priorities">
+        ${panels}
       </div>
     </section>`;
 }
 
-export function bindDevelopmentTopics(root = document, topics = []) {
+export function bindDevelopmentTopics(root = document) {
   const section = root.querySelector("[data-dev-topics]");
-  if (!section || !topics.length) return null;
+  if (!section) return null;
 
-  const panel = section.querySelector("[data-topic-panel]");
-  const thumbs = [...section.querySelectorAll("[data-topic-thumb]")];
-  let activeIndex = 0;
+  const accordion = section.querySelector("[data-priorities-accordion]");
+  const items = [...section.querySelectorAll("[data-priority]")];
+  if (!items.length) return null;
 
-  const renderPanelContent = (topic) => {
-    const body = panel.querySelector("[data-topic-body]");
-    const visual = panel.querySelector(".dev-topics__panel-visual");
-    if (!body || !visual) return;
-
-    const highlights = (topic.highlights || []).map((h) => `<li>${h}</li>`).join("");
-    body.innerHTML = `
-      <span class="dev-topics__panel-cat">${topic.category}</span>
-      <h3 class="dev-topics__panel-title">${topic.title}</h3>
-      <p class="dev-topics__panel-summary">${topic.summary}</p>
-      <p class="dev-topics__panel-desc">${topic.description}</p>
-      ${highlights ? `<ul class="dev-topics__panel-highlights">${highlights}</ul>` : ""}
-      <div class="dev-topics__panel-foot">
-        ${topic.stat ? `<div class="dev-topics__stat"><strong>${topic.stat.value}</strong><span>${topic.stat.label}</span></div>` : ""}
-        ${topic.link ? `<a href="${topic.link.target}" class="dev-topics__panel-link" data-link>${topic.link.label} &rarr;</a>` : ""}
-      </div>`;
-
-    const img = visual.querySelector(".dev-topics__panel-img");
-    if (img) {
-      img.className = `dev-topics__panel-img dev-topics__panel-img--${topic.theme}`;
-      const icon = img.querySelector(".dev-topics__panel-icon");
-      if (icon) icon.textContent = topic.title.charAt(0);
-    }
+  const setActive = (activeItem) => {
+    items.forEach((item) => {
+      const isActive = item === activeItem;
+      const btn = item.querySelector(".wb-priority-panel__btn");
+      item.classList.toggle("is-active", isActive);
+      btn?.setAttribute("aria-expanded", String(isActive));
+    });
   };
 
-  const selectTopic = (index, animate = true) => {
-    if (index < 0 || index >= topics.length || index === activeIndex) return;
-    activeIndex = index;
-    const topic = topics[index];
+  const handlers = items.map((item) => {
+    const btn = item.querySelector(".wb-priority-panel__btn");
+    if (!btn) return null;
 
-    thumbs.forEach((btn, i) => {
-      btn.classList.toggle("is-active", i === index);
-      btn.setAttribute("aria-pressed", String(i === index));
-    });
+    const onClick = (e) => {
+      if (e.target.closest(".wb-priority-panel__cta")) return;
+      if (item.classList.contains("is-active")) return;
+      setActive(item);
+    };
 
-    const body = panel.querySelector("[data-topic-body]");
-    const visual = panel.querySelector(".dev-topics__panel-visual");
-
-    if (animate && typeof gsap !== "undefined" && body) {
-      gsap.to([body, visual], {
-        opacity: 0,
-        x: 12,
-        duration: 0.2,
-        ease: "power2.in",
-        onComplete: () => {
-          renderPanelContent(topic);
-          gsap.fromTo([body, visual], { opacity: 0, x: -12 }, { opacity: 1, x: 0, duration: 0.35, ease: "power2.out", stagger: 0.05 });
-        },
-      });
-    } else {
-      renderPanelContent(topic);
-    }
-  };
-
-  thumbs.forEach((btn) => {
-    btn.addEventListener("click", () => {
-      selectTopic(Number(btn.dataset.topicIndex), true);
-    });
+    btn.addEventListener("click", onClick);
+    return { btn, onClick };
   });
 
-  return { selectTopic, destroy: () => {} };
+  const onKeydown = (e) => {
+    const current = items.findIndex((item) => item.classList.contains("is-active"));
+    if (current < 0) return;
+
+    let next = current;
+    if (e.key === "ArrowRight" || e.key === "ArrowDown") {
+      next = (current + 1) % items.length;
+      e.preventDefault();
+    } else if (e.key === "ArrowLeft" || e.key === "ArrowUp") {
+      next = (current - 1 + items.length) % items.length;
+      e.preventDefault();
+    } else {
+      return;
+    }
+
+    setActive(items[next]);
+    items[next].querySelector(".wb-priority-panel__btn")?.focus();
+  };
+
+  accordion?.addEventListener("keydown", onKeydown);
+
+  if (typeof gsap !== "undefined" && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    gsap.from(items, {
+      opacity: 0,
+      scale: 0.98,
+      duration: 0.65,
+      stagger: 0.07,
+      ease: "power3.out",
+      scrollTrigger: {
+        trigger: accordion,
+        start: "top 85%",
+        once: true,
+      },
+    });
+  }
+
+  return {
+    destroy: () => {
+      handlers.forEach((h) => {
+        if (h?.btn && h?.onClick) h.btn.removeEventListener("click", h.onClick);
+      });
+      accordion?.removeEventListener("keydown", onKeydown);
+    },
+  };
 }

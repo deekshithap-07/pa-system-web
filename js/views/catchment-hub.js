@@ -20,6 +20,10 @@ import {
   teardownCatchmentHub,
 } from "../components/catchment-hub/catchment-hub-mount.js";
 import { ContextMap, destroyContextMap } from "../map/components/ContextMap.js";
+import {
+  renderNarrativeRibbon,
+  renderCuriosityStrip,
+} from "../components/shared/site-bridge.js";
 
 export function renderCatchmentHub(countrySlug, catchmentSlug, data) {
   const hub = buildCatchmentHubPayload(countrySlug, catchmentSlug, data);
@@ -43,13 +47,26 @@ export function renderCatchmentHub(countrySlug, catchmentSlug, data) {
       ${renderCatchmentSidebar(countrySlug)}
       <main class="ch-main">
         ${renderCatchmentHero(hub)}
+        ${renderCatchmentStories(hub.stories, hub.communities)}
+        ${renderCuriosityStrip({
+          text: "Stories above connect to the metrics below.",
+          links: [
+            { label: "Catchment summary", target: "#cth-summary" },
+            { label: "Community map", target: "#cth-map" },
+          ],
+        })}
         ${renderCatchmentSummary(hub.overview, hub.kpis)}
         ${renderCatchmentMap(hub)}
+        ${renderNarrativeRibbon({
+          variant: "data",
+          eyebrow: "Analytics",
+          text: "Growth charts and sector insights show how this catchment performs within the national network.",
+          cta: { label: "Compare in insights hub", target: "#/insights" },
+        })}
         ${renderCatchmentCharts(hub.charts)}
         ${renderCatchmentCommunityList(hub.communityCards, countrySlug, catchmentSlug, hub.catchmentName)}
         ${renderCatchmentActivityFeed(hub.activities)}
         ${renderCatchmentReports(hub.reports)}
-        ${renderCatchmentStories(hub.stories, hub.communities)}
         ${renderCatchmentInsights(hub.insights)}
       </main>
     </div>`;
