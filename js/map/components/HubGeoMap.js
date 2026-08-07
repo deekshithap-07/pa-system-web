@@ -1,4 +1,4 @@
-import { applyLabelSpread, estimateLabelSize } from "../utils/label-layout.js";
+import { applyMapFeatureLayout, estimateLabelSize } from "../utils/label-layout.js";
 
 const SVG_NS = "http://www.w3.org/2000/svg";
 
@@ -125,23 +125,31 @@ export function bindHubGeoMap(root, { countrySlug, catchmentSlug, onCatchmentNav
     if (!svg) return;
 
     const catchmentLabels = svg.querySelector(".hub-geo-map__labels--catchments");
-    if (catchmentLabels) {
-      applyLabelSpread(catchmentLabels, SVG_NS, {
+    if (catchmentLabels?.childElementCount) {
+      applyMapFeatureLayout(svg, SVG_NS, {
         labelSelector: ".hub-geo-map__catchment-label",
-        spread: 1.1,
-        maxOffset: 22,
-        gap: 5,
+        anchorSelector: ".hub-geo-map__catchment-anchor",
+        idKey: "entityId",
+        spread: 2.2,
+        maxOffset: 42,
+        gap: 10,
+        minAnchorDistance: 15,
+        anchorMaxNudge: 20,
       });
     }
 
     const communityLabels = svg.querySelector(".hub-geo-map__labels--communities");
-    if (communityLabels) {
+    if (communityLabels?.childElementCount) {
       const isCatchment = mapEl.dataset.mapMode === "catchment";
-      applyLabelSpread(communityLabels, SVG_NS, {
+      applyMapFeatureLayout(svg, SVG_NS, {
         labelSelector: ".hub-geo-map__community-label",
-        spread: isCatchment ? 1.1 : 1.4,
-        maxOffset: isCatchment ? 22 : 32,
-        gap: 6,
+        anchorSelector: ".hub-geo-map__community-anchor",
+        idKey: "entityId",
+        spread: isCatchment ? 2.4 : 2.8,
+        maxOffset: isCatchment ? 38 : 48,
+        gap: 11,
+        minAnchorDistance: 16,
+        anchorMaxNudge: 22,
       });
     }
 

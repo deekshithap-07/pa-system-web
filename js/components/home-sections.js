@@ -30,17 +30,11 @@ function renderTopStoryCard(item) {
     </a>`;
 }
 
-/** World Bank hero — featured spotlight + “More top stories” strip */
-export function renderHero(hero, data) {
+/** World Bank hero — featured spotlight + newsletter strip */
+export function renderHero(hero) {
   const featured = hero.featured || {};
-  const topStories = hero.topStories || [];
-
-  const storyCards = topStories.map(renderTopStoryCard).join("");
-
-  const primaryTarget = featured.cta?.target || hero.primaryCta?.target || "#home-africa-map";
-  const primaryLinkAttrs = primaryTarget.startsWith("#/")
-    ? `href="${primaryTarget}" data-link`
-    : `href="${primaryTarget}"`;
+  const newsletterItems = (hero.topStories || []).filter((item) => item.isNewsletter);
+  const storyCards = newsletterItems.map(renderTopStoryCard).join("");
 
   return `
     <section class="wb-hero" id="home-hero">
@@ -52,17 +46,17 @@ export function renderHero(hero, data) {
             <h1 class="wb-hero__spotlight-title">${featured.title || hero.title}</h1>
             <p class="wb-hero__spotlight-desc">${featured.description || hero.description}</p>
           </div>
-          <a ${primaryLinkAttrs} class="wb-hero__spotlight-cta">
-            ${featured.cta?.label || hero.primaryCta?.label || "Explore Africa"}
-          </a>
         </div>
       </div>
-      <div class="wb-hero__stories-bar">
+      ${
+        storyCards
+          ? `<div class="wb-hero__stories-bar">
         <div class="container wb-hero__stories-inner">
-          <p class="wb-hero__stories-label">More top stories</p>
-          <div class="wb-hero__stories-grid">${storyCards}</div>
+          <div class="wb-hero__stories-grid wb-hero__stories-grid--newsletter">${storyCards}</div>
         </div>
-      </div>
+      </div>`
+          : ""
+      }
     </section>`;
 }
 
@@ -80,31 +74,82 @@ export function bindHeroNewsletter() {
   });
 }
 
-/** World Bank “Data for Development” — large stat callouts */
+const IMPACT_ICONS = {
+  communities: `<svg viewBox="0 0 48 48" fill="none" aria-hidden="true"><circle cx="24" cy="24" r="20" stroke="currentColor" stroke-width="1.5"/><path d="M16 30c0-4 3.5-7 8-7s8 3 8 7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><circle cx="18" cy="19" r="2.5" stroke="currentColor" stroke-width="1.5"/><circle cx="30" cy="19" r="2.5" stroke="currentColor" stroke-width="1.5"/><path d="M12 32h24" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>`,
+  households: `<svg viewBox="0 0 48 48" fill="none" aria-hidden="true"><circle cx="24" cy="24" r="20" stroke="currentColor" stroke-width="1.5"/><path d="M24 14l10 8v12H14V22l10-8z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M20 34v-6h8v6" stroke="currentColor" stroke-width="1.5"/></svg>`,
+  projects: `<svg viewBox="0 0 48 48" fill="none" aria-hidden="true"><circle cx="24" cy="24" r="20" stroke="currentColor" stroke-width="1.5"/><circle cx="24" cy="17" r="3" stroke="currentColor" stroke-width="1.5"/><circle cx="17" cy="28" r="3" stroke="currentColor" stroke-width="1.5"/><circle cx="31" cy="28" r="3" stroke="currentColor" stroke-width="1.5"/><path d="M24 20v5M21 26l3 2 3-2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>`,
+};
+
+/** World Bank–style impact section — headline + scorecard CTA + 3 icon columns */
 export function renderImpactOverview(impact) {
-  const kpis = (impact.kpis || []).slice(0, 6);
-  const statBlocks = kpis
+  const pillars = impact.pillars || (impact.kpis || []).slice(0, 3).map((k) => ({
+    id: k.id,
+    category: k.label,
+    value: k.value,
+    prefix: k.prefix,
+    suffix: k.suffix,
+    description: k.label,
+    icon: k.id,
+    theme: "gold",
+  }));
+
+  const statBlocks = pillars
     .map(
-      (k, i) => `<article class="wb-data-stat" data-kpi data-value="${k.value}" data-prefix="${k.prefix || ""}" data-suffix="${k.suffix || ""}" style="--stat-i:${i}">
-        <span class="wb-data-stat__value">—</span>
-        <p class="wb-data-stat__label">${k.label}</p>
+      (p) => `<article class="wb-impact-stat wb-impact-stat--${p.theme || "gold"}" data-kpi data-value="${p.value}" data-prefix="${p.prefix || ""}" data-suffix="${p.suffix || ""}">
+        <div class="wb-impact-stat__rule" aria-hidden="true"></div>
+        <p class="wb-impact-stat__category">${p.category}</p>
+        <div class="wb-impact-stat__body">
+          <div class="wb-impact-stat__icon" aria-hidden="true">${IMPACT_ICONS[p.icon] || IMPACT_ICONS.communities}</div>
+          <div class="wb-impact-stat__text">
+            <span class="wb-impact-stat__value">—</span>
+            <p class="wb-impact-stat__desc">${p.description}</p>
+          </div>
+        </div>
       </article>`
     )
     .join("");
 
+  const scorecard = impact.scorecardCta || { label: "See the Scorecard", target: "#/scorecard" };
+  const scorecardAttrs = scorecard.target?.startsWith("#/")
+    ? `href="${scorecard.target}" data-link`
+    : `href="${scorecard.target || "#/scorecard"}"`;
+
   return `
-    <section class="wb-data-section" id="impact-overview">
+    <section class="wb-impact" id="impact-overview">
       <div class="container">
-        <header class="wb-data-section__head" data-reveal>
-          <p class="eyebrow wb-data-section__eyebrow">${impact.eyebrow || "Data for transformation"}</p>
-          <h2>${impact.title}</h2>
-          <p>${impact.description}</p>
-        </header>
-        <div class="wb-data-section__stats" data-reveal>${statBlocks}</div>
-        <div class="wb-data-section__foot" data-reveal>
-          ${impact.scorecardCta ? `<a href="${impact.scorecardCta.target}" class="wb-hero__spotlight-cta wb-hero__spotlight-cta--sm" data-link>${impact.scorecardCta.label}</a>` : ""}
-          ${impact.dataCta ? `<a href="${impact.dataCta.target}" class="wb-data-section__link" data-link>${impact.dataCta.label} &rarr;</a>` : ""}
-          ${impact.modelLink ? `<a href="${impact.modelLink.target}" class="wb-data-section__link" data-link>${impact.modelLink.label} &rarr;</a>` : ""}
+        <div class="wb-impact__head" data-reveal>
+          <div class="wb-impact__head-copy">
+            <h2 class="wb-impact__title">${impact.title || "Measuring our <strong>impact</strong> and progress"}</h2>
+            <p class="wb-impact__desc">${impact.description || ""}</p>
+          </div>
+          <a ${scorecardAttrs} class="wb-impact__scorecard-btn">${scorecard.label || "See the Scorecard"}</a>
+        </div>
+        <div class="wb-impact__grid" data-reveal>${statBlocks}</div>
+      </div>
+    </section>`;
+}
+
+/** World Bank Who We Are–style intro to the main PA website */
+export function renderPaWebsiteIntro(section) {
+  if (!section) return "";
+
+  const cta = section.cta || {
+    label: "Possibilities Africa",
+    href: "https://www.possibilitiesafrica.org/",
+  };
+  const href = cta.href || "https://www.possibilitiesafrica.org/";
+
+  return `
+    <section class="wb-pa-intro" id="know-more-about-us">
+      <div class="container wb-pa-intro__inner">
+        <div class="wb-pa-intro__copy" data-reveal>
+          <p class="wb-pa-intro__eyebrow">${section.eyebrow || "Want to know more about us"}</p>
+          <blockquote class="wb-pa-intro__quote">${section.quote || "The whole gospel transforming the whole person and whole community."}</blockquote>
+          ${section.description ? `<p class="wb-pa-intro__desc">${section.description}</p>` : ""}
+          <a href="${href}" class="wb-pa-intro__cta" target="_blank" rel="noopener noreferrer">${cta.label || "Possibilities Africa"}</a>
+        </div>
+        <div class="wb-pa-intro__visual" data-reveal>
+          <div class="wb-pa-intro__image" role="img" aria-label="${section.imageAlt || "Pastor-led transformation across Africa"}"></div>
         </div>
       </div>
     </section>`;

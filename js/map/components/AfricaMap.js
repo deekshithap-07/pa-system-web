@@ -96,7 +96,7 @@ export class AfricaMap {
                 <p class="map-hero-sub">${h.subheading || ""}</p>
                 <div class="map-hero-actions">
                   <a href="#map-scroll-stage" class="btn btn-primary map-scroll-cta">Explore Africa</a>
-                  <a href="${h.secondaryCta?.target || "#/insights"}" class="btn btn-secondary"${h.secondaryCta?.target?.startsWith("#/") ? " data-link" : ""}>${h.secondaryCta?.label || "View Insights"}</a>
+                  <a href="${h.secondaryCta?.target || "#/scorecard"}" class="btn btn-secondary"${h.secondaryCta?.target?.startsWith("#/") ? " data-link" : ""}>${h.secondaryCta?.label || "View Insights"}</a>
                 </div>
               </div>
               <div class="map-hero-slot" id="map-hero-slot" aria-hidden="true"></div>
@@ -107,7 +107,7 @@ export class AfricaMap {
           <div class="map-immersive-ui" id="map-immersive-ui">
             <div class="map-stage-top">
               <div id="map-breadcrumb-root"></div>
-              <a href="#/insights" class="map-explore-btn" data-link>Explore More Data</a>
+              <a href="#/scorecard" class="map-explore-btn" data-link>Explore More Data</a>
             </div>
             <div class="map-by-numbers" id="map-by-numbers" aria-label="Africa by the numbers"></div>
             <div class="map-stage-body">
@@ -165,7 +165,7 @@ export class AfricaMap {
     this.byNumbersEl.innerHTML = `
       <div class="map-by-numbers__head">
         <h3>By the numbers: Africa</h3>
-        <a href="#/insights" class="map-explore-btn map-explore-btn--sm" data-link>Explore More Data</a>
+        <a href="#/scorecard" class="map-explore-btn map-explore-btn--sm" data-link>Explore More Data</a>
       </div>
       <div class="map-by-numbers__grid">
         <div class="map-by-numbers__featured">

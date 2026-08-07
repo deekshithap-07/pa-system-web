@@ -14,7 +14,6 @@ export function renderSearch(data) {
         <nav class="search-quick-links" aria-label="Quick explore">
           <a href="#/#home-africa-map" data-link>Africa map</a>
           <a href="#/scorecard" data-link>Scorecard</a>
-          <a href="#/insights" data-link>Insights</a>
           <a href="#/resources" data-link>Resources</a>
           <a href="#/about" data-link>How PA works</a>
         </nav>

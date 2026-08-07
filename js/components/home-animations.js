@@ -171,11 +171,14 @@ function initNetworkFlowAnimations() {
 }
 
 function initImpactCounters() {
-  document.querySelectorAll(".impact-kpi[data-kpi], .wb-data-stat[data-kpi]").forEach((el) => {
+  document.querySelectorAll(".impact-kpi[data-kpi], .wb-data-stat[data-kpi], .wb-impact-stat[data-kpi]").forEach((el) => {
     const value = parseFloat(el.dataset.value);
     const prefix = el.dataset.prefix || "";
     const suffix = el.dataset.suffix || "";
-    const valueEl = el.querySelector(".impact-kpi__value") || el.querySelector(".wb-data-stat__value");
+    const valueEl =
+      el.querySelector(".impact-kpi__value") ||
+      el.querySelector(".wb-data-stat__value") ||
+      el.querySelector(".wb-impact-stat__value");
     const obj = { val: 0 };
 
     ScrollTrigger.create({

@@ -13,12 +13,15 @@ import { renderCommunityHub, mountCommunityHub, destroyCommunityHub } from "./vi
 import { teardownDashboard } from "./views/dashboard.js";
 import { renderScorecard, mountScorecard, destroyScorecard } from "./views/scorecard.js";
 import { renderResources, mountResources } from "./views/resources-hub.js";
-import { renderInsights, mountInsights, destroyInsights } from "./views/insights-hub.js";
-import { renderAbout } from "./views/about.js";
+import { destroyInsights } from "./views/insights-hub.js";
+import { renderAbout, mountAbout, destroyAbout } from "./views/about.js";
 import { closeSearchModal } from "./components/search-modal.js";
 import { renderStoriesHub, mountStoriesHub, destroyStoriesHub } from "./views/stories-hub.js";
+import { wrapPageContent, playPageEntry, cleanupPageEntry } from "./components/shared/page-entry.js";
+import { getPageEntryConfig } from "./utils/page-entry-config.js";
 
 let currentView = null;
+let lastEntryView = null;
 let appData = null;
 let lastRouteKey = null;
 let linksBound = false;
@@ -94,7 +97,8 @@ function updateNavActive(parts) {
     const nav = el.dataset.nav;
     let active = false;
     if (nav === "home") active = parts.length === 0;
-    else if (nav === "africa") active = ["africa", "country", "catchment", "community", "stories"].includes(parts[0]); else active = parts[0] === nav;
+    else if (nav === "scorecard") active = parts[0] === "scorecard" || parts[0] === "insights";
+    else active = parts[0] === nav;
     el.classList.toggle("is-active", active);
   });
 }
@@ -115,11 +119,17 @@ function handleRoute() {
   pendingAnchor = null;
 
   if (routeKey === lastRouteKey && currentView && document.getElementById("app")?.innerHTML) {
+    if (targetAnchor?.startsWith("tab-")) {
+      document.querySelector("[data-wb-scorecard]")?._switchWbsTab?.(targetAnchor.slice(4));
+      return;
+    }
     if (targetAnchor) scrollToAnchor(targetAnchor);
     return;
   }
 
   closeSearchModal();
+  cleanupPageEntry();
+  document.body.classList.remove("pa-entry-active");
 
   if (lastRouteKey) saveScrollPosition(lastRouteKey);
   const { restore } = resolveNavigationIntent(routeKey);
@@ -136,6 +146,7 @@ function handleRoute() {
   destroyScorecard(app);
   destroyInsights();
   destroyStoriesHub();
+  destroyAbout();
   const header = document.getElementById("site-header");
   let html = "";
   let hub = null;
@@ -165,15 +176,12 @@ function handleRoute() {
     const result = renderCommunityHub(parts[1], parts[2], parts[3], appData);
     html = result.html;
     hub = result.hub;
-  } else if (parts[0] === "scorecard") {
+  } else if (parts[0] === "scorecard" || parts[0] === "insights") {
     view = "scorecard";
     html = renderScorecard(appData);
   } else if (parts[0] === "about") {
     view = "static";
     html = renderAbout(appData);
-  } else if (parts[0] === "insights") {
-    view = "insights";
-    html = renderInsights(appData);
   } else if (parts[0] === "stories") {
     view = "stories";
     html = renderStoriesHub(appData, parts[1] || null);
@@ -193,31 +201,63 @@ function handleRoute() {
   }
 
   currentView = view;
+
+  const playEntry = lastEntryView !== view;
+  lastEntryView = view;
+
+  if (playEntry && view !== "scorecard") {
+    html = wrapPageContent(html, getPageEntryConfig(view, parts, appData, hub));
+  }
+
   app.innerHTML = html;
 
-  if (view === "landing") {
-    requestAnimationFrame(() => mountHome(appData));
-  } else if (view === "africa") {
-    requestAnimationFrame(() => mountAfricaIntelligence(appData, navigate));
-  } else if (view === "community" && hub) {
-    requestAnimationFrame(() => mountCommunityHub(app, hub));
-  } else if (view === "country" && hub) {
-    requestAnimationFrame(() => mountCountryHub(app, hub, appData, navigate));
-  } else if (view === "scorecard") {
-    requestAnimationFrame(() => mountScorecard(app, appData));
-  } else if (view === "catchment" && hub) {
-    requestAnimationFrame(() => mountCatchmentHub(app, hub, appData, navigate));
-  } else if (view === "insights") {
-    requestAnimationFrame(() => mountInsights(appData));
-  } else if (view === "stories") {
-    requestAnimationFrame(() => mountStoriesHub(appData));
-  } else if (view === "resources") {
-    requestAnimationFrame(() => mountResources(appData));
+  const runMount = () => {
+    if (view === "landing") {
+      mountHome(appData);
+    } else if (view === "africa") {
+      mountAfricaIntelligence(appData, navigate);
+    } else if (view === "community" && hub) {
+      mountCommunityHub(app, hub);
+    } else if (view === "country" && hub) {
+      mountCountryHub(app, hub, appData, navigate);
+    } else if (view === "scorecard") {
+      mountScorecard(app, appData);
+    } else if (view === "catchment" && hub) {
+      mountCatchmentHub(app, hub, appData, navigate);
+    } else if (view === "stories") {
+      mountStoriesHub(appData);
+    } else if (view === "resources") {
+      mountResources(appData);
+    } else if (view === "static") {
+      mountAbout(appData);
+    }
+  };
+
+  const shouldRestoreScroll = restore && !targetAnchor;
+
+  const finalizeRouteScroll = () => {
+    if (targetAnchor) {
+      requestAnimationFrame(() => scrollToAnchor(targetAnchor));
+      return;
+    }
+    applyRouteScroll(routeKey, shouldRestoreScroll);
+  };
+
+  if (playEntry && view !== "scorecard") {
+    requestAnimationFrame(() => {
+      playPageEntry(app.querySelector("[data-page-root]"), () => {
+        runMount();
+        finalizeRouteScroll();
+      });
+    });
+  } else {
+    requestAnimationFrame(() => {
+      runMount();
+      finalizeRouteScroll();
+    });
   }
 
   bindAnchorScroll(app);
-  applyRouteScroll(routeKey, restore && !targetAnchor);
-  if (targetAnchor) scrollToAnchor(targetAnchor);
 }
 
 function bindGlobalLinks() {
@@ -245,7 +285,7 @@ function bindGlobalLinks() {
     const backMap = e.target.closest("[data-back-map]");
     if (backMap) {
       e.preventDefault();
-      navigate("africa", { isBack: true, useTransition: false });
+      navigate("/", { isBack: true, useTransition: false, anchor: "home-africa-map" });
       return;
     }
     const backCountry = e.target.closest("[data-back-country]");

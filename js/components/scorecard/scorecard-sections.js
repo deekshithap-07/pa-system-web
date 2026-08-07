@@ -17,7 +17,7 @@ export function renderScorecardSidebar() {
       </nav>
       <div class="sc-sidebar__footer">
         <a href="#/" class="sc-sidebar__back" data-link>&larr; Back to home</a>
-        <a href="#/insights" class="sc-sidebar__insights-link" data-link>Comparisons &amp; indices &rarr;</a>
+        <a href="#/scorecard#tab-analysis" class="sc-sidebar__insights-link" data-link>Comparisons &amp; indices &rarr;</a>
       </div>
     </aside>`;
 }
@@ -259,7 +259,7 @@ export function renderScorecardAnalysis(insights, comparisons, performance) {
             <h2>Sector outcomes</h2>
             <p class="sc-section__desc">Programme-area performance across the network</p>
           </div>
-          <a href="#/insights" class="sc-insights-cta" data-link>Country &amp; community comparisons, CBC index &rarr;</a>
+          <a href="#/scorecard#tab-analysis" class="sc-insights-cta" data-link>Country &amp; community comparisons, CBC index &rarr;</a>
         </div>
         <div class="sc-sector-table">
           <table class="sc-table">

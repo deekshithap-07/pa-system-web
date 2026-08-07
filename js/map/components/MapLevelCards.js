@@ -33,7 +33,7 @@ export class MapLevelCards {
         { label: "Households", value: "500K+" },
         { label: "Growth", value: "+25%" },
       ],
-      hint: "Scroll or click a cluster to zoom into a country",
+      hint: "Scroll or click a country to explore catchments",
     });
     this.animateIn();
   }
@@ -53,7 +53,7 @@ export class MapLevelCards {
         { label: "Pastors", value: formatNumber(stats.pastors ?? country.pastors ?? hub?.metrics?.pastors ?? 0) },
         { label: "Growth", value: `+${country.growth ?? hub?.metrics?.growth ?? 0}%` },
       ],
-      hint: "Select a catchment area name on the map",
+      hint: "Click a catchment dot or name to open its community page",
       link: { href: `#/country/${country.slug}`, label: `Explore ${country.countryName || country.name} hub →`, highlight: true },
     });
     this.animateIn();

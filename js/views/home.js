@@ -1,16 +1,11 @@
 import { renderHero, renderImpactOverview, bindHeroNewsletter } from "../components/home-sections.js";
 import {
-  renderKeyUpdates,
-  renderGrowthTrends,
-  renderHomeAfricaMap,
-  mountHomeGrowthCharts,
-  mountHomeAfricaMap,
+  renderWhatIsHappeningAcrossAfrica,
+  renderAfricaMapSection,
+  mountAfricaMapSection,
   destroyHomeAfricaMap,
 } from "../components/home-level1.js";
-import { renderHomeStoriesSection, bindHomeStoriesSection } from "../components/home-stories-section.js";
 import { initLandingAnimations, destroyHomeAnimations } from "../components/home-animations.js";
-
-let storiesController = null;
 
 export function renderHome(data) {
   const home = data.home;
@@ -18,12 +13,10 @@ export function renderHome(data) {
 
   return `
     <div class="home-page" data-level="1">
-      ${renderHero(home.hero, data)}
+      ${renderHero(home.hero)}
       ${renderImpactOverview(home.impactOverview)}
-      ${renderKeyUpdates(data, level1.keyUpdates)}
-      ${renderGrowthTrends(data, level1.growthTrends)}
-      ${renderHomeAfricaMap(level1.africaMap)}
-      ${renderHomeStoriesSection(data, home.storiesSection)}
+      ${renderWhatIsHappeningAcrossAfrica(data, level1.whatsHappening)}
+      ${renderAfricaMapSection(level1.africaMap)}
     </div>`;
 }
 
@@ -31,10 +24,7 @@ export function mountHome(data) {
   requestAnimationFrame(() => {
     initLandingAnimations();
     bindHeroNewsletter();
-    mountHomeGrowthCharts(document, data);
-    mountHomeAfricaMap(data);
-    storiesController?.destroy?.();
-    storiesController = bindHomeStoriesSection(document, data);
+    mountAfricaMapSection(data);
     ScrollTrigger.refresh();
   });
 }
@@ -42,9 +32,6 @@ export function mountHome(data) {
 export function destroyHome() {
   destroyHomeAnimations();
   destroyHomeAfricaMap();
-  storiesController?.destroy?.();
-  storiesController = null;
 }
-
 export const renderLanding = renderHome;
 export const teardownLanding = destroyHome;

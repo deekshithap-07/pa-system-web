@@ -6,6 +6,7 @@
 import {
   initAfricaIntelligenceMap,
   destroyAfricaIntelligenceMap,
+  setCatchmentSelectHandler,
 } from "../map/africa-intelligence.js";
 
 function collectRecentUpdates(countryHubs, limit = 6) {
@@ -24,7 +25,7 @@ function formatUpdateDate(iso) {
   return new Date(iso).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" });
 }
 
-export function renderKeyUpdates(data, section) {
+export function renderWhatIsHappeningAcrossAfrica(data, section) {
   const updates = collectRecentUpdates(data.countryHubs, section?.limit || 6);
 
   const items = updates.length
@@ -44,17 +45,19 @@ export function renderKeyUpdates(data, section) {
     : `<li class="l1-empty">No recent updates available.</li>`;
 
   return `
-    <section class="l1-updates" id="key-updates" aria-labelledby="l1-updates-title">
+    <section class="l1-updates" id="what-happening-africa" aria-labelledby="l1-whats-happening-title">
       <div class="container">
         <header class="l1-section-head" data-reveal>
-          <p class="eyebrow">${section?.eyebrow || "Key updates"}</p>
-          <h2 id="l1-updates-title">${section?.title || "Recent activity across countries"}</h2>
+          <h2 id="l1-whats-happening-title">${section?.title || "What is happening across Africa?"}</h2>
           <p>${section?.description || "Latest programme activity from pastor-led communities — each links to its country hub."}</p>
         </header>
         <ol class="l1-update-list" data-reveal>${items}</ol>
       </div>
     </section>`;
 }
+
+/** @deprecated Use renderWhatIsHappeningAcrossAfrica */
+export const renderKeyUpdates = renderWhatIsHappeningAcrossAfrica;
 
 export function renderGrowthTrends(data, section) {
   const trends = data.insightsAnalytics?.trendAnalysis || {};
@@ -86,25 +89,31 @@ export function renderGrowthTrends(data, section) {
     </section>`;
 }
 
-export function renderHomeAfricaMap(section) {
+export function renderAfricaMapSection(section, opts = {}) {
+  const sectionId = opts.sectionId || "home-africa-map";
+  const rootId = opts.rootId || "home-africa-map-root";
+  const ctaTarget = section?.countriesCta?.target || "#/africa";
+
   return `
-    <section class="l1-map" id="home-africa-map" aria-labelledby="l1-map-title">
+    <section class="l1-map" id="${sectionId}" aria-labelledby="${sectionId}-title">
       <div class="container l1-map__head-wrap">
         <header class="l1-section-head" data-reveal>
-          <p class="eyebrow">${section?.eyebrow || "Explore Africa"}</p>
-          <h2 id="l1-map-title">${section?.title || "Interactive map of Africa"}</h2>
+          <h2 id="${sectionId}-title">${section?.title || "Interactive map of Africa"}</h2>
           <p>${section?.description || "Click a country to explore data and drill into catchments and communities. Use Ctrl + scroll to zoom the map, or scroll normally to continue down the page."}</p>
         </header>
-        <a href="${section?.countriesCta?.target || "#/africa"}" class="l1-map__full-link" data-link data-reveal>
+        <a href="${ctaTarget}" class="l1-map__full-link" data-link data-enable-africa-nav data-reveal>
           ${section?.countriesCta?.label || "Browse all countries →"}
         </a>
       </div>
       <div class="l1-map__stage" data-reveal>
-        <div class="l1-map__host" id="home-africa-map-root" aria-label="Interactive Africa map"></div>
+        <div class="l1-map__host" id="${rootId}" aria-label="Interactive Africa map"></div>
         <p class="l1-map__scroll-hint" data-reveal>Scroll to continue · Ctrl + scroll on map to zoom · Click a country to explore</p>
       </div>
     </section>`;
 }
+
+/** @deprecated Use renderAfricaMapSection */
+export const renderHomeAfricaMap = (section) => renderAfricaMapSection(section);
 
 export function mountHomeGrowthCharts(root, data) {
   const trends = data.insightsAnalytics?.trendAnalysis || {};
@@ -146,22 +155,37 @@ export function mountHomeGrowthCharts(root, data) {
   });
 }
 
-export function mountHomeAfricaMap(data) {
-  if (!document.getElementById("home-africa-map-root")) return null;
+export function mountAfricaMapSection(data, opts = {}) {
+  const rootId = opts.rootId || "home-africa-map-root";
+  if (!document.getElementById(rootId)) return null;
 
-  return initAfricaIntelligenceMap({
+  const map = initAfricaIntelligenceMap({
     countries: data.countries,
     mapPaths: data.mapPaths,
     mapOverlay: data.home?.mapOverlay || {},
     mapMetrics: data.mapMetrics,
-    config: { ...data.africaIntelligence, hideSidebar: false, pageLayout: true, embedMode: true },
+    config: {
+      ...data.africaIntelligence,
+      hideSidebar: false,
+      pageLayout: true,
+      embedMode: true,
+      navigateOnCatchmentSelect: true,
+    },
     catchments: data.catchments,
     communities: data.communities,
     countryHubs: data.countryHubs,
     geoLocations: data.geoLocations,
-    containerId: "home-africa-map-root",
+    containerId: rootId,
   });
+
+  setCatchmentSelectHandler((countrySlug, catchmentSlug) => {
+    window.location.hash = `#/catchment/${countrySlug}/${catchmentSlug}`;
+  });
+
+  return map;
 }
+
+export const mountHomeAfricaMap = (data) => mountAfricaMapSection(data);
 
 export function destroyHomeAfricaMap() {
   destroyAfricaIntelligenceMap();

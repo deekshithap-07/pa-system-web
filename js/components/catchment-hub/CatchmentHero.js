@@ -11,6 +11,7 @@ export function renderCatchmentHero(hub) {
             { label: hub.catchmentName, href: `#/catchment/${hub.countrySlug}/${hub.catchmentSlug}` },
           ])}
           <p class="eyebrow ch-hero__tag">Catchment area · ${hub.heroTagline}</p>
+          <p class="ch-hero__question">What is happening in this catchment?</p>
           <h1>${hub.catchmentName}</h1>
           <p class="ch-hero__summary">${hub.description}</p>
         </div>

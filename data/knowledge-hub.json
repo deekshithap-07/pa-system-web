@@ -1,4 +1,23 @@
 {
+  "library": {
+    "title": "Resource library",
+    "subtitle": "Field case studies and downloadable data packs.",
+    "sections": [
+      { "id": "case-studies", "label": "Case studies", "anchor": "res-case-studies" },
+      { "id": "packs", "label": "Data packs", "anchor": "res-packs" }
+    ],
+    "filters": {
+      "countryLabel": "Country",
+      "programLabel": "Programme",
+      "allCountries": "All countries",
+      "allPrograms": "All programmes"
+    },
+    "connect": {
+      "title": "Connect with us",
+      "description": "Follow Possibilities Africa for field stories and ministry updates."
+    },
+    "footerNote": "Report files will be served from the community tracking API. Update data/reports.json or connect your backend — the UI reads the same JSON shape."
+  },
   "categories": [
     { "id": "reports", "title": "Ministry Reports", "description": "Monthly, quarterly, and annual field reports from across the PA network.", "icon": "📊" },
     { "id": "case-studies", "title": "Case Studies", "description": "Documented transformation outcomes with measurable community impact.", "icon": "📋" },
@@ -16,6 +35,66 @@
     { "id": "reports", "label": "Ministry Reports", "href": "#res-catalog" },
     { "id": "case-studies", "label": "Case Studies", "href": "#res-case-studies" },
     { "id": "programmes", "label": "Programme Materials", "href": "#res-categories" }
+  ],
+  "atlasThemes": [
+    {
+      "id": "leadership",
+      "label": "Leadership",
+      "accent": "#c4842c",
+      "bg": "linear-gradient(180deg, #fdf8f0 0%, #faf3e6 100%)",
+      "stat": { "headline": "627", "context": "pastors in the leadership journey across the PA network" },
+      "intro": "Pastor-led networks sustain discipleship and community engagement — even through conflict and drought."
+    },
+    {
+      "id": "communities",
+      "label": "Communities",
+      "accent": "#3d8f8f",
+      "bg": "linear-gradient(180deg, #f0f8f8 0%, #e8f4f4 100%)",
+      "stat": { "headline": "59", "context": "communities tracked with holistic transformation data" },
+      "intro": "From awareness to multiplication — communities progress through measurable journey stages."
+    },
+    {
+      "id": "prosperity",
+      "label": "Prosperity",
+      "accent": "#d4a017",
+      "bg": "linear-gradient(180deg, #fef8ec 0%, #fdf3dc 100%)",
+      "stat": { "headline": "210+", "context": "income-generating activities launched through economic productivity programmes" },
+      "intro": "Cooperatives, skill transfer, and person-to-person models lift household income across catchments."
+    },
+    {
+      "id": "water",
+      "label": "Water & Land",
+      "accent": "#3d7a52",
+      "bg": "linear-gradient(180deg, #eef6f0 0%, #e4f0e8 100%)",
+      "stat": { "headline": "14", "context": "water initiatives built by communities in Kwale South alone" },
+      "intro": "Trench dams, irrigation, and land restoration turn seasonal scarcity into year-round productivity."
+    },
+    {
+      "id": "data",
+      "label": "Data & Reports",
+      "accent": "#7b6fad",
+      "bg": "linear-gradient(180deg, #f3f0f8 0%, #ebe6f4 100%)",
+      "stat": { "headline": "4", "context": "published ministry reports with downloadable insight packs" },
+      "intro": "Structured data, field reports, and analysis packs guide programme decisions across the network."
+    }
+  ],
+  "featuredStories": [
+    {
+      "title": "Global Progress Tracking",
+      "subtitle": "Transformation across the PA network",
+      "description": "Explore progress data on communities, households, and leadership — understand how countries are advancing from their own starting points.",
+      "href": "#/scorecard",
+      "cta": "Explore scorecard",
+      "theme": "data"
+    },
+    {
+      "title": "The State of Field Data",
+      "subtitle": "Data for development",
+      "description": "For many communities, the data guiding ministry decisions are years out of date. PA's platform makes transformation visible to programme leaders.",
+      "href": "#/scorecard#tab-data",
+      "cta": "View data tables",
+      "theme": "communities"
+    }
   ],
   "socialLinks": [
     { "id": "facebook", "label": "Facebook", "href": "https://www.facebook.com/PossibilitiesAfricaPA" },
