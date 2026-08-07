@@ -15,6 +15,22 @@
   padding-bottom: 4rem;
 }
 
+.sc-page__intro {
+  margin: 0 2rem 1.5rem;
+  padding: 0.85rem 1rem;
+  font-size: 0.88rem;
+  line-height: 1.55;
+  color: var(--pa-slate);
+  background: #fff;
+  border-left: 3px solid var(--pa-blue);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  max-width: 48rem;
+}
+
+.sc-page__intro a {
+  font-weight: 600;
+}
+
 /* Sidebar */
 .sc-sidebar {
   position: sticky;

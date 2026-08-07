@@ -1,5 +1,6 @@
 const NAV_ITEMS = [
   { id: "ch-overview", label: "Overview" },
+  { id: "ch-stories", label: "Stories" },
   { id: "ch-kpi-section", label: "Metrics" },
   { id: "ch-map", label: "Map" },
   { id: "ch-charts", label: "Projects & progress" },

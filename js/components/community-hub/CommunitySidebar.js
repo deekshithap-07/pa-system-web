@@ -1,4 +1,5 @@
 const NAV_ITEMS = [
+  { id: "cm-stories", label: "Story" },
   { id: "cm-profile", label: "Profile" },
   { id: "cm-projects", label: "Projects & activities" },
   { id: "cm-leadership", label: "Leadership & engagement" },

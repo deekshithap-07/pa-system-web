@@ -1,7 +1,7 @@
 import { formatNumber } from "../utils/format.js";
 
 export function initLandingAnimations() {
-  const hero = document.querySelector(".home-hero__content");
+  const hero = document.querySelector(".wb-hero__spotlight-inner");
   if (hero) {
     gsap.from(hero.children, {
       opacity: 0,
@@ -171,11 +171,11 @@ function initNetworkFlowAnimations() {
 }
 
 function initImpactCounters() {
-  document.querySelectorAll(".impact-kpi[data-kpi]").forEach((el) => {
+  document.querySelectorAll(".impact-kpi[data-kpi], .wb-data-stat[data-kpi]").forEach((el) => {
     const value = parseFloat(el.dataset.value);
     const prefix = el.dataset.prefix || "";
     const suffix = el.dataset.suffix || "";
-    const valueEl = el.querySelector(".impact-kpi__value");
+    const valueEl = el.querySelector(".impact-kpi__value") || el.querySelector(".wb-data-stat__value");
     const obj = { val: 0 };
 
     ScrollTrigger.create({
@@ -200,7 +200,7 @@ function initImpactCounters() {
 export function destroyHomeAnimations() {
   ScrollTrigger.getAll().forEach((t) => {
     const tr = t.trigger;
-    if (tr?.closest?.(".home-page")) t.kill();
+    if (tr?.closest?.(".home-page") || tr?.closest?.("[data-home-stories]")) t.kill();
   });
   flowLoopTween?.kill();
   flowLoopTween = null;

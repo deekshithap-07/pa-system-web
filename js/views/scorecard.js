@@ -6,14 +6,12 @@ import {
   destroyScorecardSidebar,
   renderScorecardHeader,
   renderScorecardKPIs,
-  renderScorecardGrowthCharts,
   renderScorecardCountryStats,
-  renderScorecardCommunityStats,
   renderScorecardProgress,
-  renderScorecardAnalysis,
   renderScorecardReports,
 } from "../components/scorecard/scorecard-sections.js";
 
+/** Scorecard = network snapshot, rankings & journey status (not deep analysis). */
 export function renderScorecard(data) {
   const sc = data.scorecard;
   if (!sc) return `<div class="container static-page"><h1>Scorecard data unavailable</h1></div>`;
@@ -23,12 +21,10 @@ export function renderScorecard(data) {
       ${renderScorecardSidebar()}
       <main class="sc-main">
         ${renderScorecardHeader(sc.meta, sc.overview)}
+        <p class="sc-page__intro">Executive snapshot of network performance — rankings and journey progress. For comparisons and indices, use <a href="#/insights" data-link>Insights</a>.</p>
         ${renderScorecardKPIs(sc.kpis)}
-        ${renderScorecardGrowthCharts(sc.growthTrends)}
         ${renderScorecardCountryStats(sc.countryStats)}
-        ${renderScorecardCommunityStats(sc.communityStats)}
         ${renderScorecardProgress(sc.progressIndicators)}
-        ${renderScorecardAnalysis(sc.insights, sc.comparisons, sc.performanceMetrics)}
         ${renderScorecardReports(sc.reports)}
       </main>
     </div>`;
@@ -40,9 +36,6 @@ export function mountScorecard(root, data) {
 
   bindScorecardSidebar(page);
   initScorecardAnimations(page);
-  if (data?.scorecard?.growthTrends) {
-    renderDashboardCharts(page, data.scorecard.growthTrends);
-  }
 
   requestAnimationFrame(() => ScrollTrigger.refresh());
 }

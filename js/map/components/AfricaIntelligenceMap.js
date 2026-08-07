@@ -242,6 +242,7 @@ export class AfricaIntelligenceMap {
       onZoomChange: () => this.handleZoomChange(),
       minWidth: 40,
       maxWidth: 2000,
+      embedMode: Boolean(this.config?.pageLayout || this.config?.embedMode),
     });
 
     if (!this.config?.pageLayout) {

@@ -12,6 +12,11 @@
   <link rel="stylesheet" href="styles/country-hub.css">
   <link rel="stylesheet" href="styles/catchment-hub.css">
   <link rel="stylesheet" href="styles/home.css">
+  <link rel="stylesheet" href="styles/home-development-topics.css">
+  <link rel="stylesheet" href="styles/home-stories.css">
+  <link rel="stylesheet" href="styles/home-level1.css">
+  <link rel="stylesheet" href="styles/home-portal.css">
+  <link rel="stylesheet" href="styles/site-bridge.css">
   <link rel="stylesheet" href="styles/pa-network-flow.css">
   <link rel="stylesheet" href="styles/scorecard.css">
   <link rel="stylesheet" href="styles/insights-page.css">
@@ -30,18 +35,18 @@
         <span class="brand__icon" aria-hidden="true">🌍</span>
         <span>
           <span class="brand__title">Possibilities Africa</span><br>
-          <span class="brand__sub">Transformation Intelligence</span>
+          <span class="brand__sub">Stories &amp; Transformation Data</span>
         </span>
       </a>
       <nav class="site-nav" id="site-nav" aria-label="Main navigation">
-        <a href="#/" data-nav="home">Home</a>
-        <a href="#/africa" data-nav="africa">Africa</a>
-        <a href="#/insights" data-nav="insights">Insights</a>
-        <a href="#/resources" data-nav="resources">Resources</a>
-        <a href="#/about" data-nav="about">About</a>
-        <a href="#/search" class="site-nav__search" data-nav="search" aria-label="Search">
-          <span aria-hidden="true">⌕</span> Search
-        </a>
+        <a href="#/" class="site-nav__pill site-nav__pill--home" data-nav="home">Home</a>
+        <a href="#/#home-africa-map" class="site-nav__pill site-nav__pill--africa" data-nav="africa">Explore Africa</a>
+        <a href="#/insights" class="site-nav__pill site-nav__pill--insights" data-nav="insights">Insights</a>
+        <a href="#/resources" class="site-nav__pill site-nav__pill--resources" data-nav="resources">Resources</a>
+        <a href="#/about" class="site-nav__pill site-nav__pill--about" data-nav="about">About</a>
+        <button type="button" class="site-nav__search" data-nav="search" aria-label="Search">
+          <span aria-hidden="true">⌕</span>
+        </button>
       </nav>
       <button class="menu-toggle" id="menu-toggle" aria-label="Open menu">☰</button>
     </div>
@@ -54,7 +59,7 @@
       <div class="footer-grid">
         <div>
           <strong style="color:white;font-size:1rem">PA Transformation Intelligence</strong>
-          <p style="font-size:0.85rem;margin-top:0.5rem;line-height:1.6">Explore Africa → Understand Communities → Measure Transformation. An institutional platform presenting ministry impact across the continent.</p>
+          <p style="font-size:0.85rem;margin-top:0.5rem;line-height:1.6">Stories and data from pastor-led transformation across Africa. Explore communities, understand impact, and measure progress together.</p>
           <div class="footer-social">
             <a href="#" aria-label="Facebook">Fb</a>
             <a href="#" aria-label="X">X</a>
@@ -65,7 +70,8 @@
         <div>
           <h3>Explore</h3>
           <ul>
-            <li><a href="#/africa">Africa Map</a></li>
+            <li><a href="#/#home-africa-map">Africa Map</a></li>
+            <li><a href="#/africa">Countries overview</a></li>
             <li><a href="#/insights">Insights</a></li>
             <li><a href="#/resources">Resources</a></li>
           </ul>
@@ -74,7 +80,7 @@
           <h3>Platform</h3>
           <ul>
             <li><a href="#/about">About</a></li>
-            <li><a href="#/search">Search</a></li>
+            <li><a href="#/scorecard">Scorecard</a></li>
             <li><a href="https://www.possibilitiesafrica.org/" target="_blank" rel="noopener">PA Main Website</a></li>
           </ul>
         </div>

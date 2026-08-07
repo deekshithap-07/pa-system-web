@@ -124,6 +124,28 @@
   line-height: 1.4;
 }
 
+.hierarchy-step__card--link {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+  transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
+}
+
+.hierarchy-step__card--link:hover {
+  border-color: var(--pa-blue);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow);
+  text-decoration: none;
+}
+
+.hierarchy-step__explore {
+  display: inline-block;
+  margin-top: 0.5rem;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--pa-blue);
+}
+
 /* Pillars */
 .pillar-grid {
   display: grid;

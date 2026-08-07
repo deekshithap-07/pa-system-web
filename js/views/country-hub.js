@@ -2,6 +2,7 @@ import { buildCountryHubPayload } from "../utils/country-hub-data.js";
 import { getDocCountryCharts, getDocCountryKpis } from "../utils/doc-hub-kpis.js";
 import { buildCountryGeoMapModel } from "../map/utils/hub-geo-data.js";
 import { renderCountryHero } from "../components/country-hub/CountryHero.js";
+import { renderCountryStories } from "../components/country-hub/CountryStories.js";
 import { renderCountryKPIGrid } from "../components/country-hub/CountryKPIGrid.js";
 import { renderCountryMap, bindCountryMap } from "../components/country-hub/CountryMap.js";
 import { renderCountryCharts } from "../components/country-hub/CountryCharts.js";
@@ -17,6 +18,10 @@ import {
   teardownCountryHub,
 } from "../components/country-hub/country-hub-mount.js";
 import { ContextMap, destroyContextMap } from "../map/components/ContextMap.js";
+import {
+  renderNarrativeRibbon,
+  renderCuriosityStrip,
+} from "../components/shared/site-bridge.js";
 
 export function renderCountryHub(slug, data) {
   const hub = buildCountryHubPayload(slug, data);
@@ -41,6 +46,28 @@ export function renderCountryHub(slug, data) {
       ${renderCountrySidebar()}
       <main class="ch-main">
         ${renderCountryHero(hub)}
+        ${renderNarrativeRibbon({
+          variant: "story",
+          eyebrow: "Understanding this country",
+          text: hub.overview || hub.description,
+          cta: hub.stories?.length
+            ? { label: "Read country stories", target: "#ch-stories" }
+            : { label: "See country metrics", target: "#ch-kpi-section" },
+        })}
+        ${renderCountryStories(hub.stories, data.communities)}
+        ${renderCuriosityStrip({
+          text: "Curious how this country compares?",
+          links: [
+            { label: "Scorecard rankings", target: "#/scorecard#sc-countries" },
+            { label: "Country comparisons", target: "#/insights#ins-comparisons" },
+          ],
+        })}
+        ${renderNarrativeRibbon({
+          variant: "data",
+          eyebrow: "Data layer",
+          text: "Country-specific metrics, catchment map, and project charts — aligned with the doc structure.",
+          cta: { label: "Open catchment map", target: "#ch-map" },
+        })}
         ${renderCountryKPIGrid(hub.docKpis)}
         ${renderCountryMap(hub)}
         ${renderCountryCharts(hub.docCharts)}

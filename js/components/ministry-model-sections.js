@@ -11,6 +11,7 @@ export function renderAboutPage(model) {
       ${renderPillars(model.pillars)}
       ${renderJourney(model.journey)}
       ${renderTripleA(model.tripleA)}
+      ${renderAboutExplore()}
 
       <section class="about-cta">
         <div class="container">
@@ -21,7 +22,37 @@ export function renderAboutPage(model) {
     </div>`;
 }
 
+function renderAboutExplore() {
+  return `
+    <section class="about-explore" id="about-explore">
+      <div class="container">
+        <p class="eyebrow">See it in action</p>
+        <h2>Explore the model on the ground</h2>
+        <p class="about-section__desc">You've seen how PA works. These entry points show transformation with real stories and data.</p>
+        <div class="about-explore__grid">
+          <a href="#/africa" class="about-explore__card" data-link>
+            <strong>Africa map</strong>
+            <span>Drill from continent to community with live metrics at each level.</span>
+          </a>
+          <a href="#/country/kenya" class="about-explore__card" data-link>
+            <strong>Kenya country hub</strong>
+            <span>Example country page — stories, KPIs, catchment map, and reports.</span>
+          </a>
+          <a href="#/resources#res-case-studies" class="about-explore__card" data-link>
+            <strong>Case studies</strong>
+            <span>Documented outcomes that explain what the numbers mean.</span>
+          </a>
+          <a href="#/scorecard" class="about-explore__card" data-link>
+            <strong>Network scorecard</strong>
+            <span>Rankings and journey progress across all countries.</span>
+          </a>
+        </div>
+      </div>
+    </section>`;
+}
+
 function renderHierarchy(h) {
+  const levelLinks = ["#/africa", "#/country/kenya", "#/catchment/kenya/kajiado", "#/community/kenya/kajiado/koitiko"];
   return `
     <section class="about-section" id="about-hierarchy">
       <div class="container">
@@ -32,10 +63,11 @@ function renderHierarchy(h) {
             .map(
               (l, i) => `<div class="hierarchy-step">
                 ${i > 0 ? '<span class="hierarchy-step__arrow" aria-hidden="true">→</span>' : ""}
-                <div class="hierarchy-step__card">
+                <a href="${levelLinks[i] || "#/africa"}" class="hierarchy-step__card hierarchy-step__card--link" data-link>
                   <strong>${l.label}</strong>
                   <p>${l.description}</p>
-                </div>
+                  <span class="hierarchy-step__explore">Explore example &rarr;</span>
+                </a>
               </div>`
             )
             .join("")}

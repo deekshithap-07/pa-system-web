@@ -52,7 +52,7 @@ function renderStoryCard(story, communityName) {
   const program = story.program ? `<span class="ch-story-card__program">${story.program}</span>` : "";
   const metricsPanel = renderStoryMetricsPanel(story);
 
-  return `<article class="ch-story-card" data-reveal-section>
+  return `<article class="ch-story-card" id="${story.slug}" data-reveal-section>
     <div class="ch-story-card__layout">
       <div class="ch-story-card__media">
         <div class="ch-story-card__image" aria-hidden="true"><span>Field photo</span></div>
