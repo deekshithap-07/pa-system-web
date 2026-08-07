@@ -138,6 +138,8 @@ export class AfricaLeafletMap {
     this.buildPanel();
     this.buildBreadcrumb();
     this.buildLegend();
+    this.buildPosterText();
+    this.buildGradients();
     this.attachWheelGuard();
 
     this.map.on("click", (e) => {
@@ -159,6 +161,10 @@ export class AfricaLeafletMap {
         this.panelEl().innerHTML = "<p class='al-neutral'>Map data unavailable.</p>";
       });
 
+    this.posterText?.set("Africa", "7 countries · 17 catchments · 64 communities");
+    requestAnimationFrame(() => {
+      this.els.posterText?.classList.add("is-visible");
+    });
     window.__paLeafletMap = this;
     return this.map;
   }
@@ -254,6 +260,10 @@ export class AfricaLeafletMap {
     this.selected = { level: "country", slug, country };
     this.panel.showCountry(country);
     this.breadcrumb.set(["Africa", country.country.name]);
+    this.posterText?.set(
+      country.country.name,
+      `${country.catchments.length} catchments · ${fmt(country.metrics?.communities ?? 0)} communities · ${fmt(country.metrics?.pastors ?? 0)} pastors`
+    );
     this.focusCountry(slug);
     this.renderCatchments(country);
   }
@@ -262,6 +272,10 @@ export class AfricaLeafletMap {
     this.selected = { level: "catchment", slug: ct.slug, ct, country };
     this.panel.showCatchment(country, ct);
     this.breadcrumb.set(["Africa", country.country.name, ct.name]);
+    this.posterText?.set(
+      ct.name,
+      `${country.country.name} · ${ct.communities?.length ?? 0} communities · ${fmt(ct.metrics?.pastors ?? 0)} pastors`
+    );
     this.map.flyTo([ct.lat, ct.lng], 7, { duration: 1.4 });
     this.renderCommunities(ct);
   }
@@ -270,6 +284,10 @@ export class AfricaLeafletMap {
     this.selected = { level: "community", com, ct, country };
     this.panel.showCommunity(country, ct, com);
     this.breadcrumb.set(["Africa", country.country.name, ct.name, com.name]);
+    this.posterText?.set(
+      com.name,
+      `${ct.name} · ${fmt(com.households ?? 0)} households · ${fmt(com.pastors ?? 0)} pastors`
+    );
     this.map.flyTo([com.lat, com.lng], 9.5, { duration: 1.3 });
   }
 
@@ -281,6 +299,7 @@ export class AfricaLeafletMap {
       this.selected = { level: "country", slug: c.country.slug, country: c };
       this.panel.showCountry(c);
       this.breadcrumb.set(["Africa", c.country.name]);
+      this.posterText?.set(c.country.name, `${c.catchments.length} catchments · ${fmt(c.metrics?.communities ?? 0)} communities · ${fmt(c.metrics?.pastors ?? 0)} pastors`);
       this.focusCountry(c.country.slug);
       this.renderCatchments(c);
     } else if (level === "catchment" && this.selected.ct && this.selected.country) {
@@ -288,6 +307,7 @@ export class AfricaLeafletMap {
       this.selected = { level: "catchment", slug: this.selected.ct.slug, ct: this.selected.ct, country: c };
       this.panel.showCatchment(c, this.selected.ct);
       this.breadcrumb.set(["Africa", c.country.name, this.selected.ct.name]);
+      this.posterText?.set(this.selected.ct.name, `${c.country.name} · ${this.selected.ct.communities?.length ?? 0} communities · ${fmt(this.selected.ct.metrics?.pastors ?? 0)} pastors`);
       this.renderCommunities(this.selected.ct);
     }
   }
@@ -296,6 +316,7 @@ export class AfricaLeafletMap {
     this.selected = { level: "africa", slug: null };
     this.panel.reset();
     this.breadcrumb.reset();
+    this.posterText?.reset();
     this.clearCluster();
     this.geoLayer?.eachLayer((l) => this.geoLayer.resetStyle(l));
     this.fitAfrica();
@@ -540,6 +561,42 @@ export class AfricaLeafletMap {
     this.root?.addEventListener("wheel", (e) => {
       if (e.ctrlKey) e.stopPropagation();
     });
+  }
+
+  buildPosterText() {
+    const el = L.DomUtil.create("div", "al-poster-text", this.root);
+    el.innerHTML = `
+      <div class="al-poster-text__inner">
+        <p class="al-poster-text__eyebrow">Possibilities Africa</p>
+        <h2 class="al-poster-text__title" data-title>Africa</h2>
+        <p class="al-poster-text__subtitle" data-subtitle>7 countries · 17 catchments · 64 communities</p>
+     </div>`;
+    this.els.posterText = el;
+    const titleEl = el.querySelector("[data-title]");
+    const subtitleEl = el.querySelector("[data-subtitle]");
+    const self = this;
+    this.posterText = {
+      set(title, subtitle) {
+        if (titleEl.textContent !== title) {
+          el.classList.remove("is-flipping");
+          void el.offsetWidth;
+          titleEl.textContent = title;
+          subtitleEl.textContent = subtitle || "";
+          el.classList.add("is-flipping");
+        } else {
+          subtitleEl.textContent = subtitle || "";
+        }
+      },
+      reset() {
+        this.set("Africa", "7 countries · 17 catchments · 64 communities");
+      },
+    };
+  }
+
+  buildGradients() {
+    const el = L.DomUtil.create("div", "al-gradients", this.root);
+    el.innerHTML = `<div class="al-gradients__top"></div><div class="al-gradients__bottom"></div>`;
+    this.els.gradients = el;
   }
 
   destroy() {

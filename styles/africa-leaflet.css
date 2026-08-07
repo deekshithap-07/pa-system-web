@@ -24,7 +24,9 @@
   position: absolute;
   inset: 0;
   pointer-events: none;
-  background: radial-gradient(circle at 50% 45%, rgba(0, 21, 40, 0) 0%, rgba(0, 16, 34, 0.55) 100%);
+  background:
+    radial-gradient(ellipse 90% 55% at 50% 40%, rgba(0, 16, 34, 0) 0%, rgba(0, 16, 34, 0.35) 100%),
+    radial-gradient(ellipse 50% 40% at 50% 55%, rgba(0, 10, 26, 0.4) 0%, transparent 100%);
   z-index: 400;
 }
 
@@ -319,4 +321,79 @@
   .al-legend { display: none; }
   .al-panel__title { font-size: 18px; }
   .al-kpis { grid-template-columns: repeat(2, 1fr); }
+}
+
+/* ── Poster typography overlay (Terraink-style) ─────────────────────────── */
+
+.al-poster-text {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 700;
+  text-align: center;
+  padding: 48px 20px 24px;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+.al-poster-text.is-visible {
+  opacity: 1;
+}
+.al-poster-text.is-flipping {
+  opacity: 0.5;
+  transition: opacity 0.25s ease;
+}
+.al-poster-text__inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+.al-poster-text__eyebrow {
+  font: 700 10px/1 "Open Sans", system-ui, sans-serif;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: rgba(125, 211, 252, 0.72);
+  margin: 0;
+}
+.al-poster-text__title {
+  font: 800 clamp(26px, 5vw, 52px) / 1 "Georgia", "Playfair Display", serif;
+  color: rgba(255, 255, 255, 0.94);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin: 0;
+  text-shadow: 0 2px 28px rgba(0, 8, 22, 0.85), 0 0 90px rgba(0, 20, 50, 0.4);
+}
+.al-poster-text__subtitle {
+  font: 700 11px/1 "Open Sans", system-ui, sans-serif;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(160, 200, 230, 0.78);
+  margin: 0;
+}
+
+/* ── Gradient fades (Terraink-style depth) ──────────────────────────────── */
+
+.al-gradients {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 550;
+}
+.al-gradients__top,
+.al-gradients__bottom {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 130px;
+  pointer-events: none;
+}
+.al-gradients__top {
+  top: 0;
+  background: linear-gradient(to bottom, rgba(0, 10, 26, 0.72) 0%, rgba(0, 10, 26, 0) 100%);
+}
+.al-gradients__bottom {
+  bottom: 0;
+  background: linear-gradient(to top, rgba(0, 10, 26, 0.6) 0%, rgba(0, 10, 26, 0) 100%);
 }
