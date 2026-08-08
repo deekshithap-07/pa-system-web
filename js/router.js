@@ -6,6 +6,7 @@ import {
   applyRouteScroll,
 } from "./utils/scroll-nav.js";
 import { renderHome, mountHome, destroyHome } from "./views/home.js";
+import { ensureAfricaMapMounted } from "./components/home-level1.js";
 import { renderAfricaIntelligence, mountAfricaIntelligence, destroyAfricaIntelligence } from "./views/africa-intelligence.js";
 import { renderCountryHub, mountCountryHub, destroyCountryHub } from "./views/country-hub.js";
 import { renderCatchmentHub, mountCatchmentHub, destroyCatchmentHub } from "./views/catchment-hub.js";
@@ -122,6 +123,9 @@ function handleRoute() {
     if (targetAnchor?.startsWith("tab-")) {
       document.querySelector("[data-wb-scorecard]")?._switchWbsTab?.(targetAnchor.slice(4));
       return;
+    }
+    if (currentView === "landing" && appData) {
+      ensureAfricaMapMounted(appData);
     }
     if (targetAnchor) scrollToAnchor(targetAnchor);
     return;

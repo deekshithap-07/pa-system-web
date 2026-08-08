@@ -213,32 +213,31 @@
   background: linear-gradient(180deg, #001528 0%, #002b5c 100%);
 }
 
-.l1-map__host .ai-map--embedded {
-  position: relative !important;
-  height: min(72vh, 720px) !important;
+.l1-map__host.africa-map-host {
+  height: min(72vh, 720px);
   min-height: 520px;
-}
-
-.l1-map__host .ai-map--embedded .ai-map__canvas {
-  touch-action: pan-y;
-  overscroll-behavior: auto;
+  border-radius: 0;
+  border: none;
+  box-shadow: none;
 }
 
 .l1-map__scroll-hint {
   margin: 0;
-  padding: 0.75rem 1rem 1.25rem;
+  padding: 0.65rem 1rem 1rem;
   text-align: center;
-  font-size: 0.78rem;
-  color: rgba(255, 255, 255, 0.55);
-  letter-spacing: 0.02em;
+  font-size: 0.72rem;
+  color: rgba(255, 255, 255, 0.4);
+  letter-spacing: 0.04em;
+  font-family: "IBM Plex Mono", monospace;
 }
 
 .l1-map__scroll-hint::before {
   content: "↓";
   display: block;
-  font-size: 1rem;
-  margin-bottom: 0.25rem;
-  opacity: 0.7;
+  font-size: 0.85rem;
+  margin-bottom: 0.2rem;
+  opacity: 0.5;
+  color: rgba(214, 179, 82, 0.5);
 }
 
 @media (max-width: 768px) {

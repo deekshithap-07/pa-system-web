@@ -61,9 +61,14 @@ export function playPageEntry(root, onComplete) {
   if (entryInner) gsap.set(entryInner, { opacity: 0, y: 18, scale: 0.98 });
   if (content) gsap.set(content, { opacity: 0, y: 12 });
 
+  const safety = window.setTimeout(finish, 4000);
+
   const tl = gsap.timeline({
     defaults: { ease: "power3.out" },
-    onComplete: finish,
+    onComplete: () => {
+      window.clearTimeout(safety);
+      finish();
+    },
   });
 
   if (entryInner) {
