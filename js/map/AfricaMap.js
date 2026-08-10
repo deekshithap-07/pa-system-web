@@ -21,6 +21,7 @@ import {
   preserveDistanceOnResize,
 } from "./africa-map-surface.js";
 import { buildCatchmentGeoFeatures } from "./drill-layers.js";
+import { buildAfricaMapStyle } from "./build-africa-map-style.js";
 import { CatchmentTags } from "./CatchmentTags.js";
 import { CommunityTags } from "./CommunityTags.js";
 
@@ -201,9 +202,7 @@ export class AfricaMap {
       maplibregl.setWorkerUrl(workerPath);
     }
 
-    const styleRes = await fetch("data/africa-map-style.json");
-    if (!styleRes.ok) throw new Error("Failed to load map style");
-    const initialStyle = await styleRes.json();
+    const initialStyle = buildAfricaMapStyle();
 
     if (this._destroyed) return;
 
@@ -288,7 +287,7 @@ export class AfricaMap {
     return computeOverzoomScale(containerPx);
   }
 
-  _refreshOverzoomLayout() {
+  _refreshOverzoomLayout({ preserveDistance = true } = {}) {
     const px = this.root?.clientWidth || 800;
     const prevEffective = this._effectiveContainerPx;
     const lat = this.map?.getCenter()?.lat ?? AFRICA_CENTER.lat;
@@ -304,11 +303,13 @@ export class AfricaMap {
       this.map.setMinZoom(bounds.minZoom);
       this.map.setMaxZoom(bounds.maxZoom);
       this.map.resize();
-      preserveDistanceOnResize(this.map, {
-        lat,
-        previousEffectivePx: prevEffective,
-        nextEffectivePx: this._effectiveContainerPx,
-      });
+      if (preserveDistance) {
+        preserveDistanceOnResize(this.map, {
+          lat,
+          previousEffectivePx: prevEffective,
+          nextEffectivePx: this._effectiveContainerPx,
+        });
+      }
       this.map.triggerRepaint?.();
     }
   }
@@ -322,40 +323,43 @@ export class AfricaMap {
       overzoom.style.height = "100%";
       overzoom.style.transform = "";
       overzoom.style.transformOrigin = "";
-      this.root?.style.setProperty("--tk-marker-scale", "1");
       return;
     }
     overzoom.style.width = `${scale * 100}%`;
     overzoom.style.height = `${scale * 100}%`;
     overzoom.style.transform = `scale(${1 / scale})`;
     overzoom.style.transformOrigin = "top left";
-    this.root?.style.setProperty("--tk-marker-scale", String(scale));
   }
 
   attachResizeObserver() {
     if (typeof ResizeObserver === "undefined") return;
+    let resizeTimer = null;
     this._resizeObserver = new ResizeObserver(() => {
-      const px = this.root?.clientWidth || 800;
-      const prevEffective = this._effectiveContainerPx;
-      const center = this.map?.getCenter();
-      const lat = center?.lat ?? AFRICA_CENTER.lat;
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(() => {
+        const px = this.root?.clientWidth || 800;
+        const prevEffective = this._effectiveContainerPx;
+        const center = this.map?.getCenter();
+        const lat = center?.lat ?? AFRICA_CENTER.lat;
 
-      this.overzoomScale = this._resolveOverzoomScale(px);
-      this.applyOverzoomLayout();
-      this._effectiveContainerPx = getEffectiveContainerPx(px, this.overzoomScale);
+        this.overzoomScale = this._resolveOverzoomScale(px);
+        this.applyOverzoomLayout();
+        this._effectiveContainerPx = getEffectiveContainerPx(px, this.overzoomScale);
 
-      if (this.map) {
-        const bounds = resolveZoomBounds(lat, this._effectiveContainerPx);
-        this.map.setMinZoom(bounds.minZoom);
-        this.map.setMaxZoom(bounds.maxZoom);
-        this.map.resize();
-        preserveDistanceOnResize(this.map, {
-          lat,
-          previousEffectivePx: prevEffective,
-          nextEffectivePx: this._effectiveContainerPx,
-        });
-        this.syncSurface();
-      }
+        if (this.map) {
+          const bounds = resolveZoomBounds(lat, this._effectiveContainerPx);
+          this.map.setMinZoom(bounds.minZoom);
+          this.map.setMaxZoom(bounds.maxZoom);
+          this.map.resize();
+          preserveDistanceOnResize(this.map, {
+            lat,
+            previousEffectivePx: prevEffective,
+            nextEffectivePx: this._effectiveContainerPx,
+          });
+          this.map.triggerRepaint?.();
+          this.syncSurface();
+        }
+      }, 120);
     });
     this._resizeObserver.observe(this.root);
   }
@@ -898,6 +902,7 @@ export class AfricaMap {
     this.communityTags?.clear();
     this.selected = { level: "country", slug, country };
     this._selectedCountrySlug = slug;
+    this._refreshOverzoomLayout({ preserveDistance: false });
     this.panel.showCountry(country);
     this.breadcrumb.set(["Africa", country.country.name]);
     const feat = geoFeature || this.countryBounds(slug);
@@ -982,6 +987,7 @@ export class AfricaMap {
   selectCatchment(country, ct) {
     this.factSheet?.hide();
     this.selected = { level: "catchment", slug: ct.slug, ct, country };
+    this._refreshOverzoomLayout({ preserveDistance: false });
     this.panel.showCatchment(country, ct);
     this.breadcrumb.set(["Africa", country.country.name, ct.name]);
     this.posterOverlay?.set({
@@ -1010,6 +1016,7 @@ export class AfricaMap {
 
   selectCommunity(com, ct, country) {
     this.selected = { level: "community", com, ct, country };
+    this._refreshOverzoomLayout({ preserveDistance: false });
     this.breadcrumb.set(["Africa", country.country.name, ct.name, com.name]);
     this.posterOverlay?.set({
       title: com.name,
@@ -1052,12 +1059,13 @@ export class AfricaMap {
     this.factSheet?.hide();
     this.communityTags?.clear();
     this.selected = { level: "africa", slug: null };
+    this._selectedCountrySlug = null;
+    this._refreshOverzoomLayout({ preserveDistance: false });
     this.panel.reset();
     this.breadcrumb.reset();
     this.posterOverlay?.reset();
     this._removeLegacyClusterLayers();
     this.clearCatchmentPolygons();
-    this._selectedCountrySlug = null;
     this.updateDrillHighlightMode();
     this.fitAfricaView();
     this.updateNavigationLevel(this.getViewState());

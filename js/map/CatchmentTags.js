@@ -1,5 +1,5 @@
 /**
- * HTML location tags for catchment zones on the Terraink MapLibre map.
+ * HTML location tags for catchment zones on the Africa MapLibre map.
  */
 
 function shortCoords(lat, lon) {
@@ -9,10 +9,12 @@ function shortCoords(lat, lon) {
   return `${Math.abs(lat).toFixed(1)}°${ns} · ${Math.abs(lon).toFixed(1)}°${ew}`;
 }
 
-function tagOffset(index, total) {
+/** Spread label boxes around the pin — pin stays on the geographic point. */
+function labelSpreadOffset(index, total) {
+  if (total <= 1) return [0, 0];
   const angle = (index / total) * Math.PI * 2 - Math.PI / 2;
-  const radius = 52 + (index % 3) * 16;
-  return [Math.round(Math.cos(angle) * radius), Math.round(Math.sin(angle) * radius - 12)];
+  const radius = 44 + (index % 3) * 10;
+  return [Math.round(Math.cos(angle) * radius), Math.round(Math.sin(angle) * radius)];
 }
 
 export class CatchmentTags {
@@ -36,14 +38,14 @@ export class CatchmentTags {
       const outer = document.createElement("div");
       outer.className = "tk-marker-anchor";
 
-      const wrap = document.createElement("div");
-      wrap.className = "tk-marker-scale";
-
       const el = document.createElement("button");
       el.type = "button";
       el.className = "tk-catchment-tag tk-catchment-tag--animate";
       el.dataset.catchmentId = ct.id;
       el.style.setProperty("--tk-tag-delay", `${index * 80}ms`);
+      const [lx, ly] = labelSpreadOffset(index, total);
+      el.style.setProperty("--tk-label-x", `${lx}px`);
+      el.style.setProperty("--tk-label-y", `${ly}px`);
       el.setAttribute("aria-label", `${ct.name} catchment area`);
 
       el.innerHTML = `
@@ -59,11 +61,14 @@ export class CatchmentTags {
         this.onSelect?.(ct, hub);
       });
 
-      wrap.appendChild(el);
-      outer.appendChild(wrap);
+      outer.appendChild(el);
 
-      const [ox, oy] = tagOffset(index, total);
-      const marker = new maplibregl.Marker({ element: outer, anchor: "bottom", offset: [ox, oy] })
+      const marker = new maplibregl.Marker({
+        element: outer,
+        anchor: "center",
+        offset: [0, 0],
+        subpixelPositioning: false,
+      })
         .setLngLat([ct.lng, ct.lat])
         .addTo(this.map);
 

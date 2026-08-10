@@ -1,5 +1,5 @@
 /**
- * HTML location tags for communities on the Terraink MapLibre map.
+ * HTML location tags for communities on the Africa MapLibre map.
  */
 import { communityPinColor } from "./africa-map-surface.js";
 
@@ -18,6 +18,15 @@ function pinColorForCommunity(com, index) {
   const statusColor = communityPinColor(com);
   if (statusColor !== "#C99C37") return statusColor;
   return PIN_PALETTE[index % PIN_PALETTE.length];
+}
+
+/** Spread label boxes around the pin — pin stays on the geographic point. */
+function labelSpreadOffset(index, total, tightCluster) {
+  if (total <= 1) return [0, 0];
+  const angle = (index / total) * Math.PI * 2 - Math.PI / 2;
+  const base = tightCluster ? 40 : 28;
+  const radius = base + (index % 3) * (tightCluster ? 10 : 6);
+  return [Math.round(Math.cos(angle) * radius), Math.round(Math.sin(angle) * radius)];
 }
 
 export class CommunityTags {
@@ -48,15 +57,15 @@ export class CommunityTags {
       const outer = document.createElement("div");
       outer.className = "tk-marker-anchor";
 
-      const wrap = document.createElement("div");
-      wrap.className = "tk-marker-scale";
-
       const el = document.createElement("button");
       el.type = "button";
       el.className = "tk-community-tag tk-community-tag--animate";
       el.dataset.communityId = com.id;
       el.style.setProperty("--tk-tag-delay", `${index * 55}ms`);
       el.style.setProperty("--tk-pin-color", pinColor);
+      const [lx, ly] = labelSpreadOffset(index, communities.length, tightCluster);
+      el.style.setProperty("--tk-label-x", `${lx}px`);
+      el.style.setProperty("--tk-label-y", `${ly}px`);
       el.setAttribute("aria-label", `${com.name} community`);
 
       el.innerHTML = `
@@ -70,16 +79,14 @@ export class CommunityTags {
         this.onSelect?.(com, ct, country);
       });
 
-      wrap.appendChild(el);
-      outer.appendChild(wrap);
+      outer.appendChild(el);
 
-      const angle = (index / Math.max(communities.length, 1)) * Math.PI * 2 - Math.PI / 2;
-      const baseRadius = tightCluster ? 58 : 30;
-      const radius = baseRadius + (index % 3) * (tightCluster ? 14 : 8);
-      const ox = Math.round(Math.cos(angle) * radius);
-      const oy = Math.round(Math.sin(angle) * radius - 8);
-
-      const marker = new maplibregl.Marker({ element: outer, anchor: "bottom", offset: [ox, oy] })
+      const marker = new maplibregl.Marker({
+        element: outer,
+        anchor: "center",
+        offset: [0, 0],
+        subpixelPositioning: false,
+      })
         .setLngLat([com.lng, com.lat])
         .addTo(this.map);
 
