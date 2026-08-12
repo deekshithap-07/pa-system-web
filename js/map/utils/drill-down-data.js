@@ -1,5 +1,5 @@
 /**
- * Assembles hierarchical drill-down data for the Africa Intelligence Map.
+ * Assembles hierarchical drill-down data for the Africa map.
  * Only uses catchments/communities from JSON data — no invented placeholders.
  */
 
@@ -73,28 +73,4 @@ export function buildDrillDownData({ countries, catchments, communities, country
   });
 
   return { paCountries, byCountry, PA_SLUGS };
-}
-
-export function getMetricValue(entity, metricId) {
-  const m = entity.metrics || entity;
-  switch (metricId) {
-    case "communities":
-      return m.communities ?? entity.communities ?? 0;
-    case "households":
-      return m.households ?? entity.households ?? 0;
-    case "pastors":
-      return m.pastors ?? entity.pastors ?? 0;
-    case "shalom":
-      return m.shalomGroups ?? entity.shalomGroups ?? 0;
-    case "projects":
-      return m.projects ?? (entity.ppps?.length || 0);
-    case "growth":
-      return m.growth ?? 0;
-    case "progress":
-      return m.progress ?? entity.leadershipScore ?? entity.progress ?? 0;
-    case "livesImpacted":
-      return m.livesImpacted ?? 0;
-    default:
-      return m.communities ?? 0;
-  }
 }

@@ -13,6 +13,8 @@ function renderStoryCard(story, accent) {
 
 function renderThemeSection(theme) {
   const ring = theme.ring || {};
+  const explore = theme.explore || {};
+  const exploreAttrs = explore.href?.startsWith("#/") ? `href="${explore.href}" data-link` : `href="${explore.href || "#"}"`;
 
   return `
     <section
@@ -28,6 +30,7 @@ function renderThemeSection(theme) {
           <div class="about-atlas-theme__stories">
             ${(theme.stories || []).map((s) => renderStoryCard(s, theme.accent)).join("")}
           </div>
+          <a ${exploreAttrs} class="about-atlas-theme__explore" data-anchor>${explore.label || "Explore more"} →</a>
         </div>
         <div class="about-atlas-theme__viz" data-atlas-reveal>
           ${renderAtlasRing({
@@ -92,6 +95,52 @@ function renderJourney(journey) {
     </section>`;
 }
 
+function renderDifferentiators(diff) {
+  if (!diff) return "";
+  return `
+    <section class="about-atlas-block" id="about-differentiators" data-atlas-scroll>
+      <div class="container">
+        <h2 class="about-atlas-block__title" data-atlas-reveal>${diff.title}</h2>
+        <div class="about-diff-shift" data-atlas-reveal>
+          <span class="about-diff-shift__from">${diff.from}</span>
+          <span class="about-diff-shift__arrow" aria-hidden="true">→</span>
+          <span class="about-diff-shift__to">${diff.to}</span>
+        </div>
+        <div class="about-diff-grid">
+          ${diff.points
+            .map(
+              (p) => `<article class="about-diff-card" data-atlas-reveal>
+                <h3>${p.label}</h3>
+                <p>${p.description}</p>
+              </article>`
+            )
+            .join("")}
+        </div>
+      </div>
+    </section>`;
+}
+
+function renderOutcomes(outcomes) {
+  if (!outcomes) return "";
+  return `
+    <section class="about-atlas-block about-atlas-block--dark" id="about-outcomes" data-atlas-scroll>
+      <div class="container">
+        <h2 class="about-atlas-block__title" data-atlas-reveal>${outcomes.title}</h2>
+        <div class="about-outcome-grid">
+          ${outcomes.items
+            .map(
+              (o) => `<article class="about-outcome-card" data-atlas-reveal>
+                <span class="about-outcome-card__audience">${o.audience}</span>
+                <h3>${o.benefit}</h3>
+                <p>${o.description}</p>
+              </article>`
+            )
+            .join("")}
+        </div>
+      </div>
+    </section>`;
+}
+
 function renderTripleA(tripleA) {
   return `
     <section class="about-atlas-block about-atlas-block--alt" id="about-triple-a" data-atlas-scroll>
@@ -121,6 +170,7 @@ export function renderAtlasAboutPage(model, footerHtml = "") {
   const intro = atlas.intro || {};
   const themes = atlas.themes || [];
   const featured = atlas.featured || [];
+  const ack = atlas.acknowledgements || {};
 
   return `
     <div class="about-atlas-page atlas-page" data-about-atlas>
@@ -184,6 +234,16 @@ export function renderAtlasAboutPage(model, footerHtml = "") {
       ${renderHierarchy(model.hierarchy)}
       ${renderJourney(model.journey)}
       ${renderTripleA(model.tripleA)}
+      ${renderDifferentiators(model.differentiators)}
+      ${renderOutcomes(model.outcomes)}
+
+      <section class="about-atlas-ack" data-atlas-scroll>
+        <div class="container about-atlas-ack__inner" data-atlas-reveal>
+          <h2>${ack.title || "About this platform"}</h2>
+          <p>${ack.text || ""}</p>
+          ${ack.cta ? `<a href="${ack.cta.href}" class="about-atlas-ack__cta" target="_blank" rel="noopener">${ack.cta.label} →</a>` : ""}
+        </div>
+      </section>
 
       ${footerHtml}
     </div>`;

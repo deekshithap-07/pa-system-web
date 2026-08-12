@@ -63,7 +63,7 @@
     },
     "africaMap": {
       "title": "Interactive map of Africa",
-      "description": "Click a country to explore data and drill into catchments and communities. Use Ctrl + scroll to zoom the map, or scroll normally to continue down the page.",
+      "description": "Click a country to explore data and drill into catchments and communities. Scroll on the map to zoom; scroll outside to continue down the page.",
       "countriesCta": { "label": "Browse all countries →", "target": "#/africa" }
     }
   },
