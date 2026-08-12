@@ -3,11 +3,13 @@ import { bindAfricaNavTriggers, restoreAfricaNav } from "./utils/nav-africa.js";
 import { initTransitions } from "./utils/transitions.js";
 import { initRouter, navigate } from "./router.js";
 import { initSearchModal, openSearchModal } from "./components/search-modal.js";
+import { initFooter } from "./utils/footer.js";
 
 gsap.registerPlugin(ScrollTrigger);
 
 async function boot() {
   initTransitions();
+  initFooter();
   bindAfricaNavTriggers();
   restoreAfricaNav();
 

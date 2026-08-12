@@ -22,7 +22,6 @@ import { wrapPageContent, playPageEntry, cleanupPageEntry } from "./components/s
 import { getPageEntryConfig } from "./utils/page-entry-config.js";
 
 let currentView = null;
-let lastEntryView = null;
 let appData = null;
 let lastRouteKey = null;
 let linksBound = false;
@@ -138,6 +137,7 @@ function handleRoute() {
   if (lastRouteKey) saveScrollPosition(lastRouteKey);
   const { restore } = resolveNavigationIntent(routeKey);
 
+  const prevRouteKey = lastRouteKey;
   lastRouteKey = routeKey;
 
   const app = document.getElementById("app");
@@ -206,10 +206,9 @@ function handleRoute() {
 
   currentView = view;
 
-  const playEntry = lastEntryView !== view;
-  lastEntryView = view;
+  const playEntry = prevRouteKey !== routeKey;
 
-  if (playEntry && view !== "scorecard") {
+  if (playEntry) {
     html = wrapPageContent(html, getPageEntryConfig(view, parts, appData, hub));
   }
 
@@ -247,16 +246,16 @@ function handleRoute() {
     applyRouteScroll(routeKey, shouldRestoreScroll);
   };
 
-  if (playEntry && view !== "scorecard") {
+  runMount();
+
+  if (playEntry) {
     requestAnimationFrame(() => {
       playPageEntry(app.querySelector("[data-page-root]"), () => {
-        runMount();
         finalizeRouteScroll();
       });
     });
   } else {
     requestAnimationFrame(() => {
-      runMount();
       finalizeRouteScroll();
     });
   }

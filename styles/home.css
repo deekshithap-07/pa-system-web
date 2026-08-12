@@ -279,8 +279,17 @@ a.wb-topstory:hover {
 
 /* ---- Impact section (World Bank style) ---- */
 .wb-impact {
-  padding: 4rem 0 4.5rem;
-  background: #fff;
+  padding: 4.5rem 0;
+  background: linear-gradient(180deg, #ffffff 0%, #faf8f4 100%);
+}
+
+.wb-impact__eyebrow {
+  margin: 0 0 0.55rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #b8860b;
 }
 
 .wb-impact__head {
@@ -348,11 +357,22 @@ a.wb-topstory:hover {
 .wb-impact__grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 2rem;
+  gap: 0;
+  background: #fff;
+  border: 1px solid rgba(0, 43, 92, 0.09);
+  border-radius: var(--radius);
+  padding: 2rem 0;
+  box-shadow: 0 2px 16px rgba(0, 43, 92, 0.04);
 }
 
 .wb-impact-stat {
   min-width: 0;
+  padding: 0 2rem;
+  border-right: 1px solid rgba(0, 43, 92, 0.07);
+}
+
+.wb-impact-stat:last-child {
+  border-right: none;
 }
 
 .wb-impact-stat__rule {
@@ -730,7 +750,18 @@ a.wb-topstory:hover {
 
   .wb-impact__grid {
     grid-template-columns: 1fr;
-    gap: 2.5rem;
+    gap: 0;
+    padding: 0.5rem 0;
+  }
+
+  .wb-impact-stat {
+    padding: 1.5rem 1.5rem;
+    border-right: none;
+    border-bottom: 1px solid rgba(0, 43, 92, 0.07);
+  }
+
+  .wb-impact-stat:last-child {
+    border-bottom: none;
   }
 
   .wb-impact__scorecard-btn {

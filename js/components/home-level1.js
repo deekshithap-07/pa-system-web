@@ -44,6 +44,7 @@ export function renderWhatIsHappeningAcrossAfrica(data, section) {
     <section class="l1-updates" id="what-happening-africa" aria-labelledby="l1-whats-happening-title">
       <div class="container">
         <header class="l1-section-head" data-reveal>
+          ${section?.eyebrow ? `<p class="l1-section-head__eyebrow">${section.eyebrow}</p>` : ""}
           <h2 id="l1-whats-happening-title">${section?.title || "What is happening across Africa?"}</h2>
           <p>${section?.description || "Latest programme activity from pastor-led communities — each links to its country hub."}</p>
         </header>
@@ -51,6 +52,9 @@ export function renderWhatIsHappeningAcrossAfrica(data, section) {
       </div>
     </section>`;
 }
+
+/** @deprecated Use renderWhatIsHappeningAcrossAfrica */
+export const renderKeyUpdates = renderWhatIsHappeningAcrossAfrica;
 
 export function renderGrowthTrends(data, section) {
   const trends = data.insightsAnalytics?.trendAnalysis || {};
@@ -104,6 +108,9 @@ export function renderAfricaMapSection(section, opts = {}) {
       </div>
     </section>`;
 }
+
+/** @deprecated Use renderAfricaMapSection */
+export const renderHomeAfricaMap = (section) => renderAfricaMapSection(section);
 
 export function mountHomeGrowthCharts(root, data) {
   const trends = data.insightsAnalytics?.trendAnalysis || {};
