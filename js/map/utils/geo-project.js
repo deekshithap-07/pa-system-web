@@ -77,24 +77,6 @@ export function latLngToSvg(lng, lat) {
   };
 }
 
-/** Inverse of latLngToSvg — SVG map space back to geographic coordinates. */
-export function svgToLatLng(x, y) {
-  const a = X_PARAMS[0];
-  const b = X_PARAMS[1];
-  const c = X_PARAMS[2];
-  const d = Y_PARAMS[0];
-  const e = Y_PARAMS[1];
-  const f = Y_PARAMS[2];
-  const det = a * e - b * d;
-  if (Math.abs(det) < 1e-12) return { lng: 0, lat: 0 };
-  const xAdj = x - c;
-  const yAdj = y - f;
-  return {
-    lng: (e * xAdj - b * yAdj) / det,
-    lat: (a * yAdj - d * xAdj) / det,
-  };
-}
-
 export function attachGeoPoint(entity, loc) {
   if (!loc || loc.lat == null || loc.lng == null) return entity;
   const { x, y } = latLngToSvg(loc.lng, loc.lat);

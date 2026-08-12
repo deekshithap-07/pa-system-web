@@ -3,7 +3,6 @@ import {
   renderWhatIsHappeningAcrossAfrica,
   renderAfricaMapSection,
   mountAfricaMapSection,
-  ensureAfricaMapMounted,
   destroyHomeAfricaMap,
 } from "../components/home-level1.js";
 import { initLandingAnimations, destroyHomeAnimations } from "../components/home-animations.js";
@@ -23,19 +22,10 @@ export function renderHome(data) {
 
 export function mountHome(data) {
   requestAnimationFrame(() => {
-    try {
-      mountAfricaMapSection(data);
-    } catch (err) {
-      console.error("[mountHome] map mount failed:", err);
-    }
-    try {
-      initLandingAnimations();
-      bindHeroNewsletter();
-    } catch (err) {
-      console.error("[mountHome] animations failed:", err);
-    }
-    if (typeof ScrollTrigger !== "undefined") ScrollTrigger.refresh();
-    requestAnimationFrame(() => ensureAfricaMapMounted(data));
+    initLandingAnimations();
+    bindHeroNewsletter();
+    mountAfricaMapSection(data);
+    ScrollTrigger.refresh();
   });
 }
 

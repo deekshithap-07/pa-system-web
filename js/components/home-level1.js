@@ -3,7 +3,11 @@
  * Homepage sections: key updates, growth trends, interactive map embed.
  */
 
-import { initAfricaMap, destroyAfricaMap } from "../map/africa-map.js";
+import {
+  initAfricaIntelligenceMap,
+  destroyAfricaIntelligenceMap,
+  setCatchmentSelectHandler,
+} from "../map/africa-intelligence.js";
 
 function collectRecentUpdates(countryHubs, limit = 6) {
   const items = [];
@@ -96,7 +100,7 @@ export function renderAfricaMapSection(section, opts = {}) {
       <div class="container l1-map__head-wrap">
         <header class="l1-section-head" data-reveal>
           <h2 id="${sectionId}-title">${section?.title || "Interactive map of Africa"}</h2>
-          <p>${section?.description || "Click a country to explore data and drill into catchments and communities. Scroll on the map to zoom; scroll outside to continue down the page."}</p>
+          <p>${section?.description || "Click a country to explore data and drill into catchments and communities. Use Ctrl + scroll to zoom the map, or scroll normally to continue down the page."}</p>
         </header>
         <a href="${ctaTarget}" class="l1-map__full-link" data-link data-enable-africa-nav data-reveal>
           ${section?.countriesCta?.label || "Browse all countries →"}
@@ -104,7 +108,7 @@ export function renderAfricaMapSection(section, opts = {}) {
       </div>
       <div class="l1-map__stage" data-reveal>
         <div class="l1-map__host" id="${rootId}" aria-label="Interactive Africa map"></div>
-        <p class="l1-map__scroll-hint" data-reveal>Scroll to continue · Scroll on map to zoom · Click a country to explore</p>
+        <p class="l1-map__scroll-hint" data-reveal>Scroll to continue · Ctrl + scroll on map to zoom · Click a country to explore</p>
       </div>
     </section>`;
 }
@@ -152,36 +156,38 @@ export function mountHomeGrowthCharts(root, data) {
   });
 }
 
-export function ensureAfricaMapMounted(data) {
-  const root = document.getElementById("home-africa-map-root");
-  if (!root || root.querySelector(".africa-map__stage")) return;
-  mountAfricaMapSection(data);
-}
-
 export function mountAfricaMapSection(data, opts = {}) {
   const rootId = opts.rootId || "home-africa-map-root";
-  const rootEl = document.getElementById(rootId);
-  if (!rootEl) {
-    console.warn("[mountAfricaMapSection] missing container:", rootId);
-    return null;
-  }
-  if (typeof maplibregl === "undefined") {
-    console.error("[mountAfricaMapSection] MapLibre GL not loaded");
-    return null;
-  }
+  if (!document.getElementById(rootId)) return null;
 
-  return initAfricaMap({
+  const map = initAfricaIntelligenceMap({
     countries: data.countries,
     mapPaths: data.mapPaths,
+    mapOverlay: data.home?.mapOverlay || {},
+    mapMetrics: data.mapMetrics,
+    config: {
+      ...data.africaIntelligence,
+      hideSidebar: false,
+      pageLayout: true,
+      embedMode: true,
+      navigateOnCatchmentSelect: true,
+    },
     catchments: data.catchments,
     communities: data.communities,
     countryHubs: data.countryHubs,
     geoLocations: data.geoLocations,
-    charts: data.charts,
     containerId: rootId,
   });
+
+  setCatchmentSelectHandler((countrySlug, catchmentSlug) => {
+    window.location.hash = `#/catchment/${countrySlug}/${catchmentSlug}`;
+  });
+
+  return map;
 }
 
+export const mountHomeAfricaMap = (data) => mountAfricaMapSection(data);
+
 export function destroyHomeAfricaMap() {
-  destroyAfricaMap();
+  destroyAfricaIntelligenceMap();
 }

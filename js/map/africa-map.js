@@ -1,51 +1,59 @@
 /**
- * Facade for the interactive Africa map (Esri satellite base).
+ * Africa Map — public API facade.
+ * Delegates to modular AfricaMap component.
  */
-import { AfricaMap } from "./AfricaMap.js";
+import { AfricaMap } from "./components/AfricaMap.js";
 
 let instance = null;
+
+export function setCountrySelectHandler(fn) {
+  instance?.setCountrySelectHandler(fn);
+}
 
 export function initAfricaMap({
   countries,
   mapPaths,
-  catchments,
-  communities,
-  countryHubs,
-  geoLocations,
-  charts,
-  containerId = "home-africa-map-root",
+  mapOverlay,
+  mapMetrics,
+  byNumbers,
+  hero,
+  containerId = "africa-map-root",
 }) {
   destroyAfricaMap();
 
   const root = document.getElementById(containerId);
-  if (!root) return null;
+  if (!root) return;
 
   instance = new AfricaMap();
-  const mounted = instance.mount({
-    root,
-    data: {
-      countries,
-      mapPaths,
-      catchments,
-      communities,
-      countryHubs,
-      geoLocations,
-      charts,
-    },
+  instance.mount({
+    stageRoot: root,
+    countries,
+    mapPaths,
+    mapOverlay,
+    mapMetrics,
+    byNumbers,
+    hero,
   });
-
-  if (!mounted) {
-    instance.destroy();
-    instance = null;
-    return null;
-  }
 
   return instance;
 }
 
-export function destroyAfricaMap() {
-  if (instance) {
-    instance.destroy();
-    instance = null;
-  }
+export function enableScrollZoom() {
+  /* Scroll zoom is initialized automatically in AfricaMap.mount */
+  return () => destroyAfricaMap();
 }
+
+export function destroyAfricaMap() {
+  instance?.destroy();
+  instance = null;
+}
+
+export const setCountryClickHandler = setCountrySelectHandler;
+export function initScrollMap(opts) {
+  return initAfricaMap(opts);
+}
+export function destroyScrollMap() {
+  destroyAfricaMap();
+}
+
+export { AfricaMap };

@@ -1,5 +1,562 @@
-/* Context map on country / catchment hub hero sections */
+/* ==========================================================================
+   Interactive Africa Map — Hero-integrated scroll journey
+   Inspired by World Bank Poverty / Data360 interaction pattern
+   ========================================================================== */
 
+/* Journey wrapper */
+.map-journey {
+  position: relative;
+  z-index: 2;
+}
+
+.map-scroll-stage {
+  height: 420vh;
+  position: relative;
+}
+
+#africa-map-root {
+  width: 100%;
+  min-height: 100vh;
+}
+
+/* Pinned stage */
+.map-pin-wrapper {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+  background: var(--pa-white);
+  transition: background 0.3s;
+}
+
+.map-pin-wrapper.is-immersive {
+  background: linear-gradient(180deg, #001528 0%, var(--pa-navy) 50%, #003d6b 100%);
+}
+
+.map-pin-wrapper.is-map-focused {
+  background: linear-gradient(180deg, #001a38 0%, var(--pa-navy) 100%);
+}
+
+.map-stage-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+/* ---- Hero layer: map starts inside hero ---- */
+.map-hero-layer {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  display: flex;
+  align-items: center;
+  padding-top: var(--header-h);
+  pointer-events: auto;
+}
+
+.map-hero-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  align-items: center;
+  width: 100%;
+}
+
+.map-hero-content h1 {
+  font-size: clamp(2rem, 4.5vw, 3.25rem);
+  font-weight: 700;
+  line-height: 1.08;
+  letter-spacing: -0.025em;
+  color: var(--pa-navy);
+  margin: 0.5rem 0 1rem;
+}
+
+.map-pin-wrapper.is-immersive .map-hero-content h1,
+.map-pin-wrapper.is-immersive .map-hero-content .eyebrow,
+.map-pin-wrapper.is-immersive .map-hero-sub {
+  color: white;
+}
+
+.map-pin-wrapper.is-immersive .map-hero-content .eyebrow {
+  color: var(--pa-blue);
+}
+
+.map-hero-sub {
+  font-size: 1.05rem;
+  line-height: 1.7;
+  color: var(--pa-slate);
+  max-width: 32rem;
+}
+
+.map-pin-wrapper.is-immersive .map-hero-sub {
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.map-hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 1.75rem;
+}
+
+.map-hero-slot {
+  min-height: 280px;
+  border-radius: var(--radius);
+  pointer-events: none;
+}
+
+/* Immersive UI overlay */
+.map-immersive-ui {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  padding: calc(var(--header-h) + 0.5rem) 1rem 1rem;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.map-pin-wrapper.is-map-focused .map-immersive-ui {
+  pointer-events: auto;
+}
+
+/* Top bar */
+.map-stage-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 0.5rem;
+  flex-shrink: 0;
+}
+
+.map-explore-btn {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.45rem 1rem;
+  border-radius: 999px;
+  background: var(--pa-navy);
+  color: white;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-decoration: none;
+  white-space: nowrap;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  transition: background 0.2s, transform 0.2s;
+}
+
+.map-pin-wrapper.is-hero .map-explore-btn {
+  background: var(--pa-blue);
+}
+
+.map-explore-btn:hover {
+  background: var(--pa-blue);
+  text-decoration: none;
+  transform: translateY(-1px);
+}
+
+.map-explore-btn--sm {
+  font-size: 0.7rem;
+  padding: 0.35rem 0.75rem;
+}
+
+/* Breadcrumb */
+.map-breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.map-breadcrumb__link {
+  background: none;
+  border: none;
+  color: rgba(255, 255, 255, 0.75);
+  cursor: pointer;
+  font: inherit;
+  padding: 0;
+}
+
+.map-breadcrumb__link:hover { color: white; }
+.map-breadcrumb__current { color: white; font-weight: 600; }
+.map-breadcrumb__sep { opacity: 0.5; }
+
+/* By the numbers — World Bank style */
+.map-by-numbers {
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: var(--radius);
+  padding: 1rem 1.25rem;
+  margin-bottom: 0.5rem;
+  flex-shrink: 0;
+  box-shadow: var(--shadow-lg);
+  opacity: 0;
+}
+
+.map-by-numbers__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 0.75rem;
+}
+
+.map-by-numbers__head h3 {
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--pa-blue);
+}
+
+.map-by-numbers__grid {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr;
+  gap: 1rem;
+}
+
+.map-by-numbers__featured {
+  background: var(--pa-bg);
+  border-radius: 0.5rem;
+  padding: 1rem;
+}
+
+.map-by-numbers__metric-label {
+  font-size: 0.75rem;
+  color: var(--pa-muted);
+}
+
+.map-by-numbers__metric-value {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--pa-navy);
+  margin-top: 0.25rem;
+}
+
+.map-by-numbers__spark {
+  height: 48px;
+  margin-top: 0.75rem;
+  background: linear-gradient(90deg, transparent, rgba(0, 159, 218, 0.35), transparent);
+  border-radius: 2px;
+}
+
+.map-by-numbers__list {
+  list-style: none;
+}
+
+.map-by-numbers__list li {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.55rem 0;
+  border-bottom: 1px solid rgba(0, 43, 92, 0.08);
+  font-size: 0.8rem;
+}
+
+.map-by-numbers__list-label { color: var(--pa-muted); max-width: 65%; }
+.map-by-numbers__list-value { font-weight: 700; color: var(--pa-navy); }
+
+/* Stage body */
+.map-stage-body {
+  flex: 1;
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  gap: 0.75rem;
+  min-height: 0;
+  position: relative;
+}
+
+.map-stage-copy {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  text-align: center;
+  color: white;
+  z-index: 5;
+  width: min(92%, 32rem);
+  pointer-events: none;
+  opacity: 0;
+}
+
+.map-sidebar {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius);
+  padding: 0.75rem;
+  overflow-y: auto;
+  opacity: 0;
+}
+
+.map-sidebar__search input {
+  width: 100%;
+  padding: 0.45rem 0.6rem;
+  border-radius: 0.4rem;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: rgba(0, 0, 0, 0.2);
+  color: white;
+  font-size: 0.75rem;
+}
+
+.map-sidebar__title {
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: rgba(255, 255, 255, 0.5);
+  margin: 0.75rem 0 0.35rem;
+}
+
+.map-sidebar__list { list-style: none; }
+
+.map-sidebar__item {
+  width: 100%;
+  text-align: left;
+  background: none;
+  border: none;
+  padding: 0.45rem 0.4rem;
+  border-radius: 0.35rem;
+  cursor: pointer;
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 0.78rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+}
+
+.map-sidebar__item:hover,
+.map-sidebar__item.is-active {
+  background: rgba(0, 159, 218, 0.2);
+  color: white;
+}
+
+.map-sidebar__meta {
+  font-size: 0.62rem;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+/* Map canvas — always visible, camera animates */
+.map-stage-canvas {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.map-pin-wrapper.is-map-focused .map-stage-canvas {
+  pointer-events: auto;
+}
+
+.map-stage-copy h2 {
+  font-size: clamp(1.25rem, 2.5vw, 1.75rem);
+}
+
+.africa-map__camera {
+  width: 100%;
+  max-width: 960px;
+  transform-origin: center center;
+  will-change: transform;
+  pointer-events: auto;
+}
+
+#africa-map-svg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.map-ocean { fill: transparent; }
+
+/* Country paths */
+.country-path {
+  fill: rgba(0, 43, 92, 0.12);
+  stroke: rgba(0, 43, 92, 0.25);
+  stroke-width: 1;
+  cursor: default;
+  pointer-events: none;
+  transition: fill 0.25s ease, stroke 0.25s ease, opacity 0.35s ease;
+}
+
+.map-pin-wrapper.is-immersive .country-path {
+  fill: rgba(255, 255, 255, 0.1);
+  stroke: rgba(255, 255, 255, 0.28);
+}
+
+.country-path.is-pa {
+  fill: rgba(0, 159, 218, 0.28);
+}
+
+.map-pin-wrapper.is-immersive .country-path.is-pa {
+  fill: rgba(0, 159, 218, 0.32);
+}
+
+.country-path.is-interactive {
+  pointer-events: all;
+  cursor: pointer;
+}
+
+.country-path.is-interactive:hover,
+.country-path.is-hovered {
+  fill: var(--pa-blue) !important;
+  stroke: white;
+  stroke-width: 1.5;
+}
+
+.country-path.is-selected {
+  fill: var(--pa-blue) !important;
+  stroke: white;
+  stroke-width: 2;
+  filter: drop-shadow(0 0 10px rgba(0, 159, 218, 0.55));
+}
+
+.country-path.is-dimmed { opacity: 0.22; }
+
+/* Controls & legend */
+.map-controls {
+  position: absolute;
+  right: 0.75rem;
+  bottom: 3rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  z-index: 8;
+  opacity: 0;
+}
+
+.map-controls__btn {
+  width: 2rem;
+  height: 2rem;
+  border-radius: 0.35rem;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(0, 43, 92, 0.85);
+  color: white;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.map-controls__btn:hover { background: var(--pa-blue); }
+
+.map-legend {
+  position: absolute;
+  bottom: 0.75rem;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 1.25rem;
+  font-size: 0.7rem;
+  color: rgba(255, 255, 255, 0.65);
+  z-index: 8;
+  opacity: 0;
+}
+
+.legend-swatch {
+  width: 12px;
+  height: 12px;
+  border-radius: 2px;
+  display: inline-block;
+}
+
+.legend-swatch--pa { background: var(--pa-blue); }
+.legend-swatch--other { background: rgba(255, 255, 255, 0.25); }
+.legend-swatch--active { background: white; box-shadow: 0 0 0 2px var(--pa-blue); }
+
+/* Scroll hint */
+.map-scroll-hint {
+  position: absolute;
+  bottom: 1.25rem;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 0.7rem;
+  color: var(--pa-muted);
+  z-index: 6;
+  animation: mapHintBounce 2s infinite;
+}
+
+.map-pin-wrapper.is-immersive .map-scroll-hint {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+@keyframes mapHintBounce {
+  0%, 100% { transform: translateX(-50%) translateY(0); }
+  50% { transform: translateX(-50%) translateY(6px); }
+}
+
+/* Tooltip */
+.map-tooltip {
+  position: fixed;
+  z-index: 300;
+  background: white;
+  border-radius: var(--radius);
+  padding: 0.875rem 1rem;
+  box-shadow: var(--shadow-lg);
+  min-width: 200px;
+  pointer-events: none;
+  opacity: 0;
+  transform: translateY(4px);
+  transition: opacity 0.15s, transform 0.15s;
+}
+
+.map-tooltip.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.map-tooltip__name { font-weight: 700; color: var(--pa-navy); font-size: 0.95rem; }
+.map-tooltip__badge {
+  display: inline-block;
+  margin-top: 0.25rem;
+  font-size: 0.6rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--pa-blue);
+  background: var(--pa-blue-light);
+  padding: 0.15rem 0.4rem;
+  border-radius: 3px;
+}
+
+.map-tooltip dl { margin-top: 0.5rem; font-size: 0.78rem; }
+.map-tooltip__row { display: flex; justify-content: space-between; margin-top: 0.25rem; }
+.map-tooltip dt { color: var(--pa-muted); }
+.map-tooltip dd { font-weight: 600; color: var(--pa-navy); }
+
+.map-tooltip__progress { margin-top: 0.65rem; }
+.map-tooltip__progress-label {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.7rem;
+  color: var(--pa-muted);
+  margin-bottom: 0.25rem;
+}
+
+.map-tooltip__progress-bar {
+  height: 4px;
+  background: var(--pa-blue-light);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.map-tooltip__progress-bar span {
+  display: block;
+  height: 100%;
+  background: var(--pa-blue);
+}
+
+.map-tooltip__hint {
+  margin-top: 0.5rem;
+  font-size: 0.68rem;
+  font-weight: 600;
+  color: var(--pa-blue);
+}
+
+/* Context map (Country Hub sidebar) */
 .context-map {
   margin-bottom: 1rem;
   padding-bottom: 1rem;
@@ -24,18 +581,9 @@
   padding: 0;
 }
 
-.context-map__crumb:hover {
-  color: white;
-}
-
-.context-map__crumb.is-current {
-  color: var(--pa-blue);
-  font-weight: 600;
-}
-
-.context-map__sep {
-  opacity: 0.4;
-}
+.context-map__crumb:hover { color: white; }
+.context-map__crumb.is-current { color: var(--pa-blue); font-weight: 600; }
+.context-map__sep { opacity: 0.4; }
 
 .context-map__frame {
   background: rgba(0, 0, 0, 0.2);
@@ -57,19 +605,14 @@
   transition: fill 0.2s;
 }
 
-.context-map__country.is-pa {
-  fill: rgba(0, 159, 218, 0.3);
-}
-
+.context-map__country.is-pa { fill: rgba(0, 159, 218, 0.3); }
 .context-map__country.is-active {
   fill: var(--pa-blue);
   stroke: white;
   stroke-width: 1;
 }
 
-.context-map__country:hover {
-  fill: var(--pa-blue);
-}
+.context-map__country:hover { fill: var(--pa-blue); }
 
 .context-map__hint {
   font-size: 0.62rem;
@@ -85,4 +628,29 @@
 
 .ch-sidebar__context-map {
   padding: 0 0.5rem;
+}
+
+body.map-navigating { overflow: hidden; }
+body.map-journey-active { }
+
+#transition-overlay.is-map { background: var(--pa-navy); }
+
+/* Responsive */
+@media (max-width: 900px) {
+  .map-hero-grid { grid-template-columns: 1fr; }
+  .map-hero-slot { min-height: 120px; order: -1; }
+  .map-stage-body { grid-template-columns: 1fr; }
+  .map-sidebar {
+    position: absolute;
+    left: 0.5rem;
+    top: calc(var(--header-h) + 0.5rem);
+    width: min(180px, 42vw);
+    max-height: 38%;
+    z-index: 10;
+  }
+  .map-by-numbers__grid { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 640px) {
+  .map-scroll-stage { height: 380vh; }
 }
