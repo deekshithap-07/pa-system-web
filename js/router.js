@@ -6,6 +6,7 @@ import {
   applyRouteScroll,
 } from "./utils/scroll-nav.js";
 import { renderHome, mountHome, destroyHome } from "./views/home.js";
+import { ensureAfricaMapMounted } from "./components/home-level1.js";
 import { renderAfricaIntelligence, mountAfricaIntelligence, destroyAfricaIntelligence } from "./views/africa-intelligence.js";
 import { renderCountryHub, mountCountryHub, destroyCountryHub } from "./views/country-hub.js";
 import { renderCatchmentHub, mountCatchmentHub, destroyCatchmentHub } from "./views/catchment-hub.js";
@@ -21,6 +22,7 @@ import { wrapPageContent, playPageEntry, cleanupPageEntry } from "./components/s
 import { getPageEntryConfig } from "./utils/page-entry-config.js";
 
 let currentView = null;
+let lastEntryView = null;
 let appData = null;
 let lastRouteKey = null;
 let linksBound = false;
@@ -122,6 +124,9 @@ function handleRoute() {
       document.querySelector("[data-wb-scorecard]")?._switchWbsTab?.(targetAnchor.slice(4));
       return;
     }
+    if (currentView === "landing" && appData) {
+      ensureAfricaMapMounted(appData);
+    }
     if (targetAnchor) scrollToAnchor(targetAnchor);
     return;
   }
@@ -133,7 +138,6 @@ function handleRoute() {
   if (lastRouteKey) saveScrollPosition(lastRouteKey);
   const { restore } = resolveNavigationIntent(routeKey);
 
-  const prevRouteKey = lastRouteKey;
   lastRouteKey = routeKey;
 
   const app = document.getElementById("app");
@@ -202,9 +206,10 @@ function handleRoute() {
 
   currentView = view;
 
-  const playEntry = prevRouteKey !== routeKey;
+  const playEntry = lastEntryView !== view;
+  lastEntryView = view;
 
-  if (playEntry) {
+  if (playEntry && view !== "scorecard") {
     html = wrapPageContent(html, getPageEntryConfig(view, parts, appData, hub));
   }
 
@@ -242,16 +247,16 @@ function handleRoute() {
     applyRouteScroll(routeKey, shouldRestoreScroll);
   };
 
-  runMount();
-
-  if (playEntry) {
+  if (playEntry && view !== "scorecard") {
     requestAnimationFrame(() => {
       playPageEntry(app.querySelector("[data-page-root]"), () => {
+        runMount();
         finalizeRouteScroll();
       });
     });
   } else {
     requestAnimationFrame(() => {
+      runMount();
       finalizeRouteScroll();
     });
   }

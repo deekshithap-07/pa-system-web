@@ -63,6 +63,7 @@ export function getPageEntryConfig(view, parts, data, hub) {
         subtitle: "The ministry model behind pastor-led holistic transformation across Africa.",
       };
 
+
     case "scorecard":
       return {
         eyebrow: "Possibilities Africa",
