@@ -1,5 +1,5 @@
 /**
- * AfricaMap — interactive PA network map on Esri World Imagery (MapLibre).
+ * AfricaMap — interactive PA network map on Esri satellite hybrid (MapLibre).
  *
  * Drill-down: Africa → Country → Catchment → Community
  * Global view uses CSS overzoom; drill-down uses native zoom at overzoom scale 1.
@@ -231,6 +231,7 @@ export class AfricaMap {
     });
 
     this.map.addControl(new maplibregl.AttributionControl({ compact: true }), "bottom-left");
+    this.map.addControl(new maplibregl.ScaleControl({ maxWidth: 120, unit: "metric" }), "bottom-left");
     this.map.addControl(new maplibregl.NavigationControl({ showCompass: false }), "bottom-right");
 
     this._buildRecenterButton();
@@ -488,7 +489,7 @@ export class AfricaMap {
         maxzoom: 9,
         filter: ["==", ["get", "in_network"], true],
         paint: {
-          "line-color": "#0A1628",
+          "line-color": "#ffffff",
           "line-width": [
             "interpolate", ["linear"], ["zoom"],
             2, 5.2,
@@ -496,7 +497,7 @@ export class AfricaMap {
             6, 6.4,
             9, 7.0,
           ],
-          "line-opacity": 0.85,
+          "line-opacity": 0.9,
         },
       });
 
@@ -640,7 +641,7 @@ export class AfricaMap {
     this.map.fitBounds(bounds, {
       padding,
       duration: FLY_DURATION_MS,
-      maxZoom: Math.max(countryZoom, 7.2),
+      maxZoom: Math.max(countryZoom, 6.4),
     });
   }
 
@@ -655,29 +656,23 @@ export class AfricaMap {
     this.map.setPaintProperty("pa-countries-line", "line-width", COUNTRY_ACTIVE_WIDTH);
     this.map.setPaintProperty("pa-countries-line", "line-opacity", COUNTRY_ACTIVE_OPACITY);
     this.map.setPaintProperty("pa-countries-line", "line-dasharray", COUNTRY_ACTIVE_DASH);
-    if (this.map.getLayer("pa-countries-line-casing")) {
+    if (this.selected.level === "africa" && this.map.getLayer("pa-countries-line-casing")) {
       this.map.setLayoutProperty("pa-countries-line-casing", "visibility", "visible");
     }
   }
 
   updateDrillHighlightMode() {
     if (!this.map) return;
-    const showCountryGold = this.selected.level === "country";
     const showCatchmentGold = this.selected.level === "country";
     const showGlobalPaBorders = this.selected.level === "africa";
 
-    if (this.map.getLayer("pa-countries-line-casing")) {
-      this.map.setLayoutProperty(
-        "pa-countries-line-casing",
-        "visibility",
-        showGlobalPaBorders ? "visible" : "none"
-      );
-    }
+    ["pa-countries-line-casing", "pa-countries-line"].forEach((id) => {
+      if (!this.map.getLayer(id)) return;
+      this.map.setLayoutProperty(id, "visibility", showGlobalPaBorders ? "visible" : "none");
+    });
 
-    if (showCountryGold && this._selectedCountrySlug) {
-      this.updateCountrySelection(this._selectedCountrySlug);
-    } else {
-      this.updateCountrySelectionNeutral();
+    if (this.map.getLayer("pa-countries-fill")) {
+      this.map.setPaintProperty("pa-countries-fill", "fill-opacity", 0.0);
     }
 
     ["pa-catchments-fill", "pa-catchments-line"].forEach((id) => {
@@ -955,10 +950,12 @@ export class AfricaMap {
     const view = this.getViewState();
     const centerLat = bounds.getCenter().lat;
     const catchZoom = zoomForDistance(ZOOM_LEVELS.catchment, centerLat, view.effectiveContainerPx);
-    this.map.fitBounds(bounds, {
-      padding: 72,
+    const center = bounds.getCenter();
+    this.map.flyTo({
+      center: [center.lng, center.lat],
+      zoom: Math.max(catchZoom, 13.4),
       duration: FLY_DURATION_MS,
-      maxZoom: Math.max(catchZoom, 7.5),
+      padding: { top: 48, bottom: 48, left: 48, right: 48 },
     });
   }
 

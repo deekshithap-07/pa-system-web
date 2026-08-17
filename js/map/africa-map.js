@@ -1,5 +1,5 @@
 /**
- * Facade for the interactive Africa map (Esri satellite base).
+ * Facade for the interactive Africa map (Esri satellite hybrid).
  */
 import { AfricaMap } from "./AfricaMap.js";
 

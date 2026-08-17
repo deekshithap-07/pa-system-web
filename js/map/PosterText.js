@@ -20,7 +20,7 @@ export class PosterText {
       <hr class="tk-poster-divider" />
       <p class="tk-poster-country" data-country>PA NETWORK</p>
       <p class="tk-poster-coords" data-coords></p>
-      <span class="tk-poster-attribution-osm">Imagery © Esri</span>`;
+      <span class="tk-poster-attribution-osm">Imagery © Esri · Map © OpenStreetMap</span>`;
     this.root.appendChild(this.el);
     this.cityEl = this.el.querySelector("[data-city]");
     this.countryEl = this.el.querySelector("[data-country]");

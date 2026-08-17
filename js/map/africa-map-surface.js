@@ -49,9 +49,9 @@ export function formatCoordinates(lat, lon) {
 /** Half-width distances (meters) for GIS drill-down fly targets. */
 export const ZOOM_LEVELS = {
   global: 5_000_000,
-  country: 800_000,
-  catchment: 80_000,
-  community: 4_000,
+  country: 900_000,
+  catchment: 4_500,
+  community: 1_200,
 };
 
 export const FLY_DURATION_MS = 1400;
