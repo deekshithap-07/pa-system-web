@@ -2,6 +2,11 @@
  * Spread overlapping map name labels and anchor dots while keeping them near geographic anchors.
  */
 
+function readDataId(el, idKey) {
+  if (!el) return null;
+  return el.dataset?.[idKey] ?? el.getAttribute(`data-${idKey.replace(/([A-Z])/g, "-$1").toLowerCase()}`);
+}
+
 export function estimateLabelSize(name, { fontSize = 13, padX = 14, padY = 8 } = {}) {
   const charW = fontSize * 0.58;
   const width = Math.max(name.length * charW + padX, 48);
@@ -158,10 +163,13 @@ export function applyLabelSpread(container, SVG_NS, options = {}) {
     maxOffset = 90,
     gap = 8,
     obstacles = [],
+    iterations = 120,
+    viewBounds = null,
+    showLeaders = true,
   } = options;
 
   const labels = [...container.querySelectorAll(labelSelector)];
-  if (labels.length < 2) return;
+  if (!labels.length) return;
 
   container.querySelectorAll(`.${leaderClass}`).forEach((el) => el.remove());
 
@@ -169,7 +177,7 @@ export function applyLabelSpread(container, SVG_NS, options = {}) {
     .map((label) => {
       const anchorX = Number(label.dataset.anchorX);
       const anchorY = Number(label.dataset.anchorY);
-      const id = label.dataset.entityId || label.dataset.catchmentId || label.dataset.communityId;
+      const id = readDataId(label, "entityId") || readDataId(label, "catchmentId") || readDataId(label, "communityId");
       let width = Number(label.dataset.estWidth);
       let height = Number(label.dataset.estHeight);
 
@@ -181,8 +189,8 @@ export function applyLabelSpread(container, SVG_NS, options = {}) {
         } else {
           const tb = label.querySelector("text")?.getBBox();
           if (tb?.width > 0) {
-            width = tb.width + 14;
-            height = tb.height + 8;
+            width = tb.width + 4;
+            height = tb.height + 2;
           }
         }
       } catch {
@@ -199,21 +207,42 @@ export function applyLabelSpread(container, SVG_NS, options = {}) {
     })
     .filter((item) => item.id != null && !Number.isNaN(item.anchorX));
 
-  const positions = computeSpreadPositions(items, { spread, maxOffset, gap, obstacles });
+  const positions = computeSpreadPositions(items, { spread, maxOffset, gap, obstacles, iterations });
   const scale = options.viewScale || 1;
   const leaderThreshold = 6 / scale;
 
   labels.forEach((label) => {
-    const id = label.dataset.entityId || label.dataset.catchmentId || label.dataset.communityId;
-    const pos = positions.get(id);
+    const id = readDataId(label, "entityId") || readDataId(label, "catchmentId") || readDataId(label, "communityId");
+    let pos = positions.get(id);
+    if (!pos && labels.length === 1) {
+      const item = items[0];
+      pos = {
+        x: item.anchorX,
+        y: item.anchorY - 12,
+        anchorX: item.anchorX,
+        anchorY: item.anchorY,
+        offsetX: 0,
+        offsetY: -12,
+      };
+    }
     if (!pos) return;
+
+    let { x, y } = pos;
+    if (viewBounds) {
+      const w = Number(label.dataset.estWidth) || 48;
+      const h = Number(label.dataset.estHeight) || 16;
+      const pad = 4;
+      x = Math.max(viewBounds.x + w / 2 + pad, Math.min(viewBounds.x + viewBounds.width - w / 2 - pad, x));
+      y = Math.max(viewBounds.y + h / 2 + pad, Math.min(viewBounds.y + viewBounds.height - h / 2 - pad, y));
+      pos = { ...pos, x, y, offsetX: x - pos.anchorX, offsetY: y - pos.anchorY };
+    }
 
     label.setAttribute("transform", `translate(${pos.x},${pos.y})`);
     label.dataset.offsetX = String(pos.offsetX);
     label.dataset.offsetY = String(pos.offsetY);
 
     const dist = Math.hypot(pos.offsetX, pos.offsetY);
-    if (dist > leaderThreshold) {
+    if (showLeaders && dist > leaderThreshold) {
       const leader = document.createElementNS(SVG_NS, "line");
       leader.setAttribute("class", leaderClass);
       leader.setAttribute("x1", pos.anchorX);
@@ -240,13 +269,17 @@ export function applyMapFeatureLayout(container, SVG_NS, options = {}) {
     anchorMaxNudge = 22,
     viewScale = 1,
     decorateLabel,
+    moveAnchors = true,
+    layoutMode = "spread",
+    viewBounds = null,
+    showLeaders = true,
   } = options;
 
-  const idAttr = `data-${idKey}`;
+  const idAttr = `data-${idKey.replace(/([A-Z])/g, "-$1").toLowerCase()}`;
   const markers = [];
 
   container.querySelectorAll(anchorSelector).forEach((anchor) => {
-    const id = anchor.getAttribute(idAttr);
+    const id = readDataId(anchor, idKey);
     if (!id) return;
     const x = Number(anchor.getAttribute("cx"));
     const y = Number(anchor.getAttribute("cy"));
@@ -260,30 +293,46 @@ export function applyMapFeatureLayout(container, SVG_NS, options = {}) {
 
   if (!markers.length) return;
 
-  const spreadMarkers = spreadPointMarkers(markers, {
-    minDistance: minAnchorDistance,
-    maxOffset: anchorMaxNudge,
-  });
+  const anchorNodes = moveAnchors
+    ? spreadPointMarkers(markers, {
+        minDistance: minAnchorDistance,
+        maxOffset: anchorMaxNudge,
+        iterations: options.anchorIterations || 120,
+      })
+    : markers;
 
-  spreadMarkers.forEach((m) => {
-    m.anchor.setAttribute("cx", String(m.x));
-    m.anchor.setAttribute("cy", String(m.y));
-    m.hit?.setAttribute("cx", String(m.x));
-    m.hit?.setAttribute("cy", String(m.y));
-    if (m.label) {
-      m.label.dataset.anchorX = String(m.x);
-      m.label.dataset.anchorY = String(m.y);
-    }
-  });
+  if (moveAnchors) {
+    anchorNodes.forEach((m) => {
+      m.anchor.setAttribute("cx", String(m.x));
+      m.anchor.setAttribute("cy", String(m.y));
+      m.hit?.setAttribute("cx", String(m.x));
+      m.hit?.setAttribute("cy", String(m.y));
+      if (m.label) {
+        m.label.dataset.anchorX = String(m.x);
+        m.label.dataset.anchorY = String(m.y);
+      }
+    });
+  }
 
   if (decorateLabel) {
     container.querySelectorAll(labelSelector).forEach((label) => decorateLabel(label));
   }
 
-  const obstacles = spreadMarkers.map((m) => ({
+  if (layoutMode === "radial") {
+    applyRadialLabelLayout(container, SVG_NS, {
+      labelSelector,
+      baseOffset: options.radialOffset || 14,
+      gap: options.radialGap || 5,
+      viewBounds,
+      showLeaders,
+    });
+    return;
+  }
+
+  const obstacles = anchorNodes.map((m) => ({
     x: m.x,
     y: m.y,
-    r: minAnchorDistance / 2 + 2,
+    r: 4,
   }));
 
   applyLabelSpread(container, SVG_NS, {
@@ -293,5 +342,111 @@ export function applyMapFeatureLayout(container, SVG_NS, options = {}) {
     gap,
     viewScale,
     obstacles,
+    iterations: options.labelIterations || 160,
+    viewBounds,
+    showLeaders,
+  });
+}
+
+function boxesOverlap(a, b, gap = 4) {
+  return (
+    Math.abs(a.x - b.x) < (a.width + b.width) / 2 + gap &&
+    Math.abs(a.y - b.y) < (a.height + b.height) / 2 + gap
+  );
+}
+
+const RADIAL_DIRS = [
+  [0, -1],
+  [0.85, -0.55],
+  [1, 0],
+  [0.85, 0.55],
+  [0, 1],
+  [-0.85, 0.55],
+  [-1, 0],
+  [-0.85, -0.55],
+];
+
+/**
+ * Place labels on compass offsets from fixed anchors — pins stay on exact coordinates.
+ */
+export function applyRadialLabelLayout(container, SVG_NS, options = {}) {
+  const {
+    labelSelector = ".hub-geo-map__community-label",
+    leaderClass = "map-label-leader",
+    baseOffset = 16,
+    gap = 6,
+    viewBounds = null,
+    showLeaders = true,
+  } = options;
+
+  const labels = [...container.querySelectorAll(labelSelector)];
+  if (!labels.length) return;
+
+  container.querySelectorAll(`.${leaderClass}`).forEach((el) => el.remove());
+
+  const placed = [];
+
+  labels.forEach((label, index) => {
+    const anchorX = Number(label.dataset.anchorX);
+    const anchorY = Number(label.dataset.anchorY);
+    if (Number.isNaN(anchorX)) return;
+
+    let width = Number(label.dataset.estWidth) || 48;
+    let height = Number(label.dataset.estHeight) || 16;
+    try {
+      const bg = label.querySelector("rect");
+      if (bg) {
+        width = Number(bg.getAttribute("width")) || width;
+        height = Number(bg.getAttribute("height")) || height;
+      }
+    } catch {
+      /* ignore */
+    }
+
+    const dirs = [...RADIAL_DIRS];
+    if (index % 2) dirs.reverse();
+
+    let best = { x: anchorX, y: anchorY - baseOffset - height / 2, score: Infinity };
+
+    for (let distMul = 1; distMul <= 3; distMul += 1) {
+      const dist = baseOffset * distMul + height / 2;
+      for (const [dx, dy] of dirs) {
+        const x = anchorX + dx * dist;
+        const y = anchorY + dy * dist;
+        if (viewBounds) {
+          const pad = 4;
+          if (
+            x - width / 2 < viewBounds.x + pad ||
+            x + width / 2 > viewBounds.x + viewBounds.width - pad ||
+            y - height / 2 < viewBounds.y + pad ||
+            y + height / 2 > viewBounds.y + viewBounds.height - pad
+          ) {
+            continue;
+          }
+        }
+        const candidate = { x, y, width, height };
+        if (placed.some((p) => boxesOverlap(candidate, p, gap))) continue;
+        const score = Math.hypot(x - anchorX, y - anchorY) + distMul * 0.5;
+        if (score < best.score) best = { x, y, score };
+      }
+      if (best.score < Infinity) break;
+    }
+
+    placed.push({ x: best.x, y: best.y, width, height });
+    label.setAttribute("transform", `translate(${best.x},${best.y})`);
+    label.dataset.offsetX = String(best.x - anchorX);
+    label.dataset.offsetY = String(best.y - anchorY);
+
+    const offset = Math.hypot(best.x - anchorX, best.y - anchorY);
+    if (showLeaders && offset > 4) {
+      const leader = document.createElementNS(SVG_NS, "line");
+      leader.setAttribute("class", leaderClass);
+      leader.setAttribute("x1", String(anchorX));
+      leader.setAttribute("y1", String(anchorY));
+      leader.setAttribute("x2", String(best.x));
+      leader.setAttribute("y2", String(best.y));
+      const layer = label.parentElement || container;
+      layer.insertBefore(leader, layer.firstChild);
+    }
   });
 }

@@ -1,31 +1,30 @@
 import { formatNumber } from "../../utils/format.js";
+import { renderJourneyTrack } from "../shared/story-chapters.js";
+import { renderWbPageHero } from "../shared/wb-page-hero.js";
 
 export function renderCommunityHero({ community, country, catchment }) {
-  const crumbs = [
-    { label: "Africa", href: "africa" },
-    { label: country.name, href: `country/${country.slug}` },
-    { label: community.name, href: null },
-  ];
-
-  return `
-    <header class="ch-hero" id="cm-hero">
-      <div class="ch-hero__grid ch-hero__grid--single">
-        <div class="ch-hero__content">
-          <nav class="ch-breadcrumb" aria-label="Breadcrumb">
-            ${crumbs
-              .map((c, i) =>
-                c.href
-                  ? `<a href="#/${c.href}" data-link>${c.label}</a>`
-                  : `<span aria-current="page">${c.label}</span>`
-              )
-              .join(' <span aria-hidden="true">/</span> ')}
-          </nav>
-          <p class="eyebrow ch-hero__tag">${catchment.name}, ${country.name}</p>
-          <p class="ch-hero__question">What is happening in this community?</p>
-          <h1>${community.name}</h1>
-        </div>
-      </div>
-    </header>`;
+  return renderWbPageHero({
+    id: "cm-hero",
+    tone: "gold",
+    skin: "article",
+    flush: true,
+    extraClass: "ch-hero",
+    crumbs: [
+      { label: "Where we work", href: "#/africa" },
+      { label: country.name, href: `#/country/${country.slug}` },
+      { label: catchment.name, href: `#/catchment/${country.slug}/${catchment.slug}` },
+      { label: community.name },
+    ],
+    eyebrow: "One community",
+    question: "What is happening in this community?",
+    title: community.name,
+    lead: "This is the closest view: homes, local projects, pastors, and a two-year journey of change. Faith groups (Shalom) and church-led projects sit here too.",
+    chapterNext: {
+      kicker: "Nearby group",
+      title: catchment.name,
+      href: `#/catchment/${country.slug}/${catchment.slug}`,
+    },
+  });
 }
 
 export function renderCommunityProfile({ community, catchment, dash }) {
@@ -35,19 +34,19 @@ export function renderCommunityProfile({ community, catchment, dash }) {
 
   const facts = [
     { label: "Location", value: `${catchment.name}, ${catchment.region || community.region || "—"}` },
-    { label: "Journey Stage (2-Year Journey)", value: community.journeyStage || dash.kpis?.find((k) => k.text)?.text || "—" },
+    { label: "Two-year journey stage", value: community.journeyStage || dash.kpis?.find((k) => k.text)?.text || "—" },
     {
-      label: "Shalom Groups & Households",
-      value: `${community.shalomGroups ?? 0} groups · ${formatNumber(community.households ?? 0)} households`,
+      label: "Faith groups & homes",
+      value: `${community.shalomGroups ?? 0} Shalom groups · ${formatNumber(community.households ?? 0)} homes`,
     },
-    { label: "Projects (PPPs & CHIPs)", value: `${ppps} · ${chips}` },
+    { label: "Local projects", value: `${ppps} · ${chips}` },
   ];
 
   return `
     <section class="ch-section" id="cm-profile" data-reveal-section>
       <div class="ch-section__head">
-        <h2>Detailed community profile</h2>
-        <p class="ch-section__desc">${dash.hero?.description || ""}</p>
+        <h2>Life in this community</h2>
+        <p class="ch-section__desc">${dash.hero?.description || "Where this community is, how far it has come on the two-year journey, and the local projects underway."}</p>
       </div>
       <dl class="cm-profile-grid">
         ${facts
@@ -60,6 +59,7 @@ export function renderCommunityProfile({ community, catchment, dash }) {
           .join("")}
       </dl>
       ${programs !== "—" ? `<p class="cm-profile-programs"><strong>Programmes:</strong> ${programs}</p>` : ""}
+      ${renderJourneyTrack(community.journeyStage || dash.kpis?.find((k) => k.text)?.text || "")}
     </section>`;
 }
 

@@ -1,71 +1,409 @@
-function renderTopStoryCard(item) {
-  if (item.isNewsletter) {
-    return `
-      <article class="wb-topstory wb-topstory--newsletter" data-newsletter-card>
-        <div class="wb-topstory__thumb wb-topstory__thumb--newsletter" aria-hidden="true">
-          <span>✉</span>
-        </div>
-        <div class="wb-topstory__body">
-          <span class="wb-topstory__tag">NEWSLETTER</span>
-          <h3>${item.title}</h3>
-          <form class="wb-topstory__subscribe" data-newsletter-form onsubmit="return false">
-            <input type="email" placeholder="Email address" aria-label="Email for newsletter" required>
-            <button type="submit" class="wb-topstory__subscribe-btn">Subscribe</button>
-          </form>
-          <p class="wb-topstory__newsletter-msg" data-newsletter-msg hidden>Thank you — demo signup only.</p>
-        </div>
-      </article>`;
-  }
+import { renderWbPageHero } from "./shared/wb-page-hero.js";
 
-  const href = item.href || "#";
-  const linkAttrs = href.startsWith("#/") ? `href="${href}" data-link` : `href="${href}"`;
-
-  return `
-    <a ${linkAttrs} class="wb-topstory">
-      <div class="wb-topstory__thumb wb-topstory__thumb--${item.theme || "default"}" aria-hidden="true"></div>
-      <div class="wb-topstory__body">
-        <span class="wb-topstory__tag">${item.type}</span>
-        <h3>${item.title}</h3>
-      </div>
-    </a>`;
-}
-
-/** World Bank hero — featured spotlight + newsletter strip */
+/** World Bank homepage hero — spotlight + topic cards (not the main menu). */
 export function renderHero(hero) {
   const featured = hero.featured || {};
-  const newsletterItems = (hero.topStories || []).filter((item) => item.isNewsletter);
-  const storyCards = newsletterItems.map(renderTopStoryCard).join("");
+
+  return renderWbPageHero({
+    id: "home-hero",
+    tone: "navy",
+    eyebrow: featured.eyebrow || hero.eyebrow || "Possibilities Africa",
+    title: featured.title || hero.title,
+    lead: featured.description || hero.description,
+    actions: [
+      { label: hero.primaryCta?.label || "Explore countries", href: hero.primaryCta?.target || "#/africa" },
+      {
+        label: hero.secondaryCta?.label || "Read field reports",
+        href: hero.secondaryCta?.target || "#/resources/cases",
+        primary: false,
+      },
+    ],
+    related: [],
+    extraClass: "wph--home-stack",
+  });
+}
+
+
+/** Deloitte-style site overview — pill tabs + flowing dropdown panels. */
+export function renderHomeSiteOverview(overview = {}) {
+  const tabs = overview.tabs || [];
+  if (!tabs.length) return "";
+
+  const tabButtons = tabs
+    .map(
+      (tab, i) => `<button
+        type="button"
+        class="home-explorer__pill${i === 0 ? " is-active" : ""}"
+        role="tab"
+        id="site-overview-tab-${i}"
+        aria-selected="${i === 0 ? "true" : "false"}"
+        aria-expanded="${i === 0 ? "true" : "false"}"
+        aria-controls="site-overview-panel-${i}"
+        data-explorer-tab="${i}"
+      >${tab.label}</button>`
+    )
+    .join("");
+
+  const panels = tabs
+    .map((tab, i) => {
+      const bullets = (tab.bullets || [])
+        .map((item) => `<li>${item}</li>`)
+        .join("");
+      const highlights = (tab.highlights || [])
+        .map(
+          (item) => `<article class="home-explorer__card">
+            <h4>${item.title}</h4>
+            <p>${item.text}</p>
+          </article>`
+        )
+        .join("");
+      const cta = tab.cta || {};
+
+      return `<article
+        class="home-explorer__panel${i === 0 ? " is-active" : ""}"
+        id="site-overview-panel-${i}"
+        role="tabpanel"
+        aria-labelledby="site-overview-tab-${i}"
+        data-explorer-panel="${i}"
+        data-panel-id="${tab.id || i}"
+        ${i === 0 ? "" : "hidden"}
+      >
+        <div class="home-explorer__visual home-explorer__visual--${tab.id || i}" aria-hidden="true">
+          ${
+            tab.image
+              ? `<img class="home-explorer__photo" src="${tab.image}" alt="${tab.imageAlt || tab.title || tab.label}" loading="lazy" decoding="async">`
+              : ""
+          }
+          <span class="home-explorer__visual-glow"></span>
+          <span class="home-explorer__visual-label">${tab.label}</span>
+        </div>
+        <div class="home-explorer__copy">
+          ${tab.tag ? `<p class="home-explorer__panel-tag">${tab.tag}</p>` : ""}
+          <h3 class="home-explorer__panel-title">${tab.title || tab.label}</h3>
+          ${tab.lead ? `<p class="home-explorer__panel-lead">${tab.lead}</p>` : ""}
+          ${bullets ? `<ul class="home-explorer__list">${bullets}</ul>` : ""}
+          ${highlights ? `<div class="home-explorer__cards">${highlights}</div>` : ""}
+          ${
+            cta.href
+              ? `<a href="${cta.href}" class="home-explorer__cta" data-link>Open ${cta.label || tab.label} →</a>`
+              : ""
+          }
+        </div>
+      </article>`;
+    })
+    .join("");
 
   return `
-    <section class="wb-hero" id="home-hero">
-      <div class="wb-hero__spotlight">
-        <div class="wb-hero__spotlight-bg" aria-hidden="true"></div>
-        <div class="container wb-hero__spotlight-inner" data-reveal>
-          <div class="wb-hero__spotlight-copy">
-            <p class="wb-hero__spotlight-eyebrow">${featured.eyebrow || hero.eyebrow || "Possibilities Africa"}</p>
-            <h1 class="wb-hero__spotlight-title">${featured.title || hero.title}</h1>
-            <p class="wb-hero__spotlight-desc">${featured.description || hero.description}</p>
+    <section
+      class="home-explorer home-explorer--site home-explorer--deloitte"
+      id="site-overview"
+      data-home-explorer
+      data-auto-rotate="false"
+      aria-labelledby="site-overview-title"
+    >
+      <div class="home-explorer__motion" aria-hidden="true">
+        <span class="home-explorer__orb home-explorer__orb--1"></span>
+        <span class="home-explorer__orb home-explorer__orb--2"></span>
+        <span class="home-explorer__orb home-explorer__orb--3"></span>
+      </div>
+      <div class="home-explorer__sheet">
+        <div class="container">
+          <div class="home-explorer__intro-block" data-reveal>
+            ${overview.eyebrow ? `<p class="home-explorer__eyebrow">${overview.eyebrow}</p>` : ""}
+            ${overview.title ? `<h2 class="home-explorer__title" id="site-overview-title">${overview.title}</h2>` : ""}
+            ${overview.lead ? `<p class="home-explorer__intro">${overview.lead}</p>` : ""}
+          </div>
+          <div class="home-explorer__pills" role="tablist" aria-label="Explore this website" data-reveal>${tabButtons}</div>
+          <div class="home-explorer__dropdown is-open" data-explorer-dropdown data-reveal>
+            <div class="home-explorer__dropdown-inner">
+              <div class="home-explorer__panels">${panels}</div>
+            </div>
           </div>
         </div>
       </div>
-      ${
-        storyCards
-          ? `<div class="wb-hero__stories-bar">
-        <div class="container wb-hero__stories-inner">
-          <div class="wb-hero__stories-grid wb-hero__stories-grid--newsletter">${storyCards}</div>
-        </div>
-      </div>`
-          : ""
+    </section>`;
+}
+
+let explorerTimer = null;
+let explorerResizeObserver = null;
+
+function measureExplorerPanel(panel) {
+  if (!panel) return 0;
+  const wasHidden = panel.hidden;
+  panel.hidden = false;
+  panel.style.position = "absolute";
+  panel.style.visibility = "hidden";
+  panel.style.pointerEvents = "none";
+  panel.style.width = "100%";
+  const height = panel.offsetHeight;
+  panel.style.position = "";
+  panel.style.visibility = "";
+  panel.style.pointerEvents = "";
+  panel.style.width = "";
+  panel.hidden = wasHidden;
+  return height;
+}
+
+function syncExplorerDropdown(section, panel, open = true) {
+  const dropdown = section.querySelector("[data-explorer-dropdown]");
+  if (!dropdown) return;
+  dropdown.classList.toggle("is-open", open);
+  if (!open) {
+    dropdown.style.height = "0px";
+    return;
+  }
+  const height = measureExplorerPanel(panel);
+  dropdown.style.height = `${height}px`;
+}
+
+export function bindHomeExplorer(root = document) {
+  const section = root.querySelector("[data-home-explorer]");
+  if (!section || section.dataset.bound) return;
+  section.dataset.bound = "true";
+
+  const isDeloitte = section.classList.contains("home-explorer--deloitte");
+  const tabs = [...section.querySelectorAll("[data-explorer-tab]")];
+  const panels = [...section.querySelectorAll("[data-explorer-panel]")];
+  const dots = [...section.querySelectorAll("[data-explorer-dot]")];
+  const progressFill = section.querySelector(".home-explorer__progress-fill");
+  const count = tabs.length;
+  if (!count) return;
+
+  let index = 0;
+  let open = isDeloitte;
+  let paused = false;
+  const autoRotate = section.dataset.autoRotate !== "false";
+  const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const intervalMs = 5500;
+
+  const setStep = (next, { forceOpen } = {}) => {
+    const requested = (next + count) % count;
+
+    if (isDeloitte) {
+      if (requested === index && open && forceOpen !== true) return;
+      index = requested;
+      open = forceOpen !== false;
+    } else {
+      index = requested;
+      open = true;
+    }
+
+    tabs.forEach((tab, i) => {
+      const on = open && i === index;
+      tab.classList.toggle("is-active", on);
+      tab.setAttribute("aria-selected", on ? "true" : "false");
+      tab.setAttribute("aria-expanded", on ? "true" : "false");
+    });
+
+    panels.forEach((panel, i) => {
+      const on = open && i === index;
+      panel.classList.toggle("is-active", on);
+      panel.hidden = !on;
+    });
+
+    dots.forEach((dot, i) => dot.classList.toggle("is-active", open && i === index));
+
+    if (isDeloitte) {
+      syncExplorerDropdown(section, panels[index], open);
+      return;
+    }
+
+    if (progressFill && autoRotate) {
+      progressFill.style.animation = "none";
+      void progressFill.offsetWidth;
+      if (!reducedMotion && !paused) progressFill.style.animation = `home-explorer-progress ${intervalMs}ms linear forwards`;
+    }
+  };
+
+  const stopTimer = () => {
+    if (explorerTimer) {
+      clearInterval(explorerTimer);
+      explorerTimer = null;
+    }
+  };
+
+  const startTimer = () => {
+    stopTimer();
+    if (!autoRotate || reducedMotion || paused || isDeloitte) return;
+    if (progressFill) {
+      progressFill.style.animation = "none";
+      void progressFill.offsetWidth;
+      progressFill.style.animation = `home-explorer-progress ${intervalMs}ms linear forwards`;
+    }
+    explorerTimer = window.setInterval(() => setStep(index + 1, { forceOpen: true }), intervalMs);
+  };
+
+  tabs.forEach((tab) => {
+    tab.addEventListener("click", () => {
+      paused = true;
+      setStep(Number(tab.dataset.explorerTab));
+      stopTimer();
+    });
+  });
+
+  dots.forEach((dot) => {
+    dot.addEventListener("click", () => {
+      paused = true;
+      setStep(Number(dot.dataset.explorerDot), { forceOpen: true });
+      stopTimer();
+    });
+  });
+
+  section.addEventListener("mouseenter", () => {
+    paused = true;
+    stopTimer();
+    if (progressFill) progressFill.style.animationPlayState = "paused";
+  });
+
+  section.addEventListener("mouseleave", () => {
+    if (!autoRotate || isDeloitte) return;
+    paused = false;
+    startTimer();
+  });
+
+  section.addEventListener("focusin", () => {
+    paused = true;
+    stopTimer();
+  });
+
+  if (isDeloitte) {
+    const activePanel = panels[index];
+    requestAnimationFrame(() => syncExplorerDropdown(section, activePanel, open));
+    explorerResizeObserver = new ResizeObserver(() => {
+      if (open) syncExplorerDropdown(section, panels[index], true);
+    });
+    if (activePanel) explorerResizeObserver.observe(activePanel);
+    window.addEventListener("resize", () => {
+      if (open) syncExplorerDropdown(section, panels[index], true);
+    });
+  }
+
+  setStep(0, { forceOpen: true });
+  if (autoRotate && !isDeloitte) startTimer();
+}
+
+export function destroyHomeExplorer() {
+  if (explorerTimer) {
+    clearInterval(explorerTimer);
+    explorerTimer = null;
+  }
+  explorerResizeObserver?.disconnect();
+  explorerResizeObserver = null;
+  document.querySelector("[data-home-explorer]")?.removeAttribute("data-bound");
+}
+
+/** World Bank–style newsletter band (full width, not in Explore next). */
+export function renderHomeKnowledgeBand(section = {}) {
+  if (!section.title) return "";
+
+  const cards = (section.cards || [])
+    .map(
+      (card) => {
+        const cta = card.cta || {};
+        const href = cta.href || "#";
+        const linkAttrs = href.startsWith("#/") ? ` href="${href}" data-link` : ` href="${href}"`;
+        return `<article class="wb-knowledge-band__card">
+          <h3>${card.title}</h3>
+          <p>${card.text || ""}</p>
+          <a class="wb-knowledge-band__link"${linkAttrs}>${cta.label || "Learn more"}</a>
+        </article>`;
       }
+    )
+    .join("");
+
+  return `
+    <section class="wb-knowledge-band" id="home-knowledge-band" aria-labelledby="home-knowledge-band-title">
+      <div class="container wb-knowledge-band__grid">
+        <div class="wb-knowledge-band__copy" data-reveal>
+          <h2 class="wb-knowledge-band__title" id="home-knowledge-band-title">${section.title}</h2>
+          ${section.lead ? `<p class="wb-knowledge-band__lead">${section.lead}</p>` : ""}
+          ${cards ? `<div class="wb-knowledge-band__duo">${cards}</div>` : ""}
+        </div>
+        <div class="wb-knowledge-band__visual" data-reveal>
+          <figure class="wb-knowledge-band__portrait">
+            <svg class="wb-knowledge-band__ring" viewBox="0 0 420 420" aria-hidden="true" focusable="false">
+              <circle cx="210" cy="210" r="188" fill="none" stroke="currentColor" stroke-width="28" stroke-linecap="round" stroke-dasharray="1 14" opacity="0.92"/>
+              <circle cx="210" cy="210" r="200" fill="none" stroke="currentColor" stroke-width="10" stroke-linecap="round" stroke-dasharray="6 18" opacity="0.45"/>
+            </svg>
+            ${
+              section.image
+                ? `<img class="wb-knowledge-band__photo" src="${section.image}" alt="${section.imageAlt || ""}" loading="lazy" decoding="async">`
+                : `<div class="wb-knowledge-band__photo wb-knowledge-band__photo--placeholder" role="img" aria-label="${section.imageAlt || "Community in Africa"}"></div>`
+            }
+          </figure>
+        </div>
+      </div>
+    </section>`;
+}
+
+/** Deloitte-style site spotlight — four overview cards with images. */
+export function renderHomeSiteSpotlight(section = {}) {
+  const cards = section.cards || [];
+  if (!cards.length) return "";
+
+  const cardHtml = cards
+    .slice(0, 4)
+    .map((card, i) => {
+      const href = card.href || "#";
+      const linkAttrs = href.startsWith("#/") ? ` href="${href}" data-link` : ` href="${href}"`;
+      return `<a class="home-spotlight__card" ${linkAttrs} style="--i:${i}">
+        <h3 class="home-spotlight__card-title">${card.title}</h3>
+        <p class="home-spotlight__card-text">${card.text || ""}</p>
+        ${card.tag ? `<span class="home-spotlight__tag">${card.tag}</span>` : ""}
+        <span class="home-spotlight__media">
+          ${
+            card.image
+              ? `<img src="${card.image}" alt="${card.imageAlt || card.title || ""}" loading="lazy" decoding="async">`
+              : `<span class="home-spotlight__media-fallback" aria-hidden="true"></span>`
+          }
+        </span>
+      </a>`;
+    })
+    .join("");
+
+  return `
+    <section class="home-spotlight" id="home-site-spotlight" aria-labelledby="home-spotlight-title">
+      <div class="home-spotlight__bar">
+        <div class="container">
+          <p class="home-spotlight__eyebrow">${section.eyebrow || "Explore the site"}</p>
+        </div>
+      </div>
+      <div class="container home-spotlight__body">
+        ${section.title ? `<h2 class="home-spotlight__title" id="home-spotlight-title" data-reveal>${section.title}</h2>` : ""}
+        <div class="home-spotlight__grid" data-reveal>${cardHtml}</div>
+      </div>
+    </section>`;
+}
+
+/** World Bank–style newsletter band (full width, not in Explore next). */
+export function renderWbNewsletter() {
+  return `
+    <section class="wb-subscribe wb-subscribe--home" id="newsletter">
+      <div class="container wb-subscribe__inner">
+        <div class="wb-subscribe__copy">
+          <p class="wb-subscribe__eyebrow">Newsletter</p>
+          <h2>Subscribe to our newsletter</h2>
+          <p>Get the latest stories and field updates. You can unsubscribe at any time.</p>
+        </div>
+        <form class="wb-subscribe__form" data-newsletter-form onsubmit="return false">
+          <label class="sr-only" for="home-newsletter-email">Email address</label>
+          <input id="home-newsletter-email" type="email" name="email" placeholder="Email address" required autocomplete="email">
+          <button type="submit">Subscribe</button>
+          <p class="wb-subscribe__msg" data-newsletter-msg hidden>Thank you — this is a demo signup only.</p>
+        </form>
+      </div>
     </section>`;
 }
 
 export function bindHeroNewsletter() {
   document.querySelectorAll("[data-newsletter-form]").forEach((form) => {
+    if (form.dataset.bound) return;
+    form.dataset.bound = "true";
     form.addEventListener("submit", (e) => {
       e.preventDefault();
-      const card = form.closest("[data-newsletter-card]");
-      const msg = card?.querySelector("[data-newsletter-msg]");
+      const msg =
+        form.querySelector("[data-newsletter-msg]") ||
+        form.closest("section")?.querySelector("[data-newsletter-msg]");
       if (msg) {
         msg.hidden = false;
         form.querySelector("button")?.setAttribute("disabled", "true");
@@ -109,7 +447,7 @@ export function renderImpactOverview(impact) {
     )
     .join("");
 
-  const scorecard = impact.scorecardCta || { label: "See the Scorecard", target: "#/scorecard" };
+  const scorecard = impact.scorecardCta || { label: "See our results", target: "#/scorecard" };
   const scorecardAttrs = scorecard.target?.startsWith("#/")
     ? `href="${scorecard.target}" data-link`
     : `href="${scorecard.target || "#/scorecard"}"`;
@@ -123,7 +461,7 @@ export function renderImpactOverview(impact) {
             <h2 class="wb-impact__title">${impact.title || "Measuring our <strong>impact</strong> and progress"}</h2>
             <p class="wb-impact__desc">${impact.description || ""}</p>
           </div>
-          <a ${scorecardAttrs} class="wb-impact__scorecard-btn">${scorecard.label || "See the Scorecard"}</a>
+          <a ${scorecardAttrs} class="wb-impact__scorecard-btn">${scorecard.label || "See our results"}</a>
         </div>
         <div class="wb-impact__grid" data-reveal>${statBlocks}</div>
       </div>

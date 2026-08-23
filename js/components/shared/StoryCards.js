@@ -79,7 +79,7 @@ function renderStoryCard(story, communityName) {
   </article>`;
 }
 
-export function renderStorySection({ stories, communities, sectionId, title, description }) {
+export function renderStorySection({ stories, communities, sectionId, title, description, sectionClass = "ch-section" }) {
   const communityMap = {};
   (communities?.communities || communities || []).forEach((c) => {
     communityMap[c.id] = c.name;
@@ -87,7 +87,7 @@ export function renderStorySection({ stories, communities, sectionId, title, des
 
   if (!stories?.length) {
     return `
-      <section class="ch-section" id="${sectionId}" data-reveal-section>
+      <section class="${sectionClass}" id="${sectionId}" data-reveal-section>
         <div class="ch-section__head">
           <h2>${title}</h2>
           ${description ? `<p class="ch-section__desc">${description}</p>` : ""}
@@ -104,7 +104,7 @@ export function renderStorySection({ stories, communities, sectionId, title, des
     .join("");
 
   return `
-    <section class="ch-section" id="${sectionId}">
+    <section class="${sectionClass}" id="${sectionId}">
       <div class="ch-section__head">
         <h2>${title}</h2>
         ${description ? `<p class="ch-section__desc">${description}</p>` : ""}

@@ -1,16 +1,9 @@
 import { formatNumber } from "../utils/format.js";
+import { bindWbPageHero } from "./shared/wb-page-hero.js";
 
 export function initLandingAnimations() {
-  const hero = document.querySelector(".wb-hero__spotlight-inner");
-  if (hero) {
-    gsap.from(hero.children, {
-      opacity: 0,
-      y: 22,
-      duration: 0.6,
-      stagger: 0.06,
-      ease: "power3.out",
-    });
-  }
+  bindWbPageHero(document.querySelector(".home-page") || document);
+  initHomeScrollStack();
 
   gsap.utils.toArray(".home-page [data-reveal]").forEach((el) => {
     gsap.from(el, {
@@ -27,6 +20,65 @@ export function initLandingAnimations() {
 }
 
 let flowLoopTween = null;
+
+function initHomeScrollStack() {
+  const stack = document.querySelector("[data-home-scroll-stack]");
+  if (!stack || typeof gsap === "undefined" || typeof ScrollTrigger === "undefined") return;
+
+  const pin = stack.querySelector(".home-hero-stack__pin");
+  const media = pin?.querySelector(".wph__media");
+  const orbs = [...stack.querySelectorAll(".home-explorer__orb")];
+  const sheet = stack.querySelector(".home-explorer__sheet");
+  const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  if (prefersReducedMotion) return;
+
+  if (media) {
+    gsap.to(media, {
+      y: 90,
+      scale: 1.12,
+      ease: "none",
+      scrollTrigger: {
+        trigger: stack,
+        start: "top top",
+        end: () => `+=${Math.max(sheet?.offsetHeight || 600, 480)}`,
+        scrub: 0.6,
+      },
+    });
+  }
+
+  orbs.forEach((orb, i) => {
+    gsap.to(orb, {
+      y: (i + 1) * -55,
+      x: i % 2 ? 30 : -24,
+      ease: "none",
+      scrollTrigger: {
+        trigger: stack,
+        start: "top top",
+        end: "bottom top",
+        scrub: 0.85,
+      },
+    });
+  });
+
+  if (sheet) {
+    gsap.fromTo(
+      sheet,
+      { y: 48, opacity: 0.92 },
+      {
+        y: 0,
+        opacity: 1,
+        ease: "none",
+        scrollTrigger: {
+          trigger: stack,
+          start: "top top",
+          end: "+=320",
+          scrub: 0.45,
+        },
+      }
+    );
+  }
+}
 
 function initNetworkFlowAnimations() {
   const diagram = document.querySelector("[data-flow-diagram]");

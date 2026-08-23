@@ -4,8 +4,8 @@
   "defaultMetric": "communities",
   "hideSidebar": true,
   "overview": {
-    "pageTitle": "Africa network overview",
-    "lead": "Network-wide metrics, growth trends, and country hubs across the PA network. For live field updates, see the homepage above the interactive map.",
+    "pageTitle": "Where we work",
+    "lead": "Seven countries. Open one to see nearby communities. The map lives on Home.",
     "kpis": [
       { "label": "Countries", "value": "54", "suffix": "+" },
       { "label": "Communities", "value": "1000", "suffix": "+" },

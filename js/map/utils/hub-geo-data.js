@@ -130,6 +130,16 @@ export function buildCatchmentGeoMapModel({
       : { x: 0, y: 0, width: 220, height: 200 };
     const viewBox = expandViewBox(base, points, 0.1);
 
+    const communityZones = (communityMap.communities || [])
+      .filter((entry) => entry.path)
+      .map((entry) => ({
+        id: entry.id,
+        name: entry.name,
+        slug: entry.slug || entry.id,
+        status: entry.status,
+        d: entry.path,
+      }));
+
     let bgPath = "";
     const countryPathRaw = mapPaths?.paths?.[country.isoCode] || "";
     if (countryPathRaw) {
@@ -150,8 +160,10 @@ export function buildCatchmentGeoMapModel({
       catchmentName: catchment.name,
       catchmentSlug,
       countryPath: bgPath,
+      catchmentBoundary: communityMap.catchmentPath || "",
       viewBox: viewBox.string,
       communities: geoCommunities,
+      communityZones,
       catchmentZones: [],
       catchments: [],
     };

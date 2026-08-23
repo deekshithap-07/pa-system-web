@@ -1,0 +1,638 @@
+/* World Bank–style topic pages: hub tiles, back bar, distinct chapter layouts. */
+
+.page-back {
+  background: #f7f4ee;
+  border-bottom: 1px solid #e8dfd0;
+  padding: 0.75rem 0;
+}
+
+.page-back .container {
+  display: flex;
+  align-items: center;
+  min-height: 1.5rem;
+}
+
+.page-back__link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #002b5c;
+  text-decoration: none;
+}
+
+.page-back__link:hover {
+  text-decoration: underline;
+  color: #005f9e;
+}
+
+.topic-hub {
+  padding: 2.75rem 0 3.5rem;
+  background: #fff;
+}
+
+.topic-hub__eyebrow {
+  margin: 0;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #0077b6;
+}
+
+.topic-hub__title {
+  margin: 0.45rem 0 0.7rem;
+  font-size: clamp(1.5rem, 3vw, 2.05rem);
+  font-weight: 800;
+  color: #002b5c;
+  letter-spacing: -0.02em;
+}
+
+.topic-hub__lead {
+  margin: 0 0 1.75rem;
+  max-width: 38rem;
+  font-size: 1.05rem;
+  line-height: 1.6;
+  color: #4a5d73;
+}
+
+.topic-hub__grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.15rem;
+}
+
+.topic-hub__card {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  padding: 0;
+  overflow: hidden;
+  border-radius: 4px;
+  text-decoration: none;
+  color: inherit;
+  background: #fff;
+  border: 1px solid #d7e6ef;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.topic-hub__card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 28px rgba(0, 43, 92, 0.1);
+  text-decoration: none;
+}
+
+.topic-hub__visual {
+  display: block;
+  height: 8.5rem;
+  background:
+    linear-gradient(180deg, rgba(0, 43, 92, 0.08), rgba(0, 43, 92, 0.35)),
+    linear-gradient(145deg, #7eb3c4, #002b5c);
+}
+
+.topic-hub__card--0 .topic-hub__visual {
+  background:
+    linear-gradient(180deg, rgba(0, 43, 92, 0.05), rgba(0, 43, 92, 0.32)),
+    linear-gradient(145deg, #5aa8c8, #0a3a5c);
+}
+.topic-hub__card--1 .topic-hub__visual {
+  background:
+    linear-gradient(180deg, rgba(92, 61, 18, 0.08), rgba(42, 28, 8, 0.4)),
+    linear-gradient(145deg, #e0b866, #5c3d12);
+}
+.topic-hub__card--2 .topic-hub__visual {
+  background:
+    linear-gradient(180deg, rgba(43, 20, 70, 0.08), rgba(28, 16, 48, 0.4)),
+    linear-gradient(145deg, #b9a6d4, #3d2a58);
+}
+.topic-hub__card--3 .topic-hub__visual {
+  background:
+    linear-gradient(180deg, rgba(12, 60, 36, 0.08), rgba(12, 36, 24, 0.4)),
+    linear-gradient(145deg, #7dbe94, #1b4d38);
+}
+
+.topic-hub__body {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  padding: 1.15rem 1.25rem 1.15rem;
+  background: #fff;
+}
+
+.topic-hub__card--0 { background: #fff; }
+.topic-hub__card--1 { background: #fff; border-color: #e4d8c4; }
+.topic-hub__card--2 { background: #fff; border-color: #ddd4ea; }
+.topic-hub__card--3 { background: #fff; border-color: #cfe4d6; }
+
+.topic-hub__n,
+.topic-hub__kind {
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #0077b6;
+}
+
+.topic-hub__card h3 {
+  margin: 0.45rem 0 0.4rem;
+  font-size: 1.22rem;
+  color: #002b5c;
+}
+
+.topic-hub__card p {
+  margin: 0;
+  flex: 1;
+  font-size: 0.95rem;
+  line-height: 1.55;
+  color: #4a5d73;
+}
+
+.topic-hub__cta {
+  margin-top: 1rem;
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: #0077b6;
+}
+
+.wbs-glance {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+  margin: 0 0 0.5rem;
+}
+
+.wbs-glance__item {
+  padding: 1.1rem 1.2rem;
+  background: #f8fafc;
+  border-left: 4px solid #0077b6;
+}
+
+.wbs-glance__item strong {
+  display: block;
+  font-size: 1.65rem;
+  color: #002b5c;
+}
+
+.wbs-glance__item span {
+  font-size: 0.88rem;
+  color: #4a5d73;
+}
+
+.wbs-panel.is-page {
+  display: block;
+}
+
+.wbs-country-tiles {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(16rem, 1fr));
+  gap: 1rem;
+  margin: 0 0 2rem;
+}
+
+.wbs-country-tile {
+  display: block;
+  padding: 1.15rem 1.2rem;
+  background: #fff;
+  border: 1px solid #e4e9ee;
+  text-decoration: none;
+  color: inherit;
+  border-radius: 4px;
+}
+
+.wbs-country-tile:hover {
+  border-color: #0077b6;
+  box-shadow: 0 8px 22px rgba(0, 43, 92, 0.08);
+}
+
+.wbs-country-tile strong {
+  display: block;
+  font-size: 1.15rem;
+  color: #002b5c;
+}
+
+.wbs-country-tile span {
+  display: block;
+  margin-top: 0.35rem;
+  font-size: 0.88rem;
+  color: #4a5d73;
+}
+
+.wbs-duel-row strong.is-win {
+  color: inherit;
+  font-weight: 700;
+}
+
+.topic-page--working .wbs-main {
+  background: #fdf8f0;
+}
+
+.topic-page--countries .wbs-main {
+  background: #f7fafc;
+}
+
+.topic-page--together .wbs-main {
+  background: #f6f3fa;
+}
+
+/* ---- Analysis narrative (What is changing) ---- */
+.wbs-narrative__lede-wrap {
+  padding: 1.75rem 0 0.5rem;
+}
+
+.wbs-narrative__lede {
+  max-width: 42rem;
+  font-size: 1.05rem;
+  line-height: 1.65;
+  color: #334155;
+}
+
+.wbs-arc {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.wbs-arc__chapter {
+  padding: 2.5rem 0;
+  border-top: 1px solid rgba(0, 43, 92, 0.08);
+}
+
+.wbs-arc__chapter--past {
+  background: linear-gradient(180deg, #faf8f5 0%, #f6f3fa 100%);
+}
+
+.wbs-arc__chapter--present {
+  background: #fff;
+}
+
+.wbs-arc__chapter--next {
+  background: linear-gradient(180deg, #f3f8f4 0%, #f6f3fa 100%);
+}
+
+.wbs-arc__inner {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.wbs-arc__head h2 {
+  margin: 0.35rem 0 0;
+  font-size: clamp(1.35rem, 2.5vw, 1.85rem);
+  color: #002b5c;
+  letter-spacing: -0.02em;
+}
+
+.wbs-arc__label {
+  display: inline-block;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #009fda;
+}
+
+.wbs-arc__text {
+  max-width: 40rem;
+  margin: 0;
+  font-size: 1rem;
+  line-height: 1.65;
+  color: #475569;
+}
+
+.wbs-arc__figures {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.75rem;
+}
+
+.wbs-arc__stat {
+  padding: 1rem 1.1rem;
+  background: rgba(255, 255, 255, 0.85);
+  border: 1px solid rgba(0, 43, 92, 0.08);
+  border-radius: 10px;
+}
+
+.wbs-arc__stat-label {
+  display: block;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #64748b;
+}
+
+.wbs-arc__stat-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.35rem;
+  font-size: 0.95rem;
+}
+
+.wbs-arc__stat-row em {
+  font-style: normal;
+  color: #94a3b8;
+}
+
+.wbs-arc__stat-row strong {
+  color: #002b5c;
+  font-size: 1.1rem;
+}
+
+.wbs-arc__evidence {
+  margin-top: 0.5rem;
+}
+
+.wbs-arc__chart-card {
+  padding: 1.25rem;
+  background: #fff;
+  border: 1px solid rgba(0, 43, 92, 0.08);
+  border-radius: 12px;
+}
+
+.wbs-arc__chart-card h3 {
+  margin: 0 0 0.35rem;
+  font-size: 1rem;
+  color: #002b5c;
+}
+
+.wbs-arc__chart-note {
+  margin: 0 0 0.75rem;
+  font-size: 0.85rem;
+  line-height: 1.5;
+  color: #64748b;
+}
+
+.wbs-arc__quote {
+  margin: 0;
+  padding: 1.25rem 1.5rem;
+  border-left: 4px solid #009fda;
+  background: rgba(0, 159, 218, 0.06);
+  border-radius: 0 10px 10px 0;
+}
+
+.wbs-arc__quote p {
+  margin: 0;
+  font-size: 1.05rem;
+  line-height: 1.6;
+  color: #1e293b;
+  font-style: italic;
+}
+
+.wbs-arc__quote cite {
+  display: block;
+  margin-top: 0.65rem;
+  font-size: 0.82rem;
+  font-style: normal;
+  color: #64748b;
+}
+
+.wbs-arc__split {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  align-items: start;
+}
+
+.wbs-arc__subhead {
+  margin: 0 0 0.75rem;
+  font-size: 0.95rem;
+  color: #002b5c;
+}
+
+.wbs-arc__findings {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.wbs-arc__findings li {
+  padding: 1rem;
+  background: #f8fafc;
+  border-radius: 10px;
+  border: 1px solid rgba(0, 43, 92, 0.06);
+}
+
+.wbs-arc__findings strong {
+  display: block;
+  color: #002b5c;
+}
+
+.wbs-arc__change {
+  display: inline-block;
+  margin: 0.25rem 0 0.35rem;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #009fda;
+}
+
+.wbs-arc__findings p {
+  margin: 0;
+  font-size: 0.88rem;
+  line-height: 1.55;
+  color: #475569;
+}
+
+.wbs-arc__dims {
+  list-style: none;
+  margin: 0.75rem 0 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5rem;
+}
+
+.wbs-arc__dims li {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.35rem;
+  font-size: 0.82rem;
+  color: #475569;
+}
+
+.wbs-arc__dims strong {
+  color: #002b5c;
+}
+
+.wbs-arc__dims em {
+  font-style: normal;
+  font-size: 0.75rem;
+  color: #16a34a;
+}
+
+.wbs-arc__highlight {
+  margin: 0;
+  padding: 1rem 1.25rem;
+  background: rgba(22, 163, 74, 0.08);
+  border-radius: 10px;
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: #334155;
+}
+
+.wbs-arc__watch,
+.wbs-arc__drivers {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.wbs-arc__watch li {
+  padding: 0.85rem 1rem;
+  background: #fff;
+  border: 1px solid rgba(0, 43, 92, 0.08);
+  border-radius: 10px;
+}
+
+.wbs-arc__watch-score {
+  display: inline-block;
+  margin-left: 0.5rem;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #009fda;
+}
+
+.wbs-arc__watch p {
+  margin: 0.35rem 0 0;
+  font-size: 0.88rem;
+  line-height: 1.5;
+  color: #475569;
+}
+
+.wbs-arc__driver {
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  font-size: 0.88rem;
+  background: #f8fafc;
+  border-left: 3px solid #94a3b8;
+}
+
+.wbs-arc__driver--high {
+  border-left-color: #16a34a;
+}
+
+.wbs-arc__driver--medium {
+  border-left-color: #009fda;
+}
+
+.wbs-arc__driver em {
+  display: block;
+  margin-top: 0.25rem;
+  font-style: normal;
+  font-size: 0.75rem;
+  color: #64748b;
+}
+
+.wbs-arc__footnote {
+  margin: 1rem 0 0;
+  font-size: 0.82rem;
+  line-height: 1.5;
+  color: #64748b;
+}
+
+/* ---- Data sheet (By country) ---- */
+.wbs-data-sheet {
+  padding: 2rem 0 3rem;
+}
+
+.wbs-data-sheet__note {
+  margin: 0 0 1.5rem;
+  padding: 0.85rem 1rem;
+  font-size: 0.88rem;
+  line-height: 1.5;
+  color: #475569;
+  background: #eef2f6;
+  border-radius: 8px;
+}
+
+.wbs-data-sheet__note a {
+  color: #0077b6;
+  font-weight: 600;
+}
+
+.wbs-data-sheet__head {
+  margin-bottom: 1rem;
+}
+
+.wbs-data-sheet__head h2 {
+  margin: 0 0 0.35rem;
+  font-size: 1.25rem;
+  color: #002b5c;
+}
+
+.wbs-data-sheet__head p {
+  margin: 0;
+  font-size: 0.9rem;
+  color: #64748b;
+}
+
+.wbs-data-sheet__head--charts {
+  margin-top: 2.5rem;
+}
+
+.wbs-country-tile__cta {
+  display: block;
+  margin-top: 0.5rem;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #009fda;
+}
+
+.wbs-charts-grid--data {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.25rem;
+}
+
+.wbs-chart-card--data {
+  background: #fff;
+  border: 1px solid rgba(0, 43, 92, 0.08);
+  border-radius: 12px;
+  padding: 1.25rem;
+}
+
+.wbs-chart-card--data h3 {
+  margin: 0 0 0.35rem;
+  font-size: 0.95rem;
+  color: #002b5c;
+}
+
+.wbs-chart-card--data p {
+  margin: 0 0 0.75rem;
+  font-size: 0.82rem;
+  color: #64748b;
+}
+
+@media (max-width: 800px) {
+  .wbs-arc__figures,
+  .wbs-arc__split,
+  .wbs-charts-grid--data {
+    grid-template-columns: 1fr;
+  }
+
+  .wbs-arc__dims {
+    grid-template-columns: 1fr;
+  }
+}
+
+.topic-page--journey .wbs-main {
+  background: #f3f8f4;
+}
+
+.topic-page--how .about-atlas-block,
+.topic-page--journey-about .about-atlas-block {
+  padding-top: 1.5rem;
+}
+
+@media (max-width: 800px) {
+  .topic-hub__grid,
+  .wbs-glance {
+    grid-template-columns: 1fr;
+  }
+}

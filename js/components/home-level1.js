@@ -95,7 +95,7 @@ export function renderAfricaMapSection(section, opts = {}) {
           <p>${section?.description || "Click a country to explore data and drill into catchments and communities. Scroll on the map to zoom; scroll outside to continue down the page."}</p>
         </header>
         <a href="${ctaTarget}" class="l1-map__full-link" data-link data-enable-africa-nav data-reveal>
-          ${section?.countriesCta?.label || "Browse all countries →"}
+          ${section?.countriesCta?.label || "Where we work →"}
         </a>
       </div>
       <div class="l1-map__stage" data-reveal>

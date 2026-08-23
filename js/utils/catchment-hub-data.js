@@ -6,6 +6,7 @@ import {
   getStoriesByIds,
   getReportsByIds,
 } from "./data.js";
+import { attachCatchmentHubGeoMaps } from "./hub-geo-maps.js";
 
 export function buildCatchmentHubPayload(countrySlug, catchmentSlug, data) {
   const country = getCountryBySlug(data.countries, countrySlug);
@@ -42,22 +43,38 @@ export function buildCatchmentHubPayload(countrySlug, catchmentSlug, data) {
   }));
 
   if (hubEntry) {
-    return {
+    return attachCatchmentHubGeoMaps(
+      {
+        country,
+        catchment,
+        communities,
+        communityCards,
+        stories,
+        reports,
+        countrySlug,
+        catchmentSlug,
+        catchmentName: catchment.name,
+        countryName: country.name,
+        ...hubEntry,
+      },
+      data
+    );
+  }
+
+  return attachCatchmentHubGeoMaps(
+    buildDefaultCatchmentPayload(
       country,
       catchment,
       communities,
       communityCards,
       stories,
       reports,
+      dashboard,
       countrySlug,
-      catchmentSlug,
-      catchmentName: catchment.name,
-      countryName: country.name,
-      ...hubEntry,
-    };
-  }
-
-  return buildDefaultCatchmentPayload(country, catchment, communities, communityCards, stories, reports, dashboard, countrySlug, catchmentSlug);
+      catchmentSlug
+    ),
+    data
+  );
 }
 
 function buildDefaultCatchmentPayload(

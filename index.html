@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Possibilities Africa | The whole gospel transforming the whole person and whole community</title>
-  <meta name="description" content="The whole gospel transforming the whole person and whole community. Understand communities across Africa and measure transformation with Possibilities Africa.">
+  <meta name="description" content="See where Possibilities Africa works, what is happening in communities, and how people are growing — in simple steps anyone can follow.">
   <link rel="stylesheet" href="styles/base.css">
   <link rel="stylesheet" href="styles/layout.css">
   <link rel="stylesheet" href="styles/map.css">
@@ -25,6 +25,17 @@
   <link rel="stylesheet" href="styles/resources-page.css">
   <link rel="stylesheet" href="styles/about-atlas.css">
   <link rel="stylesheet" href="styles/about-page.css">
+  <link rel="stylesheet" href="styles/wb-who.css">
+  <link rel="stylesheet" href="styles/wb-work.css">
+  <link rel="stylesheet" href="styles/story-explorer.css">
+  <link rel="stylesheet" href="styles/wb-page-hero.css">
+  <link rel="stylesheet" href="styles/story-pages.css">
+  <link rel="stylesheet" href="styles/topic-pages.css">
+  <link rel="stylesheet" href="styles/wb-outcomes.css">
+  <link rel="stylesheet" href="styles/wb-country.css">
+  <link rel="stylesheet" href="styles/country-data.css">
+  <link rel="stylesheet" href="styles/country-stories.css">
+  <link rel="stylesheet" href="styles/field-reports.css">
   <link rel="stylesheet" href="https://unpkg.com/maplibre-gl@5.19.0/dist/maplibre-gl.css">
   <link rel="stylesheet" href="styles/africa-map.css">
 </head>
@@ -34,18 +45,13 @@
   <header class="site-header" id="site-header">
     <div class="container site-header__inner">
       <a href="#/" class="brand" data-nav="home">
-        <span class="brand__icon" aria-hidden="true">🌍</span>
-        <span>
-          <span class="brand__title">Possibilities Africa</span><br>
-          <span class="brand__sub">Stories &amp; Transformation Data</span>
-        </span>
+        <img class="brand__logo brand__logo--color" src="assets/images/pa-logo.png" alt="Possibilities Africa">
       </a>
       <nav class="site-nav" id="site-nav" aria-label="Main navigation">
         <a href="#/" class="site-nav__pill site-nav__pill--home" data-nav="home">Home</a>
-        <a href="#/africa" class="site-nav__pill site-nav__pill--africa" data-nav="africa" id="nav-africa" hidden>Africa</a>
-        <a href="#/scorecard" class="site-nav__pill site-nav__pill--scorecard" data-nav="scorecard">Scorecard</a>
-        <a href="#/resources" class="site-nav__pill site-nav__pill--resources" data-nav="resources">Resources</a>
-        <a href="#/about" class="site-nav__pill site-nav__pill--about" data-nav="about">About</a>
+        <a href="#/africa" class="site-nav__pill site-nav__pill--africa" data-nav="africa" id="nav-africa">Where we work</a>
+        <a href="#/work" class="site-nav__pill site-nav__pill--work" data-nav="work">What we do</a>
+        <a href="#/about" class="site-nav__pill site-nav__pill--about" data-nav="about">Who we are</a>
         <button type="button" class="site-nav__search" data-nav="search" aria-label="Search">
           <span aria-hidden="true">⌕</span>
         </button>
@@ -56,44 +62,73 @@
 
   <main id="app"></main>
 
-  <footer class="site-footer site-footer--institutional">
-    <div class="container">
-      <div class="footer-grid">
-        <div>
-          <strong style="color:white;font-size:1rem">PA Transformation Intelligence</strong>
-          <p style="font-size:0.85rem;margin-top:0.5rem;line-height:1.6">Stories and data from pastor-led transformation across Africa. Explore communities, understand impact, and measure progress together.</p>
-          <div class="footer-social">
-            <a href="#" aria-label="Facebook">Fb</a>
-            <a href="#" aria-label="X">X</a>
-            <a href="#" aria-label="YouTube">Yt</a>
-            <a href="#" aria-label="LinkedIn">In</a>
-          </div>
-        </div>
-        <div>
-          <h3>Explore</h3>
-          <ul>
-            <li><a href="#/#home-africa-map">Africa Map</a></li>
-            <li><a href="#/africa">Countries overview</a></li>
-            <li><a href="#/scorecard">Scorecard</a></li>
-            <li><a href="#/resources">Resources</a></li>
-          </ul>
-        </div>
-        <div>
-          <h3>Platform</h3>
-          <ul>
-            <li><a href="#/about">About</a></li>
-            <li><a href="https://www.possibilitiesafrica.org/" target="_blank" rel="noopener">PA Main Website</a></li>
-          </ul>
-        </div>
-        <div>
-          <h3>Contact</h3>
-          <ul>
-            <li><a href="mailto:info@possibilitiesafrica.org">info@possibilitiesafrica.org</a></li>
-            <li><a href="https://www.possibilitiesafrica.org/" target="_blank" rel="noopener">possibilitiesafrica.org</a></li>
-          </ul>
+  <footer class="site-footer">
+    <div class="container footer-grid">
+      <div class="footer-brand-col">
+        <a href="#/" class="footer-brand" data-link>
+          <img class="footer-brand__logo" src="assets/images/pa-logo.png" alt="Possibilities Africa">
+        </a>
+        <h4 class="footer-brand__tagline">With God all things are possible</h4>
+        <p class="footer-brand__mission">The whole gospel transforming the whole person and whole community.</p>
+      </div>
+      <div>
+        <h3 class="footer-col__title">Explore</h3>
+        <ul class="footer-links">
+          <li><a href="#/" data-link>Home</a></li>
+          <li><a href="#/africa" data-link>Where we work</a></li>
+          <li><a href="#/work" data-link>What we do</a></li>
+          <li><a href="#/scorecard" data-link>Our results</a></li>
+          <li><a href="#/resources" data-link>Stories &amp; reports</a></li>
+          <li><a href="#/about" data-link>Who we are</a></li>
+        </ul>
+      </div>
+      <div>
+        <h3 class="footer-col__title">About</h3>
+        <ul class="footer-links">
+          <li><a href="#/about" data-link>Who we are</a></li>
+          <li><a href="#/work/journey" data-link>The two-year journey</a></li>
+          <li><a href="https://www.possibilitiesafrica.org/" target="_blank" rel="noopener noreferrer">Main PA website</a></li>
+        </ul>
+      </div>
+      <div>
+        <h3 class="footer-col__title">Where we work</h3>
+        <ul class="footer-links footer-links--grid">
+          <li><a href="#/country/kenya" data-link>Kenya</a></li>
+          <li><a href="#/country/ethiopia" data-link>Ethiopia</a></li>
+          <li><a href="#/country/malawi" data-link>Malawi</a></li>
+          <li><a href="#/country/zambia" data-link>Zambia</a></li>
+          <li><a href="#/country/rwanda" data-link>Rwanda</a></li>
+          <li><a href="#/country/tanzania" data-link>Tanzania</a></li>
+          <li><a href="#/country/burundi" data-link>Burundi</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="container footer-middle">
+      <div class="footer-about">
+        <p>Possibilities Africa equips pastors in rural communities with the knowledge, skills, and change of attitude needed for holistic ministry — faith, family, and daily life together.</p>
+        <p class="footer-address">Africa office: BTL Centre, Gate 7 Upper Hill, Masaba Road, off Bunyala Road, Nairobi, Kenya</p>
+        <p class="footer-address"><a href="mailto:info@possibilitiesafrica.org">info@possibilitiesafrica.org</a></p>
+      </div>
+      <div class="footer-follow">
+        <h3 class="footer-col__title">Follow us</h3>
+        <div class="footer-social">
+          <a class="footer-social__link" href="https://www.facebook.com/PossibilitiesAfricaPA" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true"><path d="M14 8.5V6.75c0-.69.56-1.25 1.25-1.25H16.5V3h-2.08C12.02 3 11 4.24 11 5.92V8.5H9v2.75h2V21h3v-9.75h2.55l.45-2.75H14z"/></svg>
+          </a>
+          <a class="footer-social__link" href="https://x.com/PossibilitiesK" target="_blank" rel="noopener noreferrer" aria-label="X">
+            <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor" aria-hidden="true"><path d="M18.244 2H21l-6.53 7.46L22 22h-6.828l-4.77-6.24L4.8 22H2.04l7.02-8.02L2 2h6.914l4.31 5.69L18.244 2Zm-2.39 18h1.66L7.24 4H5.48l10.374 16Z"/></svg>
+          </a>
+          <a class="footer-social__link" href="https://www.youtube.com/@possibilitiesafrica5288" target="_blank" rel="noopener noreferrer" aria-label="YouTube">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true"><path d="M21.58 7.2a2.75 2.75 0 0 0-1.94-1.95C18.25 5 12 5 12 5s-6.25 0-7.64.25A2.75 2.75 0 0 0 2.42 7.2 28.9 28.9 0 0 0 2 12a28.9 28.9 0 0 0 .42 4.8 2.75 2.75 0 0 0 1.94 1.95C5.75 19 12 19 12 19s6.25 0 7.64-.25a2.75 2.75 0 0 0 1.94-1.95A28.9 28.9 0 0 0 22 12a28.9 28.9 0 0 0-.42-4.8ZM10 15.5v-7l6 3.5-6 3.5Z"/></svg>
+          </a>
+          <a class="footer-social__link" href="https://www.instagram.com/possibilitiesafrica/" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true"><path d="M7 3h10a4 4 0 0 1 4 4v10a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4V7a4 4 0 0 1 4-4Zm0 2a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2H7Zm5 3.25A4.75 4.75 0 1 1 7.25 13 4.75 4.75 0 0 1 12 8.25Zm0 2A2.75 2.75 0 1 0 14.75 13 2.75 2.75 0 0 0 12 10.25ZM17.5 6.75a1 1 0 1 1-1 1 1 1 0 0 1 1-1Z"/></svg>
+          </a>
         </div>
       </div>
-      <div class="footer-bottom">&copy; 2026 Possibilities Africa. All rights reserved. · Mock data — frontend demo.</div>
+    </div>
+    <div class="container footer-bottom">
+      <span>&copy; 2026 Possibilities Africa</span>
     </div>
   </footer>
 

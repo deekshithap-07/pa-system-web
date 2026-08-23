@@ -5,127 +5,144 @@
       "slug": "women-building-dams",
       "title": "Women building trench dams to store water for irrigation",
       "countryId": "ken",
-      "catchmentId": "kwale_south",
-      "communityId": "kanana",
+      "catchmentId": null,
+      "communityId": null,
       "program": "Responsible Citizenship",
-      "excerpt": "Kwale is one of the counties in Kenya that experiences severe droughts. Whenever this happens, the communities struggle — women from Shalom groups mobilised to build trench dams.",
-      "image": "assets/story-placeholder.jpg",
+      "excerpt": "Kwale is one of the counties in Kenya that experiences severe droughts. Whenever this happens, the communities in the region are forced to deal with hunger pangs due to poor harvests. This affects the families'…",
+      "image": "assets/stories/story-kenya-dams.jpg",
+      "sourceUrl": "https://www.possibilitiesafrica.org/kenya-stories.html",
       "body": [
-        "Kwale is one of the counties in Kenya that experiences severe droughts. Whenever this happens, the communities struggle without reliable water for irrigation and household use.",
-        "Pastor leaders mobilised women from five Shalom groups to plan and build trench dams — a community-led solution that stores rainwater. Within one season, 14 water initiatives were completed and farming groups diversified crops.",
-        "Tracking data shows Kanana has advanced to Implementation stage with a leadership score of 81 — one of the highest in the Kwale South catchment."
+        "Kwale is one of the counties in Kenya that experiences severe droughts. Whenever this happens, the communities in the region are forced to deal with hunger pangs due to poor harvests. This affects the families' living standards, as they largely depend on agricultural activities for their livelihood.",
+        "Pastor Richard Mazera of Mnyenzeni PEFA Church is one of the community residents whom Possibilities Africa (PA) partners with to champion transformation. Through PA training, he realized that while natural disasters like droughts are inevitable, proper planning and early intervention can significantly reduce their negative effects.",
+        "Pastor Richard shared this newfound knowledge with the church after participating in PA training. He organized his congregation into Shalom groups. The women's Shalom group, in particular, was interested in vegetable farming, but they understood that addressing the water shortage was crucial for the project's success.",
+        "To store water during the short rains expected in November and December, the group is building trench dams. The water collected and stored in the wells will be used to irrigate the crops. Pastor Richard has encouraged the women's group to apply smart farming techniques, such as mulching, to conserve water during farming.",
+        "Community-funded and community-led — the ongoing project is funded by money collected through table banking and merry-go-round activities, financial empowerment skills also covered in PA training."
       ],
-      "metrics": { "waterInitiatives": 14, "projects": 3, "leadershipScore": 81, "incomeChange": 22 },
-      "metricsList": [
-        { "label": "Water initiatives", "value": "14" },
-        { "label": "Shalom groups", "value": "5" },
-        { "label": "Leadership score", "value": "81/100" },
-        { "label": "Income change", "value": "+22%" }
-      ],
-      "dataCard": {
-        "category": "Citizenship",
-        "accent": "infrastructure",
-        "metric": "14",
-        "metricSuffix": "",
-        "text": "water initiatives completed in one season by women from **five Shalom groups** in drought-prone Kwale.",
-        "source": "PA field tracking · Kenya",
-        "sourceTarget": "#/stories/kenya"
+      "narrative": {
+        "intro": "Kwale is one of the counties in Kenya that experiences severe droughts. Whenever this happens, the communities in the region are forced to deal with hunger pangs due to poor harvests. This affects the families' living standards, as they largely depend on agricultural activities for their livelihood.",
+        "challenge": "Pastor Richard Mazera of Mnyenzeni PEFA Church is one of the community residents whom Possibilities Africa (PA) partners with to champion transformation. Through PA training, he realized that while natural disasters like droughts are inevitable, proper planning and early intervention can significantly reduce their negative effects.",
+        "solution": "Pastor Richard shared this newfound knowledge with the church after participating in PA training. He organized his congregation into Shalom groups. The women's Shalom group, in particular, was interested in vegetable farming, but they understood that addressing the water shortage was crucial for the project's success. To store water during the short rains expected in November and December, the group is building trench dams. The water collected and stored in the wells will be used to irrigate the crops. Pastor Richard has encouraged the women's group to apply smart farming techniques, such as mulching, to conserve water during farming.",
+        "impact": "Community-funded and community-led — the ongoing project is funded by money collected through table banking and merry-go-round activities, financial empowerment skills also covered in PA training."
       }
     },
     {
-      "id": "story-kenya-namawanga",
-      "slug": "namawanga-origins",
-      "title": "Where Africa's transformation journey began",
+      "id": "story-owino",
+      "slug": "pastor-owino-the-children-mentorship-champion",
+      "title": "Pastor Owino: the children mentorship champion",
       "countryId": "ken",
       "catchmentId": null,
       "communityId": null,
-      "program": "Transformational Leadership",
-      "excerpt": "Africa's transformation journey started in 2005 in Namawanga, Webuye — now spanning 32 constituencies.",
-      "image": "assets/story-placeholder.jpg",
+      "program": "Mentoring the Next Generation",
+      "excerpt": "Malindi CIFA is within Kilifi County, one of the poorest counties on Kenya's coast. Many young people drop out of school early for seasonal hotel jobs, contributing to low literacy and rising poverty.",
+      "image": "assets/stories/story-owino.jpg",
+      "sourceUrl": "https://www.possibilitiesafrica.org/kenya-stories.html",
       "body": [
-        "Kenya is the headquarters of Possibilities Africa. Africa's transformation journey started here in 2005, in Namawanga village in Webuye Constituency, Bungoma County.",
-        "Twenty years on, a network of 300+ committed pastor leaders drives holistic ministry across 32 constituencies — incorporating the whole-gospel model into personal lives, churches, and communities.",
-        "Kenya remains the benchmark for PA's two-year transformation journey with the most mature catchment structures on the continent."
+        "Malindi CIFA is within Kilifi County, one of the poorest counties on Kenya's coast. Many young people drop out of school early for seasonal hotel jobs, contributing to low literacy and rising poverty.",
+        "Pastor Owino attended PA training in Nairobi in 2017, where he was challenged to minister holistically, with a specific conviction to reach out to children. In agreement with his wife, he began an early childhood development centre inside his church compound.",
+        "Three years later, the school enrols 103 children across day care, baby class and two pre-primary levels, with 19 graduating to grade one. \"The vision was imposed in me about many children in the village who were not going to school,\" Pastor Owino recalls. \"I found a lady who could teach... whatever small would come out would be shared. Her work was brilliant!\"",
+        "Now facing challenges of growth, the community wants the school to expand into a full primary school, and Pastor Owino continues turning available rooms — even a former kitchen — into classrooms."
       ],
-      "metrics": { "constituencies": 32, "pastors": 627, "communities": 23, "years": 20 },
-      "metricsList": [
-        { "label": "Years active", "value": "20+" },
-        { "label": "Constituencies", "value": "32" },
-        { "label": "Pastor leaders", "value": "627" },
-        { "label": "Communities", "value": "23" }
-      ],
-      "dataCard": {
-        "category": "Leadership",
-        "accent": "people",
-        "metric": "32",
-        "metricSuffix": "",
-        "text": "constituencies reached across Kenya where **300+ pastor leaders** drive holistic transformation since 2005.",
-        "source": "PA Kenya network data",
-        "sourceTarget": "#/stories/kenya"
+      "narrative": {
+        "intro": "Malindi CIFA is within Kilifi County, one of the poorest counties on Kenya's coast. Many young people drop out of school early for seasonal hotel jobs, contributing to low literacy and rising poverty.",
+        "challenge": "Pastor Owino attended PA training in Nairobi in 2017, where he was challenged to minister holistically, with a specific conviction to reach out to children. In agreement with his wife, he began an early childhood development centre inside his church compound.",
+        "solution": "Three years later, the school enrols 103 children across day care, baby class and two pre-primary levels, with 19 graduating to grade one. \"The vision was imposed in me about many children in the village who were not going to school,\" Pastor Owino recalls. \"I found a lady who could teach... whatever small would come out would be shared. Her work was brilliant!\"",
+        "impact": "Now facing challenges of growth, the community wants the school to expand into a full primary school, and Pastor Owino continues turning available rooms — even a former kitchen — into classrooms."
       }
     },
     {
-      "id": "story-malawi-mary",
-      "slug": "mary-scone-business",
-      "title": "Mary Mvilera's decision to make a living out of selling scones",
-      "countryId": "mw",
-      "catchmentId": "mw_nkhotakota_south",
-      "communityId": "mw_benga",
-      "program": "Economic Productivity",
-      "excerpt": "At 35 years old, Mary Mvilera is married with 4 children. Before PA programs were introduced in her community, she had no stable income.",
-      "image": "assets/story-placeholder.jpg",
-      "body": [
-        "At 35 years old, Mary Mvilera is married with 4 children. Before PA programs were introduced in her community, she had no stable income source.",
-        "Mary joined an Economic Productivity CHIP group in Benga. Starting with a single oven, she now supplies scones to three local schools and employs two neighbours. Her story has been replicated in two neighbouring communities.",
-        "Benga's CBC economic dimension score of 80 reflects the impact of livelihood programmes across Nkhotakota South."
-      ],
-      "metrics": { "schools": 3, "jobs": 2, "children": 4, "leadershipScore": 82 },
-      "metricsList": [
-        { "label": "Schools supplied", "value": "3" },
-        { "label": "Jobs created", "value": "2" },
-        { "label": "Children supported", "value": "4" },
-        { "label": "Economic CBC", "value": "80/100" }
-      ],
-      "dataCard": {
-        "category": "Prosperity",
-        "accent": "prosperity",
-        "metric": "3",
-        "metricSuffix": "",
-        "text": "local schools now supplied by Mary's scone business — **replicated in two neighbouring communities** through CHIP skill transfer.",
-        "source": "PA field tracking · Malawi",
-        "sourceTarget": "#/stories/malawi"
-      }
-    },
-    {
-      "id": "story-malawi-warm-heart",
-      "slug": "malawi-holistic-ministry",
-      "title": "Changing the narrative in the Warm Heart of Africa",
-      "countryId": "mw",
+      "id": "story-rachuonyo",
+      "slug": "rachuonyo-a-communitys-story-of-transformation",
+      "title": "Rachuonyo: a community's story of transformation",
+      "countryId": "ken",
       "catchmentId": null,
       "communityId": null,
-      "program": "Spiritual Discipleship",
-      "excerpt": "Since 2012, PA has engaged pastors across Malawi's rural highlands and lake districts through holistic ministry.",
-      "image": "assets/story-placeholder.jpg",
+      "program": "Responsible Citizenship",
+      "excerpt": "In October 2020, Possibilities Africa began a journey with 35 pastors from 21 denominations in Rachuonyo, after Bishop Joseph of Ahero — one of PA's first recruits over six years earlier — introduced the community to…",
+      "image": "assets/stories/story-rachuonyo.jpg",
+      "sourceUrl": "https://www.possibilitiesafrica.org/kenya-stories.html",
       "body": [
-        "Malawi, the Warm Heart of Africa, faces systemic challenges despite immense natural resources. Since 2012, Possibilities Africa has been changing this narrative by engaging pastors in rural areas.",
-        "Over 15 communities and 100+ pastor leaders coordinate discipleship, children's activities, and income-generating groups across the network.",
-        "Malawi's PA communities show consistent growth in leadership scores with Nkhotakota South leading on economic productivity metrics."
+        "In October 2020, Possibilities Africa began a journey with 35 pastors from 21 denominations in Rachuonyo, after Bishop Joseph of Ahero — one of PA's first recruits over six years earlier — introduced the community to the holistic model.",
+        "A community needs assessment revealed deep-rooted challenges: traditional practices including widow inheritance affecting 75% of the adult population, and 72.4% of families living below US$1.25 a day. Fathers were often absent from family life, contributing to early pregnancies and low school performance among the majority-youth population.",
+        "Despite this, PA views Africa as a continent of immense potential rather than perpetual poverty. The pastor leaders completed the first stage of PA's four-step journey — information sharing, community needs assessment, feedback, and prioritisation of needs — laying the foundation for lasting change.",
+        "A budding story of transformation continues to unfold as the group deepens its commitment to holistic ministry."
       ],
-      "metrics": { "communities": 21, "pastors": 754, "projects": 38, "years": 13 },
-      "metricsList": [
-        { "label": "Years active", "value": "13+" },
-        { "label": "Communities", "value": "21" },
-        { "label": "Pastor leaders", "value": "754" },
-        { "label": "Active projects", "value": "38" }
+      "narrative": {
+        "intro": "In October 2020, Possibilities Africa began a journey with 35 pastors from 21 denominations in Rachuonyo, after Bishop Joseph of Ahero — one of PA's first recruits over six years earlier — introduced the community to the holistic model.",
+        "challenge": "A community needs assessment revealed deep-rooted challenges: traditional practices including widow inheritance affecting 75% of the adult population, and 72.4% of families living below US$1.25 a day. Fathers were often absent from family life, contributing to early pregnancies and low school performance among the majority-youth population.",
+        "solution": "Despite this, PA views Africa as a continent of immense potential rather than perpetual poverty. The pastor leaders completed the first stage of PA's four-step journey — information sharing, community needs assessment, feedback, and prioritisation of needs — laying the foundation for lasting change.",
+        "impact": "A budding story of transformation continues to unfold as the group deepens its commitment to holistic ministry."
+      }
+    },
+    {
+      "id": "story-webuye",
+      "slug": "webuye-cifa-groups-embrace-table-banking",
+      "title": "Webuye CIFA groups embrace table banking",
+      "countryId": "ken",
+      "catchmentId": null,
+      "communityId": null,
+      "program": "Economic Productivity",
+      "excerpt": "In Webuye Constituency — the very ground where PA's journey began in 2005 — pastor leaders continue to deepen the holistic model nearly two decades on. A cluster of CIFA groups meets weekly, pooling savings through…",
+      "image": "assets/stories/story-webuye.jpg",
+      "sourceUrl": "https://www.possibilitiesafrica.org/kenya-stories.html",
+      "body": [
+        "In Webuye Constituency — the very ground where PA's journey began in 2005 — pastor leaders continue to deepen the holistic model nearly two decades on. A cluster of CIFA groups meets weekly, pooling savings through table banking and merry-go-round contributions.",
+        "What started as a handful of pastors testing a new way of ministry has grown into a network spanning dozens of churches, each running its own Shalom group for members to save, borrow and invest in small enterprises.",
+        "Pastor leaders report that families who once depended solely on subsistence farming now run poultry, tailoring and grocery businesses funded through group savings.",
+        "Nearly twenty years on, Webuye remains a living example of how a single church's commitment to holistic ministry can ripple outward into an entire constituency."
       ],
-      "dataCard": {
-        "category": "People",
-        "accent": "people",
-        "metric": "754",
-        "metricSuffix": "",
-        "text": "pastor leaders engaged in holistic ministry across Malawi since **2012** — the Warm Heart of Africa.",
-        "source": "PA Malawi network data",
-        "sourceTarget": "#/stories/malawi"
+      "narrative": {
+        "intro": "In Webuye Constituency — the very ground where PA's journey began in 2005 — pastor leaders continue to deepen the holistic model nearly two decades on. A cluster of CIFA groups meets weekly, pooling savings through table banking and merry-go-round contributions.",
+        "challenge": "What started as a handful of pastors testing a new way of ministry has grown into a network spanning dozens of churches, each running its own Shalom group for members to save, borrow and invest in small enterprises.",
+        "solution": "Pastor leaders report that families who once depended solely on subsistence farming now run poultry, tailoring and grocery businesses funded through group savings.",
+        "impact": "Nearly twenty years on, Webuye remains a living example of how a single church's commitment to holistic ministry can ripple outward into an entire constituency."
+      }
+    },
+    {
+      "id": "story-bungoma-school",
+      "slug": "a-church-run-school-changing-bungomas-future",
+      "title": "A church-run school changing Bungoma's future",
+      "countryId": "ken",
+      "catchmentId": null,
+      "communityId": null,
+      "program": "Mentoring the Next Generation",
+      "excerpt": "In Bungoma County, a rural congregation partnered with its Shalom group to convert an underused church hall into a community primary school. What began with 30 pupils under a corrugated iron roof now serves over 150…",
+      "image": "assets/stories/story-bungoma-school.jpg",
+      "sourceUrl": "https://www.possibilitiesafrica.org/kenya-stories.html",
+      "body": [
+        "In Bungoma County, a rural congregation partnered with its Shalom group to convert an underused church hall into a community primary school. What began with 30 pupils under a corrugated iron roof now serves over 150 children from the surrounding villages.",
+        "Teachers, many of them church volunteers trained through PA's mentoring track, combine basic literacy and numeracy with life-skills lessons drawn from the holistic ministry curriculum.",
+        "Parents who once walked children over an hour to the nearest school now see their children thrive closer to home, with attendance and performance steadily rising each term.",
+        "A generation of Bungoma's children is growing up with both an education and a church community invested in their future."
+      ],
+      "narrative": {
+        "intro": "In Bungoma County, a rural congregation partnered with its Shalom group to convert an underused church hall into a community primary school. What began with 30 pupils under a corrugated iron roof now serves over 150 children from the surrounding villages.",
+        "challenge": "Teachers, many of them church volunteers trained through PA's mentoring track, combine basic literacy and numeracy with life-skills lessons drawn from the holistic ministry curriculum.",
+        "solution": "Parents who once walked children over an hour to the nearest school now see their children thrive closer to home, with attendance and performance steadily rising each term.",
+        "impact": "A generation of Bungoma's children is growing up with both an education and a church community invested in their future."
+      }
+    },
+    {
+      "id": "story-kilifi-youth",
+      "slug": "kilifis-young-people-trade-idleness-for-enterprise",
+      "title": "Kilifi's young people trade idleness for enterprise",
+      "countryId": "ken",
+      "catchmentId": null,
+      "communityId": null,
+      "program": "Responsible Citizenship",
+      "excerpt": "Along Kenya's coast, Kilifi County's youth have long faced a familiar cycle: leaving school early for seasonal hotel work, with few paths back to stable income once the tourist season ends.",
+      "image": "assets/stories/story-kilifi-youth.jpg",
+      "sourceUrl": "https://www.possibilitiesafrica.org/kenya-stories.html",
+      "body": [
+        "Along Kenya's coast, Kilifi County's youth have long faced a familiar cycle: leaving school early for seasonal hotel work, with few paths back to stable income once the tourist season ends.",
+        "Pastor leaders trained by PA began organising youth-focused Shalom groups, teaching basic bookkeeping, saving discipline and small-scale trade skills alongside Bible study.",
+        "Groups of young people have since pooled resources to start motorcycle taxi cooperatives, fishmongering stalls and tailoring units — activities that keep income flowing between tourist seasons.",
+        "What began as a handful of restless teenagers meeting after church now anchors a growing culture of enterprise among Kilifi's youth."
+      ],
+      "narrative": {
+        "intro": "Along Kenya's coast, Kilifi County's youth have long faced a familiar cycle: leaving school early for seasonal hotel work, with few paths back to stable income once the tourist season ends.",
+        "challenge": "Pastor leaders trained by PA began organising youth-focused Shalom groups, teaching basic bookkeeping, saving discipline and small-scale trade skills alongside Bible study.",
+        "solution": "Groups of young people have since pooled resources to start motorcycle taxi cooperatives, fishmongering stalls and tailoring units — activities that keep income flowing between tourist seasons.",
+        "impact": "What began as a handful of restless teenagers meeting after church now anchors a growing culture of enterprise among Kilifi's youth."
       }
     },
     {
@@ -136,28 +153,21 @@
       "catchmentId": null,
       "communityId": null,
       "program": "Transformational Leadership",
-      "excerpt": "Inchini, a town in Ethiopia, is plagued by ongoing conflicts that frequently disrupt and sometimes completely halt community life.",
-      "image": "assets/story-placeholder.jpg",
+      "excerpt": "Inchini, a town in Ethiopia, is plagued by ongoing conflicts that frequently disrupt and sometimes completely close schools, businesses, and gatherings, including church services. Pastor Abdisa struggles to support…",
+      "image": "assets/stories/story-ethiopia-abdisa.png",
+      "sourceUrl": "https://www.possibilitiesafrica.org/ethiopia-stories.html",
       "body": [
-        "Inchini, a town in Ethiopia, is plagued by ongoing conflicts that frequently disrupt and sometimes completely halt community life. Pastor Abdisa leads ministry with courage amid these challenges.",
-        "Pastor Abdisa coordinates a network of 11 communities across Hossana, Gurage, and Durame catchments. Despite regional instability, pastor leaders sustain discipleship and community health outreaches.",
-        "Ethiopia's network readiness is at Engagement stage on average, with leadership scores trending upward (+9% YoY)."
+        "Inchini, a town in Ethiopia, is plagued by ongoing conflicts that frequently disrupt and sometimes completely close schools, businesses, and gatherings, including church services. Pastor Abdisa struggles to support his church and family during these disruptions. Additionally, he has always been slow to engage in activities outside his church due to his church culture.",
+        "Pastor Abdisa engaged with Possibilities Africa (PA) and was intrigued by what the organization teaches. When the time came for centralized training with pastors selected from the rural parts of the country, he couldn't miss being onboarded on the 2 year holistic program. In October 2023, he attended the Module 1 training — PA's first programmatic training that introduces holistic ministry programs. For the first time, he learned to integrate spiritual, economic, and social development as part of day to day church activities.",
+        "Returning from the training, Pastor Abdisa began teaching holistic ministry concepts. To promote continuous spiritual growth among the members, he started three Bible study groups, aligning with the spiritual discipleship training provided by PA. Building on the skills acquired during the training, he also initiated business training for the youth.",
+        "Despite facing initial resistance from the community — whose culture traditionally limits ministers' involvement in other activities — he firmly believes that empowering the youth with business skills will help address the persistent issue of youth unemployment. The Bible study groups are growing, with each of the three groups having over eighteen members who meet weekly.",
+        "Leading by example, Pastor Abdisa supplements his income through butter sales. These visible efforts are gradually inspiring acceptance of the holistic ministry concept among church elders. Pastor Abdisa's journey shows the power of holistic ministry."
       ],
-      "metrics": { "communities": 11, "pastors": 272, "leadershipScore": 55, "growth": 9 },
-      "metricsList": [
-        { "label": "Communities", "value": "11" },
-        { "label": "Pastor leaders", "value": "272" },
-        { "label": "Leadership score", "value": "55/100" },
-        { "label": "Network growth", "value": "+9%" }
-      ],
-      "dataCard": {
-        "category": "Leadership",
-        "accent": "people",
-        "metric": "11",
-        "metricSuffix": "",
-        "text": "communities coordinated by pastor leaders across **Hossana, Gurage, and Durame** despite ongoing conflict.",
-        "source": "PA field tracking · Ethiopia",
-        "sourceTarget": "#/stories/ethiopia"
+      "narrative": {
+        "intro": "Inchini, a town in Ethiopia, is plagued by ongoing conflicts that frequently disrupt and sometimes completely close schools, businesses, and gatherings, including church services. Pastor Abdisa struggles to support his church and family during these disruptions. Additionally, he has always been slow to engage in activities outside his church due to his church culture.",
+        "challenge": "Pastor Abdisa engaged with Possibilities Africa (PA) and was intrigued by what the organization teaches. When the time came for centralized training with pastors selected from the rural parts of the country, he couldn't miss being onboarded on the 2 year holistic program. In October 2023, he attended the Module 1 training — PA's first programmatic training that introduces holistic ministry programs. For the first time, he learned to integrate spiritual, economic, and social development as part of day to day church activities.",
+        "solution": "Returning from the training, Pastor Abdisa began teaching holistic ministry concepts. To promote continuous spiritual growth among the members, he started three Bible study groups, aligning with the spiritual discipleship training provided by PA. Building on the skills acquired during the training, he also initiated business training for the youth. Despite facing initial resistance from the community — whose culture traditionally limits ministers' involvement in other activities — he firmly believes that empowering the youth with business skills will help address the persistent issue of youth unemployment. The Bible study groups are growing, with each of the three groups having over eighteen members who meet weekly.",
+        "impact": "Leading by example, Pastor Abdisa supplements his income through butter sales. These visible efforts are gradually inspiring acceptance of the holistic ministry concept among church elders. Pastor Abdisa's journey shows the power of holistic ministry."
       }
     },
     {
@@ -168,60 +178,113 @@
       "catchmentId": null,
       "communityId": null,
       "program": "Economic Productivity",
-      "excerpt": "\"A pastor cannot mix ministry work with money. This is unspiritual!\" Pastor Fikre found another way.",
-      "image": "assets/story-placeholder.jpg",
+      "excerpt": "\"A pastor cannot mix ministry work with money. This is unspiritual!\" This narrative led Pastor Fikre to sell off land inherited from his parents, leaving his family reliant on hired-out plots for school fees.",
+      "image": "assets/stories/story-ethiopia-fikre.jpg",
+      "sourceUrl": "https://www.possibilitiesafrica.org/ethiopia-stories.html",
       "body": [
-        "Pastor Fikre once believed that mixing ministry with economic activity was unspiritual. PA's holistic training challenged this mindset — showing that economic productivity and discipleship work together.",
-        "Pastor Fikre now leads income-generating activities alongside his congregation, teaching table banking and merry-go-round groups that build household economic resilience.",
-        "Ethiopia's 100+ churches and 100+ pastor leaders are 100% community-led, with IGAs tracked across the network."
+        "\"A pastor cannot mix ministry work with money. This is unspiritual!\" This narrative led Pastor Fikre to sell off land inherited from his parents, leaving his family reliant on hired-out plots for school fees.",
+        "After PA training, Pastor Fikre was convicted to build a sustainable model around his ministry and family life. Noticing the busy trade route through his village between Addis Ababa and Djibouti, he and his wife built rental rooms for truck drivers in transit — funded through a PA loan rather than selling more land.",
+        "Today the family home and two rental units are complete. Pastor Fikre now works with fellow pastors in his CIFA group to purchase a brick-making machine to serve more community members.",
+        "Through his example, the church and community are learning that holistic transformation requires both ministry and money for the benefit of the family and the community."
       ],
-      "metrics": { "churches": 100, "pastors": 100, "projects": 28, "communityLed": 100 },
-      "metricsList": [
-        { "label": "Churches", "value": "100+" },
-        { "label": "Pastor leaders", "value": "100+" },
-        { "label": "Active projects", "value": "28" },
-        { "label": "Community-led", "value": "100%" }
-      ],
-      "dataCard": {
-        "category": "Prosperity",
-        "accent": "prosperity",
-        "metric": "100+",
-        "metricSuffix": "",
-        "text": "churches where pastor leaders now integrate **ministry and economic productivity** — 100% community-led.",
-        "source": "PA Ethiopia · On the ground",
-        "sourceTarget": "#/stories/ethiopia"
+      "narrative": {
+        "intro": "\"A pastor cannot mix ministry work with money. This is unspiritual!\" This narrative led Pastor Fikre to sell off land inherited from his parents, leaving his family reliant on hired-out plots for school fees.",
+        "challenge": "After PA training, Pastor Fikre was convicted to build a sustainable model around his ministry and family life. Noticing the busy trade route through his village between Addis Ababa and Djibouti, he and his wife built rental rooms for truck drivers in transit — funded through a PA loan rather than selling more land.",
+        "solution": "Today the family home and two rental units are complete. Pastor Fikre now works with fellow pastors in his CIFA group to purchase a brick-making machine to serve more community members.",
+        "impact": "Through his example, the church and community are learning that holistic transformation requires both ministry and money for the benefit of the family and the community."
       }
     },
     {
       "id": "story-ethiopia-koka",
-      "slug": "pastors-planting-koka",
+      "slug": "koka-churches-vegetables",
       "title": "Pastors planting churches and vegetables in Koka",
       "countryId": "et",
       "catchmentId": null,
       "communityId": null,
       "program": "Spiritual Discipleship",
-      "excerpt": "From a small kiosk in Koka, 20 churches have been planted with cell groups for prayer and Bible reading.",
-      "image": "assets/story-placeholder.jpg",
+      "excerpt": "In Koka, an area once marked by serious persecution of Christians, Pastor Brihanu's small kiosk became a safe space for fellowship. From that little shop, 20 churches were planted through Bible study cell groups.",
+      "image": "assets/stories/story-ethiopia-koka.jpg",
+      "sourceUrl": "https://www.possibilitiesafrica.org/ethiopia-stories.html",
       "body": [
-        "From a small kiosk in Koka, 20 churches have been planted with cell groups for prayer and Bible reading. Pastors model holistic ministry by planting vegetables alongside new congregations.",
-        "This story exemplifies how spiritual discipleship and economic productivity compound — churches grow as communities develop sustainable food sources.",
-        "PA Ethiopia has operated since 2019, contextualising the holistic engine for rural villages across 80+ ethnic groups."
+        "In Koka, an area once marked by serious persecution of Christians, Pastor Brihanu's small kiosk became a safe space for fellowship. From that little shop, 20 churches were planted through Bible study cell groups.",
+        "Fellow believers pressured him to close the shop and focus solely on ministry, but he knew it sustained both his family and the 20 churches he had planted. \"I always knew that God has more in terms of ministry, and that more is about being holistic,\" he says.",
+        "After PA training, Pastor Brihanu partnered with his CIFA group to establish a vegetable and onion farming project, mentoring fellow pastor Ermiyas in commercial farming using a loan from PA.",
+        "A planter of churches and vegetables alike — his example of productivity now anchors the holistic message he preaches to 20 congregations."
       ],
-      "metrics": { "churchesPlanted": 20, "years": 6, "ethnicGroups": 80, "communityLed": 100 },
-      "metricsList": [
-        { "label": "Churches planted", "value": "20" },
-        { "label": "Cell groups", "value": "20+" },
-        { "label": "Years in Ethiopia", "value": "6+" },
-        { "label": "Community-led", "value": "100%" }
+      "narrative": {
+        "intro": "In Koka, an area once marked by serious persecution of Christians, Pastor Brihanu's small kiosk became a safe space for fellowship. From that little shop, 20 churches were planted through Bible study cell groups.",
+        "challenge": "Fellow believers pressured him to close the shop and focus solely on ministry, but he knew it sustained both his family and the 20 churches he had planted. \"I always knew that God has more in terms of ministry, and that more is about being holistic,\" he says.",
+        "solution": "After PA training, Pastor Brihanu partnered with his CIFA group to establish a vegetable and onion farming project, mentoring fellow pastor Ermiyas in commercial farming using a loan from PA.",
+        "impact": "A planter of churches and vegetables alike — his example of productivity now anchors the holistic message he preaches to 20 congregations."
+      }
+    },
+    {
+      "id": "story-tanzania",
+      "slug": "extending-the-ripple-across-east-africa",
+      "title": "Extending the ripple across East Africa",
+      "countryId": "tz",
+      "catchmentId": null,
+      "communityId": null,
+      "program": "Transformational Leadership",
+      "excerpt": "Every new Tanzanian ministry site begins the same way: recruit a rural pastor, equip them for holistic ministry, and watch the church become a growth centre for its village.",
+      "image": "assets/stories/story-tanzania.jpg",
+      "sourceUrl": "https://www.possibilitiesafrica.org/tanzania-stories.html",
+      "body": [
+        "Every new Tanzanian ministry site begins the same way: recruit a rural pastor, equip them for holistic ministry, and watch the church become a growth centre for its village.",
+        "As PA's newest footprint in East Africa, Tanzania is being built one CIFA group at a time — pastors trained in spiritual discipleship, economic productivity and responsible citizenship, replicating the model proven in Kenya and Ethiopia.",
+        "The ripple effect is only beginning, with early groups already forming savings circles and Bible study cells in their communities."
       ],
-      "dataCard": {
-        "category": "Discipleship",
-        "accent": "digital",
-        "metric": "20",
-        "metricSuffix": "",
-        "text": "churches planted from a small kiosk in Koka with **cell groups for prayer and Bible reading**.",
-        "source": "PA field tracking · Ethiopia",
-        "sourceTarget": "#/stories/ethiopia"
+      "narrative": {
+        "intro": "Every new Tanzanian ministry site begins the same way: recruit a rural pastor, equip them for holistic ministry, and watch the church become a growth centre for its village.",
+        "challenge": "As PA's newest footprint in East Africa, Tanzania starts with few trained pastor leaders and limited savings or project experience in most villages.",
+        "solution": "Pastors are equipped through spiritual discipleship, economic productivity, and responsible citizenship — replicating the model proven in Kenya and Ethiopia, one CIFA group at a time.",
+        "impact": "The ripple effect is only beginning, with early groups already forming savings circles and Bible study cells in their communities."
+      }
+    },
+    {
+      "id": "story-rwanda",
+      "slug": "pastor-leaders-championing-holistic-transformation",
+      "title": "Pastor leaders championing holistic transformation",
+      "countryId": "rw",
+      "catchmentId": null,
+      "communityId": null,
+      "program": "Transformational Leadership",
+      "excerpt": "Rwandan pastors in CIFA groups are recording growth of churches and improved living standards inspired by the truth of the whole Gospel.",
+      "image": "assets/stories/story-rwanda.jpeg",
+      "sourceUrl": "https://www.possibilitiesafrica.org/rwanda-stories.html",
+      "body": [
+        "Rwandan pastors in CIFA groups are recording growth of churches and improved living standards inspired by the truth of the whole Gospel.",
+        "Since joining the PA network, these pastor leaders have begun integrating spiritual discipleship with practical economic activities, following the same holistic model that has transformed communities in Kenya, Ethiopia, Malawi and Zambia.",
+        "Early fruit is visible as congregations grow and families report improved living standards."
+      ],
+      "narrative": {
+        "intro": "Rwandan pastors in CIFA groups are recording growth of churches and improved living standards inspired by the truth of the whole Gospel.",
+        "challenge": "Many congregations had strong faith traditions but little practice linking discipleship to household income, health, and local initiative.",
+        "solution": "Since joining the PA network, pastor leaders integrate spiritual discipleship with practical economic activities, following the holistic model used in Kenya, Ethiopia, Malawi, and Zambia.",
+        "impact": "Early fruit is visible as congregations grow and families report improved living standards."
+      }
+    },
+    {
+      "id": "story-burundi",
+      "slug": "equipping-pastors-on-new-ground",
+      "title": "Equipping pastors on new ground",
+      "countryId": "bi",
+      "catchmentId": null,
+      "communityId": null,
+      "program": "Transformational Leadership",
+      "excerpt": "In each new Burundian community, PA begins by training rural pastors so the local church can lead its village into lasting transformation.",
+      "image": "assets/stories/story-burundi.jpg",
+      "sourceUrl": "https://www.possibilitiesafrica.org/burundi-stories.html",
+      "body": [
+        "In each new Burundian community, PA begins by training rural pastors so the local church can lead its village into lasting transformation.",
+        "Pastor leaders newly recruited into the CIFA model are undergoing the first stages of PA's holistic journey — spiritual discipleship, community needs assessment, and the formation of Shalom groups for economic empowerment.",
+        "A new chapter of the PA ripple effect is beginning to take root in Burundi's rural churches."
+      ],
+      "narrative": {
+        "intro": "In each new Burundian community, PA begins by training rural pastors so the local church can lead its village into lasting transformation.",
+        "challenge": "Burundi's rural churches often lack structured Shalom groups, savings habits, and a shared plan for community needs.",
+        "solution": "Pastor leaders newly recruited into the CIFA model undergo the first stages of PA's holistic journey — spiritual discipleship, community needs assessment, and Shalom groups for economic empowerment.",
+        "impact": "A new chapter of the PA ripple effect is beginning to take root in Burundi's rural churches."
       }
     },
     {
@@ -232,156 +295,164 @@
       "catchmentId": null,
       "communityId": null,
       "program": "Spiritual Discipleship",
-      "excerpt": "Pastor Chaambwa Siachilwena, a young pastor in Zambia, once relied solely on church contributions — now he grows crops alongside leading his church.",
-      "image": "assets/story-placeholder.jpg",
+      "excerpt": "Pastor Chaambwa Siachilwena, a young pastor in Zambia, once relied solely on church contributions and did not see the need to engage in income-generating activities, as he was alone and did not have many needs to…",
+      "image": "assets/stories/story-zambia-crops.jpg",
+      "sourceUrl": "https://www.possibilitiesafrica.org/zambia-stories.html",
       "body": [
-        "Pastor Chaambwa Siachilwena, a young pastor in Zambia, once relied solely on church contributions and preaching. PA training showed him how to grow his church and crops together.",
-        "Crop diversification demonstrations on church land have inspired four farming groups across 12 communities near Lusaka.",
-        "PAZ was formally registered in 2022 and began operations in May 2023, recruiting pastors from seven rural communities — growing to 12 communities by early 2024."
+        "Pastor Chaambwa Siachilwena, a young pastor in Zambia, once relied solely on church contributions and did not see the need to engage in income-generating activities, as he was alone and did not have many needs to cater to.",
+        "His perspective changed when he met Possibilities Africa (PA), which enlightened him through its training on the importance of building wealth by utilizing available resources. The teachings came at an opportune time, as he had just started a new family, resulting in more needs and straining his monthly income.",
+        "Pastor Chaambwa identified idle church land and, with the church members' blessings, he began cultivating winter maize, tomatoes, green, and kidney beans. This marked the start of his economic transformation. The first harvest was a success! While honing the entrepreneurial skills sparked during PA's training, he sells fresh vegetables in the community — an initiative that has significantly increased his family's income.",
+        "Inspired by his success, Pastor Chaambwa has formed Shalom groups to transfer these skills to church members and the community. He is also keen to explore other areas trained by PA: Mentoring the Next Generation, Spiritual Discipleship, and Responsible Citizenship. His efforts are creating a ripple effect of positive change."
       ],
-      "metrics": { "communities": 12, "farmingGroups": 4, "pastors": 50, "years": 2 },
-      "metricsList": [
-        { "label": "Communities", "value": "12" },
-        { "label": "Farming groups", "value": "4" },
-        { "label": "Pastor leaders", "value": "50+" },
-        { "label": "PPP projects", "value": "14" }
-      ],
-      "dataCard": {
-        "category": "Discipleship",
-        "accent": "digital",
-        "metric": "12",
-        "metricSuffix": "",
-        "text": "communities near Lusaka where pastors grow **church and crops together** — registered PAZ in 2022.",
-        "source": "PA field tracking · Zambia",
-        "sourceTarget": "#/stories/zambia"
+      "narrative": {
+        "intro": "Pastor Chaambwa Siachilwena, a young pastor in Zambia, once relied solely on church contributions and did not see the need to engage in income-generating activities, as he was alone and did not have many needs to cater to.",
+        "challenge": "His perspective changed when he met Possibilities Africa (PA), which enlightened him through its training on the importance of building wealth by utilizing available resources. The teachings came at an opportune time, as he had just started a new family, resulting in more needs and straining his monthly income.",
+        "solution": "Pastor Chaambwa identified idle church land and, with the church members' blessings, he began cultivating winter maize, tomatoes, green, and kidney beans. This marked the start of his economic transformation. The first harvest was a success! While honing the entrepreneurial skills sparked during PA's training, he sells fresh vegetables in the community — an initiative that has significantly increased his family's income.",
+        "impact": "Inspired by his success, Pastor Chaambwa has formed Shalom groups to transfer these skills to church members and the community. He is also keen to explore other areas trained by PA: Mentoring the Next Generation, Spiritual Discipleship, and Responsible Citizenship. His efforts are creating a ripple effect of positive change."
       }
     },
     {
-      "id": "story-zambia-water",
-      "slug": "zambia-water-priority",
-      "title": "Water access as the next transformation priority",
-      "countryId": "zm",
-      "catchmentId": null,
-      "communityId": null,
-      "program": "Responsible Citizenship",
-      "excerpt": "Field assessments across 12 Zambian communities identify water access as the critical next investment.",
-      "image": "assets/story-placeholder.jpg",
-      "body": [
-        "Zambia's PA network spans 12 communities with 50+ pastor leaders recruited since PAZ began in 2023. Field assessments show water access as the critical bottleneck for agriculture.",
-        "Three PPP water projects are in planning stages with pastor leaders coordinating community contributions.",
-        "Network growth reflects expanding pastor cohorts completing foundational holistic ministry training."
-      ],
-      "metrics": { "pastors": 50, "projects": 14, "communities": 12, "growth": 6 },
-      "metricsList": [
-        { "label": "Pastor leaders", "value": "50+" },
-        { "label": "Communities", "value": "12" },
-        { "label": "PPP projects", "value": "14" },
-        { "label": "Network growth", "value": "+6%" }
-      ],
-      "dataCard": {
-        "category": "Citizenship",
-        "accent": "infrastructure",
-        "metric": "3",
-        "metricSuffix": "",
-        "text": "PPP water projects in planning — **highest-impact investment** for Zambia's 12 communities.",
-        "source": "PA Zambia readiness data",
-        "sourceTarget": "#/stories/zambia"
-      }
-    },
-    {
-      "id": "story-tanzania-msengi",
-      "slug": "pastor-timothy-msengi",
-      "title": "Ministry beyond the church walls",
-      "countryId": "tz",
-      "catchmentId": null,
-      "communityId": null,
-      "program": "Transformational Leadership",
-      "excerpt": "After MI training in Arusha in 2023, Pastor Timothy learnt that ministry goes beyond the church walls.",
-      "image": "assets/story-placeholder.jpg",
-      "body": [
-        "After attending the MI training in Arusha in 2023, Pastor Timothy Msengi learnt that ministry goes beyond the church walls. As a pastor, he was called not just for church members, but for the community.",
-        "He was challenged to be involved in resolving community challenges beyond preaching the Gospel. Six PPP projects are now tracked across the Tanzania network.",
-        "Network readiness is at Engagement stage with +5% growth year over year as new pastor cohorts complete foundational training."
-      ],
-      "metrics": { "projects": 6, "pastors": 48, "leadershipScore": 58, "growth": 5 },
-      "metricsList": [
-        { "label": "PPP projects", "value": "6" },
-        { "label": "Pastor leaders", "value": "48" },
-        { "label": "Leadership score", "value": "58/100" },
-        { "label": "Network growth", "value": "+5%" }
-      ],
-      "dataCard": {
-        "category": "Leadership",
-        "accent": "people",
-        "metric": "6",
-        "metricSuffix": "",
-        "text": "PPP projects as pastors resolve **community challenges beyond preaching** — trained in Arusha 2023.",
-        "source": "PA Tanzania network data",
-        "sourceTarget": "#/stories/tanzania"
-      }
-    },
-    {
-      "id": "story-rwanda-irakoze",
-      "slug": "pastor-irakoze-holistic",
-      "title": "Holistic church development in Rwanda",
-      "countryId": "rw",
+      "id": "story-malawi-mary",
+      "slug": "mary-scone-business",
+      "title": "Mary Mvilera's decision to make a living out of selling scones",
+      "countryId": "mw",
       "catchmentId": null,
       "communityId": null,
       "program": "Economic Productivity",
-      "excerpt": "Pastor leaders learn to equip congregations for work that breaks cycles of poverty.",
-      "image": "assets/story-placeholder.jpg",
+      "excerpt": "At 35 years old, Mary Mvilera is married with 4 children. Before PA programs were introduced in her community, she solely depended on her husband's sand business, which was not sustainable, to cater to the family's…",
+      "image": "assets/stories/story-malawi-mary.jpg",
+      "sourceUrl": "https://www.possibilitiesafrica.org/malawi-stories.html",
       "body": [
-        "Rwanda's emerging pastor network applies holistic ministry training to help churches take up productive work alongside discipleship.",
-        "Four tracked PPP initiatives connect leadership development with livelihood programmes as the network establishes its first catchment structures.",
-        "Field data shows readiness climbing as pastors report increased confidence in coordinating community-wide transformation."
+        "At 35 years old, Mary Mvilera is married with 4 children. Before PA programs were introduced in her community, she solely depended on her husband's sand business, which was not sustainable, to cater to the family's needs.",
+        "Her pastor, Namaona Seleman, who attended all Possibilities Africa training as of 2021, introduced holistic ministry teachings in his church. He introduced the essence of using locally available resources, God-given talent, and skills and working in groups to generate income for their families. These teachings intrigued Mary and she became interested to know more about the concepts so as to change her family's fortunes.",
+        "Out of the skills she had gained, she started a scones-baking business with an initial loan of MK15,000. She had also learned the importance of saving and reinvesting in the business. At the time PA was engaging with her, she had grown her savings to MK20,000 which allowed her to borrow more from the Shalom group.",
+        "Using her credibility following successfully repaying the first loan, Mary borrowed another loan of MK30,000 and encouraged her husband to invest in the potato business. At the time PA was engaging with the family again, the potato business was making MK30,000 in a week. The businesses have improved the family's living standards.",
+        "Spiritually, Mary has replicated frequent prayer and bible study at the Shalom group meetings within her own family — something they struggled to find time for before engaging with PA."
       ],
-      "metrics": { "projects": 4, "pastors": 36, "leadershipScore": 52, "growth": 4 },
-      "metricsList": [
-        { "label": "PPP projects", "value": "4" },
-        { "label": "Pastor leaders", "value": "36" },
-        { "label": "Leadership score", "value": "52/100" },
-        { "label": "Network growth", "value": "+4%" }
-      ],
-      "dataCard": {
-        "category": "Prosperity",
-        "accent": "prosperity",
-        "metric": "4",
-        "metricSuffix": "",
-        "text": "PPP initiatives linking **leadership development with livelihood programmes** in Rwanda.",
-        "source": "PA Rwanda field data",
-        "sourceTarget": "#/stories/rwanda"
+      "narrative": {
+        "intro": "At 35 years old, Mary Mvilera is married with 4 children. Before PA programs were introduced in her community, she solely depended on her husband's sand business, which was not sustainable, to cater to the family's needs.",
+        "challenge": "Her pastor, Namaona Seleman, who attended all Possibilities Africa training as of 2021, introduced holistic ministry teachings in his church. He introduced the essence of using locally available resources, God-given talent, and skills and working in groups to generate income for their families. These teachings intrigued Mary and she became interested to know more about the concepts so as to change her family's fortunes.",
+        "solution": "Out of the skills she had gained, she started a scones-baking business with an initial loan of MK15,000. She had also learned the importance of saving and reinvesting in the business. At the time PA was engaging with her, she had grown her savings to MK20,000 which allowed her to borrow more from the Shalom group. Using her credibility following successfully repaying the first loan, Mary borrowed another loan of MK30,000 and encouraged her husband to invest in the potato business. At the time PA was engaging with the family again, the potato business was making MK30,000 in a week. The businesses have improved the family's living standards.",
+        "impact": "Spiritually, Mary has replicated frequent prayer and bible study at the Shalom group meetings within her own family — something they struggled to find time for before engaging with PA."
       }
     },
     {
-      "id": "story-burundi-mahembe",
-      "slug": "pastor-etiene-mahembe",
-      "title": "Whole-person ministry in practice",
-      "countryId": "bi",
+      "id": "story-jeremiah",
+      "slug": "pastor-jeremiah-halekes-story",
+      "title": "Pastor Jeremiah Haleke's story",
+      "countryId": "mw",
+      "catchmentId": null,
+      "communityId": null,
+      "program": "Mentoring the Next Generation",
+      "excerpt": "Pastor Jeremiah Haleke leads the Ntchisi group and pastors Deeper Life Bible Church, serving 72 adult members and 57 children alongside his wife Grace and their five children. He has walked the holistic ministry…",
+      "image": "assets/stories/story-jeremiah.jpg",
+      "sourceUrl": "https://www.possibilitiesafrica.org/malawi-stories.html",
+      "body": [
+        "Pastor Jeremiah Haleke leads the Ntchisi group and pastors Deeper Life Bible Church, serving 72 adult members and 57 children alongside his wife Grace and their five children. He has walked the holistic ministry journey since 2016.",
+        "Convicted to address the education gap in his area, Pastor Jeremiah started a community school that now teaches over 100 children. Through better management of resources from his farming, his family moved into a stone house and can now enjoy a car ride around the community.",
+        "As both teacher and pastor, he trains children in Bible reading, scripture memory and monthly community activities — bringing joy and hope to the children of Ntchisi as he raises up champions of holistic transformation."
+      ],
+      "narrative": {
+        "intro": "Pastor Jeremiah Haleke leads the Ntchisi group and pastors Deeper Life Bible Church, serving 72 adult members and 57 children alongside his wife Grace and their five children. He has walked the holistic ministry journey since 2016.",
+        "challenge": "Convicted to address the education gap in his area, Pastor Jeremiah started a community school that now teaches over 100 children. Through better management of resources from his farming, his family moved into a stone house and can now enjoy a car ride around the community.",
+        "solution": "Convicted to address the education gap in his area, Pastor Jeremiah started a community school that now teaches over 100 children. Through better management of resources from his farming, his family moved into a stone house and can now enjoy a car ride around the community.",
+        "impact": "As both teacher and pastor, he trains children in Bible reading, scripture memory and monthly community activities — bringing joy and hope to the children of Ntchisi as he raises up champions of holistic transformation."
+      }
+    },
+    {
+      "id": "story-liwedi",
+      "slug": "liwedi-impact-highlights",
+      "title": "Liwedi impact highlights",
+      "countryId": "mw",
+      "catchmentId": null,
+      "communityId": null,
+      "program": "Economic Productivity",
+      "excerpt": "The pastor leaders of Liwedi (Lilongwe West) have demonstrated ownership of PA's holistic vision, now discipling and training 40 Shalom group members in vegetable production to improve family nutrition and generate…",
+      "image": "assets/stories/story-liwedi.jpg",
+      "sourceUrl": "https://www.possibilitiesafrica.org/malawi-stories.html",
+      "body": [
+        "The pastor leaders of Liwedi (Lilongwe West) have demonstrated ownership of PA's holistic vision, now discipling and training 40 Shalom group members in vegetable production to improve family nutrition and generate income.",
+        "With micro-financing support from PA, the group secured farming land, allocating a hectare to community small groups for vegetable farming, and partnering to plant sugar cane as part of a wider economic empowerment project.",
+        "The pastors also rehabilitated a divorced, devastated young woman by boosting her broom-making business with MK10,000 from their own savings — paired with prayer, visits and reintegration into community life.",
+        "Fifteen youth trained in spiritual discipleship and life skills have gone on to plant three churches, part of over 3,000 young people equipped with life skills through the Liwedi community's transformation."
+      ],
+      "narrative": {
+        "intro": "The pastor leaders of Liwedi (Lilongwe West) have demonstrated ownership of PA's holistic vision, now discipling and training 40 Shalom group members in vegetable production to improve family nutrition and generate income.",
+        "challenge": "With micro-financing support from PA, the group secured farming land, allocating a hectare to community small groups for vegetable farming, and partnering to plant sugar cane as part of a wider economic empowerment project.",
+        "solution": "The pastors also rehabilitated a divorced, devastated young woman by boosting her broom-making business with MK10,000 from their own savings — paired with prayer, visits and reintegration into community life.",
+        "impact": "Fifteen youth trained in spiritual discipleship and life skills have gone on to plant three churches, part of over 3,000 young people equipped with life skills through the Liwedi community's transformation."
+      }
+    },
+    {
+      "id": "story-lilongwe-savings",
+      "slug": "lilongwes-shalom-groups-build-a-savings-culture",
+      "title": "Lilongwe's Shalom groups build a savings culture",
+      "countryId": "mw",
+      "catchmentId": null,
+      "communityId": null,
+      "program": "Economic Productivity",
+      "excerpt": "Across Lilongwe's rural outskirts, pastor leaders discipled through PA have introduced Shalom savings groups as a core part of church life, meeting weekly alongside Bible study to pool small contributions.",
+      "image": "assets/stories/story-lilongwe-savings.jpg",
+      "sourceUrl": "https://www.possibilitiesafrica.org/malawi-stories.html",
+      "body": [
+        "Across Lilongwe's rural outskirts, pastor leaders discipled through PA have introduced Shalom savings groups as a core part of church life, meeting weekly alongside Bible study to pool small contributions.",
+        "Members who once had no access to formal credit now borrow from their own group's savings to buy seed, livestock or trading stock, repaying with modest interest that grows the group's shared fund.",
+        "Several groups have gone on to jointly lease farmland for maize and vegetable production, sharing both the labour and the harvest among member families.",
+        "What started as spare coins collected after Sunday service has grown into a dependable safety net for dozens of households."
+      ],
+      "narrative": {
+        "intro": "Across Lilongwe's rural outskirts, pastor leaders discipled through PA have introduced Shalom savings groups as a core part of church life, meeting weekly alongside Bible study to pool small contributions.",
+        "challenge": "Members who once had no access to formal credit now borrow from their own group's savings to buy seed, livestock or trading stock, repaying with modest interest that grows the group's shared fund.",
+        "solution": "Several groups have gone on to jointly lease farmland for maize and vegetable production, sharing both the labour and the harvest among member families.",
+        "impact": "What started as spare coins collected after Sunday service has grown into a dependable safety net for dozens of households."
+      }
+    },
+    {
+      "id": "story-ntchisi-health",
+      "slug": "ntchisi-pastors-champion-family-health-and-hygiene",
+      "title": "Ntchisi pastors champion family health and hygiene",
+      "countryId": "mw",
+      "catchmentId": null,
+      "communityId": null,
+      "program": "Responsible Citizenship",
+      "excerpt": "In the Ntchisi district, pastor leaders trained through PA's holistic curriculum have taken up public health education as part of their pastoral work, teaching basic hygiene, clean water handling and nutrition…",
+      "image": "assets/stories/story-ntchisi-health.jpg",
+      "sourceUrl": "https://www.possibilitiesafrica.org/malawi-stories.html",
+      "body": [
+        "In the Ntchisi district, pastor leaders trained through PA's holistic curriculum have taken up public health education as part of their pastoral work, teaching basic hygiene, clean water handling and nutrition alongside Sunday sermons.",
+        "Working with the Deeper Life network of churches, pastors organised borehole clean-up days and encouraged families to build simple handwashing stations at home.",
+        "Cases of preventable illness in participating villages have visibly declined, and mothers credit the church-led health talks for changes in how they prepare and store food and water.",
+        "A pulpit message about hygiene has quietly become one of the most practical forms of holistic ministry in Ntchisi."
+      ],
+      "narrative": {
+        "intro": "In the Ntchisi district, pastor leaders trained through PA's holistic curriculum have taken up public health education as part of their pastoral work, teaching basic hygiene, clean water handling and nutrition alongside Sunday sermons.",
+        "challenge": "Working with the Deeper Life network of churches, pastors organised borehole clean-up days and encouraged families to build simple handwashing stations at home.",
+        "solution": "Cases of preventable illness in participating villages have visibly declined, and mothers credit the church-led health talks for changes in how they prepare and store food and water.",
+        "impact": "A pulpit message about hygiene has quietly become one of the most practical forms of holistic ministry in Ntchisi."
+      }
+    },
+    {
+      "id": "story-mzimba-cooperative",
+      "slug": "mzimbas-pastor-led-farming-cooperative",
+      "title": "Mzimba's pastor-led farming cooperative",
+      "countryId": "mw",
       "catchmentId": null,
       "communityId": null,
       "program": "Spiritual Discipleship",
-      "excerpt": "MI training helped pastors imagine ministry that addresses the whole person before programmes even ended.",
-      "image": "assets/story-placeholder.jpg",
+      "excerpt": "In Mzimba, a group of pastors who trained together through PA's Module 1 programme decided to put their shared conviction — that ministry and livelihood are not separate — into practice by forming a joint farming…",
+      "image": "assets/stories/story-mzimba-cooperative.png",
+      "sourceUrl": "https://www.possibilitiesafrica.org/malawi-stories.html",
       "body": [
-        "Pastor Etiene Mahembe and peers in Burundi began reimagining church ministry during MI training — connecting spiritual discipleship with practical community engagement.",
-        "Two PPP projects are active with Shalom group formation beginning in pilot communities.",
-        "Burundi's network is at early Awareness stage with leadership scores trending upward as training cohorts complete."
+        "In Mzimba, a group of pastors who trained together through PA's Module 1 programme decided to put their shared conviction — that ministry and livelihood are not separate — into practice by forming a joint farming cooperative.",
+        "Each participating church contributes labour and a share of seed costs to a communal maize and groundnut plot, with proceeds split between household income and a fund for church-run community projects.",
+        "Weekly Bible study now doubles as a planning meeting for the cooperative, weaving spiritual discipleship directly into decisions about planting, harvesting and selling.",
+        "The cooperative's first two harvests have already funded a borehole repair and school fees for several orphaned children in the group's care."
       ],
-      "metrics": { "projects": 2, "pastors": 24, "leadershipScore": 48, "growth": 2 },
-      "metricsList": [
-        { "label": "PPP projects", "value": "2" },
-        { "label": "Pastor leaders", "value": "24" },
-        { "label": "Leadership score", "value": "48/100" },
-        { "label": "Network growth", "value": "+2%" }
-      ],
-      "dataCard": {
-        "category": "People",
-        "accent": "people",
-        "metric": "2",
-        "metricSuffix": "",
-        "text": "PPP projects active with **Shalom group formation** in Burundi's pilot communities.",
-        "source": "PA Burundi field data",
-        "sourceTarget": "#/stories/burundi"
+      "narrative": {
+        "intro": "In Mzimba, a group of pastors who trained together through PA's Module 1 programme decided to put their shared conviction — that ministry and livelihood are not separate — into practice by forming a joint farming cooperative.",
+        "challenge": "Each participating church contributes labour and a share of seed costs to a communal maize and groundnut plot, with proceeds split between household income and a fund for church-run community projects.",
+        "solution": "Weekly Bible study now doubles as a planning meeting for the cooperative, weaving spiritual discipleship directly into decisions about planting, harvesting and selling.",
+        "impact": "The cooperative's first two harvests have already funded a borehole repair and school fees for several orphaned children in the group's care."
       }
     }
   ]

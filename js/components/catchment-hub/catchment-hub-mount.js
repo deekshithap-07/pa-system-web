@@ -1,16 +1,21 @@
 import { formatNumber } from "../../utils/format.js";
 import { renderDashboardCharts, destroyCharts } from "../charts.js";
+import { bindWbPageHero } from "../shared/wb-page-hero.js";
 
 export function initCatchmentHubAnimations(root) {
   const triggers = [];
 
-  gsap.from(root.querySelectorAll(".ch-hero__content > *, .ch-hero__visual"), {
-    opacity: 0,
-    y: 20,
-    duration: 0.55,
-    stagger: 0.06,
-    ease: "power3.out",
-  });
+  if (root.querySelector("[data-wb-hero]")) {
+    bindWbPageHero(root);
+  } else {
+    gsap.from(root.querySelectorAll(".ch-hero__content > *, .ch-hero__visual"), {
+      opacity: 0,
+      y: 20,
+      duration: 0.55,
+      stagger: 0.06,
+      ease: "power3.out",
+    });
+  }
 
   root.querySelectorAll("[data-kpi]").forEach((el) => {
     const text = el.dataset.text;

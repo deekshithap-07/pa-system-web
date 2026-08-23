@@ -1,0 +1,291 @@
+/* Editorial storytelling — scorecard, resources, inner hubs. Not the MapLibre host. */
+
+.sx-zoom {
+  margin: 0 0 1.75rem;
+  padding: 1rem 0 0;
+}
+
+.sx-zoom__label {
+  margin: 0 0 0.55rem;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #8a6a32;
+}
+
+.sx-zoom ol {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem 0;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border-top: 1px solid #e4d8c4;
+}
+
+.sx-zoom li {
+  display: flex;
+  align-items: center;
+  font-size: 0.88rem;
+  font-weight: 700;
+}
+
+.sx-zoom li:not(:last-child)::after {
+  content: "→";
+  margin: 0 0.55rem;
+  color: #c4b59a;
+  font-weight: 400;
+}
+
+.sx-zoom a {
+  color: #002b5c;
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+}
+
+.sx-zoom a:hover {
+  border-bottom-color: #002b5c;
+}
+
+.sx-zoom .is-here span {
+  color: #111;
+  background: #f6c344;
+  padding: 0.1rem 0.4rem;
+}
+
+.sx-essay {
+  background: #f7f4ee;
+  padding: 2.5rem 0 2rem;
+}
+
+.sx-essay__inner {
+  display: grid;
+  grid-template-columns: minmax(0, 1.4fr) minmax(12rem, 0.7fr);
+  gap: 2rem;
+  align-items: start;
+}
+
+.sx-essay__kicker {
+  margin: 0 0 0.5rem;
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #b45309;
+}
+
+.sx-essay h2 {
+  margin: 0 0 0.75rem;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(1.6rem, 3vw, 2.2rem);
+  font-weight: 500;
+  line-height: 1.2;
+  color: #111;
+}
+
+.sx-essay p {
+  margin: 0;
+  font-size: 1.05rem;
+  line-height: 1.7;
+  color: #3d3a34;
+  max-width: 40rem;
+}
+
+.sx-essay__pull {
+  margin: 0;
+  padding: 1.1rem 0 0;
+  border-top: 4px solid #f6c344;
+  font-size: 1.2rem;
+  font-weight: 700;
+  line-height: 1.4;
+  color: #002b5c;
+}
+
+.ch-main > .sx-zoom,
+.ch-main > .sx-lede {
+  padding-left: 2rem;
+  padding-right: 2rem;
+}
+
+.ch-kpi-section .ch-section__head h2,
+.cth-summary-section .ch-section__head h2,
+#cm-profile .ch-section__head h2 {
+  font-family: Georgia, "Times New Roman", serif;
+  font-weight: 500;
+}
+
+/* Scorecard as a results essay, not DataBank chrome */
+.wbs-page--story {
+  background: #f7f4ee;
+}
+
+.wbs-page--story .wbs-chrome {
+  border-bottom: 1px solid #e4d8c4;
+}
+
+.wbs-page--story .wbs-topbar {
+  background: #f7f4ee;
+  color: #111;
+  height: auto;
+  min-height: 3.4rem;
+  padding: 0.35rem 1.25rem;
+}
+
+.wbs-page--story .wbs-topbar__logo,
+.wbs-page--story .wbs-topbar__org,
+.wbs-page--story .wbs-topbar__divider,
+.wbs-page--story .wbs-topbar__title {
+  display: none;
+}
+
+.wbs-page--story .wbs-topbar__date {
+  color: #6b6254;
+  font-size: 0.72rem;
+}
+
+.wbs-page--story .wbs-tabs__btn {
+  background: transparent;
+  color: #5c5346;
+  border: 0;
+  border-bottom: 2px solid transparent;
+  font-weight: 700;
+  padding: 0.85rem 1rem;
+}
+
+.wbs-page--story .wbs-tabs__btn.is-active {
+  color: #111;
+  border-bottom-color: #f6c344;
+  background: transparent;
+}
+
+.wbs-page--story .wbs-main {
+  background: #f7f4ee;
+}
+
+.wbs-page--story .wbs-hero-split {
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+  padding: 0 0 1.5rem;
+}
+
+.wbs-page--story .wbs-hero-split__visual {
+  display: none;
+}
+
+.wbs-page--story .wbs-cards-grid {
+  counter-reset: fig;
+  gap: 1rem;
+}
+
+.wbs-page--story .wbs-card {
+  counter-increment: fig;
+  background: #fff;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+  border-top: 3px solid #c4842c;
+  min-height: 0;
+}
+
+.wbs-page--story .wbs-card__icon-ring {
+  width: auto;
+  height: auto;
+  background: none;
+  border: 0;
+}
+
+.wbs-page--story .wbs-card__icon {
+  display: none;
+}
+
+.wbs-page--story .wbs-card__icon-ring::before {
+  content: counter(fig, decimal-leading-zero);
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  color: #c4842c;
+}
+
+.wbs-page--story .wbs-table-wrap,
+.wbs-page--story .wbs-chart-card,
+.wbs-page--story .wbs-compare-card,
+.wbs-page--story .wbs-cbc-block {
+  background: #fff;
+  border: 0;
+  box-shadow: none;
+  border-top: 3px solid #002b5c;
+  border-radius: 0;
+}
+
+.wbs-page--story .wbs-panel-head h2 {
+  font-family: Georgia, "Times New Roman", serif;
+  font-weight: 500;
+}
+
+/* Resources as a reading room */
+.story-resources {
+  background: #faf8f3;
+}
+
+.topic-page--cases .atlas-library,
+.topic-page--packs .atlas-library {
+  background: #f4f6f8;
+  border-top: none;
+}
+
+.topic-page--cases .rlib__filters,
+.topic-page--packs .rlib__filters {
+  margin-bottom: 1.5rem;
+}
+
+.story-resources .atlas-nav {
+  background: #faf8f3;
+  border-bottom: 1px solid #e4d8c4;
+  position: relative;
+  top: 0;
+}
+
+.story-resources .atlas-nav__link {
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+
+.story-resources .atlas-intro {
+  background: #faf8f3;
+}
+
+.story-resources .atlas-intro__title {
+  font-family: Georgia, "Times New Roman", serif;
+  font-weight: 500;
+}
+
+.story-resources .rlib__filters {
+  background: #fff;
+  border: 1px solid #e4d8c4;
+  padding: 1rem;
+}
+
+.story-resources .rlib-case,
+.story-resources .rlib-pack {
+  background: #fff;
+  border-radius: 0;
+  box-shadow: none;
+  border-top: 3px solid #c4842c;
+}
+
+.story-resources .ao-country-card,
+.africa-intelligence-page .ao-country-card {
+  background: #fff;
+  border: 0;
+  border-top: 1px solid #d9d0bf;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+@media (max-width: 900px) {
+  .sx-essay__inner {
+    grid-template-columns: 1fr;
+  }
+}

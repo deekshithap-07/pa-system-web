@@ -1,0 +1,35 @@
+{
+  "heroLead": "Pastor-led work across seven countries. Open a country to see what is happening there.",
+  "countryCovers": {
+    "kenya": { "image": "assets/stories/story-rachuonyo.jpg", "label": "Rachuonyo, Kenya" },
+    "malawi": { "image": "assets/stories/story-ntchisi-health.jpg", "label": "Ntchisi, Malawi" },
+    "ethiopia": { "image": "assets/stories/story-ethiopia-koka.jpg", "label": "Koka, Ethiopia" },
+    "zambia": { "image": "assets/stories/story-zambia-crops.jpg", "label": "Rural Zambia" },
+    "burundi": { "image": "assets/stories/story-burundi.jpg", "label": "Burundi" },
+    "rwanda": { "image": "assets/stories/story-rwanda.jpeg", "label": "Rwanda" },
+    "tanzania": { "image": "assets/stories/story-tanzania.jpg", "label": "Tanzania" }
+  },
+  "regions": [
+    {
+      "id": "east-africa",
+      "name": "East Africa",
+      "lead": "Kenya is the longest-running network. Tanzania, Rwanda, and Burundi are growing pastor cohorts from the same two-year journey.",
+      "photoClass": "wb-photo--east",
+      "countrySlugs": ["kenya", "tanzania", "rwanda", "burundi"]
+    },
+    {
+      "id": "horn-of-africa",
+      "name": "Horn of Africa",
+      "lead": "Ethiopia’s pastor network keeps working through difficult seasons — leadership training, farming, and new churches in Hossana, Gurage, and Durame.",
+      "photoClass": "wb-photo--horn",
+      "countrySlugs": ["ethiopia"]
+    },
+    {
+      "id": "southern-africa",
+      "name": "Southern Africa",
+      "lead": "Malawi has one of the largest pastor networks. Zambia is newer, with church and crop work spreading from Lusaka’s rural communities.",
+      "photoClass": "wb-photo--south",
+      "countrySlugs": ["malawi", "zambia"]
+    }
+  ]
+}

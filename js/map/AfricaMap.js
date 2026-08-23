@@ -649,7 +649,6 @@ export class AfricaMap {
     if (!this.map?.getLayer("pa-countries-fill")) return;
     this.map.setPaintProperty("pa-countries-fill", "fill-color", "#0D1C2F");
     this.map.setPaintProperty("pa-countries-fill", "fill-opacity", 0.0);
-    // Reset to data-driven expression by clearing overrides
     this.map.setPaintProperty("pa-countries-line", "line-color", [
       "case", ["==", ["get", "in_network"], true], ACTIVE_GOLD, INACTIVE_BORDER
     ]);

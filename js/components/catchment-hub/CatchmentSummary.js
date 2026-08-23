@@ -14,8 +14,8 @@ export function renderCatchmentSummary(overview, kpis) {
   return `
     <section class="ch-section cth-summary-section" id="cth-summary" data-reveal-section>
       <div class="ch-section__head">
-        <h2>Catchment Summary</h2>
-        <p class="ch-section__desc">The ministry model at catchment level</p>
+        <h2>How this cluster works</h2>
+        <p class="ch-section__desc">A catchment is how PA groups 3–5 communities under coordinated pastor leadership — country strategy becomes community action here.</p>
       </div>
       <div class="ch-summary"><p>${overview}</p></div>
       <div class="cth-kpi-wrap">

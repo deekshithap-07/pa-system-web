@@ -1,18 +1,32 @@
-import { renderBreadcrumb } from "./Breadcrumb.js";
+import { renderWbPageHero } from "../shared/wb-page-hero.js";
 
 export function renderCountryHero(hub) {
-  return `
-    <header class="ch-hero" id="ch-overview">
-      <div class="ch-hero__grid">
-        <div class="ch-hero__content">
-          ${renderBreadcrumb(hub.countryName)}
-          <p class="eyebrow ch-hero__tag">${hub.heroTagline}</p>
-          <p class="ch-hero__question">What is happening in this country?</p>
-          <h1>${hub.countryName}</h1>
-        </div>
-        <div class="ch-hero__visual ch-hero__context-map-wrap">
-          <div id="context-map-root" class="ch-hero__context-map" aria-label="Africa context map"></div>
-        </div>
-      </div>
-    </header>`;
+  const slug = hub.country?.slug || "";
+  const firstCatchment = hub.catchments?.[0];
+
+  return renderWbPageHero({
+    id: "ch-overview",
+    tone: "navy",
+    skin: "report",
+    variant: "split",
+    flush: true,
+    extraClass: "ch-hero",
+    crumbs: [
+      { label: "Where we work", href: "#/africa" },
+      { label: hub.countryName },
+    ],
+    eyebrow: "Country",
+    question: "What is happening in this country?",
+    title: hub.countryName,
+    lead: "Pastors work together across this country. Next, open a small group of nearby communities, then one community. That is how the work is organised.",
+    actions: firstCatchment
+      ? [{ label: `Open ${firstCatchment.name}`, href: `#/catchment/${slug}/${firstCatchment.slug}` }]
+      : [{ label: "Where we work", href: "#/africa" }],
+    chapterNext: {
+      kicker: "Next in the story",
+      title: firstCatchment ? `Open ${firstCatchment.name}` : "Where we work",
+      href: firstCatchment ? `#/catchment/${slug}/${firstCatchment.slug}` : "#/africa",
+    },
+    visualHtml: `<div id="context-map-root" class="ch-hero__context-map" aria-label="Africa context map"></div>`,
+  });
 }

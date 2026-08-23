@@ -1,3 +1,6 @@
+import { bindWbPageHero } from "./shared/wb-page-hero.js";
+import { bindStoryReveals } from "./shared/story-chapters.js";
+
 export function initResourcesAnimations() {
   const page = document.querySelector("[data-resources-hub]");
   if (!page || typeof gsap === "undefined") return;
@@ -5,19 +8,9 @@ export function initResourcesAnimations() {
   const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
   if (!reducedMotion) {
-    const heroItems = page.querySelectorAll("[data-atlas-hero]");
-    if (heroItems.length) {
-      gsap.set(heroItems, { opacity: 0, y: 24 });
-      gsap.to(heroItems, {
-        opacity: 1,
-        y: 0,
-        duration: 0.75,
-        stagger: 0.1,
-        ease: "power3.out",
-        delay: 0.15,
-      });
-    }
+    bindWbPageHero(page);
   }
+  bindStoryReveals(page);
 
   if (typeof ScrollTrigger === "undefined") return;
 

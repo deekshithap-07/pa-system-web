@@ -5,13 +5,30 @@
     "period": "2021 – 2024",
     "lastUpdated": "September 2024"
   },
+  "storyArc": {
+    "past": {
+      "label": "Where we started",
+      "title": "A smaller network, steady roots",
+      "text": "Four years ago, fewer communities were on the journey and household reach sat near half of today. The growth since then came parish by parish — not all at once."
+    },
+    "present": {
+      "label": "What we see now",
+      "title": "Faith and leadership carry the rest",
+      "text": "Spiritual formation scores highest across communities. Economic and youth work are catching up — usually after pastors and Shalom groups are in place."
+    },
+    "next": {
+      "label": "What may come next",
+      "title": "More places ready to share the work",
+      "text": "Seven communities are already multiplying what they learned in neighbouring areas. Others still need water, training, or stronger groups before they can do the same."
+    }
+  },
   "editorial": {
     "heroSpotlight": {
       "value": "253K+",
       "label": "Households engaged",
       "context": "Cumulative reach across pastor-led communities — up from 120,000 in 2021."
     },
-    "intro": "The scorecard tells you where communities stand. Insights explains why — which countries are pulling ahead, which dimensions of transformation are strongest, and what field patterns repeat across the network.",
+    "intro": "This page walks through where the work began, what the field shows today, and what may come next — with the numbers beside each step.",
     "pullQuote": {
       "text": "Pastor leadership engagement shows the strongest correlation with community advancement across every country we track.",
       "attribution": "PA Network Analysis · r = 0.84"
@@ -28,7 +45,7 @@
         "stat": "78",
         "unit": "Spiritual formation",
         "change": "Top CBC dimension",
-        "text": "Spiritual formation leads the Community Balanced Scorecard — the foundation other outcomes build on.",
+        "text": "Faith and discipleship lead the picture of community life — other results grow from there.",
         "anchor": "#ins-cbc"
       },
       {
@@ -42,7 +59,7 @@
         "stat": "Kwale",
         "unit": "South, Kenya",
         "change": "+22% household reach",
-        "text": "Pastor leadership combined with water PPPs is driving the fastest household reach growth in the network.",
+        "text": "Pastor leadership combined with water projects is helping more homes in this area.",
         "anchor": "#ins-hotspots"
       }
     ]
@@ -100,8 +117,8 @@
     ]
   },
   "cbcIndex": {
-    "title": "Community Balanced Scorecard (CBC) Visual Index",
-    "description": "Holistic community performance across six transformation dimensions. Scores are aggregated from field tracking data.",
+    "title": "How communities are doing",
+    "description": "A simple picture of community life across six areas. Scores come from field reports.",
     "dimensions": [
       { "id": "spiritual", "label": "Spiritual Formation", "score": 78, "trend": "+6%" },
       { "id": "leadership", "label": "Leadership Development", "score": 67, "trend": "+4pts" },
@@ -134,7 +151,7 @@
     ]
   },
   "whyProgressing": [
-    { "area": "Kwale South, Kenya", "reason": "Strong pastor leadership + water PPPs driving fastest household reach growth (+22%).", "score": 85 },
+    { "area": "Kwale South, Kenya", "reason": "Pastor leadership and water projects are helping more homes here.", "score": 85 },
     { "area": "Kajiado, Kenya", "reason": "Livestock cooperatives and multiplication-stage communities (Koitiko) accelerating replication.", "score": 82 },
     { "area": "Nkhotakota South, Malawi", "reason": "Economic productivity programmes showing highest CBC economic dimension scores.", "score": 78 },
     { "area": "Ethiopia network", "reason": "Emerging Shalom groups; leadership training correlates with engagement stage advancement.", "score": 55 }

@@ -3,21 +3,21 @@ import { formatNumber } from "../../utils/format.js";
 const NAV = [
   { id: "sc-overview", label: "Overview" },
   { id: "sc-indices", label: "Network snapshot" },
-  { id: "sc-countries", label: "Country rankings" },
+  { id: "sc-countries", label: "By country" },
   { id: "sc-progress", label: "Journey progress" },
   { id: "sc-reports", label: "Reports" },
 ];
 
 export function renderScorecardSidebar() {
   return `
-    <aside class="sc-sidebar" aria-label="Scorecard navigation">
+    <aside class="sc-sidebar" aria-label="Our results navigation">
       <nav class="sc-sidebar__nav">
-        <p class="sc-sidebar__title">Scorecard</p>
+        <p class="sc-sidebar__title">Our results</p>
         <ul>${NAV.map((i) => `<li><a href="#${i.id}" class="sc-sidebar__link" data-sc-nav="${i.id}">${i.label}</a></li>`).join("")}</ul>
       </nav>
       <div class="sc-sidebar__footer">
         <a href="#/" class="sc-sidebar__back" data-link>&larr; Back to home</a>
-        <a href="#/scorecard#tab-analysis" class="sc-sidebar__insights-link" data-link>Comparisons &amp; indices &rarr;</a>
+        <a href="#/scorecard/together" class="sc-sidebar__insights-link" data-link>What is changing &rarr;</a>
       </div>
     </aside>`;
 }
@@ -60,7 +60,7 @@ export function renderScorecardHeader(meta, overview) {
   return `
     <header class="sc-hero" id="sc-overview">
       <div class="sc-hero__inner">
-        <p class="sc-hero__eyebrow">Transformation Scorecard · ${meta.period}</p>
+        <p class="sc-hero__eyebrow">Our results · ${meta.period}</p>
         <h1>${overview?.headline || meta.title}</h1>
         <p class="sc-hero__recap">${overview?.description || meta.subtitle}</p>
         <div class="sc-hero__meta">
@@ -259,7 +259,7 @@ export function renderScorecardAnalysis(insights, comparisons, performance) {
             <h2>Sector outcomes</h2>
             <p class="sc-section__desc">Programme-area performance across the network</p>
           </div>
-          <a href="#/scorecard#tab-analysis" class="sc-insights-cta" data-link>Country &amp; community comparisons, CBC index &rarr;</a>
+          <a href="#/scorecard/together" class="sc-insights-cta" data-link>What is changing &rarr;</a>
         </div>
         <div class="sc-sector-table">
           <table class="sc-table">

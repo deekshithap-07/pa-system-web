@@ -8,6 +8,10 @@
   background: #f8f9fa;
 }
 
+.about-atlas-page.wb-who {
+  background: #fff;
+}
+
 .about-atlas-hero .atlas-hero__title-line--accent strong {
   color: #00d4d4;
 }

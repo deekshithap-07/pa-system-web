@@ -26,7 +26,8 @@ export function renderCountryKPIGrid(kpis) {
   return `
     <section class="ch-kpi-section" id="ch-kpi-section" aria-label="Country-specific data and metrics">
       <div class="ch-section__head">
-        <h2>Country-specific data &amp; metrics</h2>
+        <h2>The national record</h2>
+        <p class="ch-section__desc">Not a dashboard — the country chapter. How far the pastor network has reached, before you zoom into catchments.</p>
       </div>
       <div class="ch-kpi-grid">${cards}</div>
     </section>`;

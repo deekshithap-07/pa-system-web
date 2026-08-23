@@ -1,4 +1,5 @@
 const NAV_ITEMS = [
+  { id: "cm-places", label: "Place & map" },
   { id: "cm-stories", label: "Story" },
   { id: "cm-profile", label: "Profile" },
   { id: "cm-projects", label: "Projects & activities" },

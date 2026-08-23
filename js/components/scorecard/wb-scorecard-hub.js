@@ -1,14 +1,7 @@
 import { formatNumber } from "../../utils/format.js";
 import { renderChart, destroyCharts } from "../charts.js";
-import { buildCommunityHubPath } from "../shared/site-bridge.js";
-
-const TABS = [
-  { id: "overview", label: "Overview" },
-  { id: "outcomes", label: "Outcomes" },
-  { id: "data", label: "Data" },
-  { id: "analysis", label: "Analysis" },
-  { id: "progress", label: "Progress" },
-];
+import { renderWbPageHero, bindWbPageHero, renderPageBack, renderTopicHub } from "../shared/wb-page-hero.js";
+import { bindStoryReveals } from "../shared/story-chapters.js";
 
 const WB_THEMES = [
   { name: "orange", color: "#de8a0a" },
@@ -43,19 +36,19 @@ const CARD_ICONS = {
 };
 
 const CARD_COPY = {
-  countries: { keyword: "Countries", rest: "in the PA network reporting transformation data." },
-  communities: { keyword: "Communities", rest: "engaged in pastor-led holistic transformation programmes." },
-  households: { keyword: "Households", rest: "reached through ministry and community development work." },
-  projects: { keyword: "Projects", rest: "active across water, agriculture, and livelihood sectors." },
-  lives: { keyword: "Lives", rest: "impacted through the whole-gospel transformation model." },
-  shalom: { keyword: "Shalom groups", rest: "building cohesion and discipleship depth in communities." },
-  leadership: { keyword: "Leadership teams", rest: "developed through the two-year pastor journey framework." },
-  growth: { keyword: "Network growth", rest: "year-over-year across active catchments and countries." },
-  Education: { keyword: "Education", rest: "outcomes improving through school and literacy programmes." },
-  Health: { keyword: "Health", rest: "services strengthened in underserved rural communities." },
-  Agriculture: { keyword: "Agriculture", rest: "productivity rising through farmer training and cooperatives." },
-  Water: { keyword: "Water", rest: "infrastructure delivering reliable access in dryland regions." },
-  Livelihood: { keyword: "Livelihood", rest: "income growing through CHIP groups and skill transfer." },
+  countries: { keyword: "Countries", rest: "where Possibilities Africa is at work." },
+  communities: { keyword: "Communities", rest: "on a two-year journey of change." },
+  households: { keyword: "Homes", rest: "reached through church and community work." },
+  projects: { keyword: "Projects", rest: "in water, farming, and jobs." },
+  lives: { keyword: "Lives", rest: "touched by this work." },
+  shalom: { keyword: "Faith groups", rest: "(Shalom) that meet and serve in communities." },
+  leadership: { keyword: "Leadership teams", rest: "trained through the two-year pastor journey." },
+  growth: { keyword: "Growth", rest: "year on year across countries." },
+  Education: { keyword: "Education", rest: "schools and literacy programmes." },
+  Health: { keyword: "Health", rest: "care in rural communities." },
+  Agriculture: { keyword: "Farming", rest: "training and cooperatives." },
+  Water: { keyword: "Water", rest: "wells, dams, and reliable access." },
+  Livelihood: { keyword: "Jobs", rest: "income groups and skills training." },
 };
 
 function pct(achieved, expected) {
@@ -150,8 +143,8 @@ function buildOverviewCards(sc) {
       achieved: k.text || val,
       expected,
       progress: pct(val || 1, expected),
-      summary: `Network trend: ${k.trend || "stable"}. Reporting period ${sc.meta?.period || "2024"}.`,
-      link: k.id === "growth" ? "#/scorecard#tab-data" : "#/scorecard#tab-outcomes",
+      summary: `Trend: ${k.trend || "stable"}. Period ${sc.meta?.period || "2024"}.`,
+      link: k.id === "growth" ? "#/africa" : "#/scorecard/working",
     };
   });
 }
@@ -164,11 +157,10 @@ function renderOverviewPanel(sc, ia) {
     <section class="wbs-panel wbs-panel--overview is-active" data-panel="overview" id="tab-overview">
       <div class="wbs-hero-split">
         <div class="wbs-hero-split__copy">
-          <h2>${ov.headline || "Measuring transformation across Africa"}</h2>
-          <p>${ov.description || sc.meta.subtitle}</p>
+          <h2>How big is the work?</h2>
+          <p>Countries, communities, and homes — a simple picture of reach.</p>
           <p class="wbs-hero-split__date">Updated ${sc.meta.lastUpdated}</p>
         </div>
-        <div class="wbs-hero-split__visual" aria-hidden="true"></div>
       </div>
       <div class="wbs-cards-wrap">
         <div class="wbs-cards-grid">
@@ -183,10 +175,10 @@ function renderOutcomesPanel(sc, ia) {
   const progress = sc.progressIndicators || [];
 
   return `
-    <section class="wbs-panel" data-panel="outcomes" id="tab-outcomes">
+    <section class="wbs-panel is-page" data-panel="outcomes" id="tab-outcomes">
       <header class="wbs-panel-head">
-        <h2>Outcome areas</h2>
-        <p>Sector performance and journey-stage progress across the PA network — holistic transformation, not single metrics.</p>
+        <h2>What’s working</h2>
+        <p>Water, farming, health, schools, jobs, and leadership — and how far communities have come on the two-year journey.</p>
         <p class="wbs-panel-head__date">Period ${sc.meta.period} · Updated ${sc.meta.lastUpdated}</p>
       </header>
       <div class="wbs-cards-grid wbs-cards-grid--compact">
@@ -221,123 +213,179 @@ function renderOutcomesPanel(sc, ia) {
     </section>`;
 }
 
+function renderArcFigure(label, then, now) {
+  return `<div class="wbs-arc__stat">
+    <span class="wbs-arc__stat-label">${label}</span>
+    <span class="wbs-arc__stat-row"><em>${then}</em><span aria-hidden="true">→</span><strong>${now}</strong></span>
+  </div>`;
+}
+
+function renderAnalysisPanel(sc, ia) {
+  const arc = ia?.storyArc || {};
+  const ed = ia?.editorial || {};
+  const pq = ed.pullQuote || {};
+  const findings = (ed.keyFindings || []).slice(0, 3);
+  const hotspots = (ia?.whyProgressing || []).slice(0, 3);
+  const drivers = (ia?.readinessLevels?.progressDrivers || []).slice(0, 3);
+  const dims = (ia?.cbcIndex?.dimensions || []).slice(0, 4);
+  const stages = ia?.readinessLevels?.stages || [];
+  const multiply = stages.find((s) => s.id === "multiplication");
+
+  const past = arc.past || {};
+  const present = arc.present || {};
+  const next = arc.next || {};
+
+  return `
+    <section class="wbs-narrative wbs-panel is-page" data-panel="analysis" id="tab-analysis">
+      <div class="container wbs-narrative__lede-wrap">
+        <p class="wbs-narrative__lede">${ed.intro || "Figures alone do not tell the story. This page walks through where the work began, what the field shows today, and what may come next."}</p>
+      </div>
+
+      <div class="wbs-arc">
+        <article class="wbs-arc__chapter wbs-arc__chapter--past" id="ins-past">
+          <div class="container wbs-arc__inner">
+            <header class="wbs-arc__head">
+              <span class="wbs-arc__label">${past.label || "Where we started"}</span>
+              <h2>${past.title || "A smaller network, steady roots"}</h2>
+            </header>
+            <p class="wbs-arc__text">${past.text || ""}</p>
+            <div class="wbs-arc__figures">
+              ${renderArcFigure("Communities on the journey", "32", "59")}
+              ${renderArcFigure("Homes reached", "120K", "253K+")}
+              ${renderArcFigure("Shalom groups", "28", "86")}
+            </div>
+            <div class="wbs-arc__evidence">
+              <article class="wbs-arc__chart-card" data-wbs-chart="communityGrowth">
+                <h3>Communities over time</h3>
+                <p class="wbs-arc__chart-note">The line shows how many communities were active each year — not a target, just the count.</p>
+                <div class="wbs-chart-wrap"><canvas></canvas></div>
+              </article>
+            </div>
+          </div>
+        </article>
+
+        <article class="wbs-arc__chapter wbs-arc__chapter--present" id="ins-present">
+          <div class="container wbs-arc__inner">
+            <header class="wbs-arc__head">
+              <span class="wbs-arc__label">${present.label || "What we see now"}</span>
+              <h2>${present.title || "Faith and leadership carry the rest"}</h2>
+            </header>
+            <p class="wbs-arc__text">${present.text || ""}</p>
+            ${pq.text ? `<blockquote class="wbs-arc__quote"><p>${pq.text}</p>${pq.attribution ? `<cite>${pq.attribution}</cite>` : ""}</blockquote>` : ""}
+            <div class="wbs-arc__split">
+              <div class="wbs-arc__meaning">
+                <h3 class="wbs-arc__subhead">What stands out in the field</h3>
+                <ul class="wbs-arc__findings">
+                  ${findings
+                    .map(
+                      (f) => `<li>
+                      <strong>${f.stat} ${f.unit}</strong>
+                      <span class="wbs-arc__change">${f.change}</span>
+                      <p>${f.text}</p>
+                    </li>`
+                    )
+                    .join("")}
+                </ul>
+              </div>
+              <div class="wbs-arc__viz">
+                <h3 class="wbs-arc__subhead">Six areas of community life</h3>
+                <p class="wbs-arc__chart-note">Each spoke is a score from field reports — higher means more progress in that area.</p>
+                <div class="wbs-chart-wrap wbs-chart-wrap--radar"><canvas id="wbs-chart-cbc"></canvas></div>
+                <ul class="wbs-arc__dims">
+                  ${dims
+                    .map((d) => `<li><span>${d.label}</span><strong>${d.score}</strong><em>${d.trend}</em></li>`)
+                    .join("")}
+                </ul>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <article class="wbs-arc__chapter wbs-arc__chapter--next" id="ins-next">
+          <div class="container wbs-arc__inner">
+            <header class="wbs-arc__head">
+              <span class="wbs-arc__label">${next.label || "What may come next"}</span>
+              <h2>${next.title || "More places ready to share the work"}</h2>
+            </header>
+            <p class="wbs-arc__text">${next.text || ""}</p>
+            ${multiply ? `<p class="wbs-arc__highlight"><strong>${multiply.count}</strong> communities are at the multiplication stage — avg score ${multiply.avgScore}. ${multiply.description}</p>` : ""}
+            <div class="wbs-arc__split wbs-arc__split--next">
+              <div>
+                <h3 class="wbs-arc__subhead">Places to watch</h3>
+                <ul class="wbs-arc__watch">
+                  ${hotspots
+                    .map(
+                      (h) => `<li>
+                      <strong>${h.area}</strong>
+                      <span class="wbs-arc__watch-score">${h.score}</span>
+                      <p>${h.reason}</p>
+                    </li>`
+                    )
+                    .join("")}
+                </ul>
+              </div>
+              <div>
+                <h3 class="wbs-arc__subhead">What usually comes first</h3>
+                <ul class="wbs-arc__drivers">
+                  ${drivers
+                    .map(
+                      (d) => `<li class="wbs-arc__driver wbs-arc__driver--${d.impact}">
+                      <span>${d.driver}</span>
+                      <em>${d.impact} · r=${d.correlation}</em>
+                    </li>`
+                    )
+                    .join("")}
+                </ul>
+                <p class="wbs-arc__footnote">These patterns come from comparing communities on the journey — useful for planning, not for ranking people.</p>
+              </div>
+            </div>
+          </div>
+        </article>
+      </div>
+    </section>`;
+}
+
 function renderDataPanel(sc, ia) {
   const countries = sc.countryStats || [];
   const trends = sc.growthTrends || ia?.trendAnalysis || {};
 
   return `
-    <section class="wbs-panel" data-panel="data" id="tab-data">
-      <header class="wbs-panel-head">
-        <h2>Network data</h2>
-        <p>Country rankings and time-series trends from field tracking across seven PA nations.</p>
-        <p class="wbs-panel-head__date">Updated ${sc.meta.lastUpdated}</p>
-      </header>
-      <div class="wbs-table-wrap">
-        <table class="wbs-table">
-          <thead>
-            <tr>
-              <th>#</th>
-              <th>Country</th>
-              <th>Communities</th>
-              <th>Projects</th>
-              <th>Growth</th>
-              <th>Progress</th>
-              <th>Status</th>
-            </tr>
-          </thead>
-          <tbody>
-            ${countries
-              .map(
-                (c, i) => `<tr>
-                <td>${i + 1}</td>
-                <th><a href="#/country/${c.slug}" data-link>${c.name}</a></th>
-                <td>${c.communities}</td>
-                <td>${c.projects}</td>
-                <td class="${c.growth > 0 ? "is-up" : ""}">+${c.growth}%</td>
-                <td><div class="wbs-table-bar"><span style="width:${c.progress}%"></span></div> ${c.progress}%</td>
-                <td><span class="wbs-status wbs-status--${(c.status || "").toLowerCase()}">${c.status}</span></td>
-              </tr>`
-              )
-              .join("")}
-          </tbody>
-        </table>
-      </div>
-      <div class="wbs-charts-grid">
-        ${Object.entries(trends)
-          .slice(0, 4)
-          .map(
-            ([key, cfg]) => `<article class="wbs-chart-card" data-wbs-chart="${key}">
+    <section class="wbs-data-sheet wbs-panel is-page" data-panel="data" id="tab-data">
+      <div class="container">
+        <p class="wbs-data-sheet__note">Country figures and trend lines only. For what they mean over time, open <a href="#/scorecard/together" data-link>What is changing</a>.</p>
+
+        <header class="wbs-data-sheet__head">
+          <h2>Country figures</h2>
+          <p>Open a country to read its full story.</p>
+        </header>
+        <div class="wbs-country-tiles">
+          ${countries
+            .map(
+              (c) => `<a href="#/country/${c.slug}" class="wbs-country-tile" data-link>
+              <strong>${c.name}</strong>
+              <span>${c.communities} communities · ${c.projects} projects · ${c.growth}% growth</span>
+              <span class="wbs-country-tile__cta">Open country →</span>
+            </a>`
+            )
+            .join("")}
+        </div>
+
+        <header class="wbs-data-sheet__head wbs-data-sheet__head--charts">
+          <h2>Trend lines</h2>
+          <p>Counts and reach by year or quarter — raw totals from field reports.</p>
+        </header>
+        <div class="wbs-charts-grid wbs-charts-grid--data">
+          ${Object.entries(trends)
+            .slice(0, 4)
+            .map(
+              ([key, cfg]) => `<article class="wbs-chart-card wbs-chart-card--data" data-wbs-chart="${key}">
             <h3>${cfg.title}</h3>
             <p>${cfg.description || ""}</p>
             <div class="wbs-chart-wrap"><canvas></canvas></div>
           </article>`
-          )
-          .join("")}
-      </div>
-    </section>`;
-}
-
-function renderAnalysisPanel(sc, ia) {
-  const countries = ia?.countryComparison?.countries || [];
-  const communities = ia?.communityComparison?.communities || [];
-  const cbc = ia?.cbcIndex;
-  const labels = ia?.countryComparison?.metricLabels || {};
-
-  return `
-    <section class="wbs-panel wbs-panel--analysis" data-panel="analysis" id="tab-analysis">
-      <div class="wbs-panel-hero wbs-panel-hero--analysis">
-        <header class="wbs-panel-head">
-          <h2>Analysis &amp; comparisons</h2>
-          <p>CBC index and side-by-side peer comparison — understand performance in context.</p>
-          <p class="wbs-panel-head__date">Updated ${ia?.meta?.lastUpdated || sc.meta.lastUpdated}</p>
-        </header>
-      </div>
-
-      <div class="wbs-panel-body">
-      <div class="wbs-cbc-block">
-        <div class="wbs-cbc-copy">
-          <h3>${cbc?.title || "Community Balanced Scorecard"}</h3>
-          <p>${cbc?.description || ""}</p>
-          <ul class="wbs-cbc-list">
-            ${(cbc?.dimensions || [])
-              .map(
-                (d) => `<li>
-                <span>${d.label}</span>
-                <strong>${d.score}</strong>
-                <em>${d.trend}</em>
-                <div class="wbs-cbc-bar"><span style="width:${d.score}%"></span></div>
-              </li>`
-              )
-              .join("")}
-          </ul>
+            )
+            .join("")}
         </div>
-        <div class="wbs-cbc-chart">
-          <div class="wbs-chart-wrap wbs-chart-wrap--radar"><canvas id="wbs-chart-cbc"></canvas></div>
-        </div>
-      </div>
-
-      <div class="wbs-compare-grid">
-        <article class="wbs-compare-card">
-          <h3>Country vs country</h3>
-          <div class="wbs-compare-pickers">
-            <label>Country A <select id="wbs-country-a">${countries.map((c) => `<option value="${c.slug}">${c.name}</option>`).join("")}</select></label>
-            <span>vs</span>
-            <label>Country B <select id="wbs-country-b">${countries.map((c, i) => `<option value="${c.slug}" ${i === 1 ? "selected" : ""}>${c.name}</option>`).join("")}</select></label>
-          </div>
-          <div class="wbs-duel" id="wbs-country-results" data-metric-labels='${JSON.stringify(labels)}'></div>
-          <div class="wbs-compare-links" id="wbs-country-links" hidden></div>
-        </article>
-        <article class="wbs-compare-card">
-          <h3>Community vs community</h3>
-          <div class="wbs-compare-pickers">
-            <label>Community A <select id="wbs-community-a">${communities.map((c) => `<option value="${c.id}">${c.name}</option>`).join("")}</select></label>
-            <span>vs</span>
-            <label>Community B <select id="wbs-community-b">${communities.map((c, i) => `<option value="${c.id}" ${i === 1 ? "selected" : ""}>${c.name}</option>`).join("")}</select></label>
-          </div>
-          <div class="wbs-duel" id="wbs-community-results"></div>
-          <div class="wbs-compare-links" id="wbs-community-links" hidden></div>
-        </article>
-      </div>
       </div>
     </section>`;
 }
@@ -348,11 +396,11 @@ function renderProgressPanel(sc, ia) {
   const hotspots = ia?.whyProgressing || [];
 
   return `
-    <section class="wbs-panel wbs-panel--progress" data-panel="progress" id="tab-progress">
+    <section class="wbs-panel wbs-panel--progress is-page" data-panel="progress" id="tab-progress">
       <div class="wbs-panel-hero wbs-panel-hero--progress">
         <header class="wbs-panel-head">
-          <h2>Progress &amp; hotspots</h2>
-          <p>${readiness?.description || "Journey readiness and areas advancing fastest across the network."}</p>
+          <h2>The two-year journey</h2>
+          <p>From first steps to sharing the work with others — how many communities sit in each stage.</p>
           <p class="wbs-panel-head__date">Updated ${ia?.meta?.lastUpdated || sc.meta.lastUpdated}</p>
         </header>
       </div>
@@ -374,7 +422,7 @@ function renderProgressPanel(sc, ia) {
       </div>
 
       <div class="wbs-drivers">
-        <h3>Progress drivers</h3>
+        <h3>What helps communities grow</h3>
         <div class="wbs-drivers__grid">
           ${drivers
             .map(
@@ -389,12 +437,11 @@ function renderProgressPanel(sc, ia) {
       </div>
 
       <div class="wbs-hotspots">
-        <h3>Progress hotspots</h3>
+        <h3>Places where the work is growing</h3>
         <div class="wbs-hotspots__grid">
           ${hotspots
             .map(
-              (h, i) => `<article class="wbs-hotspot wbs-hotspot--${i + 1}">
-              <span class="wbs-hotspot__rank">0${i + 1}</span>
+              (h) => `<article class="wbs-hotspot">
               <strong class="wbs-hotspot__score">${h.score}</strong>
               <h4>${h.area}</h4>
               <p>${h.reason}</p>
@@ -407,140 +454,125 @@ function renderProgressPanel(sc, ia) {
     </section>`;
 }
 
-export function renderWbScorecard(data) {
+export function renderWbScorecard(data, section = "overview") {
   const sc = data.scorecard;
   const ia = data.insightsAnalytics;
-  if (!sc) return `<div class="container static-page"><h1>Scorecard data unavailable</h1></div>`;
+  if (!sc) return `<div class="container static-page"><h1>Our results are unavailable</h1></div>`;
 
-  return `
-    <div class="wbs-page" data-wb-scorecard>
-      <div class="wbs-chrome">
-        <header class="wbs-topbar">
-          <div class="wbs-topbar__brand">
-            <span class="wbs-topbar__logo" aria-hidden="true">🌍</span>
-            <span class="wbs-topbar__org">Possibilities Africa</span>
-            <span class="wbs-topbar__divider" aria-hidden="true"></span>
-            <span class="wbs-topbar__title">Scorecard</span>
-          </div>
-          <nav class="wbs-tabs" aria-label="Scorecard sections">
-            ${TABS.map((t) => `<button type="button" class="wbs-tabs__btn" data-wbs-tab="${t.id}" aria-selected="false">${t.label}</button>`).join("")}
-          </nav>
-          <p class="wbs-topbar__date">${sc.meta.lastUpdated}</p>
-        </header>
-      </div>
-      <main class="wbs-main">
-        ${renderOverviewPanel(sc, ia)}
-        ${renderOutcomesPanel(sc, ia)}
-        ${renderDataPanel(sc, ia)}
-        ${renderAnalysisPanel(sc, ia)}
-        ${renderProgressPanel(sc, ia)}
-      </main>
+  const page = ["working", "together", "journey"].includes(section) ? section : "overview";
+
+  if (page === "overview") {
+    const glance = (sc.kpis || []).slice(0, 3);
+    return `
+    <div class="wbs-page wbs-page--story topic-page--hub" data-wb-scorecard data-results-page="overview">
+      ${renderPageBack({ href: "#/work", label: "What we do" })}
+      ${renderWbPageHero({
+        id: "scorecard-hero",
+        tone: "navy",
+        skin: "who",
+        flush: true,
+        crumbs: [
+          { label: "Home", href: "#/" },
+          { label: "What we do", href: "#/work" },
+          { label: "Our results" },
+        ],
+        eyebrow: "Our results",
+        title: "How the work is going",
+        lead: "Figures for countries, communities, and homes — beside the map, not instead of visiting a place.",
+      })}
+      <section class="container" style="padding:0 0 1rem">
+        <div class="wbs-glance">
+          ${glance
+            .map(
+              (k) => `<div class="wbs-glance__item">
+                <strong>${k.text || k.value}</strong>
+                <span>${k.label}</span>
+              </div>`
+            )
+            .join("")}
+        </div>
+      </section>
+      ${renderTopicHub({
+        eyebrow: "Topics",
+        title: "Open a results page",
+        lead: "Each card is figures only — not a repeat of How places work or the two-year journey.",
+        items: [
+          { href: "#/scorecard/working", kind: "Results", title: "What’s working", text: "Water, farming, health, schools, jobs, and leadership — in plain words.", cta: "Open" },
+          { href: "#/scorecard/together", kind: "Change", title: "What is changing", text: "Where the work began, what the field shows now, and what may come next.", cta: "Open" },
+        ],
+      })}
     </div>`;
-}
+  }
 
-function renderCountryDuel(countries, slugA, slugB, labels) {
-  const a = countries.find((c) => c.slug === slugA);
-  const b = countries.find((c) => c.slug === slugB);
-  if (!a || !b) return "";
-  const metrics = ["communities", "households", "projects", "growth", "shalomGroups", "leadershipScore"];
-  return metrics
-    .map((m) => {
-      const rawA = a[m] ?? 0;
-      const rawB = b[m] ?? 0;
-      const winner = rawA > rawB ? "a" : rawA < rawB ? "b" : "tie";
-      return `<div class="wbs-duel-row">
-        <span>${labels[m] || m}</span>
-        <strong class="${winner === "a" ? "is-win" : ""}">${m === "households" ? formatNumber(rawA) : rawA}</strong>
-        <strong class="${winner === "b" ? "is-win" : ""}">${m === "households" ? formatNumber(rawB) : rawB}</strong>
-      </div>`;
-    })
-    .join("");
-}
+  const chapters = {
+    working: {
+      skin: "who",
+      tone: "navy",
+      title: "What’s working",
+      lead: "Water, farming, health, schools, jobs, and leadership — and how far communities have come.",
+      body: renderOutcomesPanel(sc, ia),
+    },
+    together: {
+      skin: "who",
+      tone: "navy",
+      title: "What is changing",
+      lead: "Where the work began, what the field shows now, and what may come next.",
+      body: renderAnalysisPanel(sc, ia),
+    },
+    journey: {
+      skin: "who",
+      tone: "navy",
+      title: "Journey stage counts",
+      lead: "How many communities sit in each stage. For the path itself, open The two-year journey under What we do.",
+      body: renderProgressPanel(sc, ia),
+    },
+  };
 
-function renderCommunityDuel(communities, idA, idB) {
-  const a = communities.find((c) => c.id === idA);
-  const b = communities.find((c) => c.id === idB);
-  if (!a || !b) return "";
-  const fields = [
-    ["Stage", "stage"],
-    ["Shalom leaders", "shalomLeaders"],
-    ["Leadership", "leadershipScore"],
-    ["Projects", "projects"],
-    ["Growth %", "growth"],
-  ];
-  return fields
-    .map(([label, key]) => {
-      const rawA = Number(a[key]) || 0;
-      const rawB = Number(b[key]) || 0;
-      const winner = typeof a[key] === "string" ? "tie" : rawA > rawB ? "a" : rawA < rawB ? "b" : "tie";
-      return `<div class="wbs-duel-row">
-        <span>${label}</span>
-        <strong class="${winner === "a" ? "is-win" : ""}">${a[key]}</strong>
-        <strong class="${winner === "b" ? "is-win" : ""}">${b[key]}</strong>
-      </div>`;
-    })
-    .join("");
+  const ch = chapters[page];
+  return `
+    <div class="wbs-page wbs-page--story topic-page--${page}" data-wb-scorecard data-results-page="${page}">
+      ${renderPageBack({ href: "#/scorecard", label: "Our results" })}
+      ${renderWbPageHero({
+        id: "scorecard-hero",
+        tone: ch.tone,
+        skin: ch.skin,
+        flush: true,
+        crumbs: [
+          { label: "Home", href: "#/" },
+          { label: "What we do", href: "#/work" },
+          { label: "Our results", href: "#/scorecard" },
+          { label: ch.title },
+        ],
+        eyebrow: "Our results",
+        title: ch.title,
+        lead: ch.lead,
+      })}
+      <main class="wbs-main">${ch.body}</main>
+    </div>`;
 }
 
 let activeCharts = [];
 
-export function mountWbScorecard(data, initialTab = "overview") {
+export function mountWbScorecard(data, section = "overview") {
   const root = document.querySelector("[data-wb-scorecard]");
   if (!root) return;
 
+  bindWbPageHero(root);
+  bindStoryReveals(root);
   destroyCharts();
   activeCharts = [];
 
   const sc = data.scorecard;
   const ia = data.insightsAnalytics;
+  const page = root.dataset.resultsPage || section;
 
-  const switchTab = (tabId, pushHash = true) => {
-    const id = TABS.some((t) => t.id === tabId) ? tabId : "overview";
-    root.querySelectorAll("[data-wbs-tab]").forEach((btn) => {
-      const active = btn.dataset.wbsTab === id;
-      btn.classList.toggle("is-active", active);
-      btn.setAttribute("aria-selected", active ? "true" : "false");
-    });
-    root.querySelectorAll("[data-panel]").forEach((panel) => {
-      panel.classList.toggle("is-active", panel.dataset.panel === id);
-    });
-    if (pushHash) {
-      const base = location.hash.split("#").slice(0, 2).join("#") || "#/scorecard";
-      const newHash = `${base.replace(/#tab-.*$/, "")}#tab-${id}`;
-      if (location.hash !== newHash) history.replaceState(null, "", newHash);
-    }
-    window.scrollTo({ top: 0, behavior: "smooth" });
-    requestAnimationFrame(() => {
-      if (id === "data") mountDataCharts(root, sc, ia);
-      if (id === "analysis") mountAnalysisCharts(ia);
-      if (id === "overview" && !root.dataset.wbsContentRevealed) {
-        scheduleScorecardContentReveal(root);
-      }
-      ScrollTrigger?.refresh?.();
-    });
-  };
-
-  root.querySelectorAll("[data-wbs-tab]").forEach((btn) => {
-    btn.addEventListener("click", () => switchTab(btn.dataset.wbsTab));
+  requestAnimationFrame(() => {
+    if (page === "together") mountAnalysisCharts(root, sc, ia);
+    if (page === "working") bindCardSelection(root);
+    ScrollTrigger?.refresh?.();
   });
 
-  const tabFromHash = () => {
-    const anchor = location.hash.match(/#tab-(\w+)/)?.[1];
-    return anchor || initialTab;
-  };
-
-  switchTab(tabFromHash(), false);
-  root._switchWbsTab = (id) => switchTab(id, false);
-
-  window.addEventListener("hashchange", onHash);
-  root._wbsHashHandler = onHash;
-  function onHash() {
-    if (!document.querySelector("[data-wb-scorecard]")) return;
-    switchTab(tabFromHash(), false);
-  }
-
-  bindComparisons(root, ia, data);
-  bindCardSelection(root);
+  if (page === "working") bindCardSelection(root);
   scheduleScorecardContentReveal(root);
 
   document.getElementById("site-header")?.classList.add("site-header--on-scorecard");
@@ -570,62 +602,32 @@ function mountDataCharts(root, sc, ia) {
   root.dataset.chartsMounted = "data";
 }
 
-function mountAnalysisCharts(ia) {
-  const canvas = document.getElementById("wbs-chart-cbc");
-  if (!canvas || canvas.dataset.mounted) return;
-  const dims = ia?.cbcIndex?.dimensions || [];
-  if (!dims.length) return;
-  renderChart(canvas, {
-    type: "radar",
-    labels: dims.map((d) => d.label),
-    data: dims.map((d) => d.score),
-    color: "#009FDA",
+function mountAnalysisCharts(root, sc, ia) {
+  if (root.dataset.chartsMounted === "analysis") return;
+  const trends = { ...sc?.growthTrends, ...ia?.trendAnalysis };
+  root.querySelectorAll("[data-wbs-chart]").forEach((el) => {
+    const key = el.dataset.wbsChart;
+    const cfg = trends[key];
+    if (!cfg) return;
+    const canvas = el.querySelector("canvas");
+    if (!canvas || canvas.dataset.mounted) return;
+    renderChart(canvas, cfg);
+    canvas.dataset.mounted = "1";
   });
-  canvas.dataset.mounted = "1";
-}
-
-function bindComparisons(root, ia, data) {
-  const countries = ia?.countryComparison?.countries || [];
-  const communities = ia?.communityComparison?.communities || [];
-  const labels = ia?.countryComparison?.metricLabels || {};
-  const countryA = root.querySelector("#wbs-country-a");
-  const countryB = root.querySelector("#wbs-country-b");
-  const commA = root.querySelector("#wbs-community-a");
-  const commB = root.querySelector("#wbs-community-b");
-  const countryResults = root.querySelector("#wbs-country-results");
-  const communityResults = root.querySelector("#wbs-community-results");
-  const countryLinks = root.querySelector("#wbs-country-links");
-  const communityLinks = root.querySelector("#wbs-community-links");
-
-  const updateCountry = () => {
-    if (!countryResults) return;
-    countryResults.innerHTML = renderCountryDuel(countries, countryA.value, countryB.value, labels);
-    if (countryLinks) {
-      countryLinks.hidden = false;
-      countryLinks.innerHTML = `<a href="#/country/${countryA.value}" data-link>Open ${countryA.options[countryA.selectedIndex].text}</a>
-        <a href="#/country/${countryB.value}" data-link>Open ${countryB.options[countryB.selectedIndex].text}</a>`;
+  const radar = root.querySelector("#wbs-chart-cbc");
+  if (radar && !radar.dataset.mounted) {
+    const dims = ia?.cbcIndex?.dimensions || [];
+    if (dims.length) {
+      renderChart(radar, {
+        type: "radar",
+        labels: dims.map((d) => d.label),
+        data: dims.map((d) => d.score),
+        color: "#009FDA",
+      });
+      radar.dataset.mounted = "1";
     }
-  };
-  const updateCommunity = () => {
-    if (!communityResults) return;
-    communityResults.innerHTML = renderCommunityDuel(communities, commA.value, commB.value);
-    if (communityLinks) {
-      const pathA = buildCommunityHubPath(commA.value, data);
-      const pathB = buildCommunityHubPath(commB.value, data);
-      const links = [];
-      if (pathA) links.push(`<a href="#/${pathA}" data-link>Community A</a>`);
-      if (pathB) links.push(`<a href="#/${pathB}" data-link>Community B</a>`);
-      communityLinks.hidden = !links.length;
-      communityLinks.innerHTML = links.join("");
-    }
-  };
-
-  countryA?.addEventListener("change", updateCountry);
-  countryB?.addEventListener("change", updateCountry);
-  commA?.addEventListener("change", updateCommunity);
-  commB?.addEventListener("change", updateCommunity);
-  updateCountry();
-  updateCommunity();
+  }
+  root.dataset.chartsMounted = "analysis";
 }
 
 function bindCardSelection(root) {

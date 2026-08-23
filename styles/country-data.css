@@ -1,0 +1,714 @@
+/* ==========================================================================
+   Country data profile — World Bank Data 360 economy page inspired
+   https://data360.worldbank.org/en/economy/KEN
+   ========================================================================== */
+
+.d360-page {
+  padding-top: var(--header-h);
+  min-height: 100vh;
+  background: #f4f7f9;
+  color: #1a2e35;
+}
+
+/* ---- Masthead ---- */
+.d360-masthead {
+  background: linear-gradient(145deg, #071822 0%, #0c2430 45%, #103040 100%);
+  color: #fff;
+  padding: 1.75rem 0 2.25rem;
+  border-bottom: 3px solid #009fda;
+}
+
+.d360-crumb {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem;
+  margin: 0 0 1.25rem;
+  font-size: 0.82rem;
+}
+
+.d360-crumb a {
+  color: rgba(255, 255, 255, 0.72);
+  text-decoration: none;
+}
+
+.d360-crumb a:hover {
+  color: #fff;
+  text-decoration: underline;
+}
+
+.d360-crumb span[aria-current] {
+  color: rgba(255, 255, 255, 0.92);
+}
+
+.d360-masthead__row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.d360-masthead__eyebrow {
+  margin: 0 0 0.35rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.55);
+}
+
+.d360-masthead__title {
+  margin: 0;
+  font-size: clamp(2rem, 5vw, 3.25rem);
+  font-weight: 300;
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+}
+
+.d360-masthead__meta {
+  margin: 0.65rem 0 0;
+  font-size: 0.88rem;
+  color: rgba(255, 255, 255, 0.72);
+}
+
+.d360-code {
+  display: inline-block;
+  margin-right: 0.65rem;
+  padding: 0.15rem 0.45rem;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  border-radius: 3px;
+  font-weight: 700;
+  font-size: 0.78rem;
+  letter-spacing: 0.08em;
+  color: #fff;
+}
+
+.d360-masthead__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+  align-items: flex-end;
+}
+
+.d360-country-switch {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  min-width: 11rem;
+}
+
+.d360-country-switch__label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.62);
+}
+
+.d360-country-switch__select {
+  appearance: none;
+  padding: 0.6rem 2.25rem 0.6rem 1rem;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  background:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%23ffffff' d='M6 8 0 0h12z'/%3E%3C/svg%3E")
+    no-repeat right 0.85rem center / 10px,
+    #009fda;
+  color: #fff;
+  font-size: 0.88rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.d360-country-switch__select:hover,
+.d360-country-switch__select:focus {
+  background-color: #0088bd;
+  outline: none;
+  border-color: rgba(255, 255, 255, 0.55);
+}
+
+.d360-country-switch__select option {
+  color: #002244;
+  background: #fff;
+}
+
+.d360-kpi-strip {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(8.5rem, 1fr));
+  gap: 0.85rem;
+  margin-top: 1.75rem;
+  padding-top: 1.35rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.d360-kpi {
+  padding: 0.85rem 1rem;
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: 0.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.d360-kpi__val {
+  display: block;
+  font-size: 1.35rem;
+  font-weight: 800;
+  line-height: 1.1;
+}
+
+.d360-kpi__label {
+  display: block;
+  margin-top: 0.25rem;
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.62);
+}
+
+/* ---- Sticky nav ---- */
+.d360-nav-wrap {
+  position: sticky;
+  top: var(--header-h);
+  z-index: 20;
+  background: #fff;
+  border-bottom: 1px solid #dde5ea;
+  box-shadow: 0 2px 8px rgba(0, 34, 68, 0.04);
+}
+
+.d360-nav {
+  display: flex;
+  gap: 0.15rem;
+  overflow-x: auto;
+  padding: 0.35rem 0;
+}
+
+.d360-nav__link {
+  flex: 0 0 auto;
+  padding: 0.75rem 1.1rem;
+  border: 0;
+  background: transparent;
+  color: #5b6b7c;
+  font-size: 0.88rem;
+  font-weight: 650;
+  text-decoration: none;
+  border-bottom: 2px solid transparent;
+  white-space: nowrap;
+}
+
+.d360-nav__link.is-active,
+.d360-nav__link:hover {
+  color: #002244;
+  border-bottom-color: #009fda;
+  text-decoration: none;
+}
+
+/* ---- Main panels ---- */
+.d360-main {
+  padding: 2rem 0 2.5rem;
+}
+
+.d360-panel {
+  animation: d360-fade 0.35s ease;
+}
+
+.d360-panel[hidden] {
+  display: none !important;
+}
+
+@keyframes d360-fade {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: none; }
+}
+
+.d360-overview-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(10.5rem, 1fr));
+  gap: 0.85rem;
+}
+
+.d360-panel#overview {
+  display: flex;
+  flex-direction: column;
+  gap: 1.75rem;
+}
+
+.d360-stat {
+  display: grid;
+  gap: 0.15rem;
+  padding: 1rem 1.1rem;
+  background: #fff;
+  border: 1px solid #e2e9ee;
+  border-radius: 0.55rem;
+}
+
+.d360-stat__val {
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: #002244;
+}
+
+.d360-stat__label {
+  font-size: 0.78rem;
+  color: #5b6b7c;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.d360-stat__trend {
+  font-size: 0.75rem;
+  font-weight: 650;
+  color: #009fda;
+}
+
+.d360-panel {
+  display: block;
+}
+
+/* ---- Compare & context ---- */
+.d360-compare h3,
+.d360-reports h3 {
+  margin: 0 0 0.85rem;
+  font-size: 1rem;
+  color: #002244;
+}
+
+.d360-compare {
+  padding: 1.35rem 1.4rem;
+  background: #fff;
+  border: 1px solid #e2e9ee;
+  border-radius: 0.65rem;
+}
+
+/* ---- Tables ---- */
+.d360-table-wrap {
+  overflow-x: auto;
+}
+
+.d360-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.88rem;
+}
+
+.d360-table th,
+.d360-table td {
+  padding: 0.65rem 0.85rem;
+  text-align: left;
+  border-bottom: 1px solid #e8eef2;
+}
+
+.d360-table thead th {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #5b6b7c;
+  background: #f8fafb;
+}
+
+.d360-table tbody th {
+  font-weight: 650;
+  color: #002244;
+}
+
+.d360-status {
+  display: inline-block;
+  padding: 0.15rem 0.5rem;
+  border-radius: 999px;
+  background: #e8f4fa;
+  color: #005f9e;
+  font-size: 0.78rem;
+  font-weight: 650;
+}
+
+/* ---- Programme flip cards ---- */
+.d360-programmes-note {
+  margin: 0 0 1.15rem;
+  font-size: 0.88rem;
+  line-height: 1.55;
+  color: #5b6b7c;
+}
+
+.d360-flip-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
+  gap: 1rem;
+}
+
+.d360-flip {
+  display: block;
+  width: 100%;
+  min-height: 11.5rem;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  perspective: 900px;
+  text-align: left;
+  font: inherit;
+}
+
+.d360-flip__inner {
+  position: relative;
+  display: block;
+  width: 100%;
+  min-height: 11.5rem;
+  transform-style: preserve-3d;
+  transition: transform 0.55s cubic-bezier(0.4, 0.2, 0.2, 1);
+}
+
+.d360-flip.is-flipped .d360-flip__inner {
+  transform: rotateY(180deg);
+}
+
+.d360-flip__face {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  padding: 1.2rem 1.25rem;
+  backface-visibility: hidden;
+  border-radius: 0.65rem;
+  border: 1px solid #e2e9ee;
+  background: #fff;
+  border-left: 4px solid var(--d360-accent, #009fda);
+}
+
+.d360-flip__back {
+  transform: rotateY(180deg);
+}
+
+.d360-flip__hint {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  margin-bottom: 0.65rem;
+  font-size: 0.72rem;
+  font-weight: 650;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #5b6b7c;
+}
+
+.d360-flip__hint-icon {
+  display: inline-grid;
+  place-items: center;
+  width: 1.35rem;
+  height: 1.35rem;
+  border-radius: 50%;
+  background: rgba(0, 34, 68, 0.08);
+  color: var(--d360-accent, #009fda);
+  font-size: 0.85rem;
+}
+
+.d360-flip__hint--back {
+  margin-top: auto;
+  margin-bottom: 0;
+}
+
+.d360-flip__front h3 {
+  margin: 0 0 0.5rem;
+  font-size: 1rem;
+  color: #002244;
+}
+
+.d360-flip__score {
+  font-size: 2.25rem;
+  font-weight: 800;
+  line-height: 1;
+  color: var(--d360-accent, #009fda);
+}
+
+.d360-flip__score-label {
+  margin-top: 0.25rem;
+  font-size: 0.72rem;
+  font-weight: 650;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #5b6b7c;
+}
+
+.d360-flip__metric {
+  margin-top: 0.65rem;
+  font-size: 0.86rem;
+  font-weight: 650;
+  color: #005f9e;
+}
+
+.d360-flip__back p {
+  margin: 0;
+  flex: 1;
+  font-size: 0.9rem;
+  line-height: 1.6;
+  color: #334155;
+}
+
+.d360-flip__trend {
+  display: inline-block;
+  margin-top: 0.75rem;
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: #16a34a;
+}
+
+/* ---- Charts ---- */
+.d360-chart-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(18rem, 1fr));
+  gap: 1rem;
+}
+
+.d360-chart-card {
+  padding: 1.2rem 1.25rem 1rem;
+  background: #fff;
+  border: 1px solid #e2e9ee;
+  border-radius: 0.65rem;
+}
+
+.d360-chart-card__head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 0.5rem;
+}
+
+.d360-chart-card__head h3 {
+  margin: 0;
+  font-size: 0.92rem;
+  color: #002244;
+}
+
+.d360-chart-card__kind {
+  padding: 0.12rem 0.45rem;
+  border-radius: 0.25rem;
+  background: rgba(0, 34, 68, 0.08);
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #002244;
+}
+
+.d360-chart-card__sub {
+  margin: 0.35rem 0 0.75rem;
+  font-size: 0.82rem;
+  color: #5b6b7c;
+}
+
+.d360-chart-card__canvas {
+  position: relative;
+  height: 11rem;
+}
+
+.d360-chart-card__source {
+  margin: 0.65rem 0 0;
+  font-size: 0.75rem;
+  color: #005f9e;
+}
+
+/* ---- Reports ---- */
+.d360-reports {
+  margin-top: 1.5rem;
+  padding: 1.25rem 1.3rem;
+  background: #fff;
+  border: 1px solid #e2e9ee;
+  border-radius: 0.65rem;
+}
+
+.d360-reports ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.d360-reports li {
+  padding: 0.55rem 0;
+  border-bottom: 1px solid #eef2f5;
+  font-size: 0.88rem;
+}
+
+.d360-reports li span {
+  display: block;
+  margin-top: 0.15rem;
+  font-size: 0.8rem;
+  color: #5b6b7c;
+}
+
+.d360-empty {
+  margin: 0;
+  padding: 2rem;
+  text-align: center;
+  color: #5b6b7c;
+  background: #fff;
+  border: 1px dashed #d5dfe6;
+  border-radius: 0.65rem;
+}
+
+/* ---- Places (tab only) ---- */
+.d360-places-head {
+  margin-bottom: 1.35rem;
+}
+
+.d360-places-head__eyebrow {
+  margin: 0 0 0.35rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #005f9e;
+}
+
+.d360-places-head h2 {
+  margin: 0 0 0.35rem;
+  font-size: 1.35rem;
+  color: #002244;
+}
+
+.d360-places-head p {
+  margin: 0;
+  font-size: 0.9rem;
+  color: #5b6b7c;
+}
+
+/* ---- Places cards ---- */
+.d360-places-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(18rem, 1fr));
+  gap: 1.15rem;
+}
+
+.d360-place-wrap {
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+  background: #fff;
+  border: 1px solid #dde8ef;
+  border-radius: 0.75rem;
+  overflow: hidden;
+  transition: box-shadow 0.22s ease, transform 0.22s ease;
+}
+
+.d360-place-wrap:hover {
+  box-shadow: 0 10px 28px rgba(0, 34, 68, 0.1);
+  transform: translateY(-2px);
+}
+
+.d360-place-card {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  padding: 1.25rem 1.3rem 1.1rem;
+  color: inherit;
+  text-decoration: none;
+  border-left: 4px solid #009fda;
+}
+
+.d360-place-card:hover {
+  text-decoration: none;
+  color: inherit;
+}
+
+.d360-place-card__top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.d360-place-card__top h3 {
+  margin: 0 0 0.25rem;
+  font-size: 1.08rem;
+  color: #002244;
+}
+
+.d360-place-card__top p {
+  margin: 0;
+  font-size: 0.82rem;
+  color: #5b6b7c;
+}
+
+.d360-place-card__open {
+  flex-shrink: 0;
+  font-size: 0.8rem;
+  font-weight: 650;
+  color: #005f9e;
+  white-space: nowrap;
+}
+
+.d360-place-wrap:hover .d360-place-card__open {
+  color: #009fda;
+}
+
+.d360-place-card__stats {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.75rem 0.85rem;
+  margin: 0;
+}
+
+.d360-place-card__stats dt {
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #5b6b7c;
+}
+
+.d360-place-card__stats dd {
+  margin: 0.15rem 0 0;
+  font-size: 1.15rem;
+  font-weight: 750;
+  color: #002244;
+}
+
+.d360-place-card__foot {
+  padding: 0.85rem 1.3rem 1.15rem;
+  border-top: 1px solid #eef2f5;
+  background: #f8fafb;
+}
+
+.d360-place-card__comm-label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #5b6b7c;
+}
+
+.d360-place-card__chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.d360-place-chip {
+  display: inline-block;
+  padding: 0.28rem 0.6rem;
+  border-radius: 999px;
+  background: #fff;
+  border: 1px solid #d5e3ec;
+  color: #002244;
+  font-size: 0.78rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
+}
+
+.d360-place-chip:hover {
+  background: #009fda;
+  border-color: #009fda;
+  color: #fff;
+  text-decoration: none;
+}
+
+@media (max-width: 720px) {
+  .d360-masthead__actions {
+    width: 100%;
+  }
+
+  .d360-chart-grid,
+  .d360-places-grid {
+    grid-template-columns: 1fr;
+  }
+}

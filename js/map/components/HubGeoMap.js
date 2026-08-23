@@ -6,8 +6,16 @@ function catchmentIdToSlug(id) {
   return id?.replace(/_/g, "-") || "";
 }
 
+/** Compact label size — plain text beside dots. */
+function labelFontSize(viewBox, { variant = "country" } = {}) {
+  const parts = String(viewBox || "0 0 100 100").split(/\s+/).map(Number);
+  const span = Math.max(parts[2] || 100, parts[3] || 100);
+  if (variant === "schematic") return Math.max(7, Math.min(8, span * 0.03));
+  return Math.max(7.5, Math.min(9, span * 0.032));
+}
+
 function renderLabel(name, x, y, className, id, slug, fontSize = 8) {
-  const est = estimateLabelSize(name, { fontSize });
+  const est = estimateLabelSize(name, { fontSize, padX: 4, padY: 2 });
   return `
     <g class="${className}" data-entity-id="${id}" data-entity-slug="${slug || ""}" data-anchor-x="${x}" data-anchor-y="${y}"
        data-est-width="${est.width}" data-est-height="${est.height}" transform="translate(${x},${y})" role="button" tabindex="0" aria-label="${name}">
@@ -15,9 +23,30 @@ function renderLabel(name, x, y, className, id, slug, fontSize = 8) {
     </g>`;
 }
 
-function renderMarker(x, y, className, id, slug, r = 4) {
+function renderMarker(x, y, className, id, slug, r = 5) {
   return `<circle class="${className}" cx="${x}" cy="${y}" r="${r}"
     data-entity-id="${id}" data-entity-slug="${slug || ""}" aria-hidden="true" />`;
+}
+
+function measureLabel(label) {
+  try {
+    const tb = label.querySelector("text")?.getBBox();
+    if (tb?.width > 0) {
+      label.dataset.estWidth = String(tb.width + 4);
+      label.dataset.estHeight = String(tb.height + 2);
+    }
+  } catch {
+    /* bbox unavailable until painted */
+  }
+}
+
+function layoutMapLabels(svg, mapEl, options) {
+  applyMapFeatureLayout(svg, SVG_NS, { showLeaders: false, decorateLabel: measureLabel, ...options });
+}
+
+function parseViewBox(viewBox) {
+  const p = String(viewBox || "0 0 100 100").split(/\s+/).map(Number);
+  return { x: p[0] || 0, y: p[1] || 0, width: p[2] || 100, height: p[3] || 100 };
 }
 
 export function renderHubGeoMap(model, { variant = "full", mapId = "hub-geo-map", displayMode = "default" } = {}) {
@@ -29,20 +58,24 @@ export function renderHubGeoMap(model, { variant = "full", mapId = "hub-geo-map"
   const communitiesFocus =
     model.mode === "catchment" || (displayMode === "communities" && model.mode === "country");
 
+  const isSchematic = model.layout === "schematic";
+  const fontVariant = isSchematic ? "schematic" : model.mode === "catchment" ? "catchment" : "country";
+  const labelFont = labelFontSize(model.viewBox, { variant: fontVariant });
+
   const zones = "";
 
   const catchmentMarkers = communitiesFocus
     ? ""
     : (model.catchments || [])
         .filter((c) => c.x != null)
-        .map((c) => renderMarker(c.x, c.y, "hub-geo-map__catchment-anchor", c.id, c.slug, 3.5))
+        .map((c) => renderMarker(c.x, c.y, "hub-geo-map__catchment-anchor", c.id, c.slug, 5))
         .join("");
 
   const catchmentLabels =
     !communitiesFocus && model.mode === "country"
       ? (model.catchments || [])
           .filter((c) => c.x != null)
-          .map((c) => renderLabel(c.name, c.x, c.y, "hub-geo-map__catchment-label", c.id, c.slug, 5))
+          .map((c) => renderLabel(c.name, c.x, c.y, "hub-geo-map__catchment-label", c.id, c.slug, labelFont))
           .join("")
       : "";
 
@@ -57,7 +90,7 @@ export function renderHubGeoMap(model, { variant = "full", mapId = "hub-geo-map"
     ? (model.communities || [])
         .filter((c) => c.x != null)
         .map((c) =>
-          renderLabel(c.name, c.x, c.y, "hub-geo-map__community-label", c.id, c.slug, 7)
+          renderLabel(c.name, c.x, c.y, "hub-geo-map__community-label", c.id, c.slug, labelFont)
         )
         .join("")
     : "";
@@ -124,34 +157,44 @@ export function bindHubGeoMap(root, { countrySlug, catchmentSlug, onCatchmentNav
     const svg = mapEl.querySelector(".hub-geo-map__svg");
     if (!svg) return;
 
-    const catchmentLabels = svg.querySelector(".hub-geo-map__labels--catchments");
-    if (catchmentLabels?.childElementCount) {
-      applyMapFeatureLayout(svg, SVG_NS, {
-        labelSelector: ".hub-geo-map__catchment-label",
-        anchorSelector: ".hub-geo-map__catchment-anchor",
-        idKey: "entityId",
-        spread: 2.2,
-        maxOffset: 42,
-        gap: 10,
-        minAnchorDistance: 15,
-        anchorMaxNudge: 20,
-      });
-    }
+    const runLayout = () => {
+      const vb = parseViewBox(svg.getAttribute("viewBox"));
+      const viewBounds = { x: vb.x, y: vb.y, width: vb.width, height: vb.height };
 
-    const communityLabels = svg.querySelector(".hub-geo-map__labels--communities");
-    if (communityLabels?.childElementCount) {
-      const isCatchment = mapEl.dataset.mapMode === "catchment";
-      applyMapFeatureLayout(svg, SVG_NS, {
-        labelSelector: ".hub-geo-map__community-label",
-        anchorSelector: ".hub-geo-map__community-anchor",
-        idKey: "entityId",
-        spread: isCatchment ? 2.4 : 2.8,
-        maxOffset: isCatchment ? 38 : 48,
-        gap: 11,
-        minAnchorDistance: 16,
-        anchorMaxNudge: 22,
-      });
-    }
+      const catchmentLabelLayer = svg.querySelector(".hub-geo-map__labels--catchments");
+      if (catchmentLabelLayer?.childElementCount) {
+        layoutMapLabels(svg, mapEl, {
+          labelSelector: ".hub-geo-map__catchment-label",
+          anchorSelector: ".hub-geo-map__catchment-anchor",
+          idKey: "entityId",
+          moveAnchors: false,
+          spread: 1,
+          maxOffset: Math.min(32, vb.width * 0.15),
+          gap: 4,
+          viewBounds,
+        });
+      }
+
+      const communityLabelLayer = svg.querySelector(".hub-geo-map__labels--communities");
+      if (communityLabelLayer?.childElementCount) {
+        const isSchematic = mapEl.classList.contains("hub-geo-map--schematic");
+        layoutMapLabels(svg, mapEl, {
+          labelSelector: ".hub-geo-map__community-label",
+          anchorSelector: ".hub-geo-map__community-anchor",
+          idKey: "entityId",
+          moveAnchors: false,
+          layoutMode: isSchematic ? "radial" : "spread",
+          radialOffset: isSchematic ? 10 : 12,
+          radialGap: 3,
+          spread: 1,
+          maxOffset: isSchematic ? Math.min(22, vb.width * 0.1) : Math.min(32, vb.width * 0.15),
+          gap: 4,
+          viewBounds,
+        });
+      }
+    };
+
+    requestAnimationFrame(runLayout);
 
     const toast = mapEl.querySelector(".hub-geo-map__toast");
     let toastTimer;
@@ -194,13 +237,22 @@ export function bindHubGeoMap(root, { countrySlug, catchmentSlug, onCatchmentNav
     };
 
     const highlightCommunity = (slug) => {
-      svg.querySelectorAll(".hub-geo-map__community-anchor, .hub-geo-map__community-label").forEach((el) => {
+      svg.querySelectorAll(".hub-geo-map__community-anchor, .hub-geo-map__community-label, .hub-geo-map__zone--community").forEach((el) => {
         const match = el.dataset.entitySlug === slug;
         el.classList.toggle("is-selected", match);
+        el.classList.toggle("is-highlighted", match);
       });
     };
 
-    svg.querySelectorAll(".hub-geo-map__zone").forEach((path) => {
+    svg.querySelectorAll(".hub-geo-map__zone--community").forEach((path) => {
+      const slug = path.dataset.entitySlug;
+      const name = path.getAttribute("aria-label") || slug;
+      path.addEventListener("click", () => goCommunity(slug, name));
+      path.addEventListener("mouseenter", () => highlightCommunity(slug));
+      path.addEventListener("mouseleave", () => highlightCommunity(null));
+    });
+
+    svg.querySelectorAll(".hub-geo-map__zone:not(.hub-geo-map__zone--community)").forEach((path) => {
       const { catchmentSlug: slug, catchmentName: name, catchmentId: id } = path.dataset;
       path.addEventListener("mouseenter", () => {
         path.classList.add("is-hovered");

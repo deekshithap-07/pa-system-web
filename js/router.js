@@ -8,7 +8,10 @@ import {
 import { renderHome, mountHome, destroyHome } from "./views/home.js";
 import { ensureAfricaMapMounted } from "./components/home-level1.js";
 import { renderAfricaIntelligence, mountAfricaIntelligence, destroyAfricaIntelligence } from "./views/africa-intelligence.js";
+import { renderCountryData, mountCountryData, destroyCountryData } from "./views/country-data.js";
 import { renderCountryHub, mountCountryHub, destroyCountryHub } from "./views/country-hub.js";
+import { renderCountryStoriesPage, mountCountryStoriesPage, destroyCountryStoriesPage } from "./views/country-stories.js";
+import { renderStoryFeature, mountStoryFeature, destroyStoryFeature } from "./views/story-feature.js";
 import { renderCatchmentHub, mountCatchmentHub, destroyCatchmentHub } from "./views/catchment-hub.js";
 import { renderCommunityHub, mountCommunityHub, destroyCommunityHub } from "./views/community-hub.js";
 import { teardownDashboard } from "./views/dashboard.js";
@@ -16,10 +19,12 @@ import { renderScorecard, mountScorecard, destroyScorecard } from "./views/score
 import { renderResources, mountResources } from "./views/resources-hub.js";
 import { destroyInsights } from "./views/insights-hub.js";
 import { renderAbout, mountAbout, destroyAbout } from "./views/about.js";
+import { renderWhatWeDo, mountWhatWeDo, destroyWhatWeDo } from "./views/what-we-do.js";
 import { closeSearchModal } from "./components/search-modal.js";
 import { renderStoriesHub, mountStoriesHub, destroyStoriesHub } from "./views/stories-hub.js";
 import { wrapPageContent, playPageEntry, cleanupPageEntry } from "./components/shared/page-entry.js";
 import { getPageEntryConfig } from "./utils/page-entry-config.js";
+import { syncSiteHeader } from "./utils/header.js";
 
 let currentView = null;
 let lastEntryView = null;
@@ -98,7 +103,9 @@ function updateNavActive(parts) {
     const nav = el.dataset.nav;
     let active = false;
     if (nav === "home") active = parts.length === 0;
-    else if (nav === "scorecard") active = parts[0] === "scorecard" || parts[0] === "insights";
+    else if (nav === "work")
+      active = parts[0] === "work" || parts[0] === "scorecard" || parts[0] === "insights" || parts[0] === "resources" || parts[0] === "stories";
+    else if (nav === "africa") active = parts[0] === "africa" || parts[0] === "country" || parts[0] === "catchment" || parts[0] === "community" || parts[0] === "story";
     else active = parts[0] === nav;
     el.classList.toggle("is-active", active);
   });
@@ -120,10 +127,6 @@ function handleRoute() {
   pendingAnchor = null;
 
   if (routeKey === lastRouteKey && currentView && document.getElementById("app")?.innerHTML) {
-    if (targetAnchor?.startsWith("tab-")) {
-      document.querySelector("[data-wb-scorecard]")?._switchWbsTab?.(targetAnchor.slice(4));
-      return;
-    }
     if (currentView === "landing" && appData) {
       ensureAfricaMapMounted(appData);
     }
@@ -145,12 +148,16 @@ function handleRoute() {
   destroyAfricaIntelligence();
   teardownDashboard();
   destroyCountryHub(app);
+  destroyCountryData(app);
   destroyCatchmentHub(app);
   destroyCommunityHub(app);
   destroyScorecard(app);
   destroyInsights();
   destroyStoriesHub();
   destroyAbout();
+  destroyWhatWeDo();
+  destroyCountryStoriesPage();
+  destroyStoryFeature();
   const header = document.getElementById("site-header");
   let html = "";
   let hub = null;
@@ -164,7 +171,21 @@ function handleRoute() {
     html = renderHome(appData);
   } else if (parts[0] === "africa") {
     view = "africa";
-    html = renderAfricaIntelligence(appData);
+    if (parts[1] === "countries") html = renderAfricaIntelligence(appData, "countries");
+    else if (parts[1] === "region" && parts[2]) html = renderAfricaIntelligence(appData, "region", parts[2]);
+    else if (parts[1] === "how-places-are-grouped") html = renderAfricaIntelligence(appData, "places");
+    else html = renderAfricaIntelligence(appData);
+  } else if (parts[0] === "story" && parts[1]) {
+    view = "story";
+    html = renderStoryFeature(parts[1], appData);
+  } else if (parts[0] === "country" && parts[1] && parts[2] === "data") {
+    view = "country-data";
+    const result = renderCountryData(parts[1], appData);
+    html = result.html;
+    hub = result.hub;
+  } else if (parts[0] === "country" && parts[1] && parts[2] === "stories") {
+    view = "country-stories";
+    html = renderCountryStoriesPage(parts[1], appData);
   } else if (parts[0] === "country" && parts[1]) {
     view = "country";
     const result = renderCountryHub(parts[1], appData);
@@ -181,17 +202,53 @@ function handleRoute() {
     html = result.html;
     hub = result.hub;
   } else if (parts[0] === "scorecard" || parts[0] === "insights") {
+    const tabMap = { outcomes: "working", data: "working", analysis: "together", progress: "journey" };
+    if (parts[1] === "countries") {
+      location.hash = "#/scorecard";
+      return;
+    }
+    if (targetAnchor?.startsWith("tab-") && tabMap[targetAnchor.slice(4)]) {
+      location.hash = `#/scorecard/${tabMap[targetAnchor.slice(4)]}`;
+      return;
+    }
     view = "scorecard";
-    html = renderScorecard(appData);
+    hub = { section: parts[1] || "overview" };
+    html = renderScorecard(appData, hub.section);
+  } else if (parts[0] === "work") {
+    if (parts[1] === "places") {
+      location.hash = "#/work";
+      return;
+    }
+    view = "work";
+    hub = { section: parts[1] || "overview" };
+    html = renderWhatWeDo(appData, hub.section);
   } else if (parts[0] === "about") {
+    if (parts[1] === "how-we-work") {
+      location.hash = "#/work";
+      return;
+    }
+    if (parts[1] === "journey") {
+      location.hash = "#/work/journey";
+      return;
+    }
     view = "static";
-    html = renderAbout(appData);
+    hub = { section: parts[1] || "overview" };
+    html = renderAbout(appData, hub.section);
   } else if (parts[0] === "stories") {
     view = "stories";
     html = renderStoriesHub(appData, parts[1] || null);
   } else if (parts[0] === "resources" || parts[0] === "reports") {
+    if (targetAnchor === "res-case-studies" || targetAnchor === "res-catalog") {
+      location.hash = "#/resources/cases";
+      return;
+    }
+    if (targetAnchor === "res-packs") {
+      location.hash = "#/resources/packs";
+      return;
+    }
     view = "resources";
-    html = renderResources(appData);
+    hub = { section: parts[1] || "overview" };
+    html = renderResources(appData, hub.section);
   } else if (parts[0] === "search") {
     view = "landing";
     html = renderHome(appData);
@@ -209,31 +266,40 @@ function handleRoute() {
   const playEntry = lastEntryView !== view;
   lastEntryView = view;
 
-  if (playEntry && view !== "scorecard") {
+  if (playEntry && view === "landing") {
     html = wrapPageContent(html, getPageEntryConfig(view, parts, appData, hub));
   }
 
   app.innerHTML = html;
+  syncSiteHeader();
 
   const runMount = () => {
     if (view === "landing") {
       mountHome(appData);
     } else if (view === "africa") {
       mountAfricaIntelligence(appData, navigate);
+    } else if (view === "story") {
+      mountStoryFeature();
+    } else if (view === "country-stories") {
+      mountCountryStoriesPage(app);
     } else if (view === "community" && hub) {
       mountCommunityHub(app, hub);
+    } else if (view === "country-data" && hub) {
+      mountCountryData(app, hub);
     } else if (view === "country" && hub) {
       mountCountryHub(app, hub, appData, navigate);
     } else if (view === "scorecard") {
-      mountScorecard(app, appData);
+      mountScorecard(app, appData, hub?.section || "overview");
     } else if (view === "catchment" && hub) {
       mountCatchmentHub(app, hub, appData, navigate);
     } else if (view === "stories") {
       mountStoriesHub(appData);
     } else if (view === "resources") {
-      mountResources(appData);
+      mountResources(appData, hub?.section || "overview");
+    } else if (view === "work") {
+      mountWhatWeDo(app);
     } else if (view === "static") {
-      mountAbout(appData);
+      mountAbout(appData, hub?.section || "overview");
     }
   };
 
@@ -242,12 +308,14 @@ function handleRoute() {
   const finalizeRouteScroll = () => {
     if (targetAnchor) {
       requestAnimationFrame(() => scrollToAnchor(targetAnchor));
+      syncSiteHeader();
       return;
     }
     applyRouteScroll(routeKey, shouldRestoreScroll);
+    syncSiteHeader();
   };
 
-  if (playEntry && view !== "scorecard") {
+  if (playEntry && view === "landing") {
     requestAnimationFrame(() => {
       playPageEntry(app.querySelector("[data-page-root]"), () => {
         runMount();

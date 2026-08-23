@@ -1,4 +1,58 @@
 {
+  "page": {
+    "title": "Field Reports",
+    "subtitle": "MINISTRY UPDATES FROM ACROSS THE NETWORK",
+    "aboutLead": "Every month, pastors and field staff submit updates from their communities — what changed, what was tried, and what is working. These reports are the narrative behind the numbers on country and community pages.",
+    "aboutBody": "Monthly ministry reports, quarterly briefs, and annual summaries give partners and staff a grounded view of holistic ministry across the network. They capture pastoral visits, savings groups, agricultural trials, school support, and church life — not as isolated anecdotes, but as a consistent record of progress over time.",
+    "aboutClosing": "Reports feed directly into the scorecard and totals you see on country pages. When you download a report, you are reading the same source material that shapes how we understand impact across Kenya, Malawi, Ethiopia, and the wider network.",
+    "introLink": { "label": "Read how reports are used", "href": "#/scorecard" },
+    "primaryDownload": { "label": "Download latest report", "useLatest": true },
+    "secondaryDownload": { "label": "Download overview", "href": "#/resources/packs" },
+    "mainMessagesLead": "Field reports are more than paperwork — they connect pastoral work on the ground to the figures partners see online. Three ideas guide how we collect and use them.",
+    "mainMessages": [
+      {
+        "title": "From the field: Capture what pastors see every month",
+        "intro": "Pastors know their communities. Monthly reports give them a structured way to record visits, projects, and outcomes — in their own words, from their own context.",
+        "points": [
+          "Monthly reports cover holistic ministry: discipleship, savings, agriculture, education, and community care.",
+          "Quarterly briefs summarise trends across catchments and compare progress between countries.",
+          "Annual summaries pull the year together — impact metrics, programme highlights, and stories worth remembering."
+        ]
+      },
+      {
+        "title": "Into the numbers: Reports feed the scorecard",
+        "intro": "The totals on country and community pages do not appear from nowhere. They are built from the same field reports pastors submit each month.",
+        "points": [
+          "Community counts, pastor numbers, and programme indicators are updated from verified field submissions.",
+          "Quarterly briefs highlight where networks are growing fastest and where support is needed.",
+          "Partners can trace a figure on the scorecard back to the narrative in the underlying report."
+        ]
+      },
+      {
+        "title": "For partners: Download, read, and share",
+        "intro": "Reports are written for staff, pastors, and partners who want the full picture — not just headlines.",
+        "points": [
+          "Download any report in the archive below — monthly, quarterly, or annual.",
+          "Filter by country or report type to find what you need quickly.",
+          "Share reports with boards, donors, and prayer partners who want to see what is happening on the ground."
+        ]
+      }
+    ],
+    "heroImage": "assets/field-reports/hero.jpg",
+    "aboutCover": "assets/field-reports/cover.jpg",
+    "relatedCards": [
+      { "title": "Our results", "text": "See the numbers reports feed into", "href": "#/scorecard", "imageUrl": "assets/stories/story-ntchisi-health.jpg" },
+      { "title": "Field stories", "text": "People and progress from the network", "href": "#/resources", "imageUrl": "assets/stories/story-tanzania.jpg" },
+      { "title": "Where we work", "text": "Browse countries and communities", "href": "#/africa/countries", "imageUrl": "assets/stories/story-zambia-crops.jpg" },
+      { "title": "Insight packs", "text": "Short downloads beside the stories", "href": "#/resources/packs", "imageUrl": "assets/stories/story-bungoma-school.jpg" }
+    ],
+    "relatedLinks": [
+      { "label": "Stories & reports hub", "href": "#/resources" },
+      { "label": "Our results (scorecard)", "href": "#/scorecard" },
+      { "label": "Where we work", "href": "#/africa" },
+      { "label": "Insight packs", "href": "#/resources/packs" }
+    ]
+  },
   "reports": [
     { "id": "sep-2024", "slug": "september-2024", "title": "September '24 Ministry Report", "type": "monthly", "period": "2024-09", "summary": "Field updates from Kenya, Ethiopia, Malawi and Zambia.", "downloadUrl": "#", "countryIds": ["ken", "et", "mw", "zm"], "program": null },
     { "id": "aug-2024", "slug": "august-2024", "title": "August 2024 Ministry Report", "type": "monthly", "period": "2024-08", "summary": "Holistic ministry outcomes across seven nations.", "downloadUrl": "#", "countryIds": ["ken", "et", "mw", "zm", "bi", "rw", "tz"], "program": null },

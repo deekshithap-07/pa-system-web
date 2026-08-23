@@ -1,23 +1,33 @@
-import { renderBreadcrumb } from "./Breadcrumb.js";
+import { renderWbPageHero } from "../shared/wb-page-hero.js";
 
 export function renderCatchmentHero(hub) {
-  return `
-    <header class="ch-hero" id="cth-overview">
-      <div class="ch-hero__grid">
-        <div class="ch-hero__content">
-          ${renderBreadcrumb([
-            { label: "Africa", href: "#/africa" },
-            { label: hub.countryName, href: `#/country/${hub.countrySlug}` },
-            { label: hub.catchmentName, href: `#/catchment/${hub.countrySlug}/${hub.catchmentSlug}` },
-          ])}
-          <p class="eyebrow ch-hero__tag">Catchment area · ${hub.heroTagline}</p>
-          <p class="ch-hero__question">What is happening in this catchment?</p>
-          <h1>${hub.catchmentName}</h1>
-          <p class="ch-hero__summary">${hub.description}</p>
-        </div>
-        <div class="ch-hero__visual ch-hero__context-map-wrap">
-          <div id="context-map-root" class="ch-hero__context-map" aria-label="Africa context map"></div>
-        </div>
-      </div>
-    </header>`;
+  const firstCommunity = hub.communityCards?.[0] || hub.communities?.[0];
+
+  return renderWbPageHero({
+    id: "cth-overview",
+    tone: "forest",
+    skin: "field",
+    variant: "split",
+    flush: true,
+    extraClass: "ch-hero",
+    crumbs: [
+      { label: "Where we work", href: "#/africa" },
+      { label: hub.countryName, href: `#/country/${hub.countrySlug}` },
+      { label: hub.catchmentName },
+    ],
+    eyebrow: "A group of nearby communities",
+    question: "What is happening in this group?",
+    title: hub.catchmentName,
+    lead:
+      hub.description ||
+      "This is a group of 3–5 neighbouring communities. Pastors here work together. Open one community to see the people and the projects.",
+    chapterNext: firstCommunity
+      ? {
+          kicker: "Meet a community",
+          title: firstCommunity.name,
+          href: `#/community/${hub.countrySlug}/${hub.catchmentSlug}/${firstCommunity.slug}`,
+        }
+      : { kicker: "Up one level", title: hub.countryName, href: `#/country/${hub.countrySlug}` },
+    visualHtml: `<div id="context-map-root" class="ch-hero__context-map" aria-label="Africa context map"></div>`,
+  });
 }

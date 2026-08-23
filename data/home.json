@@ -2,70 +2,263 @@
   "hero": {
     "eyebrow": "Possibilities Africa",
     "title": "The whole gospel transforming the whole person and whole community",
-    "description": "A public-facing window into pastor-led transformation across Africa — field stories, country context, and measurable impact you can follow at every level.",
-    "primaryCta": { "label": "View the scorecard", "target": "#/scorecard" },
-    "secondaryCta": { "label": "How PA works", "target": "#/about" },
+    "description": "This website shows where we work, what is happening in communities, and what results look like — in simple steps anyone can follow.",
+    "primaryCta": { "label": "Explore countries", "target": "#/africa" },
+    "secondaryCta": { "label": "Read field reports", "target": "#/resources/cases" },
     "featured": {
-      "eyebrow": "Stories & transformation data",
+      "eyebrow": "Possibilities Africa",
       "title": "The whole gospel transforming the whole person and whole community",
-      "description": "Explore pastor-led transformation across Africa — from field stories and country context to measurable impact you can follow at every level.",
-      "cta": { "label": "View the scorecard", "target": "#/scorecard" }
-    },
-    "topStories": [
+      "description": "Pastor-led communities across Africa — where we work, what is changing, and the stories behind it.",
+      "cta": { "label": "Explore countries", "target": "#/africa" }
+    }
+  },
+  "explorer": {
+    "eyebrow": "Explore",
+    "title": "What you can open from here",
+    "steps": [
       {
-        "type": "NEWSLETTER",
-        "title": "Subscribe to our newsletter",
-        "isNewsletter": true
+        "tab": "How ministries are organised",
+        "quote": "Country, then a nearby group of communities, then one community — the same path as the work on the ground.",
+        "href": "#/africa",
+        "cta": "Browse countries"
+      },
+      {
+        "tab": "Where we work",
+        "quote": "Seven countries. Open one to see what is happening there.",
+        "href": "#/country/kenya",
+        "cta": "Open Kenya"
+      },
+      {
+        "tab": "Measuring our impact and progress",
+        "quote": "Simple numbers from seven countries — communities, homes reached, and what is improving.",
+        "href": "#/scorecard",
+        "cta": "See our results"
+      },
+      {
+        "tab": "Read field reports",
+        "quote": "Monthly updates from the field — stories beside the figures, ready to read and share.",
+        "href": "#/resources/cases",
+        "cta": "Open reports"
+      }
+    ]
+  },
+  "siteOverview": {
+    "eyebrow": "Explore this website",
+    "title": "Connecting the work across Africa",
+    "lead": "Possibilities Africa walks with local pastors in seven countries. Use the tabs below to see what each part of this site is about — then open a section when you want to go deeper.",
+    "autoRotate": false,
+    "tabs": [
+      {
+        "id": "about",
+        "label": "Who we are",
+        "image": "assets/home-overview/tab-about.jpg",
+        "imageAlt": "Pastor speaking with a rural congregation in East Africa",
+        "tag": "About the ministry",
+        "title": "Pastors and churches leading change",
+        "lead": "We exist so rural families grow in faith and in everyday life — food, water, health, and work. Local pastors carry the vision. Possibilities Africa walks beside them.",
+        "bullets": [
+          "Rural churches are already in the community — we build on what is there.",
+          "Change lasts when local people own it, not when outsiders run it.",
+          "Faith and daily life belong together — spiritual growth and practical help side by side."
+        ],
+        "highlights": [
+          { "title": "Inclusive", "text": "Women, youth, and households are part of the change." },
+          { "title": "Resilient", "text": "Skills and assets that last beyond one project." },
+          { "title": "Sustainable", "text": "Churches mobilise local resources first." }
+        ],
+        "cta": { "label": "Who we are", "href": "#/about" }
+      },
+      {
+        "id": "places",
+        "label": "Where we work",
+        "image": "assets/home-overview/tab-places.jpg",
+        "imageAlt": "Aerial view of villages across the East and Southern Africa landscape",
+        "tag": "Places on the map",
+        "title": "Seven countries, one path on the ground",
+        "lead": "The work runs in Kenya, Malawi, Ethiopia, Zambia, Tanzania, Rwanda, and Burundi. On this site you can open a country and drill down to a nearby group of communities, then one community.",
+        "bullets": [
+          "Start on the map of Africa — pick a country to see pastors and communities there.",
+          "Each country has catchment areas: 3–5 neighbouring communities that share pastor leaders.",
+          "Each community walks a two-year journey — you can follow one place from start to finish."
+        ],
+        "highlights": [
+          { "title": "Country pages", "text": "Stories, maps, and updates for one nation." },
+          { "title": "Nearby groups", "text": "See how communities cluster and share leaders." },
+          { "title": "One community", "text": "Follow a single place through the journey." }
+        ],
+        "cta": { "label": "Where we work", "href": "#/africa" }
+      },
+      {
+        "id": "work",
+        "label": "What we do",
+        "image": "assets/home-overview/tab-work.jpg",
+        "imageAlt": "Pastor and community members planning a local project together",
+        "tag": "How the ministry works",
+        "title": "A clear two-year path with pastors",
+        "lead": "Every community moves through five stages over about two years — from first awareness to helping neighbours copy the work. Pastors grow through training, Shalom groups meet, and local projects begin.",
+        "bullets": [
+          "Pastors lead — trained and supported through awareness, ability, and action.",
+          "Shalom groups of 30–50 leaders in each community deepen discipleship and local initiative.",
+          "Communities plan their own work: water, farming, health, jobs, and more."
+        ],
+        "highlights": [
+          { "title": "Two-year journey", "text": "Five stages from first steps to multiplication." },
+          { "title": "Leadership growth", "text": "Pastors grow in vision, skill, and practice." },
+          { "title": "Local projects", "text": "Church-led plans owned by the community." }
+        ],
+        "cta": { "label": "What we do", "href": "#/work" }
+      },
+      {
+        "id": "results",
+        "label": "Our results",
+        "image": "assets/home-overview/tab-results.jpg",
+        "imageAlt": "Community leaders reviewing progress and results together",
+        "tag": "Tracking progress",
+        "title": "Simple numbers beside the stories",
+        "lead": "We track communities, homes, pastors, and projects across the network. Results pages show what is improving — water, farming, health, schools, and leadership — without replacing the people behind the figures.",
+        "bullets": [
+          "See how many communities are on the journey and how homes are reached.",
+          "Check what is working in water, farming, health, and jobs — in plain words.",
+          "Read what is changing over time — where the work began and what may come next."
+        ],
+        "highlights": [
+          { "title": "Network snapshot", "text": "Countries, communities, and homes at a glance." },
+          { "title": "What is working", "text": "Sector progress in language anyone can follow." },
+          { "title": "What is changing", "text": "Trends and field notes over time." }
+        ],
+        "cta": { "label": "Our results", "href": "#/scorecard" }
+      },
+      {
+        "id": "stories",
+        "label": "Stories & reports",
+        "image": "assets/home-overview/tab-stories.jpg",
+        "imageAlt": "Field stories shared between community members in rural Africa",
+        "tag": "From the field",
+        "title": "People and places behind the numbers",
+        "lead": "Field reports and stories show what happened in a place — a dam built, a savings group started, a pastor trained. They sit beside the figures so you can see real lives, not only charts.",
+        "bullets": [
+          "Read stories from Kenya, Malawi, Ethiopia, and other countries.",
+          "Open case studies and monthly field reports from pastors and communities.",
+          "Browse insight packs — short downloads next to the longer stories."
+        ],
+        "highlights": [
+          { "title": "Stories by country", "text": "People and progress, place by place." },
+          { "title": "Field reports", "text": "Monthly updates from the ground." },
+          { "title": "Case studies", "text": "What was tried and what changed." }
+        ],
+        "cta": { "label": "Stories & reports", "href": "#/stories" }
       }
     ]
   },
   "impactOverview": {
-    "eyebrow": "Network snapshot",
+    "eyebrow": "Our progress",
     "title": "Measuring our <strong>impact</strong> and progress",
     "description": "We're tracking how pastor-led communities advance across the PA network — from field stories to measurable transformation data.",
-    "scorecardCta": { "label": "See the Scorecard", "target": "#/scorecard" },
+    "scorecardCta": { "label": "See our results", "target": "#/scorecard" },
     "pillars": [
       {
         "id": "communities",
-        "category": "Communities & leadership",
-        "value": 59,
+        "category": "Countries",
+        "value": 7,
         "suffix": "",
-        "description": "pastor-led communities engaged in holistic transformation programmes",
+        "description": "countries where Possibilities Africa is at work",
         "icon": "communities",
         "theme": "gold"
       },
       {
         "id": "households",
-        "category": "Households reached",
-        "value": 253000,
-        "suffix": "+",
-        "description": "households reached through ministry and community development work",
-        "icon": "households",
-        "theme": "green"
+        "category": "Communities",
+        "value": 59,
+        "suffix": "",
+        "description": "communities on a two-year journey of change",
+        "icon": "projects",
+        "theme": "maroon"
       },
       {
         "id": "projects",
-        "category": "Active ministry projects",
-        "value": 148,
-        "suffix": "",
-        "description": "active projects across water, agriculture, and livelihood sectors",
-        "icon": "projects",
-        "theme": "maroon"
+        "category": "Homes reached",
+        "value": 253000,
+        "suffix": "+",
+        "description": "homes reached through local church and community work",
+        "icon": "households",
+        "theme": "green"
       }
     ]
   },
   "level1": {
+    "growthTrends": {
+      "eyebrow": "Growth",
+      "title": "How the work is growing",
+      "description": "Groups and homes reached over time.",
+      "chartKeys": ["shalomGroups", "householdReach"]
+    },
     "whatsHappening": {
-      "eyebrow": "Latest field activity",
-      "title": "What is happening across Africa?",
-      "description": "Latest programme activity from pastor-led communities — each links to its country hub.",
+      "eyebrow": "Updates",
+      "title": "Recent activity across countries",
+      "description": "What moved recently. Each update opens that country.",
       "limit": 6
     },
     "africaMap": {
-      "title": "Interactive map of Africa",
-      "description": "Click a country to explore data and drill into catchments and communities. Use Ctrl + scroll to zoom the map, or scroll normally to continue down the page.",
-      "countriesCta": { "label": "Browse all countries →", "target": "#/africa" }
+      "title": "Map of Africa",
+      "description": "Click a country to see what is happening there. Use Ctrl + scroll to zoom the map. Scroll the page as usual to keep reading.",
+      "countriesCta": { "label": "Where we work →", "target": "#/africa" }
     }
+  },
+  "siteSpotlight": {
+    "eyebrow": "Explore the site",
+    "title": "Open a part of Possibilities Africa",
+    "cards": [
+      {
+        "tag": "Places",
+        "title": "Where we work",
+        "text": "Seven countries on the map — open one to see pastors, nearby groups, and communities.",
+        "href": "#/africa",
+        "image": "assets/home-overview/tab-places.jpg",
+        "imageAlt": "Landscape across East and Southern Africa"
+      },
+      {
+        "tag": "The work",
+        "title": "What we do",
+        "text": "A two-year path with pastors — journey stages, leadership growth, and local projects.",
+        "href": "#/work",
+        "image": "assets/home-overview/tab-work.jpg",
+        "imageAlt": "Community planning a local project"
+      },
+      {
+        "tag": "Results",
+        "title": "Our results",
+        "text": "Communities, homes, and sectors — simple numbers beside the stories from the field.",
+        "href": "#/scorecard",
+        "image": "assets/home-overview/tab-results.jpg",
+        "imageAlt": "Community reviewing progress together"
+      },
+      {
+        "tag": "Stories",
+        "title": "Field stories & reports",
+        "text": "People and places behind the figures — case studies and monthly updates.",
+        "href": "#/stories",
+        "image": "assets/stories/story-kenya-dams.jpg",
+        "imageAlt": "Women building trench dams in Kenya"
+      }
+    ]
+  },
+  "knowledgeBand": {
+    "title": "Transforming communities<br>Transforming lives",
+    "lead": "Trusted field stories, simple results, and resources to help pastors, partners, and leaders see what is changing — and what may come next.",
+    "image": "assets/home-overview/tab-stories.jpg",
+    "imageAlt": "Pastors and community members working together in rural Africa",
+    "cards": [
+      {
+        "title": "Field stories & reports",
+        "text": "People and places behind the numbers — monthly updates and case studies from the ground.",
+        "cta": { "label": "Learn more", "href": "#/stories" }
+      },
+      {
+        "title": "Our results",
+        "text": "Easy-to-follow indicators that show progress across countries, communities, and homes.",
+        "cta": { "label": "Learn more", "href": "#/scorecard" }
+      }
+    ]
   },
   "paWebsiteIntro": {
     "eyebrow": "Want to know more about us",

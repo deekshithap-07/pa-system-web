@@ -73,7 +73,7 @@ export function renderDataSnapshots(section) {
         </header>
         <div class="hp-data__grid">${cards}</div>
         <p class="hp-data__cta" data-reveal>
-          <a href="${section.cta?.target || '#/scorecard'}" class="btn btn-secondary" data-link>${section.cta?.label || "Explore scorecard"}</a>
+          <a href="${section.cta?.target || '#/scorecard'}" class="btn btn-secondary" data-link>${section.cta?.label || "See our results"}</a>
         </p>
       </div>
     </section>`;
@@ -101,7 +101,7 @@ export function renderFeaturedStories(data, section) {
                   .join("")}</ul>`
               : ""
           }
-          <a href="#/resources#res-case-studies" class="hp-story-card__link" data-link>Read full story &rarr;</a>
+          <a href="#/resources/cases" class="hp-story-card__link" data-link>Read full story &rarr;</a>
         </div>
       </article>`
     )
@@ -127,7 +127,7 @@ export function renderPublicationsTeaser(data, section) {
 
   const rows = reports
     .map(
-      (r, i) => `<a href="#/resources#res-catalog" class="wb-pub-row" data-link data-reveal>
+      (r, i) => `<a href="#/resources/cases" class="wb-pub-row" data-link data-reveal>
         <div class="wb-pub-row__cover wb-pub-row__cover--${i === 0 ? "annual" : "report"}" aria-hidden="true"></div>
         <div class="wb-pub-row__body">
           <span class="wb-pub-row__type">${TYPE_LABELS[r.type] || r.type}</span>

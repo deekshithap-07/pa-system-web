@@ -86,7 +86,7 @@ function renderResults(query) {
   const storyCards = storyHits
     .slice(0, 4)
     .map(
-      (s) => `<a href="#/resources#res-case-studies" class="search-modal__item" data-link>
+      (s) => `<a href="#/resources/cases" class="search-modal__item" data-link>
         <span class="search-modal__item-type">Story</span>
         <strong>${s.title}</strong>
         <span>${s.program}</span>
@@ -97,9 +97,9 @@ function renderResults(query) {
   const quick = !q
     ? `<div class="search-modal__quick">
         <a href="#/#home-africa-map" data-link>Africa map</a>
-        <a href="#/scorecard" data-link>Scorecard</a>
-        <a href="#/resources" data-link>Resources</a>
-        <a href="#/about" data-link>About PA</a>
+        <a href="#/africa" data-link>Where we work</a>
+        <a href="#/work" data-link>What we do</a>
+        <a href="#/about" data-link>Who we are</a>
       </div>`
     : "";
 

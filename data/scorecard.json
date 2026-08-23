@@ -1,13 +1,13 @@
 {
   "meta": {
-    "title": "Transformation Scorecard",
-    "subtitle": "Institutional analytics across the PA network",
+    "title": "Our results",
+    "subtitle": "Simple numbers from seven countries",
     "period": "2024",
     "lastUpdated": "2024-09-15"
   },
   "overview": {
-    "headline": "Measuring transformation across Africa",
-    "description": "The PA Transformation Scorecard aggregates ministry impact data across seven network countries — communities, households, projects, and leadership development. All figures are mock data for frontend demonstration; backend API integration points are marked throughout.",
+    "headline": "How the work is going across Africa",
+    "description": "These figures show reach and progress in seven countries — communities, homes, projects, and leadership. Figures here are demo data for this website.",
     "highlights": [
       { "label": "Network countries", "value": "7" },
       { "label": "Reporting period", "value": "Jan – Sep 2024" },

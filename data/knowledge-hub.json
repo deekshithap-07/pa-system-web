@@ -1,7 +1,7 @@
 {
   "library": {
-    "title": "Resource library",
-    "subtitle": "Field case studies and downloadable data packs.",
+    "title": "Stories & reports",
+    "subtitle": "Field stories and short packs you can read or download.",
     "sections": [
       { "id": "case-studies", "label": "Case studies", "anchor": "res-case-studies" },
       { "id": "packs", "label": "Data packs", "anchor": "res-packs" }
@@ -32,8 +32,8 @@
     "Responsible Citizenship"
   ],
   "focusAreas": [
-    { "id": "reports", "label": "Ministry Reports", "href": "#res-catalog" },
-    { "id": "case-studies", "label": "Case Studies", "href": "#res-case-studies" },
+    { "id": "reports", "label": "Ministry Reports", "href": "#/resources/cases" },
+    { "id": "case-studies", "label": "Case Studies", "href": "#/resources/cases" },
     { "id": "programmes", "label": "Programme Materials", "href": "#res-categories" }
   ],
   "atlasThemes": [
@@ -80,19 +80,19 @@
   ],
   "featuredStories": [
     {
-      "title": "Global Progress Tracking",
-      "subtitle": "Transformation across the PA network",
-      "description": "Explore progress data on communities, households, and leadership — understand how countries are advancing from their own starting points.",
+      "title": "How the work is going",
+      "subtitle": "Our results",
+      "description": "See communities, homes, and leadership — and where more support may help.",
       "href": "#/scorecard",
-      "cta": "Explore scorecard",
+      "cta": "See our results",
       "theme": "data"
     },
     {
       "title": "The State of Field Data",
       "subtitle": "Data for development",
       "description": "For many communities, the data guiding ministry decisions are years out of date. PA's platform makes transformation visible to programme leaders.",
-      "href": "#/scorecard#tab-data",
-      "cta": "View data tables",
+      "href": "#/africa",
+      "cta": "Browse countries",
       "theme": "communities"
     }
   ],
@@ -113,7 +113,8 @@
       "catchmentId": "kwale_south",
       "summary": "Trench dam construction across five communities reduced seasonal water scarcity and enabled year-round irrigation.",
       "outcomes": ["14 water initiatives", "34 farming groups formed", "22% household income increase"],
-      "downloadUrl": "#download-insight-pack"
+      "downloadUrl": "#download-insight-pack",
+      "storySlug": "women-building-dams"
     },
     {
       "id": "cs-malawi-economic",
@@ -125,7 +126,8 @@
       "catchmentId": "mw_nkhotakota_south",
       "summary": "Person-to-person skill transfer and cooperative models lifted household income in Benga and surrounding communities.",
       "outcomes": ["210 income activities", "Scone business model replicated", "18% agriculture sector growth"],
-      "downloadUrl": "#download-insight-pack"
+      "downloadUrl": "#download-insight-pack",
+      "storySlug": "mary-scone-business"
     },
     {
       "id": "cs-ethiopia-leadership",
@@ -137,7 +139,8 @@
       "catchmentId": null,
       "summary": "Pastor-led networks sustained community engagement and discipleship programmes through conflict-affected regions.",
       "outcomes": ["12 active communities", "Leadership score avg 55", "Shalom groups forming"],
-      "downloadUrl": "#download-insight-pack"
+      "downloadUrl": "#download-insight-pack",
+      "storySlug": "pastor-abdisa-conflict"
     }
   ],
   "insightPacks": [
@@ -159,8 +162,8 @@
     },
     {
       "id": "pack-cbc-readiness",
-      "title": "CBC Index & Readiness Levels",
-      "description": "Community Balanced Scorecard scores and journey-stage readiness by community.",
+      "title": "Community progress pack",
+      "description": "How communities are doing on the two-year journey.",
       "format": "JSON",
       "size": "12 KB",
       "topics": ["CBC", "Readiness", "Journey stages"]

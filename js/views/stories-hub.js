@@ -1,11 +1,13 @@
 import { renderDataFlipCard, getPaCountries, getStoriesByCountry, countrySlugFromId } from "../components/home-stories-section.js";
 import { renderStorySection } from "../components/shared/StoryCards.js";
+import { renderWbPageHero, bindWbPageHero } from "../components/shared/wb-page-hero.js";
 
 export function renderStoriesHub(data, countrySlug = null) {
   const paCountries = getPaCountries(data.countries);
   const activeCountry = countrySlug
     ? paCountries.find((c) => c.slug === countrySlug)
     : null;
+  const allStories = data.stories?.stories || [];
 
   const countryPills = paCountries
     .map(
@@ -17,6 +19,61 @@ export function renderStoriesHub(data, countrySlug = null) {
     )
     .join("");
 
+  const hero = activeCountry
+    ? renderWbPageHero({
+        id: "stories-hero",
+        tone: "gold",
+        skin: "ink",
+        flush: true,
+        crumbs: [
+          { label: "Home", href: "#/" },
+          { label: "Stories", href: "#/stories" },
+          { label: activeCountry.name },
+        ],
+        eyebrow: "Results stories",
+        title: activeCountry.name,
+        lead: `Stories from ${activeCountry.name} — people first, with simple results beside them.`,
+        actions: [
+          { label: `Open the ${activeCountry.name} chapter`, href: `#/country/${activeCountry.slug}` },
+          { label: "All stories", href: "#/stories", primary: false },
+        ],
+        chapterNext: { kicker: "Country hub", title: `Continue in ${activeCountry.name}`, href: `#/country/${activeCountry.slug}` },
+      })
+    : renderWbPageHero({
+        id: "stories-hero",
+        tone: "gold",
+        skin: "ink",
+        flush: true,
+        crumbs: [{ label: "Home", href: "#/" }, { label: "Stories" }],
+        eyebrow: "Results stories",
+        title: "Stories with results beside them",
+        lead: "Every story here sits next to simple facts — leadership, projects, and how far a community has come. People first. Evidence beside them.",
+        actions: [
+          { label: "Kenya stories", href: "#/stories/kenya" },
+          { label: "Case studies", href: "#/resources/cases", primary: false },
+        ],
+      });
+
+  const spotlight = !activeCountry
+    ? `<section class="sx-essay" data-story-reveal>
+        <div class="container sx-essay__inner">
+          <div class="sx-essay__copy">
+            <p class="sx-essay__kicker">Featured from the field</p>
+            <h2>Three dispatches to start with</h2>
+            <ol class="wph-toc">${allStories
+              .slice(0, 3)
+              .map((s, i) => {
+                const country = paCountries.find((c) => c.id === s.countryId);
+                const href = country ? `#/stories/${country.slug}` : "#/stories";
+                return `<li><a href="${href}" data-link><span class="wph-toc__n">0${i + 1}</span>${s.title}</a></li>`;
+              })
+              .join("")}</ol>
+          </div>
+          <blockquote class="sx-essay__pull">People first. Evidence beside them. That is how PA tells the story of transformation.</blockquote>
+        </div>
+      </section>`
+    : "";
+
   let body = "";
 
   if (activeCountry) {
@@ -26,19 +83,6 @@ export function renderStoriesHub(data, countrySlug = null) {
       .join("");
 
     body = `
-      <header class="stories-hub__country-hero" data-reveal>
-        <p class="eyebrow">Stories of impact</p>
-        <h1>${activeCountry.name}</h1>
-        <p class="stories-hub__country-desc">
-          Field stories from ${activeCountry.name} — each paired with tracked impact metrics from the PA network.
-        </p>
-        <div class="stories-hub__country-stats">
-          ${activeCountry.communities ? `<span><strong>${activeCountry.communities}</strong> communities</span>` : ""}
-          ${activeCountry.pastors ? `<span><strong>${activeCountry.pastors}</strong> pastor leaders</span>` : ""}
-          ${activeCountry.projects ? `<span><strong>${activeCountry.projects}</strong> active projects</span>` : ""}
-          ${activeCountry.growth ? `<span><strong>+${activeCountry.growth}%</strong> network growth</span>` : ""}
-        </div>
-      </header>
       <div class="stories-hub__flip-grid" data-story-flips data-reveal>${flipCards}</div>
       ${renderStorySection({
         stories,
@@ -52,7 +96,6 @@ export function renderStoriesHub(data, countrySlug = null) {
         <a href="#/" class="stories-hub__btn stories-hub__btn--ghost" data-link>&larr; Back to home</a>
       </div>`;
   } else {
-    const allStories = data.stories?.stories || [];
     const featured = allStories.slice(0, 6);
     const cards = featured.map((s, i) => {
       const country = paCountries.find((c) => c.id === s.countryId);
@@ -60,17 +103,10 @@ export function renderStoriesHub(data, countrySlug = null) {
     }).join("");
 
     body = `
-      <header class="stories-hub__hero" data-reveal>
-        <p class="eyebrow">Transformation stories</p>
-        <h1>Stories with data behind them</h1>
-        <p class="stories-hub__hero-desc">
-          Every story on this platform is paired with field metrics — leadership scores, project counts, and journey stages tracked in real time.
-        </p>
-      </header>
       <div class="stories-hub__flip-grid stories-hub__flip-grid--wide" data-story-flips data-reveal>${cards}</div>
       <section class="stories-hub__countries-section" data-reveal>
-        <h2>Browse by country</h2>
-        <p>Select a country to see all field stories and impact data from that network.</p>
+        <h2>Where we work</h2>
+        <p>Pick a country to read stories from that place.</p>
         <div class="stories-hub__country-grid">
           ${paCountries.map((c) => {
             const count = allStories.filter((s) => s.countryId === c.id).length;
@@ -86,6 +122,8 @@ export function renderStoriesHub(data, countrySlug = null) {
 
   return `
     <div class="stories-hub-page">
+      ${hero}
+      ${spotlight}
       <div class="stories-hub__top">
         <div class="container">
           <nav class="stories-hub__nav" aria-label="Country filter">
@@ -102,6 +140,7 @@ export function renderStoriesHub(data, countrySlug = null) {
 
 export function mountStoriesHub(data) {
   requestAnimationFrame(() => {
+    bindWbPageHero(document.querySelector(".stories-hub-page") || document);
     bindFlipCards(document);
     if (typeof ScrollTrigger !== "undefined") ScrollTrigger.refresh();
   });

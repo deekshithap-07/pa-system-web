@@ -1,5 +1,7 @@
 import { getCountryName, downloadJson, buildInsightPack } from "../utils/hub-filters.js";
 import { initResourcesAnimations } from "../components/resources-animations.js";
+import { renderWbPageHero, renderPageBack, renderTopicHub, bindWbPageHero } from "../components/shared/wb-page-hero.js";
+import { renderFieldReports, mountFieldReports } from "./field-reports.js";
 
 const COVER_STYLES = {
   annual: "res-cover--annual",
@@ -33,31 +35,39 @@ function renderSocialLinks(links = []) {
     .join("");
 }
 
-function renderResourceLibrary(data, hub, caseStudies, insightPacks, programs, countries, socialLinks) {
+function renderResourceLibrary(data, hub, caseStudies, insightPacks, programs, countries, socialLinks, mode = "all") {
   const lib = hub.library || {};
   const sections = lib.sections || [];
   const filters = lib.filters || {};
+
+  const isChild = mode === "cases" || mode === "packs";
 
   const caseCards = caseStudies
     .map((cs) => {
       const country = countries.find((c) => c.id === cs.countryId);
       const catchment = (data.catchments?.catchments || []).find((c) => c.id === cs.catchmentId);
-      const href =
+      const placeHref =
         country && catchment
           ? `#/catchment/${country.slug}/${catchment.slug}`
           : country
             ? `#/country/${country.slug}`
             : "#/scorecard";
-      const linkLabel = catchment ? "View catchment" : country ? "View country" : "View data";
-      const topOutcome = cs.outcomes?.[0] || "";
-      return `<article class="rlib-case" data-rlib-item data-filterable="case-studies" data-country-id="${cs.countryId || ""}" data-program="${cs.program || ""}" data-rlib-reveal>
+      const placeLabel = catchment ? "Open community" : country ? "Open country" : "Our results";
+      const storyHref = cs.storySlug ? `#/story/${cs.storySlug}` : null;
+      const outcomesList = cs.outcomes?.length
+        ? `<ul class="rlib-case__outcomes">${cs.outcomes.map((o) => `<li>${o}</li>`).join("")}</ul>`
+        : "";
+      return `<article class="rlib-case${isChild ? " rlib-case--brief" : ""}" data-rlib-item data-filterable="case-studies" data-country-id="${cs.countryId || ""}" data-program="${cs.program || ""}" data-rlib-reveal>
         <span class="rlib-case__tag">${cs.program}</span>
         <h3 class="rlib-case__title">${cs.title}</h3>
         <p class="rlib-case__summary">${cs.summary}</p>
-        ${topOutcome ? `<p class="rlib-case__outcome">${topOutcome}</p>` : ""}
+        ${outcomesList}
         <footer class="rlib-case__foot">
           <span class="rlib-case__meta">${getCountryName(data.countries, cs.countryId)}</span>
-          <a href="${href}" class="rlib-case__link" data-link>${linkLabel} →</a>
+          <div class="rlib-case__links">
+            ${storyHref ? `<a href="${storyHref}" class="rlib-case__link rlib-case__link--primary" data-link>Read story →</a>` : ""}
+            <a href="${placeHref}" class="rlib-case__link" data-link>${placeLabel} →</a>
+          </div>
         </footer>
       </article>`;
     })
@@ -72,7 +82,7 @@ function renderResourceLibrary(data, hub, caseStudies, insightPacks, programs, c
           <p class="rlib-pack__desc">${p.description}</p>
           <div class="rlib-pack__actions">
             <button type="button" class="rlib-pack__btn" data-download-pack="${p.id}">${p.format} · ${p.size}</button>
-            <a href="#/scorecard" class="rlib-pack__link" data-link>Live data →</a>
+            <a href="#/scorecard" class="rlib-pack__link" data-link>Our results →</a>
           </div>
         </div>
       </article>`
@@ -81,22 +91,28 @@ function renderResourceLibrary(data, hub, caseStudies, insightPacks, programs, c
 
   return `
     <div class="atlas-library">
-      <div class="rlib" data-resource-library>
+      <div class="rlib${isChild ? " rlib--child" : ""}" data-resource-library id="res-catalog">
         <div class="container rlib__inner">
-          <header class="rlib__head" data-rlib-scroll>
+          ${!isChild
+            ? `<header class="rlib__head" data-rlib-scroll>
+            <p class="rlib__eyebrow" data-rlib-reveal>Stories &amp; reports</p>
             <h2 class="rlib__title" data-rlib-reveal>${lib.title || "Resource library"}</h2>
             <p class="rlib__subtitle" data-rlib-reveal>${lib.subtitle || ""}</p>
-          </header>
+          </header>`
+            : ""}
 
-          <nav class="rlib__nav" aria-label="Library sections" data-rlib-scroll>
+          ${mode === "all"
+            ? `<nav class="rlib__nav" aria-label="Library sections" data-rlib-scroll>
             ${sections
               .map(
-                (s, i) => `<a href="#${s.anchor}" class="rlib__nav-link${i === 0 ? " is-active" : ""}" data-rlib-nav="${s.id}" data-anchor data-rlib-reveal>${s.label}</a>`
+                (s, i) => `<a href="#/resources/${s.id === "packs" ? "packs" : "cases"}" class="rlib__nav-link${i === 0 ? " is-active" : ""}" data-link data-rlib-reveal>${s.label}</a>`
               )
               .join("")}
-          </nav>
+          </nav>`
+            : ""}
 
-          <div class="rlib__filters" data-rlib-scroll data-hub-filters>
+          ${mode !== "packs"
+            ? `<div class="rlib__filters" data-rlib-scroll data-hub-filters>
             <label class="rlib__filter">
               <span>${filters.countryLabel || "Country"}</span>
               <select id="hub-filter-country" aria-label="Filter by country">
@@ -112,18 +128,21 @@ function renderResourceLibrary(data, hub, caseStudies, insightPacks, programs, c
               </select>
             </label>
           </div>
-
           <section class="rlib__section" id="res-case-studies" data-rlib-section="case-studies" data-rlib-scroll>
-            <h3 class="rlib__section-title" data-rlib-reveal>${sections.find((s) => s.id === "case-studies")?.label || "Case studies"}</h3>
-            <div class="rlib-case-grid" data-filterable="case-studies">${caseCards}</div>
-          </section>
+            ${!isChild ? `<h3 class="rlib__section-title" data-rlib-reveal>Case studies</h3>` : `<p class="rlib__intro" data-rlib-reveal>Filter by country or programme, then open the story or the place where the work continues.</p>`}
+            <div class="rlib-case-grid${isChild ? " rlib-case-grid--brief" : ""}" data-filterable="case-studies">${caseCards}</div>
+          </section>`
+            : ""}
 
-          <section class="rlib__section" id="res-packs" data-rlib-section="packs" data-rlib-scroll>
-            <h3 class="rlib__section-title" data-rlib-reveal>${sections.find((s) => s.id === "packs")?.label || "Data packs"}</h3>
+          ${mode !== "cases"
+            ? `<section class="rlib__section" id="res-packs" data-rlib-section="packs" data-rlib-scroll>
+            ${!isChild ? `<h3 class="rlib__section-title" data-rlib-reveal>Insight packs</h3>` : `<p class="rlib__intro" data-rlib-reveal>Download short data packs. They sit next to the stories — they do not replace them.</p>`}
             <div class="rlib-pack-list">${packCards}</div>
-          </section>
+          </section>`
+            : ""}
 
-          <section class="rlib__connect" data-rlib-scroll>
+          ${!isChild
+            ? `<section class="rlib__connect" data-rlib-scroll>
             <div class="rlib__connect-inner" data-rlib-reveal>
               <h3>${lib.connect?.title || "Connect with us"}</h3>
               <p>${lib.connect?.description || ""}</p>
@@ -131,7 +150,12 @@ function renderResourceLibrary(data, hub, caseStudies, insightPacks, programs, c
             </div>
           </section>
 
-          <p class="rlib__note" data-rlib-reveal>${lib.footerNote || ""}</p>
+          <p class="rlib__note" data-rlib-reveal>${lib.footerNote || ""}</p>`
+            : `<p class="rlib__child-note" data-rlib-reveal>${
+                mode === "cases"
+                  ? `<a href="#/resources/packs" data-link>Insight packs</a>`
+                  : `<a href="#/resources/cases" data-link>Case studies</a>`
+              } · <a href="#/resources" data-link>All stories &amp; reports</a></p>`}
         </div>
       </div>
     </div>`;
@@ -160,7 +184,7 @@ function storiesForTheme(themeId, caseStudies, reports, insightPacks, countries,
       stories.push({
         ...cs,
         meta: getCountryName(data.countries, cs.countryId),
-        href: country ? `#/country/${country.slug}` : "#/resources#res-case-studies",
+        href: country ? `#/country/${country.slug}` : "#/resources/cases",
       });
     }
     const report = reports.find((r) => r.type === "quarterly");
@@ -169,7 +193,7 @@ function storiesForTheme(themeId, caseStudies, reports, insightPacks, countries,
         title: report.title,
         summary: report.summary,
         meta: report.period,
-        href: "#/scorecard#tab-data",
+        href: "#/scorecard",
       });
     }
   }
@@ -183,7 +207,7 @@ function storiesForTheme(themeId, caseStudies, reports, insightPacks, countries,
         stories.push({
           ...cs,
           meta: getCountryName(data.countries, cs.countryId),
-          href: country ? `#/country/${country.slug}` : "#/resources#res-case-studies",
+          href: country ? `#/country/${country.slug}` : "#/resources/cases",
         });
       });
   }
@@ -195,14 +219,14 @@ function storiesForTheme(themeId, caseStudies, reports, insightPacks, countries,
       stories.push({
         ...cs,
         meta: getCountryName(data.countries, cs.countryId),
-        href: country ? `#/country/${country.slug}` : "#/resources#res-case-studies",
+        href: country ? `#/country/${country.slug}` : "#/resources/cases",
       });
     }
     stories.push({
       title: "Household income growth",
       summary: "Network-wide trends in economic productivity and cooperative models across Malawi and Kenya.",
-      meta: "Scorecard · Prosperity",
-      href: "#/scorecard#tab-outcomes",
+      meta: "Our results · Prosperity",
+      href: "#/scorecard/working",
     });
   }
 
@@ -219,7 +243,7 @@ function storiesForTheme(themeId, caseStudies, reports, insightPacks, countries,
       title: "Water infrastructure outcomes",
       summary: "Trench dam and borehole programmes driving strongest sector outcomes across coastal catchments.",
       meta: "Water sector · +22%",
-      href: "#/scorecard#tab-outcomes",
+      href: "#/scorecard/working",
     });
   }
 
@@ -229,7 +253,7 @@ function storiesForTheme(themeId, caseStudies, reports, insightPacks, countries,
         title: p.title,
         summary: p.description,
         meta: `${p.format} · ${p.size}`,
-        href: "#res-packs",
+        href: "#/resources/packs",
       });
     });
   }
@@ -241,10 +265,8 @@ function renderThemeSection(theme, caseStudies, reports, insightPacks, countries
   const stories = storiesForTheme(theme.id, caseStudies, reports, insightPacks, countries, data);
   const exploreHref =
     theme.id === "data"
-      ? "#res-packs"
-      : theme.id === "leadership" || theme.id === "communities" || theme.id === "prosperity" || theme.id === "water"
-        ? "#res-case-studies"
-        : "#res-packs";
+      ? "#/resources/packs"
+      : "#/resources/cases";
 
   return `
     <section
@@ -266,14 +288,14 @@ function renderThemeSection(theme, caseStudies, reports, insightPacks, countries
         <div class="atlas-theme__stories">
           ${stories.map((s) => renderAtlasStoryCard(s, theme.accent)).join("")}
         </div>
-        <a href="${exploreHref}" class="atlas-theme__explore" data-anchor data-atlas-reveal>
+        <a href="${exploreHref}" class="atlas-theme__explore" data-link data-atlas-reveal>
           Explore more on ${theme.label} →
         </a>
       </div>
     </section>`;
 }
 
-export function renderResources(data) {
+export function renderResources(data, section = "overview") {
   const hub = data.knowledgeHub || {};
   const reports = data.reports?.reports || [];
   const caseStudies = hub.caseStudies || [];
@@ -283,41 +305,65 @@ export function renderResources(data) {
   const themes = hub.atlasThemes || [];
   const featured = hub.featuredStories || [];
   const socialLinks = hub.socialLinks || [];
+  const page = section === "cases" || section === "packs" ? section : "overview";
+
+  if (page === "cases") {
+    return renderFieldReports(data);
+  }
+
+  if (page === "packs") {
+    return `
+    <div class="atlas-page story-resources topic-page--packs" data-resources-hub>
+      ${renderPageBack({ href: "#/resources", label: "Stories & reports" })}
+      ${renderWbPageHero({
+        id: "resources-hero",
+        tone: "navy",
+        skin: "ink",
+        crumbs: [
+          { label: "Home", href: "#/" },
+          { label: "What we do", href: "#/work" },
+          { label: "Stories & reports", href: "#/resources" },
+          { label: "Insight packs" },
+        ],
+        eyebrow: "Stories & reports",
+        title: "Insight packs",
+        lead: "Short packs you can download. They sit next to the stories — they do not replace them.",
+      })}
+      ${renderResourceLibrary(data, hub, caseStudies, insightPacks, programs, countries, socialLinks, "packs")}
+    </div>`;
+  }
 
   return `
-    <div class="atlas-page" data-resources-hub>
-      <header class="atlas-hero">
-        <div class="atlas-hero__mesh" aria-hidden="true"></div>
-        <div class="container atlas-hero__inner">
-          <p class="atlas-hero__eyebrow" data-atlas-hero>Knowledge &amp; Resource Hub</p>
-          <h1 class="atlas-hero__title" data-atlas-hero>
-            <span class="atlas-hero__title-line"><strong>Resource</strong> Hub</span>
-          </h1>
-          <p class="atlas-hero__lead" data-atlas-hero>
-            Interactive storytelling and data on pastor-led transformation — leadership, communities, prosperity, water, and field reports across the PA network.
-          </p>
-        </div>
-        <div class="atlas-hero__scroll" aria-hidden="true" data-atlas-hero>
-          <span>Scroll to explore</span>
-          <span class="atlas-hero__scroll-icon">↓</span>
-        </div>
-      </header>
-
-      <nav class="atlas-nav" aria-label="Resource themes">
-        <div class="container atlas-nav__inner">
-          ${themes.map((t) => `<a href="#atlas-theme-${t.id}" class="atlas-nav__link" data-anchor data-theme-nav="${t.id}" style="--atlas-accent:${t.accent}">${t.label}</a>`).join("")}
-        </div>
-      </nav>
-
-      <section class="atlas-intro" data-atlas-scroll>
-        <div class="container atlas-intro__inner">
-          <h2 class="atlas-intro__title" data-atlas-reveal>Data <strong>stories</strong> on transformation</h2>
-          <p class="atlas-intro__text" data-atlas-reveal>
-            Which communities are moving fastest, and which face the greatest challenges? This resource atlas puts progress at its centre — tracking how countries advance across leadership, economic productivity, water access, and discipleship from their own starting points.
-          </p>
-        </div>
-      </section>
-
+    <div class="atlas-page story-resources" data-resources-hub>
+      ${renderPageBack({ href: "#/work", label: "What we do" })}
+      ${renderWbPageHero({
+        id: "resources-hero",
+        tone: "navy",
+        skin: "who",
+        crumbs: [
+          { label: "Home", href: "#/" },
+          { label: "What we do", href: "#/work" },
+          { label: "Stories & reports" },
+        ],
+        eyebrow: "Stories & reports",
+        title: "Reports, cases, and the stories they tell",
+        lead: "Field reports, community stories, and short data packs — then back to that country or community.",
+        actions: [
+          { label: "Field reports", href: "#/resources/cases" },
+          { label: "Insight packs", href: "#/resources/packs", primary: false },
+        ],
+      })}
+      ${renderTopicHub({
+        eyebrow: "Library",
+        title: "Collections you can open",
+        lead: "Each collection is its own page.",
+        items: [
+          { href: "#/resources/cases", kind: "Reports", title: "Field reports", text: "Monthly ministry reports and annual summaries from across the network.", cta: "Open" },
+          { href: "#/resources/packs", kind: "Reports", title: "Insight packs", text: "Short downloads that sit next to the stories.", cta: "Open" },
+          { href: "#/stories/kenya", kind: "Country", title: "Kenya field stories", text: "People and progress from one country.", cta: "Open" },
+          { href: "#/stories/malawi", kind: "Country", title: "Malawi field stories", text: "Household work, farming, and church life from Malawi.", cta: "Open" },
+        ],
+      })}
       <section class="atlas-featured" data-atlas-scroll>
         <div class="container">
           <div class="atlas-featured__grid">
@@ -327,25 +373,29 @@ export function renderResources(data) {
               <p class="atlas-featured-card__subtitle">${f.subtitle}</p>
               <h3 class="atlas-featured-card__title">${f.title}</h3>
               <p class="atlas-featured-card__desc">${f.description}</p>
-              <a href="${f.href}" class="atlas-featured-card__cta" data-link>${f.cta} →</a>
+              <a href="${f.href.startsWith("#/scorecard#") ? "#/scorecard" : f.href}" class="atlas-featured-card__cta" data-link>${f.cta} →</a>
             </article>`
               )
               .join("")}
           </div>
         </div>
       </section>
-
-      ${themes.map((t) => renderThemeSection(t, caseStudies, reports, insightPacks, countries, data)).join("")}
-
-      ${renderResourceLibrary(data, hub, caseStudies, insightPacks, programs, countries, socialLinks)}
+      ${themes.slice(0, 2).map((t) => renderThemeSection(t, caseStudies, reports, insightPacks, countries, data)).join("")}
     </div>`;
 }
 
 export function mountResources(data) {
+  const fieldReportsRoot = document.querySelector("[data-field-reports]");
+  if (fieldReportsRoot) {
+    mountFieldReports();
+    return;
+  }
+
   const root = document.querySelector("[data-resources-hub]");
   if (!root) return;
 
   requestAnimationFrame(() => {
+    bindWbPageHero(root);
     initResourcesAnimations();
     if (typeof ScrollTrigger !== "undefined") ScrollTrigger.refresh();
   });
