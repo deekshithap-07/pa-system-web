@@ -6,17 +6,17 @@
 .wph {
   --wph-ink: #fff;
   --wph-muted: rgba(255, 255, 255, 0.86);
-  --wph-accent: #7dd3fc;
-  --wph-from: #001a38;
-  --wph-mid: #003d73;
-  --wph-to: #0077b6;
+  --wph-accent: #f5d78a;
+  --wph-from: #3d181c;
+  --wph-mid: #6b2a30;
+  --wph-to: #c48914;
 }
 
 .wph--navy {
-  --wph-from: #00152c;
-  --wph-mid: #002b5c;
-  --wph-to: #005a8c;
-  --wph-accent: #7dd3fc;
+  --wph-from: #2a1014;
+  --wph-mid: #5c2428;
+  --wph-to: #8b3d42;
+  --wph-accent: #f5d78a;
 }
 
 .wph--teal {
@@ -37,7 +37,7 @@
   --wph-from: #0c2418;
   --wph-mid: #1b4d38;
   --wph-to: #2f6b4f;
-  --wph-accent: #bbf7d0;
+  --wph-accent: #f5d78a;
 }
 
 .wph--dusk {
@@ -101,7 +101,7 @@ header.ch-hero.wph::after {
 .wph__veil {
   position: absolute;
   inset: 0;
-  background: linear-gradient(105deg, rgba(0, 16, 36, 0.58) 0%, rgba(0, 16, 36, 0.14) 58%, transparent 100%);
+  background: linear-gradient(105deg, rgba(42, 16, 20, 0.58) 0%, rgba(42, 16, 20, 0.14) 58%, transparent 100%);
   pointer-events: none;
 }
 
@@ -205,7 +205,7 @@ header.ch-hero.wph::after {
 
 .wph__btn--solid {
   background: #fff;
-  color: #002b5c;
+  color: #5c2428;
 }
 
 .wph__btn--ghost {
@@ -220,7 +220,7 @@ header.ch-hero.wph::after {
 }
 
 .wph__btn--solid:hover {
-  color: #002b5c;
+  color: #5c2428;
   box-shadow: 0 10px 28px rgba(0, 0, 0, 0.22);
 }
 
@@ -259,12 +259,12 @@ header.ch-hero.wph::after {
   display: block;
   width: 100%;
   height: 42px;
-  fill: #0a2540;
+  fill: #4a1c22;
   z-index: 2;
 }
 
 .wph-related {
-  background: #0a2540;
+  background: #4a1c22;
   color: #fff;
 }
 
@@ -297,7 +297,7 @@ header.ch-hero.wph::after {
   padding: 0.35rem 0.2rem;
   color: #fff;
   text-decoration: none;
-  border-left: 3px solid var(--wph-accent, #009fda);
+  border-left: 3px solid var(--wph-accent, #e8a91a);
   padding-left: 0.85rem;
   transition: transform 0.2s;
 }
@@ -313,7 +313,7 @@ header.ch-hero.wph::after {
   width: 4.25rem;
   height: 4.25rem;
   border-radius: 0.2rem;
-  background: linear-gradient(145deg, #005a8c, #001a38);
+  background: linear-gradient(145deg, #8b3d42, #3d181c);
 }
 
 .wph-related__thumb--1 {
@@ -330,7 +330,7 @@ header.ch-hero.wph::after {
   font-weight: 700;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: var(--wph-accent, #7dd3fc);
+  color: var(--wph-accent, #f5d78a);
 }
 
 .wph-related__card strong {
@@ -359,11 +359,11 @@ header.ch-hero.wph::after {
   background: transparent;
   border: 0;
   padding-left: 0.85rem;
-  border-left: 3px solid var(--wph-accent, #009fda);
+  border-left: 3px solid var(--wph-accent, #e8a91a);
 }
 
 .wph-related .wb-topstory__tag {
-  color: var(--wph-accent, #7dd3fc);
+  color: var(--wph-accent, #f5d78a);
 }
 
 .wph-related .wb-topstory__subscribe input {
@@ -411,14 +411,14 @@ header.ch-hero.wph::after {
   font-weight: 700;
   letter-spacing: 0.16em;
   text-transform: uppercase;
-  color: #009fda;
+  color: #e8a91a;
 }
 
 .wb-trio__title {
   margin: 0.4rem 0 1.4rem;
   font-size: clamp(1.5rem, 3vw, 2rem);
   font-weight: 800;
-  color: #002b5c;
+  color: #5c2428;
   letter-spacing: -0.02em;
 }
 
@@ -431,10 +431,10 @@ header.ch-hero.wph::after {
 .wb-trio__card {
   display: flex;
   flex-direction: column;
-  color: #002b5c;
+  color: #5c2428;
   text-decoration: none;
   background: #fff;
-  border: 1px solid rgba(0, 43, 92, 0.08);
+  border: 1px solid rgba(92, 36, 40, 0.08);
   border-radius: 0.15rem;
   overflow: hidden;
   transition: transform 0.2s, box-shadow 0.2s;
@@ -442,15 +442,15 @@ header.ch-hero.wph::after {
 
 .wb-trio__card:hover {
   transform: translateY(-4px);
-  box-shadow: 0 16px 32px rgba(0, 43, 92, 0.1);
+  box-shadow: 0 16px 32px rgba(92, 36, 40, 0.1);
   text-decoration: none;
-  color: #002b5c;
+  color: #5c2428;
 }
 
 .wb-trio__media {
   display: block;
   height: 9.5rem;
-  background: linear-gradient(135deg, #002b5c, #009fda);
+  background: linear-gradient(135deg, #5c2428, #e8a91a);
 }
 
 .wb-trio__card--1 .wb-trio__media {
@@ -468,7 +468,7 @@ header.ch-hero.wph::after {
   font-weight: 700;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: #009fda;
+  color: #e8a91a;
 }
 
 .wb-trio__card strong {
@@ -489,7 +489,7 @@ header.ch-hero.wph::after {
 
 /* ---- Who-we-are organisation band ---- */
 .wb-orgband {
-  background: #002b5c;
+  background: #5c2428;
   color: #fff;
   padding: 3.25rem 0;
 }
@@ -500,7 +500,7 @@ header.ch-hero.wph::after {
   font-weight: 700;
   letter-spacing: 0.16em;
   text-transform: uppercase;
-  color: #7dd3fc;
+  color: #f5d78a;
 }
 
 .wb-orgband__title {
@@ -518,7 +518,7 @@ header.ch-hero.wph::after {
 
 .wb-orgband__card {
   padding: 1.15rem 0 0;
-  border-top: 3px solid #009fda;
+  border-top: 3px solid #e8a91a;
 }
 
 .wb-orgband__code {
@@ -527,7 +527,7 @@ header.ch-hero.wph::after {
   font-weight: 800;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: #7dd3fc;
+  color: #f5d78a;
 }
 
 .wb-orgband__card h3 {
@@ -575,7 +575,7 @@ header.ch-hero.wph::after {
 }
 
 .wph-chapter a:hover {
-  color: #002b5c;
+  color: #5c2428;
 }
 
 .wph-toc {
@@ -598,7 +598,7 @@ header.ch-hero.wph::after {
 }
 
 .wph-toc a:hover {
-  color: #002b5c;
+  color: #5c2428;
 }
 
 .wph-toc__n {
@@ -686,13 +686,13 @@ header.ch-hero.wph::after {
 
 .wph--skin-report .wph__veil {
   background: none;
-  border-left: 8px solid #002b5c;
+  border-left: 8px solid #5c2428;
 }
 
 .wph--skin-report .wph__title,
 .wph--skin-report .wph__crumbs a,
 .wph--skin-report .wph__btn--ghost {
-  color: #002b5c;
+  color: #5c2428;
 }
 
 .wph--skin-report .wph__visual {
@@ -787,13 +787,13 @@ header.ch-hero.wph::after {
 }
 
 .wph--skin-catalog .wph__btn--solid {
-  background: #002b5c;
+  background: #5c2428;
   color: #fff;
 }
 
 .wph--skin-catalog .wph__btn--ghost {
-  color: #002b5c;
-  border-color: #002b5c;
+  color: #5c2428;
+  border-color: #5c2428;
 }
 
 .wph--skin-who .wph__media {
@@ -806,7 +806,7 @@ header.ch-hero.wph::after {
 }
 
 .wph--skin-who .wph__title {
-  color: #002b5c;
+  color: #5c2428;
 }
 
 .wph--skin-who .wph__eyebrow {
@@ -829,7 +829,7 @@ header.ch-hero.wph::after {
 }
 
 .wph--skin-who .wph__aside {
-  background: #002b5c;
+  background: #5c2428;
   color: #fff;
   border: 0;
   padding: 1.5rem 1.35rem;

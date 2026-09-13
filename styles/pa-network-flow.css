@@ -22,7 +22,7 @@
   left: 50%;
   top: 48%;
   transform: translate(-50%, -50%);
-  border: 1px solid rgba(0, 43, 92, 0.06);
+  border: 1px solid rgba(92, 36, 40, 0.06);
   border-radius: 50%;
 }
 
@@ -83,8 +83,8 @@
   background: #fff;
   border-radius: 18px;
   padding: 1rem 0.85rem;
-  border: 1px solid rgba(0, 43, 92, 0.08);
-  box-shadow: 0 8px 28px rgba(0, 43, 92, 0.07);
+  border: 1px solid rgba(92, 36, 40, 0.08);
+  box-shadow: 0 8px 28px rgba(92, 36, 40, 0.07);
   text-align: center;
   opacity: 0.35;
   transform: scale(0.94);
@@ -102,15 +102,15 @@
 }
 
 .pa-flow__card.is-active {
-  border-color: rgba(0, 159, 218, 0.35);
-  box-shadow: 0 12px 36px rgba(0, 159, 218, 0.18);
+  border-color: rgba(232, 169, 26, 0.35);
+  box-shadow: 0 12px 36px rgba(232, 169, 26, 0.18);
 }
 
 .pa-flow__card-glow {
   position: absolute;
   inset: -2px;
   border-radius: 20px;
-  background: radial-gradient(circle at 50% 0%, rgba(0, 159, 218, 0.2), transparent 70%);
+  background: radial-gradient(circle at 50% 0%, rgba(232, 169, 26, 0.2), transparent 70%);
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.4s ease;
@@ -131,18 +131,18 @@
 
 .pa-flow__card:hover {
   transform: translateY(-4px) scale(1);
-  box-shadow: 0 14px 36px rgba(0, 43, 92, 0.11);
+  box-shadow: 0 14px 36px rgba(92, 36, 40, 0.11);
 }
 
 .pa-flow__card--root {
-  border-color: rgba(0, 159, 218, 0.25);
-  box-shadow: 0 10px 32px rgba(0, 159, 218, 0.12);
+  border-color: rgba(232, 169, 26, 0.25);
+  box-shadow: 0 10px 32px rgba(232, 169, 26, 0.12);
 }
 
 .pa-flow__card--country { border-top: 3px solid var(--pa-blue); }
-.pa-flow__card--catchment { border-top: 3px solid rgba(0, 119, 182, 0.55); }
+.pa-flow__card--catchment { border-top: 3px solid rgba(196, 137, 20, 0.55); }
 .pa-flow__card--community {
-  border-top: 3px solid rgba(0, 159, 218, 0.45);
+  border-top: 3px solid rgba(232, 169, 26, 0.45);
   width: 158px;
 }
 
@@ -166,7 +166,7 @@
 }
 
 .pa-flow__card--root .pa-flow__card-icon {
-  background: linear-gradient(135deg, var(--pa-blue), #0077b6);
+  background: linear-gradient(135deg, var(--pa-blue), #c48914);
 }
 
 .pa-flow__card--catchment .pa-flow__card-icon,
@@ -174,7 +174,7 @@
   width: 2rem;
   height: 2rem;
   font-size: 0.65rem;
-  background: linear-gradient(135deg, #0077b6, #009fda);
+  background: linear-gradient(135deg, #c48914, #e8a91a);
 }
 
 .pa-flow__card-label {
@@ -214,7 +214,7 @@
 }
 
 .pa-flow__tag--ps {
-  background: rgba(0, 43, 92, 0.08);
+  background: rgba(92, 36, 40, 0.08);
   color: var(--pa-navy);
 }
 
@@ -241,8 +241,8 @@
 .pa-flow__connector-track {
   background: repeating-linear-gradient(
     90deg,
-    rgba(0, 43, 92, 0.15) 0,
-    rgba(0, 43, 92, 0.15) 5px,
+    rgba(92, 36, 40, 0.15) 0,
+    rgba(92, 36, 40, 0.15) 5px,
     transparent 5px,
     transparent 10px
   );
@@ -251,8 +251,8 @@
 .pa-flow__connector-progress {
   transform: scaleX(0);
   transform-origin: left center;
-  background: linear-gradient(90deg, var(--pa-blue), #0077b6);
-  box-shadow: 0 0 8px rgba(0, 159, 218, 0.35);
+  background: linear-gradient(90deg, var(--pa-blue), #c48914);
+  box-shadow: 0 0 8px rgba(232, 169, 26, 0.35);
 }
 
 .pa-flow.is-complete .pa-flow__connector-progress {
@@ -269,7 +269,7 @@
   border-radius: 50%;
   background: var(--pa-blue);
   border: 2px solid #fff;
-  box-shadow: 0 0 0 2px rgba(0, 159, 218, 0.25), 0 2px 8px rgba(0, 159, 218, 0.4);
+  box-shadow: 0 0 0 2px rgba(232, 169, 26, 0.25), 0 2px 8px rgba(232, 169, 26, 0.4);
   opacity: 0;
   pointer-events: none;
   z-index: 2;
@@ -328,14 +328,14 @@
   font-size: 0.875rem;
   font-weight: 600;
   text-decoration: none;
-  box-shadow: 0 8px 24px rgba(0, 43, 92, 0.2);
+  box-shadow: 0 8px 24px rgba(92, 36, 40, 0.2);
   transition: transform 0.2s, box-shadow 0.2s, background 0.2s;
 }
 
 .pa-flow__cta:hover {
   background: #003d7a;
   transform: translateY(-2px);
-  box-shadow: 0 12px 28px rgba(0, 43, 92, 0.25);
+  box-shadow: 0 12px 28px rgba(92, 36, 40, 0.25);
   text-decoration: none;
   color: #fff;
 }
@@ -408,15 +408,15 @@
   .pa-flow__connector-track {
     background: repeating-linear-gradient(
       180deg,
-      rgba(0, 43, 92, 0.15) 0,
-      rgba(0, 43, 92, 0.15) 5px,
+      rgba(92, 36, 40, 0.15) 0,
+      rgba(92, 36, 40, 0.15) 5px,
       transparent 5px,
       transparent 10px
     );
   }
 
   .pa-flow__connector-progress {
-    background: linear-gradient(180deg, var(--pa-blue), #0077b6);
+    background: linear-gradient(180deg, var(--pa-blue), #c48914);
   }
 
   .pa-flow__card,

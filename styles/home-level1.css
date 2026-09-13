@@ -26,7 +26,7 @@
 .l1-updates {
   padding: 4rem 0;
   background: #fff;
-  border-top: 1px solid rgba(0, 43, 92, 0.06);
+  border-top: 1px solid rgba(92, 36, 40, 0.06);
 }
 
 .l1-update-list {
@@ -34,7 +34,7 @@
   display: flex;
   flex-direction: column;
   gap: 0;
-  border: 1px solid rgba(0, 43, 92, 0.08);
+  border: 1px solid rgba(92, 36, 40, 0.08);
   border-radius: var(--radius);
   overflow: hidden;
 }
@@ -46,7 +46,7 @@
   gap: 1rem;
   padding: 1rem 1.25rem;
   background: #fff;
-  border-bottom: 1px solid rgba(0, 43, 92, 0.06);
+  border-bottom: 1px solid rgba(92, 36, 40, 0.06);
   transition: background 0.2s;
 }
 
@@ -84,7 +84,7 @@
   letter-spacing: 0.05em;
   padding: 0.25rem 0.55rem;
   border-radius: 999px;
-  background: rgba(0, 159, 218, 0.1);
+  background: rgba(232, 169, 26, 0.1);
   color: var(--pa-blue);
 }
 
@@ -95,7 +95,7 @@
 
 .l1-update__status--ongoing,
 .l1-update__status--active {
-  background: rgba(0, 159, 218, 0.1);
+  background: rgba(232, 169, 26, 0.1);
   color: var(--pa-blue);
 }
 
@@ -105,7 +105,7 @@
   width: 2rem;
   height: 2rem;
   border-radius: 50%;
-  border: 1px solid rgba(0, 43, 92, 0.12);
+  border: 1px solid rgba(92, 36, 40, 0.12);
   color: var(--pa-blue);
   text-decoration: none;
   font-size: 1rem;
@@ -137,10 +137,10 @@
 
 .l1-trend-card {
   background: #fff;
-  border: 1px solid rgba(0, 43, 92, 0.08);
+  border: 1px solid rgba(92, 36, 40, 0.08);
   border-radius: var(--radius);
   padding: 1.25rem 1.35rem 1rem;
-  box-shadow: 0 2px 16px rgba(0, 43, 92, 0.04);
+  box-shadow: 0 2px 16px rgba(92, 36, 40, 0.04);
 }
 
 .l1-trend-card h3 {
@@ -186,13 +186,13 @@
 }
 
 .l1-map .eyebrow {
-  color: #7dd3fc;
+  color: #f5d78a;
 }
 
 .l1-map__full-link {
   font-size: 0.85rem;
   font-weight: 600;
-  color: #7dd3fc;
+  color: #f5d78a;
   text-decoration: none;
   white-space: nowrap;
 }
@@ -210,7 +210,7 @@
   position: relative;
   min-height: min(72vh, 720px);
   width: 100%;
-  background: linear-gradient(180deg, #001528 0%, #002b5c 100%);
+  background: linear-gradient(180deg, #001528 0%, #5c2428 100%);
 }
 
 .l1-map__host.africa-map-host {

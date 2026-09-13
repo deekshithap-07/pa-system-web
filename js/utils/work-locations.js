@@ -37,7 +37,7 @@ export function paStoriesPageUrl(slug) {
   return `https://www.possibilitiesafrica.org/${slug}-stories.html`;
 }
 
-function chartColor(chart, fallback = "#009FDA") {
+function chartColor(chart, fallback = "#e8a91a") {
   return chart?.color || fallback;
 }
 
@@ -74,7 +74,7 @@ export function numberCardsFromHub(hub) {
       config: {
         ...c,
         type: c.type || "line",
-        color: chartColor(c, "#F5A623"),
+        color: chartColor(c, "#e8a91a"),
         seriesLabel: countryName,
         unit: "%",
       },
@@ -99,7 +99,7 @@ export function numberCardsFromHub(hub) {
       config: {
         ...c,
         type: c.type || "pie",
-        color: chartColor(c, "#009FDA"),
+        color: chartColor(c, "#e8a91a"),
         seriesLabel: countryName,
         unit: "%",
       },
@@ -120,7 +120,7 @@ export function numberCardsFromHub(hub) {
       config: {
         ...c,
         type: c.type || "bar",
-        color: chartColor(c, "#002B5C"),
+        color: chartColor(c, "#5c2428"),
         seriesLabel: countryName,
         unit: "communities",
       },
@@ -141,7 +141,7 @@ export function numberCardsFromHub(hub) {
       config: {
         ...c,
         type: c.type || "line",
-        color: chartColor(c, "#0077B6"),
+        color: chartColor(c, "#c48914"),
         seriesLabel: countryName,
         unit: "score",
       },

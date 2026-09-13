@@ -37,19 +37,19 @@
 }
 
 .wb-stories__graph-line {
-  stroke: #009fda;
+  stroke: #e8a91a;
   stroke-dasharray: 400;
   stroke-dashoffset: 400;
 }
 
 .wb-stories__graph-dots circle {
   fill: #fff;
-  stroke: #009fda;
+  stroke: #e8a91a;
   stroke-width: 2;
 }
 
 .wb-stories__graph-dots circle:last-child {
-  fill: #009fda;
+  fill: #e8a91a;
 }
 
 .wb-stories__aside-content {
@@ -107,7 +107,7 @@
 
 .wb-stories__cta:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 24px rgba(0, 43, 92, 0.2);
+  box-shadow: 0 8px 24px rgba(92, 36, 40, 0.2);
   color: #fff;
   text-decoration: none;
 }
@@ -189,7 +189,7 @@
   backface-visibility: hidden;
   border-radius: 0.35rem;
   background: #fff;
-  box-shadow: 0 4px 24px rgba(0, 43, 92, 0.08);
+  box-shadow: 0 4px 24px rgba(92, 36, 40, 0.08);
   padding: 1.25rem 1.15rem 1rem;
   display: flex;
   flex-direction: column;
@@ -198,7 +198,7 @@
 .wb-story-flip__back {
   transform: rotateY(180deg);
   background: linear-gradient(160deg, #f8fbfd 0%, #fff 100%);
-  border: 1px solid rgba(0, 159, 218, 0.15);
+  border: 1px solid rgba(232, 169, 26, 0.15);
 }
 
 /* Accent bar */
@@ -214,7 +214,7 @@
 .wb-story-flip--people .wb-story-flip__accent { background: #f5c842; }
 .wb-story-flip--prosperity .wb-story-flip__accent { background: #7c6ff7; }
 .wb-story-flip--infrastructure .wb-story-flip__accent { background: #e85d5d; }
-.wb-story-flip--digital .wb-story-flip__accent { background: #009fda; }
+.wb-story-flip--digital .wb-story-flip__accent { background: #e8a91a; }
 .wb-story-flip--planet .wb-story-flip__accent { background: #10b981; }
 
 .wb-story-flip__category {
@@ -223,7 +223,7 @@
   color: var(--pa-navy);
   margin-top: 0.35rem;
   padding-bottom: 0.5rem;
-  border-bottom: 1px solid rgba(0, 43, 92, 0.08);
+  border-bottom: 1px solid rgba(92, 36, 40, 0.08);
 }
 
 .wb-story-flip__metric {
@@ -265,7 +265,7 @@
   justify-content: space-between;
   margin-top: auto;
   padding-top: 0.85rem;
-  border-top: 1px solid rgba(0, 43, 92, 0.06);
+  border-top: 1px solid rgba(92, 36, 40, 0.06);
 }
 
 .wb-story-flip__source {
@@ -281,7 +281,7 @@
   width: 1.75rem;
   height: 1.75rem;
   border-radius: 50%;
-  background: rgba(0, 159, 218, 0.1);
+  background: rgba(232, 169, 26, 0.1);
   color: var(--pa-blue);
 }
 
@@ -397,7 +397,7 @@
 
 .stories-hub__top {
   background: #fff;
-  border-bottom: 1px solid rgba(0, 43, 92, 0.08);
+  border-bottom: 1px solid rgba(92, 36, 40, 0.08);
   padding: 0.75rem 0;
   position: sticky;
   top: var(--header-h);
@@ -413,7 +413,7 @@
 .stories-hub__pill {
   padding: 0.4rem 0.9rem;
   border-radius: 999px;
-  border: 1.5px solid rgba(0, 43, 92, 0.15);
+  border: 1.5px solid rgba(92, 36, 40, 0.15);
   font-size: 0.78rem;
   font-weight: 600;
   color: var(--pa-blue);
@@ -479,7 +479,7 @@
 .stories-hub__countries-section {
   margin-top: 2rem;
   padding-top: 2rem;
-  border-top: 1px solid rgba(0, 43, 92, 0.08);
+  border-top: 1px solid rgba(92, 36, 40, 0.08);
 }
 
 .stories-hub__countries-section h2 {
@@ -508,7 +508,7 @@
   padding: 1rem 1.15rem;
   background: #fff;
   border-radius: var(--radius);
-  border: 1px solid rgba(0, 43, 92, 0.08);
+  border: 1px solid rgba(92, 36, 40, 0.08);
   text-decoration: none;
   color: inherit;
   transition: box-shadow 0.2s, border-color 0.2s;
@@ -566,7 +566,7 @@
 .stories-hub__btn--ghost {
   background: transparent;
   color: var(--pa-blue);
-  border: 1.5px solid rgba(0, 43, 92, 0.15);
+  border: 1.5px solid rgba(92, 36, 40, 0.15);
 }
 
 @media (max-width: 900px) {

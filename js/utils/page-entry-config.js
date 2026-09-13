@@ -3,7 +3,7 @@ export function getPageEntryConfig(view, parts, data, hub) {
     case "landing":
       return {
         eyebrow: "Possibilities Africa",
-        title: "The whole gospel transforming the whole person and whole community",
+        title: "Transforming communities. Developing leaders. Creating possibilities.",
         subtitle: "",
       };
 
@@ -70,11 +70,14 @@ export function getPageEntryConfig(view, parts, data, hub) {
 
     case "resources": {
       const chapter = {
-        cases: { title: "Case <strong>studies</strong>", subtitle: "Stories from communities you can read and share." },
+        cases: { title: "Field <strong>reports</strong>", subtitle: "Ministry updates from across the network." },
         packs: { title: "Insight <strong>packs</strong>", subtitle: "Short downloads that sit next to the stories." },
-      }[parts[1]] || { title: "Stories &amp; <strong>reports</strong>", subtitle: "Stories, case studies, and reports you can read and share." };
+      }[parts[1]] || {
+        title: "Knowledge <strong>Hub</strong>",
+        subtitle: "PA as a source of knowledge, learning and evidence.",
+      };
       return {
-        eyebrow: "Stories & reports",
+        eyebrow: "Knowledge Hub",
         title: chapter.title,
         subtitle: chapter.subtitle,
       };
@@ -86,13 +89,20 @@ export function getPageEntryConfig(view, parts, data, hub) {
         ? data?.countries?.countries?.find((c) => c.slug === slug && c.isPaNetwork)
         : null;
       return {
-        eyebrow: country ? country.name : "Stories",
-        title: country ? `<strong>${country.name}</strong>` : "Stories of <strong>change</strong>",
+        eyebrow: "Stories",
+        title: country ? `<strong>${country.name}</strong>` : "Stories",
         subtitle: country
-          ? "People and progress from this country."
-          : "Real lives and simple results from the places we work.",
+          ? `Human stories from ${country.name} that explain the meaning behind the data.`
+          : "Human stories that explain the meaning behind the data.",
       };
     }
+
+    case "news":
+      return {
+        eyebrow: "News & Updates",
+        title: "A current stream of <strong>PA activity</strong>",
+        subtitle: "News, country updates, events, announcements, and milestones.",
+      };
 
     case "work": {
       const chapter = {
@@ -108,10 +118,23 @@ export function getPageEntryConfig(view, parts, data, hub) {
     }
 
     case "static": {
-      return {
-        eyebrow: "Possibilities Africa",
+      const chapter = {
+        vision: { title: "Vision &amp; <strong>mission</strong>", subtitle: "Whole gospel. Whole person. Whole community." },
+        mission: { title: "Vision &amp; <strong>mission</strong>", subtitle: "Whole gospel. Whole person. Whole community." },
+        approach: { title: "Our <strong>approach</strong>", subtitle: "How the work is carried with local churches." },
+        leadership: { title: "<strong>Leadership</strong>", subtitle: "People who steward the ministry." },
+        history: { title: "<strong>History</strong>", subtitle: "From Webuye to seven countries." },
+        countries: { title: "<strong>Countries</strong>", subtitle: "Where the ministry is present." },
+        partners: { title: "<strong>Partners</strong>", subtitle: "Churches and friends walking with us." },
+        contact: { title: "<strong>Contact</strong>", subtitle: "Get in touch with Possibilities Africa." },
+      }[parts[1]] || {
         title: "Who we <strong>are</strong>",
-        subtitle: "Mission and where to explore next.",
+        subtitle: "The institutional foundation of Possibilities Africa.",
+      };
+      return {
+        eyebrow: "About PA",
+        title: chapter.title,
+        subtitle: chapter.subtitle,
       };
     }
 
@@ -121,7 +144,7 @@ export function getPageEntryConfig(view, parts, data, hub) {
         working: { title: "What’s <strong>working</strong>", subtitle: "Water, farming, health, schools, jobs, and leadership." },
         together: { title: "What is <strong>changing</strong>", subtitle: "Where the work began, what the field shows now, and what may come next." },
         journey: { title: "The two-year <strong>journey</strong>", subtitle: "From first steps to sharing the work with neighbours." },
-      }[parts[1]] || { title: "Our <strong>results</strong>", subtitle: "Simple numbers from seven countries" };
+      }[parts[1]] || { title: "Impact &amp; <strong>Data</strong>", subtitle: "Simple numbers from seven countries" };
       return {
         eyebrow: "Possibilities Africa",
         title: chapter.title,

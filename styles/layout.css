@@ -11,12 +11,12 @@
 
 .site-header.is-scrolled {
   background: rgba(255,255,255,0.97);
-  border-bottom-color: rgba(0,43,92,0.08);
-  box-shadow: 0 8px 24px rgba(0, 43, 92, 0.06);
+  border-bottom-color: rgba(92, 36, 40,0.08);
+  box-shadow: 0 8px 24px rgba(92, 36, 40, 0.06);
 }
 
 .site-header--dark {
-  background: rgba(0,43,92,0.95);
+  background: rgba(92, 36, 40,0.95);
   border-color: rgba(255,255,255,0.1);
 }
 
@@ -74,12 +74,13 @@
   font-weight: 700;
 }
 
-.site-nav__pill--home.is-active { background: #f1f5f9; color: var(--pa-navy); }
-.site-nav__pill--africa.is-active { background: #e0f7fa; color: #0077b6; border-color: #009fda; }
-.site-nav__pill--work.is-active { background: #eef2ff; color: #3730a3; border-color: #6366f1; }
-.site-nav__pill--scorecard.is-active { background: #e0f4f8; color: #00313c; border-color: #00d4d4; }
-.site-nav__pill--resources.is-active { background: #fff7ed; color: #c2410c; border-color: #f5a623; }
-.site-nav__pill--about.is-active { background: #ecfdf5; color: #047857; border-color: #10b981; }
+.site-nav__pill--home.is-active { background: #f8f1e8; color: var(--pa-navy); }
+.site-nav__pill--africa.is-active { background: #f8f1e8; color: var(--pa-maroon); border-color: var(--pa-gold); }
+.site-nav__pill--work.is-active { background: #f3ebe2; color: var(--pa-maroon); border-color: var(--pa-gold); }
+.site-nav__pill--scorecard.is-active { background: #fbf3dd; color: #8a6a10; border-color: var(--pa-gold); }
+.site-nav__pill--stories.is-active { background: #f8f1e8; color: var(--pa-maroon); border-color: var(--pa-gold); }
+.site-nav__pill--resources.is-active { background: #fbf3dd; color: #8a6a10; border-color: var(--pa-gold); }
+.site-nav__pill--about.is-active { background: #f3ebe2; color: var(--pa-maroon); border-color: var(--pa-gold); }
 
 .site-nav__pill[hidden] { display: none; }
 
@@ -111,7 +112,7 @@
   height: 2.25rem;
   margin-left: 0.35rem;
   padding: 0;
-  border: 1px solid rgba(0, 43, 92, 0.12);
+  border: 1px solid rgba(92, 36, 40, 0.12);
   border-radius: 50%;
   background: var(--pa-bg);
   cursor: pointer;
@@ -357,7 +358,7 @@ body.search-modal-open {
 .search-modal__backdrop {
   position: absolute;
   inset: 0;
-  background: rgba(0, 43, 92, 0.55);
+  background: rgba(92, 36, 40, 0.55);
   backdrop-filter: blur(4px);
 }
 
@@ -388,7 +389,7 @@ body.search-modal-open {
   width: 100%;
   margin-top: 0.75rem;
   padding: 0.7rem 0.85rem;
-  border: 1px solid rgba(0, 43, 92, 0.15);
+  border: 1px solid rgba(92, 36, 40, 0.15);
   border-radius: 0.5rem;
   font-size: 0.95rem;
 }
@@ -411,7 +412,7 @@ body.search-modal-open {
   padding: 0.7rem 0.75rem;
   border-radius: 0.5rem;
   text-decoration: none;
-  border: 1px solid rgba(0, 43, 92, 0.06);
+  border: 1px solid rgba(92, 36, 40, 0.06);
   margin-bottom: 0.4rem;
   transition: background 0.2s;
 }
@@ -455,7 +456,7 @@ body.search-modal-open {
   font-weight: 600;
   color: var(--pa-navy);
   text-decoration: none;
-  border: 1px solid rgba(0, 43, 92, 0.08);
+  border: 1px solid rgba(92, 36, 40, 0.08);
 }
 
 .search-modal__empty {

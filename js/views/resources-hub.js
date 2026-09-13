@@ -1,7 +1,12 @@
 import { getCountryName, downloadJson, buildInsightPack } from "../utils/hub-filters.js";
 import { initResourcesAnimations } from "../components/resources-animations.js";
-import { renderWbPageHero, renderPageBack, renderTopicHub, bindWbPageHero } from "../components/shared/wb-page-hero.js";
+import { renderWbPageHero, renderPageBack, bindWbPageHero } from "../components/shared/wb-page-hero.js";
 import { renderFieldReports, mountFieldReports } from "./field-reports.js";
+import {
+  renderKnowledgeHubPage,
+  mountKnowledgeHubPage,
+  destroyKnowledgeHubPage,
+} from "../components/resources/knowledge-hub-page.js";
 
 const COVER_STYLES = {
   annual: "res-cover--annual",
@@ -295,15 +300,21 @@ function renderThemeSection(theme, caseStudies, reports, insightPacks, countries
     </section>`;
 }
 
+function itemLinkAttrs(item = {}) {
+  const href = item.href || "#";
+  if (item.external || href.startsWith("http")) {
+    return `href="${href}" target="_blank" rel="noopener noreferrer"`;
+  }
+  if (href.startsWith("#/")) return `href="${href}" data-link`;
+  return `href="${href}"`;
+}
+
 export function renderResources(data, section = "overview") {
   const hub = data.knowledgeHub || {};
-  const reports = data.reports?.reports || [];
   const caseStudies = hub.caseStudies || [];
   const insightPacks = hub.insightPacks || [];
   const programs = hub.programs || [];
   const countries = data.countries?.countries?.filter((c) => c.isPaNetwork) || [];
-  const themes = hub.atlasThemes || [];
-  const featured = hub.featuredStories || [];
   const socialLinks = hub.socialLinks || [];
   const page = section === "cases" || section === "packs" ? section : "overview";
 
@@ -314,18 +325,17 @@ export function renderResources(data, section = "overview") {
   if (page === "packs") {
     return `
     <div class="atlas-page story-resources topic-page--packs" data-resources-hub>
-      ${renderPageBack({ href: "#/resources", label: "Stories & reports" })}
+      ${renderPageBack({ href: "#/resources", label: "Knowledge Hub" })}
       ${renderWbPageHero({
         id: "resources-hero",
-        tone: "navy",
+        tone: "gold",
         skin: "ink",
         crumbs: [
           { label: "Home", href: "#/" },
-          { label: "What we do", href: "#/work" },
-          { label: "Stories & reports", href: "#/resources" },
+          { label: "Knowledge Hub", href: "#/resources" },
           { label: "Insight packs" },
         ],
-        eyebrow: "Stories & reports",
+        eyebrow: "Knowledge Hub",
         title: "Insight packs",
         lead: "Short packs you can download. They sit next to the stories — they do not replace them.",
       })}
@@ -333,55 +343,7 @@ export function renderResources(data, section = "overview") {
     </div>`;
   }
 
-  return `
-    <div class="atlas-page story-resources" data-resources-hub>
-      ${renderPageBack({ href: "#/work", label: "What we do" })}
-      ${renderWbPageHero({
-        id: "resources-hero",
-        tone: "navy",
-        skin: "who",
-        crumbs: [
-          { label: "Home", href: "#/" },
-          { label: "What we do", href: "#/work" },
-          { label: "Stories & reports" },
-        ],
-        eyebrow: "Stories & reports",
-        title: "Reports, cases, and the stories they tell",
-        lead: "Field reports, community stories, and short data packs — then back to that country or community.",
-        actions: [
-          { label: "Field reports", href: "#/resources/cases" },
-          { label: "Insight packs", href: "#/resources/packs", primary: false },
-        ],
-      })}
-      ${renderTopicHub({
-        eyebrow: "Library",
-        title: "Collections you can open",
-        lead: "Each collection is its own page.",
-        items: [
-          { href: "#/resources/cases", kind: "Reports", title: "Field reports", text: "Monthly ministry reports and annual summaries from across the network.", cta: "Open" },
-          { href: "#/resources/packs", kind: "Reports", title: "Insight packs", text: "Short downloads that sit next to the stories.", cta: "Open" },
-          { href: "#/stories/kenya", kind: "Country", title: "Kenya field stories", text: "People and progress from one country.", cta: "Open" },
-          { href: "#/stories/malawi", kind: "Country", title: "Malawi field stories", text: "Household work, farming, and church life from Malawi.", cta: "Open" },
-        ],
-      })}
-      <section class="atlas-featured" data-atlas-scroll>
-        <div class="container">
-          <div class="atlas-featured__grid">
-            ${featured
-              .map(
-                (f, i) => `<article class="atlas-featured-card atlas-featured-card--${i + 1}" data-atlas-reveal>
-              <p class="atlas-featured-card__subtitle">${f.subtitle}</p>
-              <h3 class="atlas-featured-card__title">${f.title}</h3>
-              <p class="atlas-featured-card__desc">${f.description}</p>
-              <a href="${f.href.startsWith("#/scorecard#") ? "#/scorecard" : f.href}" class="atlas-featured-card__cta" data-link>${f.cta} →</a>
-            </article>`
-              )
-              .join("")}
-          </div>
-        </div>
-      </section>
-      ${themes.slice(0, 2).map((t) => renderThemeSection(t, caseStudies, reports, insightPacks, countries, data)).join("")}
-    </div>`;
+  return renderKnowledgeHubPage(data);
 }
 
 export function mountResources(data) {
@@ -393,6 +355,11 @@ export function mountResources(data) {
 
   const root = document.querySelector("[data-resources-hub]");
   if (!root) return;
+
+  if (root.hasAttribute("data-knowledge-hub")) {
+    mountKnowledgeHubPage();
+    return;
+  }
 
   requestAnimationFrame(() => {
     bindWbPageHero(root);
@@ -448,47 +415,11 @@ export function mountResources(data) {
     });
   });
 
-  const themeSections = root.querySelectorAll("[data-atlas-theme]");
-  const navLinks = root.querySelectorAll("[data-theme-nav]");
-
-  if (themeSections.length && navLinks.length && typeof IntersectionObserver !== "undefined") {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            const id = entry.target.dataset.atlasTheme;
-            navLinks.forEach((link) => {
-              link.classList.toggle("is-active", link.dataset.themeNav === id);
-            });
-          }
-        });
-      },
-      { rootMargin: "-40% 0px -50% 0px", threshold: 0 }
-    );
-    themeSections.forEach((section) => observer.observe(section));
-  }
-
-  const libSections = root.querySelectorAll("[data-rlib-section]");
-  const libNavLinks = root.querySelectorAll("[data-rlib-nav]");
-
-  if (libSections.length && libNavLinks.length && typeof IntersectionObserver !== "undefined") {
-    const libObserver = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            const id = entry.target.dataset.rlibSection;
-            libNavLinks.forEach((link) => {
-              link.classList.toggle("is-active", link.dataset.rlibNav === id);
-            });
-          }
-        });
-      },
-      { rootMargin: "-45% 0px -45% 0px", threshold: 0 }
-    );
-    libSections.forEach((section) => libObserver.observe(section));
-  }
-
   initLibraryInteractions(root);
+}
+
+export function destroyResources() {
+  destroyKnowledgeHubPage();
 }
 
 function initLibraryInteractions(root) {

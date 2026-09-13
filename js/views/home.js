@@ -1,46 +1,51 @@
+import { renderHero } from "../components/home-sections.js";
 import {
-  renderHero,
-  renderHomeSiteOverview,
-  renderImpactOverview,
-  renderHomeKnowledgeBand,
-  renderHomeSiteSpotlight,
-  renderWbNewsletter,
-  bindHeroNewsletter,
-  bindHomeExplorer,
-  destroyHomeExplorer,
-} from "../components/home-sections.js";
+  renderAfricaExploreBand,
+  bindAfricaCountrySelect,
+  renderOurWorkPrograms,
+  bindOurWorkPrograms,
+  renderImpactDataBand,
+  renderStoriesBand,
+  renderKnowledgeNewsSplit,
+  renderPartnerBanner,
+} from "../components/home-design.js";
 import {
-  renderAfricaMapSection,
   mountAfricaMapSection,
   ensureAfricaMapMounted,
   destroyHomeAfricaMap,
 } from "../components/home-level1.js";
 import { initLandingAnimations, destroyHomeAnimations } from "../components/home-animations.js";
 
+/**
+ * Order from PA Website Designs mockup (+ vision as reference):
+ * Hero → PA Across Africa (map) → Our Work → Impact & Data →
+ * Stories → Knowledge / News → Partner
+ * Interactive map mount/root unchanged.
+ */
 export function renderHome(data) {
-  const home = data.home;
-  const level1 = home.level1 || {};
+  const home = data.home || {};
 
   return `
     <div class="home-page" data-level="1">
       <div class="home-hero-stack" data-home-scroll-stack>
         <div class="home-hero-stack__pin">${renderHero(home.hero)}</div>
-        ${renderHomeSiteOverview(home.siteOverview)}
       </div>
-      ${renderImpactOverview(home.impactOverview)}
-      ${renderAfricaMapSection(level1.africaMap)}
-      ${renderHomeSiteSpotlight(home.siteSpotlight)}
-      ${renderHomeKnowledgeBand(home.knowledgeBand)}
-      ${renderWbNewsletter()}
+      ${renderAfricaExploreBand(home.africaBand, home.level1?.africaMap)}
+      ${renderOurWorkPrograms(home.ourWork)}
+      ${renderImpactDataBand(home.impactData)}
+      ${renderStoriesBand(home.storiesBand)}
+      ${renderKnowledgeNewsSplit(home.knowledgeNews)}
+      ${renderPartnerBanner(home.partnerSupport)}
     </div>`;
 }
 
 export function mountHome(data) {
   requestAnimationFrame(() => {
     try {
-      bindHeroNewsletter();
+      bindAfricaCountrySelect();
+      bindOurWorkPrograms(document, data.home?.ourWork || {});
     } catch (err) {
-      console.error("[mountHome] newsletter bind failed:", err);
+      console.error("[mountHome] country select bind failed:", err);
     }
     try {
       mountAfricaMapSection(data);
@@ -48,22 +53,23 @@ export function mountHome(data) {
       console.error("[mountHome] map mount failed:", err);
     }
     try {
-      bindHomeExplorer();
+      // Wait one frame so section layout/heights exist before ScrollTrigger measures
+      requestAnimationFrame(() => {
+        try {
+          initLandingAnimations();
+        } catch (err) {
+          console.error("[mountHome] animations failed:", err);
+        }
+        if (typeof ScrollTrigger !== "undefined") ScrollTrigger.refresh();
+        ensureAfricaMapMounted(data);
+      });
     } catch (err) {
-      console.error("[mountHome] site overview bind failed:", err);
+      console.error("[mountHome] animation schedule failed:", err);
     }
-    try {
-      initLandingAnimations();
-    } catch (err) {
-      console.error("[mountHome] animations failed:", err);
-    }
-    if (typeof ScrollTrigger !== "undefined") ScrollTrigger.refresh();
-    requestAnimationFrame(() => ensureAfricaMapMounted(data));
   });
 }
 
 export function destroyHome() {
-  destroyHomeExplorer();
   destroyHomeAnimations();
   destroyHomeAfricaMap();
 }

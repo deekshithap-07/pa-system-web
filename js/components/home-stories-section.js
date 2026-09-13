@@ -116,23 +116,23 @@ export function renderHomeStoriesSection(data, section) {
             <svg class="wb-stories__graph-svg" viewBox="0 0 320 200" preserveAspectRatio="none">
               <defs>
                 <linearGradient id="wb-stories-graph-grad" x1="0%" y1="0%" x2="100%" y2="0%">
-                  <stop offset="0%" stop-color="#009fda" stop-opacity="0.15"/>
-                  <stop offset="100%" stop-color="#002b5c" stop-opacity="0.05"/>
+                  <stop offset="0%" stop-color="#e8a91a" stop-opacity="0.18"/>
+                  <stop offset="100%" stop-color="#5c2428" stop-opacity="0.06"/>
                 </linearGradient>
               </defs>
               <path class="wb-stories__graph-area" d="M0,160 L40,140 L80,150 L120,100 L160,110 L200,60 L240,80 L280,40 L320,70 L320,200 L0,200 Z" fill="url(#wb-stories-graph-grad)"/>
-              <polyline class="wb-stories__graph-line" points="0,160 40,140 80,150 120,100 160,110 200,60 240,80 280,40 320,70" fill="none" stroke="#009fda" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              <polyline class="wb-stories__graph-line" points="0,160 40,140 80,150 120,100 160,110 200,60 240,80 280,40 320,70" fill="none" stroke="#e8a91a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
               <g class="wb-stories__graph-dots">
                 <circle cx="40" cy="140" r="4"/><circle cx="80" cy="150" r="4"/><circle cx="120" cy="100" r="4"/>
                 <circle cx="160" cy="110" r="4"/><circle cx="200" cy="60" r="4"/><circle cx="240" cy="80" r="4"/>
-                <circle cx="280" cy="40" r="5" fill="#009fda"/>
+                <circle cx="280" cy="40" r="5" fill="#e8a91a"/>
               </g>
             </svg>
           </div>
           <div class="wb-stories__aside-content">
-            <p class="wb-stories__eyebrow">Field Stories</p>
+            <p class="wb-stories__eyebrow">${section?.eyebrow || "Transformation stories"}</p>
             <h2 class="wb-stories__title" id="home-stories-title">
-              Real lives, <strong>rewritten.</strong>
+              ${section?.title || "Real lives, <strong>rewritten.</strong>"}
             </h2>
             <p class="wb-stories__desc">${section?.description || "Field stories paired with tracked impact data — see exactly where pastor-led transformation is making a measurable difference."}</p>
             <a href="${section?.cta?.target || "#/stories"}" class="wb-stories__cta" data-link>

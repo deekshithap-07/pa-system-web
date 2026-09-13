@@ -4,7 +4,7 @@
    ========================================================================== */
 
 .wb-priorities-band {
-  background: #002b5c;
+  background: #5c2428;
   padding: 3.5rem 0 0;
   overflow: hidden;
 }
@@ -84,7 +84,7 @@
 }
 
 .wb-priority-panel__btn:focus-visible {
-  outline: 2px solid #7dd3fc;
+  outline: 2px solid #f5d78a;
   outline-offset: -4px;
 }
 
@@ -104,31 +104,31 @@
 
 .wb-priority-panel__bg--leadership {
   background-image:
-    linear-gradient(160deg, rgba(0, 43, 92, 0.35), rgba(0, 119, 182, 0.2)),
+    linear-gradient(160deg, rgba(92, 36, 40, 0.35), rgba(196, 137, 20, 0.2)),
     url("https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&w=900&q=80");
 }
 
 .wb-priority-panel__bg--discipleship {
   background-image:
-    linear-gradient(160deg, rgba(13, 148, 136, 0.35), rgba(0, 43, 92, 0.25)),
+    linear-gradient(160deg, rgba(13, 148, 136, 0.35), rgba(92, 36, 40, 0.25)),
     url("https://images.unsplash.com/photo-1507692049790-de58290a4334?auto=format&fit=crop&w=900&q=80");
 }
 
 .wb-priority-panel__bg--economic {
   background-image:
-    linear-gradient(160deg, rgba(194, 65, 12, 0.35), rgba(0, 43, 92, 0.25)),
+    linear-gradient(160deg, rgba(194, 65, 12, 0.35), rgba(92, 36, 40, 0.25)),
     url("https://images.unsplash.com/photo-1625246333195-78d9c38ad449?auto=format&fit=crop&w=900&q=80");
 }
 
 .wb-priority-panel__bg--youth {
   background-image:
-    linear-gradient(160deg, rgba(91, 33, 182, 0.35), rgba(0, 43, 92, 0.25)),
+    linear-gradient(160deg, rgba(91, 33, 182, 0.35), rgba(92, 36, 40, 0.25)),
     url("https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=900&q=80");
 }
 
 .wb-priority-panel__bg--citizenship {
   background-image:
-    linear-gradient(160deg, rgba(4, 120, 87, 0.35), rgba(0, 43, 92, 0.25)),
+    linear-gradient(160deg, rgba(4, 120, 87, 0.35), rgba(92, 36, 40, 0.25)),
     url("https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?auto=format&fit=crop&w=900&q=80");
 }
 
@@ -260,7 +260,7 @@
 }
 
 .wb-priority-panel__cta:hover {
-  color: #7dd3fc;
+  color: #f5d78a;
   text-decoration: underline;
 }
 

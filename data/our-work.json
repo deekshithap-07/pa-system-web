@@ -1,0 +1,126 @@
+{
+  "hero": {
+    "eyebrow": "What we do",
+    "title": "Holistic transformation for lasting change.",
+    "titleHtml": "<span>Holistic transformation</span> <em>for lasting change.</em>",
+    "lead": "We work with communities to build stronger people, healthier families and more prosperous communities through a unique, integrated model of development.",
+    "quote": "Stronger Communities. Brighter Futures.",
+    "image": "assets/country-heroes/malawi-hero-savings.jpg",
+    "imageAlt": "Women in a community savings circle across rural Africa",
+    "primaryCta": { "label": "Explore Our Model", "href": "#work-model" },
+    "secondaryCta": { "label": "Where we work", "href": "#/africa" }
+  },
+  "model": {
+    "eyebrow": "Our Approach",
+    "title": "The ministry model.",
+    "titleHtml": "<span>The ministry</span> <em>model.</em>",
+    "cta": { "label": "Start with community transformation", "href": "#/africa" },
+    "sideLead": "The work is rooted in churches already present in the village. Pastors gather neighbours so faith, food, water, health, work, and leadership grow together.",
+    "sidePoints": [
+      "Country → nearby group → one community — the same path as the work on the ground",
+      "Local churches lead; PA walks beside for about two years",
+      "Families notice change in daily life, not only in programmes"
+    ],
+    "steps": [
+      {
+        "id": "community",
+        "title": "Community transformation",
+        "text": "Whole-person change led by churches already in the village.",
+        "href": "#/africa",
+        "tone": "gold"
+      },
+      {
+        "id": "leadership",
+        "title": "Leadership development",
+        "text": "Build confident, capable and ethical leaders.",
+        "href": "#work-leadership",
+        "tone": "green"
+      },
+      {
+        "id": "shalom",
+        "title": "Shalom Groups",
+        "text": "Small groups. Big change.",
+        "href": "#work-shalom",
+        "tone": "maroon"
+      },
+      {
+        "id": "projects",
+        "title": "PPP & CHIPs",
+        "text": "Partnerships for people and infrastructure.",
+        "href": "#work-projects",
+        "tone": "gold"
+      },
+      {
+        "id": "journey",
+        "title": "2-year transformation journey",
+        "text": "From engagement to lasting transformation.",
+        "href": "#work-journey",
+        "tone": "green"
+      }
+    ]
+  },
+  "leadership": {
+    "eyebrow": "Leadership development",
+    "title": "Pastors grow in awareness, ability, and action.",
+    "titleHtml": "<span>Pastors grow in awareness,</span> <em>ability, and action.</em>",
+    "lead": "Triple-A leadership is how pastor leaders mature through the journey — vision, skill, and practice.",
+    "cta": { "label": "Open leadership growth", "href": "#/work/leadership" }
+  },
+  "shalom": {
+    "eyebrow": "Shalom Groups",
+    "title": "30–50 leaders in each community.",
+    "titleHtml": "<span>30–50 leaders</span> <em>in each community.</em>",
+    "lead": "Each community develops Shalom groups who drive discipleship, cohesion, and local initiative — the engine of lasting change.",
+    "stat": "30–50",
+    "statLabel": "leaders per group",
+    "cta": { "label": "See communities", "href": "#/africa" }
+  },
+  "projects": {
+    "eyebrow": "PPP & CHIPs",
+    "title": "Community-led projects owned locally.",
+    "titleHtml": "<span>Community-led projects</span> <em>owned locally.</em>",
+    "lead": "Pastor-Planned Projects and church-led initiatives turn training into water, farming, health, and livelihoods — owned by the community.",
+    "items": [
+      {
+        "title": "Pastor-Planned Projects (PPPs)",
+        "text": "Local plans for water, farming, health, and more."
+      },
+      {
+        "title": "Church-led initiatives (CHIPs)",
+        "text": "Skills and income work that spreads person to person."
+      },
+      {
+        "title": "Local ownership first",
+        "text": "Communities mobilise their own resources before outside support."
+      }
+    ],
+    "cta": { "label": "Open community projects", "href": "#/work/projects" }
+  },
+  "journey": {
+    "eyebrow": "2-year transformation journey",
+    "title": "A clear path from first steps to multiplication.",
+    "titleHtml": "<span>A clear path</span> <em>from first steps to multiplication.</em>",
+    "lead": "Every community walks five stages over about 24 months — tracked so progress stays visible without becoming a dashboard.",
+    "cta": { "label": "Open the full journey", "href": "#/work/journey" }
+  },
+  "resources": {
+    "eyebrow": "Resource mobilisation / local ownership",
+    "title": "Local ownership that lasts.",
+    "titleHtml": "<span>Local ownership</span> <em>that lasts.</em>",
+    "lead": "Communities mobilise local resources and partnerships. The work is designed so churches keep going after the training season ends.",
+    "points": [
+      "Local contributions and partnerships come first",
+      "Outside support fills gaps — it does not replace ownership",
+      "Progress continues when PA steps back"
+    ],
+    "cta": { "label": "See our results", "href": "#/scorecard" }
+  },
+  "ctaBand": {
+    "eyebrow": "Next step",
+    "title": "See the work where it happens.",
+    "titleHtml": "<span>See the work</span> <em>where it happens.</em>",
+    "lead": "Open a country, follow a community journey, or read what is changing on the ground.",
+    "primaryCta": { "label": "Where we work", "href": "#/africa" },
+    "secondaryCta": { "label": "Read stories", "href": "#/stories" }
+  }
+}

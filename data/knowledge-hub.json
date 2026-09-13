@@ -1,28 +1,74 @@
 {
-  "library": {
-    "title": "Stories & reports",
-    "subtitle": "Field stories and short packs you can read or download.",
-    "sections": [
-      { "id": "case-studies", "label": "Case studies", "anchor": "res-case-studies" },
-      { "id": "packs", "label": "Data packs", "anchor": "res-packs" }
-    ],
-    "filters": {
-      "countryLabel": "Country",
-      "programLabel": "Programme",
-      "allCountries": "All countries",
-      "allPrograms": "All programmes"
-    },
-    "connect": {
-      "title": "Connect with us",
-      "description": "Follow Possibilities Africa for field stories and ministry updates."
-    },
-    "footerNote": "Report files will be served from the community tracking API. Update data/reports.json or connect your backend — the UI reads the same JSON shape."
+  "hero": {
+    "eyebrow": "Knowledge Hub",
+    "title": "Knowledge Hub",
+    "titleHtml": "<span>Knowledge</span> <em>Hub.</em>",
+    "lead": "PA as a source of knowledge, learning and evidence.",
+    "image": "assets/field-reports/cover.jpg"
   },
-  "categories": [
-    { "id": "reports", "title": "Ministry Reports", "description": "Monthly, quarterly, and annual field reports from across the PA network.", "icon": "📊" },
-    { "id": "case-studies", "title": "Case Studies", "description": "Documented transformation outcomes with measurable community impact.", "icon": "📋" },
-    { "id": "insights", "title": "Structured Insights", "description": "Downloadable analysis packs — trends, comparisons, and performance data.", "icon": "💡" },
-    { "id": "programmes", "title": "Programme Materials", "description": "Leadership, discipleship, economic productivity, youth, and citizenship resources.", "icon": "🎯" }
+  "library": {
+    "title": "Search and filters",
+    "subtitle": "Search by keyword, then filter by type, country, or programme.",
+    "searchPlaceholder": "Search reports, guides, videos…",
+    "filters": {
+      "typeLabel": "Type",
+      "countryLabel": "Country",
+      "allTypes": "All types",
+      "allCountries": "All countries",
+      "programLabel": "Programme",
+      "allPrograms": "All programmes"
+    }
+  },
+  "collections": [
+    {
+      "id": "reports",
+      "label": "Reports",
+      "title": "Reports",
+      "description": "Monthly, quarterly, and annual field reports from across the network.",
+      "href": "#kh-reports"
+    },
+    {
+      "id": "research",
+      "label": "Research",
+      "title": "Research",
+      "description": "Evidence briefs and analysis that sit beside programme decisions.",
+      "href": "#kh-research"
+    },
+    {
+      "id": "case-studies",
+      "label": "Case studies",
+      "title": "Case studies",
+      "description": "Documented transformation outcomes with measurable community impact.",
+      "href": "#kh-case-studies"
+    },
+    {
+      "id": "guides",
+      "label": "Guides",
+      "title": "Guides",
+      "description": "Practical how-to resources for pastors, facilitators, and partners.",
+      "href": "#kh-guides"
+    },
+    {
+      "id": "training",
+      "label": "Training resources",
+      "title": "Training resources",
+      "description": "Curriculum outlines and materials used in the two-year journey.",
+      "href": "#kh-training"
+    },
+    {
+      "id": "publications",
+      "label": "Publications",
+      "title": "Publications",
+      "description": "Newsletters and published ministry updates.",
+      "href": "#kh-publications"
+    },
+    {
+      "id": "videos",
+      "label": "Videos",
+      "title": "Videos",
+      "description": "Field films and teaching clips from communities.",
+      "href": "#kh-videos"
+    }
   ],
   "programs": [
     "Transformational Leadership",
@@ -31,77 +77,65 @@
     "Youth Mentoring",
     "Responsible Citizenship"
   ],
-  "focusAreas": [
-    { "id": "reports", "label": "Ministry Reports", "href": "#/resources/cases" },
-    { "id": "case-studies", "label": "Case Studies", "href": "#/resources/cases" },
-    { "id": "programmes", "label": "Programme Materials", "href": "#res-categories" }
-  ],
-  "atlasThemes": [
-    {
-      "id": "leadership",
-      "label": "Leadership",
-      "accent": "#c4842c",
-      "bg": "linear-gradient(180deg, #fdf8f0 0%, #faf3e6 100%)",
-      "stat": { "headline": "627", "context": "pastors in the leadership journey across the PA network" },
-      "intro": "Pastor-led networks sustain discipleship and community engagement — even through conflict and drought."
-    },
-    {
-      "id": "communities",
-      "label": "Communities",
-      "accent": "#3d8f8f",
-      "bg": "linear-gradient(180deg, #f0f8f8 0%, #e8f4f4 100%)",
-      "stat": { "headline": "59", "context": "communities tracked with holistic transformation data" },
-      "intro": "From awareness to multiplication — communities progress through measurable journey stages."
-    },
-    {
-      "id": "prosperity",
-      "label": "Prosperity",
-      "accent": "#d4a017",
-      "bg": "linear-gradient(180deg, #fef8ec 0%, #fdf3dc 100%)",
-      "stat": { "headline": "210+", "context": "income-generating activities launched through economic productivity programmes" },
-      "intro": "Cooperatives, skill transfer, and person-to-person models lift household income across catchments."
-    },
-    {
-      "id": "water",
-      "label": "Water & Land",
-      "accent": "#3d7a52",
-      "bg": "linear-gradient(180deg, #eef6f0 0%, #e4f0e8 100%)",
-      "stat": { "headline": "14", "context": "water initiatives built by communities in Kwale South alone" },
-      "intro": "Trench dams, irrigation, and land restoration turn seasonal scarcity into year-round productivity."
-    },
-    {
-      "id": "data",
-      "label": "Data & Reports",
-      "accent": "#7b6fad",
-      "bg": "linear-gradient(180deg, #f3f0f8 0%, #ebe6f4 100%)",
-      "stat": { "headline": "4", "context": "published ministry reports with downloadable insight packs" },
-      "intro": "Structured data, field reports, and analysis packs guide programme decisions across the network."
-    }
-  ],
-  "featuredStories": [
-    {
-      "title": "How the work is going",
-      "subtitle": "Our results",
-      "description": "See communities, homes, and leadership — and where more support may help.",
-      "href": "#/scorecard",
-      "cta": "See our results",
-      "theme": "data"
-    },
-    {
-      "title": "The State of Field Data",
-      "subtitle": "Data for development",
-      "description": "For many communities, the data guiding ministry decisions are years out of date. PA's platform makes transformation visible to programme leaders.",
-      "href": "#/africa",
-      "cta": "Browse countries",
-      "theme": "communities"
-    }
-  ],
-  "socialLinks": [
-    { "id": "facebook", "label": "Facebook", "href": "https://www.facebook.com/PossibilitiesAfricaPA" },
-    { "id": "x", "label": "X", "href": "https://x.com/PossibilitiesK" },
-    { "id": "youtube", "label": "YouTube", "href": "https://www.youtube.com/@possibilitiesafrica5288" },
-    { "id": "instagram", "label": "Instagram", "href": "https://www.instagram.com/possibilitiesafrica/" }
-  ],
+  "items": {
+    "research": [
+      {
+        "id": "res-leadership-correlation",
+        "title": "Pastor leadership and community progress",
+        "summary": "Analysis of how pastor engagement correlates with journey-stage advancement across the network.",
+        "year": "2024",
+        "countryId": null,
+        "href": "#/scorecard"
+      }
+    ],
+    "guides": [
+      {
+        "id": "guide-shalom-start",
+        "title": "Starting a Shalom group",
+        "summary": "A short facilitator guide for forming groups of 30–50 leaders in a community.",
+        "year": "2024",
+        "program": "Discipleship",
+        "href": "#/work"
+      },
+      {
+        "id": "guide-ppp-planning",
+        "title": "Planning a Pastor-Planned Project",
+        "summary": "Steps for churches to design water, farming, or livelihood projects with local ownership.",
+        "year": "2023",
+        "program": "Responsible Citizenship",
+        "href": "#/work"
+      }
+    ],
+    "training": [
+      {
+        "id": "train-triple-a",
+        "title": "Triple-A leadership overview",
+        "summary": "Awareness, Ability, and Action — how pastor leaders grow through the journey.",
+        "year": "2024",
+        "program": "Transformational Leadership",
+        "href": "#/work/leadership"
+      },
+      {
+        "id": "train-journey-stages",
+        "title": "Two-year journey stage cards",
+        "summary": "Printable stage descriptions from Awareness through Multiplication.",
+        "year": "2024",
+        "program": "Discipleship",
+        "href": "#/work/journey"
+      }
+    ],
+    "publications": [
+      {
+        "id": "pub-sep-2024",
+        "title": "September 2024 Newsletter",
+        "summary": "Field newsletter covering Kenya, Malawi, and Ethiopia updates.",
+        "year": "2024",
+        "href": "https://africa.possibilitiesafrica.org/wp-content/uploads/2024/10/PA-Newsletter-for-September.pdf",
+        "external": true
+      }
+    ],
+    "videos": []
+  },
   "caseStudies": [
     {
       "id": "cs-kwale-water",
@@ -123,11 +157,10 @@
       "type": "case-study",
       "program": "Economic Productivity",
       "countryId": "mw",
-      "catchmentId": "mw_nkhotakota_south",
-      "summary": "Person-to-person skill transfer and cooperative models lifted household income in Benga and surrounding communities.",
-      "outcomes": ["210 income activities", "Scone business model replicated", "18% agriculture sector growth"],
-      "downloadUrl": "#download-insight-pack",
-      "storySlug": "mary-scone-business"
+      "catchmentId": null,
+      "summary": "CHIP groups and savings culture helping households diversify income beyond seasonal farming.",
+      "outcomes": ["Shalom savings groups active", "Household enterprises expanding"],
+      "storySlug": "mary-mvileras-decision-to-make-a-living-out-of-selling-scones"
     },
     {
       "id": "cs-ethiopia-leadership",
@@ -137,10 +170,9 @@
       "program": "Transformational Leadership",
       "countryId": "et",
       "catchmentId": null,
-      "summary": "Pastor-led networks sustained community engagement and discipleship programmes through conflict-affected regions.",
-      "outcomes": ["12 active communities", "Leadership score avg 55", "Shalom groups forming"],
-      "downloadUrl": "#download-insight-pack",
-      "storySlug": "pastor-abdisa-conflict"
+      "summary": "Pastors continuing holistic ministry training and youth enterprise work despite regional challenges.",
+      "outcomes": ["Bible study groups growing", "Youth business training underway"],
+      "storySlug": "pastor-abdisa-a-man-caught-between-ongoing-rebel-conflicts"
     }
   ],
   "insightPacks": [
@@ -167,6 +199,48 @@
       "format": "JSON",
       "size": "12 KB",
       "topics": ["CBC", "Readiness", "Journey stages"]
+    }
+  ],
+  "featuredStories": [
+    {
+      "title": "How the work is going",
+      "subtitle": "Our results",
+      "description": "See communities, homes, and leadership — and where more support may help.",
+      "href": "#/scorecard",
+      "cta": "See our results",
+      "theme": "data"
+    },
+    {
+      "title": "Field reports",
+      "subtitle": "Evidence from the ground",
+      "description": "Monthly ministry reports and annual summaries from across the network.",
+      "href": "#/resources/cases",
+      "cta": "Open reports",
+      "theme": "communities"
+    }
+  ],
+  "socialLinks": [
+    { "id": "facebook", "label": "Facebook", "href": "https://www.facebook.com/PossibilitiesAfricaPA" },
+    { "id": "x", "label": "X", "href": "https://x.com/PossibilitiesK" },
+    { "id": "youtube", "label": "YouTube", "href": "https://www.youtube.com/@possibilitiesafrica5288" },
+    { "id": "instagram", "label": "Instagram", "href": "https://www.instagram.com/possibilitiesafrica/" }
+  ],
+  "atlasThemes": [
+    {
+      "id": "leadership",
+      "label": "Leadership",
+      "accent": "#e8a91a",
+      "bg": "linear-gradient(180deg, #fff9ef 0%, #faf7f2 100%)",
+      "stat": { "headline": "627", "context": "pastors in the leadership journey across the PA network" },
+      "intro": "Pastor-led networks sustain discipleship and community engagement — even through conflict and drought."
+    },
+    {
+      "id": "communities",
+      "label": "Communities",
+      "accent": "#3f9a4a",
+      "bg": "linear-gradient(180deg, #f3faf4 0%, #eef6ef 100%)",
+      "stat": { "headline": "59", "context": "communities tracked with holistic transformation data" },
+      "intro": "From awareness to multiplication — communities progress through measurable journey stages."
     }
   ]
 }

@@ -90,7 +90,7 @@ export function renderByTheNumbers(hub) {
       <div class="container">
         <header class="wb-numbers__head">
           <h2>By the numbers: ${hub.countryName}</h2>
-          <a href="#/country/${hub.country.slug}/data" class="wb-numbers__more" data-link>Explore more data</a>
+          <a href="#/scorecard" class="wb-numbers__more" data-link>Explore more data</a>
         </header>
         <div class="wb-numbers__row">
           <div class="wb-numbers__track" data-num-track>${items}</div>
@@ -191,7 +191,7 @@ function renderTabPanel(tab, isActive) {
     tab.id === "dashboard"
       ? `<p>${more.replace(
           "open Our results",
-          `<a href="#/scorecard" data-link>open Our results</a>`
+          `<a href="#/scorecard" data-link>open Impact &amp; Data</a>`
         )}</p>`
       : `<p>${more}</p>`;
   return `

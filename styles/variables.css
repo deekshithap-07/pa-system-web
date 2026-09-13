@@ -1,18 +1,29 @@
 :root {
-  --pa-navy: #002B5C;
-  --pa-blue: #009FDA;
-  --pa-blue-dark: #0077B6;
-  --pa-blue-light: #E8F4FC;
-  --pa-gold: #F5A623;
-  --pa-slate: #4A5568;
-  --pa-muted: #718096;
-  --pa-bg: #F7F9FC;
+  /* Brand — from Possibilities Africa logo */
+  --pa-maroon: #5c2428;
+  --pa-maroon-dark: #3d181c;
+  --pa-maroon-deep: #2a1014;
+  --pa-gold: #e8a91a;
+  --pa-gold-bright: #f0b429;
+  --pa-gold-soft: #f5d78a;
+  --pa-green: #3f9a4a;
+  --pa-green-dark: #2f7a38;
+
+  /* Semantic aliases used across the site */
+  --pa-navy: var(--pa-maroon);
+  --pa-blue: var(--pa-gold);
+  --pa-blue-dark: #c48914;
+  --pa-blue-light: #f8f1e8;
+  --pa-slate: #4a403c;
+  --pa-muted: #7a6e68;
+  --pa-bg: #faf7f2;
   --pa-white: #ffffff;
+
   --font-sans: "Open Sans", system-ui, sans-serif;
   --header-h: 4rem;
   --max-w: 72rem;
   --radius: 0.75rem;
-  --shadow: 0 4px 24px rgba(0, 43, 92, 0.08);
-  --shadow-lg: 0 12px 48px rgba(0, 43, 92, 0.15);
+  --shadow: 0 4px 24px rgba(92, 36, 40, 0.08);
+  --shadow-lg: 0 12px 48px rgba(92, 36, 40, 0.15);
   --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
 }

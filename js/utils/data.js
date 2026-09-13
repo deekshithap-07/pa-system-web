@@ -24,6 +24,10 @@ const FILES = {
   insightsAnalytics: "data/insights-analytics.json",
   ministryModel: "data/ministry-model.json",
   workLocations: "data/work-locations.json",
+  ourWork: "data/our-work.json",
+  whereWeWork: "data/where-we-work.json",
+  aboutPa: "data/about-pa.json",
+  newsUpdates: "data/news-updates.json",
 };
 
 async function load(key) {
@@ -35,7 +39,7 @@ async function load(key) {
 }
 
 export async function getAllData() {
-  const [countries, catchments, communities, stories, reports, charts, mapPaths, home, mapMetrics, countryHubs, catchmentHubs, africaIntelligence, geoLocations, scorecard, knowledgeHub, insightsAnalytics, ministryModel, workLocations] =
+  const [countries, catchments, communities, stories, reports, charts, mapPaths, home, mapMetrics, countryHubs, catchmentHubs, africaIntelligence, geoLocations, scorecard, knowledgeHub, insightsAnalytics, ministryModel, workLocations, ourWork, whereWeWork, aboutPa, newsUpdates] =
     await Promise.all([
       load("countries"),
       load("catchments"),
@@ -55,8 +59,12 @@ export async function getAllData() {
       load("insightsAnalytics"),
       load("ministryModel"),
       load("workLocations"),
+      load("ourWork"),
+      load("whereWeWork"),
+      load("aboutPa"),
+      load("newsUpdates"),
     ]);
-  return { countries, catchments, communities, stories, reports, charts, mapPaths, home, mapMetrics, countryHubs, catchmentHubs, africaIntelligence, geoLocations, scorecard, knowledgeHub, insightsAnalytics, ministryModel, workLocations };
+  return { countries, catchments, communities, stories, reports, charts, mapPaths, home, mapMetrics, countryHubs, catchmentHubs, africaIntelligence, geoLocations, scorecard, knowledgeHub, insightsAnalytics, ministryModel, workLocations, ourWork, whereWeWork, aboutPa, newsUpdates };
 }
 
 export function getCountryBySlug(countries, slug) {

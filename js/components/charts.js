@@ -10,7 +10,7 @@ export function destroyCharts() {
   instances.length = 0;
 }
 
-const COLORS = ["#009FDA", "#002B5C", "#0077B6", "#F5A623", "#16a34a", "#4A5568"];
+const COLORS = ["#e8a91a", "#5c2428", "#c48914", "#3f9a4a", "#8b3d42", "#4a403c"];
 
 function sliceColors(count, accent) {
   if (count <= COLORS.length) return COLORS.slice(0, count);
@@ -71,7 +71,7 @@ export function renderChart(canvas, config) {
   const rawType = config.type === "area" ? "line" : config.type;
   const type = rawType === "doughnut" ? "doughnut" : rawType;
   const isRound = type === "pie" || type === "radar" || type === "doughnut";
-  const accent = config.color || "#009FDA";
+  const accent = config.color || "#e8a91a";
   const dataLen = config.data?.length || 0;
 
   let datasets;

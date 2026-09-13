@@ -945,7 +945,7 @@
 
 .sc-report-card:hover {
   border-color: var(--pa-blue);
-  box-shadow: 0 4px 20px rgba(0, 43, 92, 0.06);
+  box-shadow: 0 4px 20px rgba(92, 36, 40, 0.06);
 }
 
 .sc-report-card__meta {

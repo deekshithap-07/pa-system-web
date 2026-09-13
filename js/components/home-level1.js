@@ -91,6 +91,7 @@ export function renderAfricaMapSection(section, opts = {}) {
     <section class="l1-map" id="${sectionId}" aria-labelledby="${sectionId}-title">
       <div class="container l1-map__head-wrap">
         <header class="l1-section-head" data-reveal>
+          ${section?.eyebrow ? `<p class="eyebrow">${section.eyebrow}</p>` : ""}
           <h2 id="${sectionId}-title">${section?.title || "Interactive map of Africa"}</h2>
           <p>${section?.description || "Click a country to explore data and drill into catchments and communities. Scroll on the map to zoom; scroll outside to continue down the page."}</p>
         </header>
@@ -123,8 +124,8 @@ export function mountHomeGrowthCharts(root, data) {
         datasets: [
           {
             data: cfg.data,
-            borderColor: cfg.color || "#009FDA",
-            backgroundColor: cfg.type === "area" ? `${cfg.color || "#009FDA"}28` : cfg.color || "#009FDA",
+            borderColor: cfg.color || "#e8a91a",
+            backgroundColor: cfg.type === "area" ? `${cfg.color || "#e8a91a"}28` : cfg.color || "#e8a91a",
             fill: cfg.type === "area",
             tension: 0.35,
             borderWidth: 2,

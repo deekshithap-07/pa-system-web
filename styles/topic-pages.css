@@ -18,7 +18,7 @@
   gap: 0.35rem;
   font-size: 0.9rem;
   font-weight: 700;
-  color: #002b5c;
+  color: #5c2428;
   text-decoration: none;
 }
 
@@ -38,14 +38,14 @@
   font-weight: 800;
   letter-spacing: 0.16em;
   text-transform: uppercase;
-  color: #0077b6;
+  color: #c48914;
 }
 
 .topic-hub__title {
   margin: 0.45rem 0 0.7rem;
   font-size: clamp(1.5rem, 3vw, 2.05rem);
   font-weight: 800;
-  color: #002b5c;
+  color: #5c2428;
   letter-spacing: -0.02em;
 }
 
@@ -79,7 +79,7 @@
 
 .topic-hub__card:hover {
   transform: translateY(-3px);
-  box-shadow: 0 10px 28px rgba(0, 43, 92, 0.1);
+  box-shadow: 0 10px 28px rgba(92, 36, 40, 0.1);
   text-decoration: none;
 }
 
@@ -87,13 +87,13 @@
   display: block;
   height: 8.5rem;
   background:
-    linear-gradient(180deg, rgba(0, 43, 92, 0.08), rgba(0, 43, 92, 0.35)),
-    linear-gradient(145deg, #7eb3c4, #002b5c);
+    linear-gradient(180deg, rgba(92, 36, 40, 0.08), rgba(92, 36, 40, 0.35)),
+    linear-gradient(145deg, #7eb3c4, #5c2428);
 }
 
 .topic-hub__card--0 .topic-hub__visual {
   background:
-    linear-gradient(180deg, rgba(0, 43, 92, 0.05), rgba(0, 43, 92, 0.32)),
+    linear-gradient(180deg, rgba(92, 36, 40, 0.05), rgba(92, 36, 40, 0.32)),
     linear-gradient(145deg, #5aa8c8, #0a3a5c);
 }
 .topic-hub__card--1 .topic-hub__visual {
@@ -131,13 +131,13 @@
   font-weight: 800;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: #0077b6;
+  color: #c48914;
 }
 
 .topic-hub__card h3 {
   margin: 0.45rem 0 0.4rem;
   font-size: 1.22rem;
-  color: #002b5c;
+  color: #5c2428;
 }
 
 .topic-hub__card p {
@@ -152,7 +152,7 @@
   margin-top: 1rem;
   font-size: 0.88rem;
   font-weight: 700;
-  color: #0077b6;
+  color: #c48914;
 }
 
 .wbs-glance {
@@ -165,13 +165,13 @@
 .wbs-glance__item {
   padding: 1.1rem 1.2rem;
   background: #f8fafc;
-  border-left: 4px solid #0077b6;
+  border-left: 4px solid #c48914;
 }
 
 .wbs-glance__item strong {
   display: block;
   font-size: 1.65rem;
-  color: #002b5c;
+  color: #5c2428;
 }
 
 .wbs-glance__item span {
@@ -201,14 +201,14 @@
 }
 
 .wbs-country-tile:hover {
-  border-color: #0077b6;
-  box-shadow: 0 8px 22px rgba(0, 43, 92, 0.08);
+  border-color: #c48914;
+  box-shadow: 0 8px 22px rgba(92, 36, 40, 0.08);
 }
 
 .wbs-country-tile strong {
   display: block;
   font-size: 1.15rem;
-  color: #002b5c;
+  color: #5c2428;
 }
 
 .wbs-country-tile span {
@@ -255,7 +255,7 @@
 
 .wbs-arc__chapter {
   padding: 2.5rem 0;
-  border-top: 1px solid rgba(0, 43, 92, 0.08);
+  border-top: 1px solid rgba(92, 36, 40, 0.08);
 }
 
 .wbs-arc__chapter--past {
@@ -279,7 +279,7 @@
 .wbs-arc__head h2 {
   margin: 0.35rem 0 0;
   font-size: clamp(1.35rem, 2.5vw, 1.85rem);
-  color: #002b5c;
+  color: #5c2428;
   letter-spacing: -0.02em;
 }
 
@@ -289,7 +289,7 @@
   font-weight: 700;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: #009fda;
+  color: #e8a91a;
 }
 
 .wbs-arc__text {
@@ -309,7 +309,7 @@
 .wbs-arc__stat {
   padding: 1rem 1.1rem;
   background: rgba(255, 255, 255, 0.85);
-  border: 1px solid rgba(0, 43, 92, 0.08);
+  border: 1px solid rgba(92, 36, 40, 0.08);
   border-radius: 10px;
 }
 
@@ -334,7 +334,7 @@
 }
 
 .wbs-arc__stat-row strong {
-  color: #002b5c;
+  color: #5c2428;
   font-size: 1.1rem;
 }
 
@@ -345,14 +345,14 @@
 .wbs-arc__chart-card {
   padding: 1.25rem;
   background: #fff;
-  border: 1px solid rgba(0, 43, 92, 0.08);
+  border: 1px solid rgba(92, 36, 40, 0.08);
   border-radius: 12px;
 }
 
 .wbs-arc__chart-card h3 {
   margin: 0 0 0.35rem;
   font-size: 1rem;
-  color: #002b5c;
+  color: #5c2428;
 }
 
 .wbs-arc__chart-note {
@@ -365,8 +365,8 @@
 .wbs-arc__quote {
   margin: 0;
   padding: 1.25rem 1.5rem;
-  border-left: 4px solid #009fda;
-  background: rgba(0, 159, 218, 0.06);
+  border-left: 4px solid #e8a91a;
+  background: rgba(232, 169, 26, 0.06);
   border-radius: 0 10px 10px 0;
 }
 
@@ -396,7 +396,7 @@
 .wbs-arc__subhead {
   margin: 0 0 0.75rem;
   font-size: 0.95rem;
-  color: #002b5c;
+  color: #5c2428;
 }
 
 .wbs-arc__findings {
@@ -412,12 +412,12 @@
   padding: 1rem;
   background: #f8fafc;
   border-radius: 10px;
-  border: 1px solid rgba(0, 43, 92, 0.06);
+  border: 1px solid rgba(92, 36, 40, 0.06);
 }
 
 .wbs-arc__findings strong {
   display: block;
-  color: #002b5c;
+  color: #5c2428;
 }
 
 .wbs-arc__change {
@@ -425,7 +425,7 @@
   margin: 0.25rem 0 0.35rem;
   font-size: 0.78rem;
   font-weight: 600;
-  color: #009fda;
+  color: #e8a91a;
 }
 
 .wbs-arc__findings p {
@@ -454,7 +454,7 @@
 }
 
 .wbs-arc__dims strong {
-  color: #002b5c;
+  color: #5c2428;
 }
 
 .wbs-arc__dims em {
@@ -486,7 +486,7 @@
 .wbs-arc__watch li {
   padding: 0.85rem 1rem;
   background: #fff;
-  border: 1px solid rgba(0, 43, 92, 0.08);
+  border: 1px solid rgba(92, 36, 40, 0.08);
   border-radius: 10px;
 }
 
@@ -495,7 +495,7 @@
   margin-left: 0.5rem;
   font-size: 0.82rem;
   font-weight: 700;
-  color: #009fda;
+  color: #e8a91a;
 }
 
 .wbs-arc__watch p {
@@ -518,7 +518,7 @@
 }
 
 .wbs-arc__driver--medium {
-  border-left-color: #009fda;
+  border-left-color: #e8a91a;
 }
 
 .wbs-arc__driver em {
@@ -552,7 +552,7 @@
 }
 
 .wbs-data-sheet__note a {
-  color: #0077b6;
+  color: #c48914;
   font-weight: 600;
 }
 
@@ -563,7 +563,7 @@
 .wbs-data-sheet__head h2 {
   margin: 0 0 0.35rem;
   font-size: 1.25rem;
-  color: #002b5c;
+  color: #5c2428;
 }
 
 .wbs-data-sheet__head p {
@@ -581,7 +581,7 @@
   margin-top: 0.5rem;
   font-size: 0.82rem;
   font-weight: 600;
-  color: #009fda;
+  color: #e8a91a;
 }
 
 .wbs-charts-grid--data {
@@ -592,7 +592,7 @@
 
 .wbs-chart-card--data {
   background: #fff;
-  border: 1px solid rgba(0, 43, 92, 0.08);
+  border: 1px solid rgba(92, 36, 40, 0.08);
   border-radius: 12px;
   padding: 1.25rem;
 }
@@ -600,7 +600,7 @@
 .wbs-chart-card--data h3 {
   margin: 0 0 0.35rem;
   font-size: 0.95rem;
-  color: #002b5c;
+  color: #5c2428;
 }
 
 .wbs-chart-card--data p {

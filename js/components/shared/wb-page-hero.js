@@ -156,6 +156,7 @@ export function renderWbPageHero({
   visualHtml = "",
   asideHtml = "",
   extraClass = "",
+  afterActionsHtml = "",
 } = {}) {
   const split = Boolean((variant === "split" || asideHtml) && (visualHtml || asideHtml));
   const isHome = skin === "spotlight";
@@ -182,6 +183,7 @@ export function renderWbPageHero({
             <h1 class="wph__title">${title}</h1>
             ${lead ? `<p class="wph__lead">${lead}</p>` : ""}
             ${renderActions(actions)}
+            ${afterActionsHtml || ""}
           </div>
           ${split ? `<div class="${visualClass}">${visualHtml || asideHtml}</div>` : ""}
         </div>

@@ -1,50 +1,62 @@
-import { renderWbPageHero } from "./shared/wb-page-hero.js";
-
-/** World Bank homepage hero — spotlight + topic cards (not the main menu). */
-export function renderHero(hero) {
-  const featured = hero.featured || {};
-
-  return renderWbPageHero({
-    id: "home-hero",
-    tone: "navy",
-    eyebrow: featured.eyebrow || hero.eyebrow || "Possibilities Africa",
-    title: featured.title || hero.title,
-    lead: featured.description || hero.description,
-    actions: [
-      { label: hero.primaryCta?.label || "Explore countries", href: hero.primaryCta?.target || "#/africa" },
-      {
-        label: hero.secondaryCta?.label || "Read field reports",
-        href: hero.secondaryCta?.target || "#/resources/cases",
-        primary: false,
-      },
-    ],
-    related: [],
-    extraClass: "wph--home-stack",
+/** Full-bleed photo hero — home only. */
+export function renderHero(hero = {}) {
+  const lines = (hero.headline || []).map((line) => {
+    const text = typeof line === "string" ? line : line.text || "";
+    const accent = typeof line === "object" && line.accent;
+    return `<span class="home-photo-hero__line${accent ? " home-photo-hero__line--accent" : ""}">${text}</span>`;
   });
+
+  const primary = hero.primaryCta || { label: "Explore Our Work", target: "#/work" };
+  const secondary = hero.secondaryCta || { label: "See Our Impact", target: "#/scorecard" };
+  const image = hero.image || "assets/home-hero/woman.jpg";
+  const watch = hero.watchStory || null;
+  const watchHref = watch?.href || "#/stories";
+  const watchAttrs = watchHref.startsWith("#/")
+    ? `href="${watchHref}" data-link`
+    : `href="${watchHref}"${watchHref.startsWith("http") ? ` target="_blank" rel="noopener noreferrer"` : ""}`;
+
+  return `
+    <header class="home-photo-hero" id="home-hero" data-home-photo-hero>
+      <div class="home-photo-hero__media" aria-hidden="true">
+        <img class="home-photo-hero__img" src="${image}" alt="" fetchpriority="high">
+        <span class="home-photo-hero__veil"></span>
+        <span class="home-photo-hero__grain"></span>
+      </div>
+      <div class="home-photo-hero__inner">
+        <div class="home-photo-hero__copy">
+          <p class="home-photo-hero__eyebrow">${hero.eyebrow || "Possibilities Africa"}</p>
+          <h1 class="home-photo-hero__title">${lines.join("")}</h1>
+          ${hero.description ? `<p class="home-photo-hero__lead">${hero.description}</p>` : ""}
+          <div class="home-photo-hero__actions">
+            <a href="${primary.target || "#/work"}" class="home-photo-hero__btn home-photo-hero__btn--solid" data-link>${primary.label || "Explore Our Work"} <span aria-hidden="true">→</span></a>
+            <a href="${secondary.target || "#/scorecard"}" class="home-photo-hero__btn home-photo-hero__btn--ghost" data-link>${secondary.label || "See Our Impact"}</a>
+          </div>
+        </div>
+        ${
+          watch
+            ? `<a class="home-photo-hero__watch" ${watchAttrs}>
+                <span class="home-photo-hero__watch-play" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M8 5.5v13l11-6.5L8 5.5z"/></svg>
+                </span>
+                <span class="home-photo-hero__watch-copy">
+                  <span class="home-photo-hero__watch-label">${watch.label || "Watch Our Story"}</span>
+                  ${watch.duration ? `<span class="home-photo-hero__watch-time">${watch.duration}</span>` : ""}
+                </span>
+              </a>`
+            : ""
+        }
+      </div>
+    </header>`;
 }
 
 
-/** Deloitte-style site overview — pill tabs + flowing dropdown panels. */
+/** Site overview — arrow carousel instead of tab pills. */
 export function renderHomeSiteOverview(overview = {}) {
-  const tabs = overview.tabs || [];
-  if (!tabs.length) return "";
+  const slides = overview.tabs || [];
+  if (!slides.length) return "";
 
-  const tabButtons = tabs
-    .map(
-      (tab, i) => `<button
-        type="button"
-        class="home-explorer__pill${i === 0 ? " is-active" : ""}"
-        role="tab"
-        id="site-overview-tab-${i}"
-        aria-selected="${i === 0 ? "true" : "false"}"
-        aria-expanded="${i === 0 ? "true" : "false"}"
-        aria-controls="site-overview-panel-${i}"
-        data-explorer-tab="${i}"
-      >${tab.label}</button>`
-    )
-    .join("");
-
-  const panels = tabs
+  const total = String(slides.length).padStart(2, "0");
+  const panels = slides
     .map((tab, i) => {
       const bullets = (tab.bullets || [])
         .map((item) => `<li>${item}</li>`)
@@ -62,13 +74,14 @@ export function renderHomeSiteOverview(overview = {}) {
       return `<article
         class="home-explorer__panel${i === 0 ? " is-active" : ""}"
         id="site-overview-panel-${i}"
-        role="tabpanel"
-        aria-labelledby="site-overview-tab-${i}"
+        role="group"
+        aria-roledescription="slide"
+        aria-label="${i + 1} of ${slides.length}: ${tab.title || tab.label}"
         data-explorer-panel="${i}"
         data-panel-id="${tab.id || i}"
         ${i === 0 ? "" : "hidden"}
       >
-        <div class="home-explorer__visual home-explorer__visual--${tab.id || i}" aria-hidden="true">
+        <div class="home-explorer__visual home-explorer__visual--${tab.id || i}">
           ${
             tab.image
               ? `<img class="home-explorer__photo" src="${tab.image}" alt="${tab.imageAlt || tab.title || tab.label}" loading="lazy" decoding="async">`
@@ -85,7 +98,7 @@ export function renderHomeSiteOverview(overview = {}) {
           ${highlights ? `<div class="home-explorer__cards">${highlights}</div>` : ""}
           ${
             cta.href
-              ? `<a href="${cta.href}" class="home-explorer__cta" data-link>Open ${cta.label || tab.label} →</a>`
+              ? `<a href="${cta.href}" class="home-explorer__cta" data-link>${cta.label || tab.label} →</a>`
               : ""
           }
         </div>
@@ -93,9 +106,16 @@ export function renderHomeSiteOverview(overview = {}) {
     })
     .join("");
 
+  const ticks = slides
+    .map(
+      (_, i) =>
+        `<button type="button" class="home-reel__tick${i === 0 ? " is-active" : ""}" data-explorer-dot="${i}" aria-label="Show slide ${i + 1}"></button>`
+    )
+    .join("");
+
   return `
     <section
-      class="home-explorer home-explorer--site home-explorer--deloitte"
+      class="home-explorer home-explorer--site home-explorer--deloitte home-explorer--reel"
       id="site-overview"
       data-home-explorer
       data-auto-rotate="false"
@@ -113,10 +133,19 @@ export function renderHomeSiteOverview(overview = {}) {
             ${overview.title ? `<h2 class="home-explorer__title" id="site-overview-title">${overview.title}</h2>` : ""}
             ${overview.lead ? `<p class="home-explorer__intro">${overview.lead}</p>` : ""}
           </div>
-          <div class="home-explorer__pills" role="tablist" aria-label="Explore this website" data-reveal>${tabButtons}</div>
-          <div class="home-explorer__dropdown is-open" data-explorer-dropdown data-reveal>
-            <div class="home-explorer__dropdown-inner">
+          <div class="home-reel" data-reveal tabindex="0">
+            <button type="button" class="home-reel__arrow home-reel__arrow--prev" data-explorer-prev aria-label="Previous">
+              <span aria-hidden="true">←</span>
+            </button>
+            <div class="home-reel__frame" data-explorer-dropdown>
               <div class="home-explorer__panels">${panels}</div>
+            </div>
+            <button type="button" class="home-reel__arrow home-reel__arrow--next" data-explorer-next aria-label="Next">
+              <span aria-hidden="true">→</span>
+            </button>
+            <div class="home-reel__meta">
+              <p class="home-reel__count" data-explorer-count>01 / ${total}</p>
+              <div class="home-reel__ticks" role="tablist" aria-label="Overview slides">${ticks}</div>
             </div>
           </div>
         </div>
@@ -165,8 +194,11 @@ export function bindHomeExplorer(root = document) {
   const tabs = [...section.querySelectorAll("[data-explorer-tab]")];
   const panels = [...section.querySelectorAll("[data-explorer-panel]")];
   const dots = [...section.querySelectorAll("[data-explorer-dot]")];
+  const prevBtn = section.querySelector("[data-explorer-prev]");
+  const nextBtn = section.querySelector("[data-explorer-next]");
+  const countEl = section.querySelector("[data-explorer-count]");
   const progressFill = section.querySelector(".home-explorer__progress-fill");
-  const count = tabs.length;
+  const count = panels.length || tabs.length;
   if (!count) return;
 
   let index = 0;
@@ -202,6 +234,10 @@ export function bindHomeExplorer(root = document) {
     });
 
     dots.forEach((dot, i) => dot.classList.toggle("is-active", open && i === index));
+
+    if (countEl) {
+      countEl.textContent = `${String(index + 1).padStart(2, "0")} / ${String(count).padStart(2, "0")}`;
+    }
 
     if (isDeloitte) {
       syncExplorerDropdown(section, panels[index], open);
@@ -247,6 +283,27 @@ export function bindHomeExplorer(root = document) {
       setStep(Number(dot.dataset.explorerDot), { forceOpen: true });
       stopTimer();
     });
+  });
+
+  prevBtn?.addEventListener("click", () => {
+    paused = true;
+    stopTimer();
+    setStep(index - 1, { forceOpen: true });
+  });
+
+  nextBtn?.addEventListener("click", () => {
+    paused = true;
+    stopTimer();
+    setStep(index + 1, { forceOpen: true });
+  });
+
+  section.addEventListener("keydown", (e) => {
+    if (e.key !== "ArrowLeft" && e.key !== "ArrowRight") return;
+    if (e.target.closest("a, input, textarea")) return;
+    e.preventDefault();
+    paused = true;
+    stopTimer();
+    setStep(index + (e.key === "ArrowRight" ? 1 : -1), { forceOpen: true });
   });
 
   section.addEventListener("mouseenter", () => {
@@ -301,11 +358,12 @@ export function renderHomeKnowledgeBand(section = {}) {
       (card) => {
         const cta = card.cta || {};
         const href = cta.href || "#";
-        const linkAttrs = href.startsWith("#/") ? ` href="${href}" data-link` : ` href="${href}"`;
+        const isInternal = href.startsWith("#/");
+        const extra = isInternal ? ` href="${href}" data-link` : ` href="${href}"${href.startsWith("http") ? ` target="_blank" rel="noopener noreferrer"` : ""}`;
         return `<article class="wb-knowledge-band__card">
           <h3>${card.title}</h3>
           <p>${card.text || ""}</p>
-          <a class="wb-knowledge-band__link"${linkAttrs}>${cta.label || "Learn more"}</a>
+          <a class="wb-knowledge-band__link"${extra}>${cta.label || "Learn more"}</a>
         </article>`;
       }
     )
@@ -315,6 +373,7 @@ export function renderHomeKnowledgeBand(section = {}) {
     <section class="wb-knowledge-band" id="home-knowledge-band" aria-labelledby="home-knowledge-band-title">
       <div class="container wb-knowledge-band__grid">
         <div class="wb-knowledge-band__copy" data-reveal>
+          ${section.eyebrow ? `<p class="wb-knowledge-band__eyebrow">${section.eyebrow}</p>` : ""}
           <h2 class="wb-knowledge-band__title" id="home-knowledge-band-title">${section.title}</h2>
           ${section.lead ? `<p class="wb-knowledge-band__lead">${section.lead}</p>` : ""}
           ${cards ? `<div class="wb-knowledge-band__duo">${cards}</div>` : ""}
@@ -336,20 +395,22 @@ export function renderHomeKnowledgeBand(section = {}) {
     </section>`;
 }
 
-/** Deloitte-style site spotlight — four overview cards with images. */
-export function renderHomeSiteSpotlight(section = {}) {
-  const cards = section.cards || [];
+/** Deloitte/World Bank “stay current” — reports and insights, not field stories. */
+export function renderHomeLatestField(section = {}) {
+  const cards = (section.cards || []).slice(0, 3);
   if (!cards.length) return "";
 
+  const more = section.cta || { label: "All reports", href: "#/resources/cases" };
+  const moreAttrs = more.href?.startsWith("#/") ? ` href="${more.href}" data-link` : ` href="${more.href || "#/resources/cases"}"`;
+
   const cardHtml = cards
-    .slice(0, 4)
     .map((card, i) => {
       const href = card.href || "#";
       const linkAttrs = href.startsWith("#/") ? ` href="${href}" data-link` : ` href="${href}"`;
       return `<a class="home-spotlight__card" ${linkAttrs} style="--i:${i}">
+        ${card.tag ? `<span class="home-spotlight__tag">${card.tag}</span>` : ""}
         <h3 class="home-spotlight__card-title">${card.title}</h3>
         <p class="home-spotlight__card-text">${card.text || ""}</p>
-        ${card.tag ? `<span class="home-spotlight__tag">${card.tag}</span>` : ""}
         <span class="home-spotlight__media">
           ${
             card.image
@@ -362,14 +423,16 @@ export function renderHomeSiteSpotlight(section = {}) {
     .join("");
 
   return `
-    <section class="home-spotlight" id="home-site-spotlight" aria-labelledby="home-spotlight-title">
+    <section class="home-spotlight home-spotlight--latest" id="home-latest-field" aria-labelledby="home-spotlight-title">
       <div class="home-spotlight__bar">
-        <div class="container">
-          <p class="home-spotlight__eyebrow">${section.eyebrow || "Explore the site"}</p>
+        <div class="container home-spotlight__bar-inner">
+          <p class="home-spotlight__eyebrow">${section.eyebrow || "Now on the ground"}</p>
+          <a class="home-spotlight__all"${moreAttrs}>${more.label || "All reports"}</a>
         </div>
       </div>
       <div class="container home-spotlight__body">
         ${section.title ? `<h2 class="home-spotlight__title" id="home-spotlight-title" data-reveal>${section.title}</h2>` : ""}
+        ${section.lead ? `<p class="home-spotlight__lead" data-reveal>${section.lead}</p>` : ""}
         <div class="home-spotlight__grid" data-reveal>${cardHtml}</div>
       </div>
     </section>`;
@@ -452,18 +515,58 @@ export function renderImpactOverview(impact) {
     ? `href="${scorecard.target}" data-link`
     : `href="${scorecard.target || "#/scorecard"}"`;
 
+  const freshness = impact.updatedAt
+    ? `<p class="wb-impact__freshness">${impact.updatedLabel || "Figures last updated"}: <strong>${impact.updatedAt}</strong>${
+        impact.sourceNote ? ` · ${impact.sourceNote}` : ""
+      }</p>`
+    : "";
+
   return `
-    <section class="wb-impact" id="impact-overview">
+    <section class="wb-impact" id="impact-overview" aria-labelledby="impact-overview-title">
       <div class="container">
         <div class="wb-impact__head" data-reveal>
           <div class="wb-impact__head-copy">
             ${impact.eyebrow ? `<p class="wb-impact__eyebrow">${impact.eyebrow}</p>` : ""}
-            <h2 class="wb-impact__title">${impact.title || "Measuring our <strong>impact</strong> and progress"}</h2>
+            <h2 class="wb-impact__title" id="impact-overview-title">${impact.title || "Measuring our <strong>impact</strong> and progress"}</h2>
             <p class="wb-impact__desc">${impact.description || ""}</p>
+            ${freshness}
           </div>
           <a ${scorecardAttrs} class="wb-impact__scorecard-btn">${scorecard.label || "See our results"}</a>
         </div>
         <div class="wb-impact__grid" data-reveal>${statBlocks}</div>
+      </div>
+    </section>`;
+}
+
+/** Partner / Support CTA — framework Home closing band */
+export function renderPartnerSupport(section = {}) {
+  if (!section.title) return "";
+
+  const primary = section.primaryCta || {
+    label: "Partner with us",
+    href: "https://www.possibilitiesafrica.org/",
+  };
+  const secondary = section.secondaryCta || { label: "Who we are", href: "#/about" };
+  const primaryExternal = /^https?:/i.test(primary.href || "");
+  const primaryAttrs = primaryExternal
+    ? `href="${primary.href}" target="_blank" rel="noopener noreferrer"`
+    : `href="${primary.href || "#/about"}" data-link`;
+  const secondaryAttrs = (secondary.href || "#/about").startsWith("#/")
+    ? `href="${secondary.href}" data-link`
+    : `href="${secondary.href}"`;
+
+  return `
+    <section class="home-partner" id="partner-support" aria-labelledby="partner-support-title">
+      <div class="container home-partner__inner" data-reveal>
+        <div class="home-partner__copy">
+          ${section.eyebrow ? `<p class="home-partner__eyebrow">${section.eyebrow}</p>` : ""}
+          <h2 class="home-partner__title" id="partner-support-title">${section.title}</h2>
+          ${section.lead ? `<p class="home-partner__lead">${section.lead}</p>` : ""}
+        </div>
+        <div class="home-partner__actions">
+          <a class="home-partner__btn home-partner__btn--solid" ${primaryAttrs}>${primary.label}</a>
+          <a class="home-partner__btn home-partner__btn--ghost" ${secondaryAttrs}>${secondary.label}</a>
+        </div>
       </div>
     </section>`;
 }

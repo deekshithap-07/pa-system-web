@@ -4,8 +4,8 @@
 
 .site-ribbon {
   padding: 2.25rem 0;
-  border-top: 1px solid rgba(0, 43, 92, 0.06);
-  border-bottom: 1px solid rgba(0, 43, 92, 0.06);
+  border-top: 1px solid rgba(92, 36, 40, 0.06);
+  border-bottom: 1px solid rgba(92, 36, 40, 0.06);
 }
 
 .site-ribbon--story {
@@ -78,7 +78,7 @@
   font-size: 0.82rem;
   font-weight: 600;
   color: var(--pa-blue);
-  border: 1px solid rgba(0, 159, 218, 0.35);
+  border: 1px solid rgba(232, 169, 26, 0.35);
   text-decoration: none;
   white-space: nowrap;
   transition: background 0.2s, border-color 0.2s;
@@ -102,7 +102,7 @@
   padding: 0.85rem 1.15rem;
   background: var(--pa-blue-light);
   border-radius: var(--radius);
-  border: 1px solid rgba(0, 159, 218, 0.15);
+  border: 1px solid rgba(232, 169, 26, 0.15);
 }
 
 .site-curiosity__inner p {
@@ -139,7 +139,7 @@
 .site-bridge {
   padding: 3.5rem 0 4.5rem;
   background: var(--pa-bg);
-  border-top: 1px solid rgba(0, 43, 92, 0.06);
+  border-top: 1px solid rgba(92, 36, 40, 0.06);
 }
 
 .site-bridge__head {
@@ -172,7 +172,7 @@
   position: relative;
   padding: 1.35rem 1.25rem;
   background: #fff;
-  border: 1px solid rgba(0, 43, 92, 0.08);
+  border: 1px solid rgba(92, 36, 40, 0.08);
   border-radius: var(--radius);
   text-decoration: none;
   color: inherit;
@@ -237,7 +237,7 @@
   gap: 0.5rem 1rem;
   margin-top: 1rem;
   padding-top: 0.85rem;
-  border-top: 1px solid rgba(0, 43, 92, 0.08);
+  border-top: 1px solid rgba(92, 36, 40, 0.08);
 }
 
 .ins-compare-hub-links a {
@@ -287,7 +287,7 @@
   padding: 1.25rem;
   background: #fff;
   border-radius: var(--radius);
-  border: 1px solid rgba(0, 43, 92, 0.08);
+  border: 1px solid rgba(92, 36, 40, 0.08);
   text-decoration: none;
   transition: border-color 0.2s, transform 0.2s;
 }
@@ -325,7 +325,7 @@
   padding: 0.85rem 1rem;
   background: var(--pa-bg);
   border-radius: var(--radius);
-  border: 1px solid rgba(0, 43, 92, 0.08);
+  border: 1px solid rgba(92, 36, 40, 0.08);
   font-size: 0.85rem;
   font-weight: 600;
   color: var(--pa-navy);

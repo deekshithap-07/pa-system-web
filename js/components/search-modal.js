@@ -97,8 +97,11 @@ function renderResults(query) {
   const quick = !q
     ? `<div class="search-modal__quick">
         <a href="#/#home-africa-map" data-link>Africa map</a>
-        <a href="#/africa" data-link>Where we work</a>
         <a href="#/work" data-link>What we do</a>
+        <a href="#/africa" data-link>Where we work</a>
+        <a href="#/scorecard" data-link>Impact &amp; Data</a>
+        <a href="#/stories" data-link>Stories</a>
+        <a href="#/news" data-link>News &amp; Updates</a>
         <a href="#/about" data-link>Who we are</a>
       </div>`
     : "";

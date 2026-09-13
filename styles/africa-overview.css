@@ -23,7 +23,7 @@
   border-radius: 999px;
   background: #fff;
   border: 1px solid #dde5ea;
-  color: #002b5c;
+  color: #5c2428;
   font-size: 0.85rem;
   font-weight: 600;
   text-decoration: none;
@@ -32,9 +32,9 @@
 
 .ao-back-btn:hover {
   background: #f0f7fa;
-  border-color: #009fda;
+  border-color: #e8a91a;
   text-decoration: none;
-  color: #002b5c;
+  color: #5c2428;
   transform: translateX(-2px);
 }
 
@@ -44,7 +44,7 @@
 
 .ao-overview__head h1 {
   font-size: clamp(1.6rem, 3vw, 2.25rem);
-  color: var(--pa-navy, #002b5c);
+  color: var(--pa-navy, #5c2428);
   margin: 0.35rem 0 0;
 }
 
@@ -62,7 +62,7 @@
 
 .ao-section__title {
   font-size: 1.15rem;
-  color: var(--pa-navy, #002b5c);
+  color: var(--pa-navy, #5c2428);
   margin: 0 0 1rem;
 }
 
@@ -83,14 +83,14 @@
   border: 1px solid #e5e9ef;
   border-radius: 12px;
   padding: 1.1rem 1rem;
-  box-shadow: 0 1px 3px rgba(0, 43, 92, 0.06);
+  box-shadow: 0 1px 3px rgba(92, 36, 40, 0.06);
 }
 
 .ao-metric__value {
   display: block;
   font-size: 1.6rem;
   font-weight: 700;
-  color: #009fda;
+  color: #e8a91a;
 }
 
 .ao-metric__label {
@@ -116,7 +116,7 @@
 .ao-chart-card h3 {
   margin: 0 0 0.35rem;
   font-size: 1rem;
-  color: var(--pa-navy, #002b5c);
+  color: var(--pa-navy, #5c2428);
 }
 
 .ao-chart-card__desc {
@@ -147,7 +147,7 @@
   gap: 0.35rem;
   padding: 1rem 1.1rem;
   background: #fff;
-  border: 1px solid rgba(0, 43, 92, 0.1);
+  border: 1px solid rgba(92, 36, 40, 0.1);
   border-radius: var(--radius, 8px);
   text-decoration: none;
   color: inherit;
@@ -155,15 +155,15 @@
 }
 
 .ao-country-card:hover {
-  border-color: var(--pa-blue, #0077b6);
-  box-shadow: 0 4px 16px rgba(0, 43, 92, 0.08);
+  border-color: var(--pa-blue, #c48914);
+  box-shadow: 0 4px 16px rgba(92, 36, 40, 0.08);
   transform: translateY(-1px);
 }
 
 .ao-country-card__name {
   font-weight: 700;
   font-size: 0.95rem;
-  color: var(--pa-navy, #002b5c);
+  color: var(--pa-navy, #5c2428);
 }
 
 .ao-country-card__meta {
@@ -174,7 +174,7 @@
 .ao-country-card__cta {
   font-size: 0.78rem;
   font-weight: 600;
-  color: var(--pa-blue, #0077b6);
+  color: var(--pa-blue, #c48914);
   margin-top: 0.25rem;
 }
 

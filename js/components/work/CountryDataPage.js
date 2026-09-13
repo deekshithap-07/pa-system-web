@@ -11,12 +11,12 @@ const THEME_NAV = [
 ];
 
 const SECTOR_COLORS = {
-  education: "#0077B6",
+  education: "#c48914",
   health: "#16a34a",
-  agriculture: "#F5A623",
+  agriculture: "#e8a91a",
   climate: "#4A5568",
-  water: "#009FDA",
-  livelihood: "#002B5C",
+  water: "#e8a91a",
+  livelihood: "#5c2428",
   leadership: "#002244",
   community: "#5b8a72",
 };
@@ -71,7 +71,7 @@ function renderKpiGrid(kpis = []) {
 function renderProgrammeThemes(insights = []) {
   return insights
     .map((ins) => {
-      const color = SECTOR_COLORS[ins.id] || "#009FDA";
+      const color = SECTOR_COLORS[ins.id] || "#e8a91a";
       return `<button type="button" class="d360-flip" data-d360-flip aria-pressed="false" style="--d360-accent:${color}">
         <span class="d360-flip__inner">
           <span class="d360-flip__face d360-flip__front">

@@ -39,13 +39,13 @@
 }
 
 .sx-zoom a {
-  color: #002b5c;
+  color: #5c2428;
   text-decoration: none;
   border-bottom: 1px solid transparent;
 }
 
 .sx-zoom a:hover {
-  border-bottom-color: #002b5c;
+  border-bottom-color: #5c2428;
 }
 
 .sx-zoom .is-here span {
@@ -99,7 +99,7 @@
   font-size: 1.2rem;
   font-weight: 700;
   line-height: 1.4;
-  color: #002b5c;
+  color: #5c2428;
 }
 
 .ch-main > .sx-zoom,
@@ -215,7 +215,7 @@
   background: #fff;
   border: 0;
   box-shadow: none;
-  border-top: 3px solid #002b5c;
+  border-top: 3px solid #5c2428;
   border-radius: 0;
 }
 

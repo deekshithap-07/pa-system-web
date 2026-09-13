@@ -16,18 +16,17 @@ import { renderCatchmentHub, mountCatchmentHub, destroyCatchmentHub } from "./vi
 import { renderCommunityHub, mountCommunityHub, destroyCommunityHub } from "./views/community-hub.js";
 import { teardownDashboard } from "./views/dashboard.js";
 import { renderScorecard, mountScorecard, destroyScorecard } from "./views/scorecard.js";
-import { renderResources, mountResources } from "./views/resources-hub.js";
+import { renderResources, mountResources, destroyResources } from "./views/resources-hub.js";
 import { destroyInsights } from "./views/insights-hub.js";
 import { renderAbout, mountAbout, destroyAbout } from "./views/about.js";
 import { renderWhatWeDo, mountWhatWeDo, destroyWhatWeDo } from "./views/what-we-do.js";
 import { closeSearchModal } from "./components/search-modal.js";
 import { renderStoriesHub, mountStoriesHub, destroyStoriesHub } from "./views/stories-hub.js";
-import { wrapPageContent, playPageEntry, cleanupPageEntry } from "./components/shared/page-entry.js";
-import { getPageEntryConfig } from "./utils/page-entry-config.js";
+import { renderNewsUpdates, mountNewsUpdates, destroyNewsUpdates } from "./views/news-updates.js";
+import { cleanupPageEntry } from "./components/shared/page-entry.js";
 import { syncSiteHeader } from "./utils/header.js";
 
 let currentView = null;
-let lastEntryView = null;
 let appData = null;
 let lastRouteKey = null;
 let linksBound = false;
@@ -103,9 +102,13 @@ function updateNavActive(parts) {
     const nav = el.dataset.nav;
     let active = false;
     if (nav === "home") active = parts.length === 0;
-    else if (nav === "work")
-      active = parts[0] === "work" || parts[0] === "scorecard" || parts[0] === "insights" || parts[0] === "resources" || parts[0] === "stories";
-    else if (nav === "africa") active = parts[0] === "africa" || parts[0] === "country" || parts[0] === "catchment" || parts[0] === "community" || parts[0] === "story";
+    else if (nav === "work") active = parts[0] === "work";
+    else if (nav === "africa")
+      active = parts[0] === "africa" || parts[0] === "country" || parts[0] === "catchment" || parts[0] === "community" || parts[0] === "story";
+    else if (nav === "scorecard") active = parts[0] === "scorecard" || parts[0] === "insights";
+    else if (nav === "stories") active = parts[0] === "stories";
+    else if (nav === "about") active = parts[0] === "about";
+    else if (nav === "resources") active = parts[0] === "resources";
     else active = parts[0] === nav;
     el.classList.toggle("is-active", active);
   });
@@ -154,6 +157,8 @@ function handleRoute() {
   destroyScorecard(app);
   destroyInsights();
   destroyStoriesHub();
+  destroyNewsUpdates();
+  destroyResources();
   destroyAbout();
   destroyWhatWeDo();
   destroyCountryStoriesPage();
@@ -237,6 +242,9 @@ function handleRoute() {
   } else if (parts[0] === "stories") {
     view = "stories";
     html = renderStoriesHub(appData, parts[1] || null);
+  } else if (parts[0] === "news") {
+    view = "news";
+    html = renderNewsUpdates(appData);
   } else if (parts[0] === "resources" || parts[0] === "reports") {
     if (targetAnchor === "res-case-studies" || targetAnchor === "res-catalog") {
       location.hash = "#/resources/cases";
@@ -263,13 +271,6 @@ function handleRoute() {
 
   currentView = view;
 
-  const playEntry = lastEntryView !== view;
-  lastEntryView = view;
-
-  if (playEntry && view === "landing") {
-    html = wrapPageContent(html, getPageEntryConfig(view, parts, appData, hub));
-  }
-
   app.innerHTML = html;
   syncSiteHeader();
 
@@ -294,6 +295,8 @@ function handleRoute() {
       mountCatchmentHub(app, hub, appData, navigate);
     } else if (view === "stories") {
       mountStoriesHub(appData);
+    } else if (view === "news") {
+      mountNewsUpdates();
     } else if (view === "resources") {
       mountResources(appData, hub?.section || "overview");
     } else if (view === "work") {
@@ -315,19 +318,10 @@ function handleRoute() {
     syncSiteHeader();
   };
 
-  if (playEntry && view === "landing") {
-    requestAnimationFrame(() => {
-      playPageEntry(app.querySelector("[data-page-root]"), () => {
-        runMount();
-        finalizeRouteScroll();
-      });
-    });
-  } else {
-    requestAnimationFrame(() => {
-      runMount();
-      finalizeRouteScroll();
-    });
-  }
+  requestAnimationFrame(() => {
+    runMount();
+    finalizeRouteScroll();
+  });
 
   bindAnchorScroll(app);
 }

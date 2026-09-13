@@ -238,7 +238,7 @@
 }
 
 .about-hierarchy-step__arrow {
-  color: var(--pa-blue, #009fda);
+  color: var(--pa-blue, #e8a91a);
   font-size: 1.25rem;
   flex-shrink: 0;
 }
@@ -258,7 +258,7 @@
 .about-hierarchy-step__card:hover {
   transform: translateY(-3px);
   box-shadow: 0 8px 24px rgba(10, 31, 38, 0.08);
-  border-color: var(--pa-blue, #009fda);
+  border-color: var(--pa-blue, #e8a91a);
   text-decoration: none;
 }
 
@@ -280,7 +280,7 @@
   margin-top: 0.5rem;
   font-size: 0.72rem;
   font-weight: 700;
-  color: var(--pa-blue, #009fda);
+  color: var(--pa-blue, #e8a91a);
 }
 
 .about-journey-track {
@@ -318,7 +318,7 @@
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.06em;
-  color: var(--pa-blue, #009fda);
+  color: var(--pa-blue, #e8a91a);
 }
 
 .about-journey-step strong {
@@ -396,7 +396,7 @@
 }
 
 .about-diff-shift__arrow {
-  color: var(--pa-blue, #009fda);
+  color: var(--pa-blue, #e8a91a);
   font-size: 1.25rem;
 }
 
@@ -415,7 +415,7 @@
   padding: 1.15rem;
   background: #f8f9fa;
   border-radius: 6px;
-  border-left: 4px solid var(--pa-blue, #009fda);
+  border-left: 4px solid var(--pa-blue, #e8a91a);
 }
 
 .about-diff-card h3 {
@@ -491,7 +491,7 @@
   margin-top: 1rem;
   font-size: 0.85rem;
   font-weight: 700;
-  color: var(--pa-blue, #009fda);
+  color: var(--pa-blue, #e8a91a);
   text-decoration: none;
 }
 
@@ -544,7 +544,7 @@
 }
 
 #about-hierarchy .about-hierarchy-step__card {
-  border-top: 3px solid var(--pa-blue, #009fda);
+  border-top: 3px solid var(--pa-blue, #e8a91a);
   padding-top: 1.15rem;
 }
 
@@ -560,7 +560,7 @@
   top: 0.5rem;
   bottom: 0.5rem;
   width: 2px;
-  background: linear-gradient(180deg, #009fda, rgba(0, 159, 218, 0.15));
+  background: linear-gradient(180deg, #e8a91a, rgba(232, 169, 26, 0.15));
 }
 
 #about-journey .about-journey-step {
@@ -571,7 +571,7 @@
 
 #about-triple-a .about-triple-card {
   background: linear-gradient(160deg, #fff 0%, #f8fbfd 100%);
-  border: 1px solid rgba(0, 159, 218, 0.12);
+  border: 1px solid rgba(232, 169, 26, 0.12);
   box-shadow: 0 4px 20px rgba(10, 31, 38, 0.04);
 }
 

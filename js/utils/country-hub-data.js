@@ -77,8 +77,8 @@ function buildDefaultHubPayload(country, catchments, stories, reports, metrics) 
           { id: "context", title: "Regional Context", metric: `${country.stats?.povertyRate}% poverty`, score: 0, trend: "—", summary: "PA ministry data not yet available for this region." },
         ],
     charts: {
-      growthOverTime: { type: "line", title: "Growth Over Time", labels: ["2022", "2023", "2024"], data: [0, 0, metrics.growth ?? 0], color: "#009FDA" },
-      householdsReached: { type: "area", title: "Households Reached", labels: ["2022", "2023", "2024"], data: [0, 0, metrics.households ?? 0], color: "#009FDA" },
+      growthOverTime: { type: "line", title: "Growth Over Time", labels: ["2022", "2023", "2024"], data: [0, 0, metrics.growth ?? 0], color: "#e8a91a" },
+      householdsReached: { type: "area", title: "Households Reached", labels: ["2022", "2023", "2024"], data: [0, 0, metrics.households ?? 0], color: "#e8a91a" },
     },
     catchmentMap: {
       viewBox: "0 0 160 200",

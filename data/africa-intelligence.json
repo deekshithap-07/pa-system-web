@@ -5,7 +5,7 @@
   "hideSidebar": true,
   "overview": {
     "pageTitle": "Where we work",
-    "lead": "Seven countries. Open one to see nearby communities. The map lives on Home.",
+    "lead": "Seven countries. Open one to see nearby communities, or explore the interactive map on this page.",
     "kpis": [
       { "label": "Countries", "value": "54", "suffix": "+" },
       { "label": "Communities", "value": "1000", "suffix": "+" },

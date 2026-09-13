@@ -235,7 +235,7 @@
 }
 
 .wb-who-impact__card:hover {
-  border-color: #009fda;
+  border-color: #e8a91a;
   transform: translateY(-2px);
 }
 
@@ -244,7 +244,7 @@
   font-weight: 700;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: #0077b6;
+  color: #c48914;
 }
 
 .wb-who-impact__value {
@@ -278,7 +278,7 @@
   font-weight: 700;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: #0077b6;
+  color: #c48914;
 }
 
 .wb-who-quote blockquote {
@@ -375,7 +375,7 @@
   font-weight: 700;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: #0077b6;
+  color: #c48914;
 }
 
 .wb-who-history h2 {
@@ -445,7 +445,7 @@
   font-weight: 700;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: #0077b6;
+  color: #c48914;
 }
 
 .wb-who-report h2 {
@@ -478,7 +478,7 @@
   background-color: #0a3355;
   background-size: cover;
   background-position: center;
-  box-shadow: 0 12px 36px rgba(0, 43, 92, 0.12);
+  box-shadow: 0 12px 36px rgba(92, 36, 40, 0.12);
 }
 
 .wb-who-newsletter__copy {
@@ -561,7 +561,7 @@
 }
 
 .wb-who-gate__card:hover {
-  border-color: #009fda;
+  border-color: #e8a91a;
   transform: translateY(-2px);
 }
 
@@ -570,7 +570,7 @@
   font-weight: 700;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: #0077b6;
+  color: #c48914;
 }
 
 .wb-who-gate__card strong {

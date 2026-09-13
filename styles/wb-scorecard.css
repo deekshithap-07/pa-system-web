@@ -107,7 +107,7 @@ body.pa-entry-active .wbs-main {
 }
 
 .wbs-tabs__btn[data-wbs-tab="progress"].is-active {
-  background: rgba(0, 159, 218, 0.2);
+  background: rgba(232, 169, 26, 0.2);
   border-bottom-color: #00d4d4;
 }
 
@@ -263,18 +263,18 @@ body.pa-entry-active .wbs-main {
 
 .wbs-panel--progress {
   background:
-    radial-gradient(ellipse 70% 50% at 85% 0%, rgba(0, 159, 218, 0.1), transparent 52%),
-    radial-gradient(ellipse 55% 40% at 5% 15%, rgba(0, 43, 92, 0.06), transparent 48%),
-    linear-gradient(180deg, #e8f4fc 0%, #f4f6f8 36%, #f4f6f8 100%);
+    radial-gradient(ellipse 70% 50% at 85% 0%, rgba(232, 169, 26, 0.1), transparent 52%),
+    radial-gradient(ellipse 55% 40% at 5% 15%, rgba(92, 36, 40, 0.06), transparent 48%),
+    linear-gradient(180deg, #f8f1e8 0%, #f4f6f8 36%, #f4f6f8 100%);
 }
 
 .wbs-panel-hero--progress {
-  background: linear-gradient(125deg, #002b5c 0%, #0077b6 48%, #1a363a 100%);
+  background: linear-gradient(125deg, #5c2428 0%, #c48914 48%, #1a363a 100%);
 }
 
 .wbs-panel--progress .wbs-journey__card {
   border-top-width: 4px;
-  box-shadow: 0 4px 16px rgba(0, 43, 92, 0.08);
+  box-shadow: 0 4px 16px rgba(92, 36, 40, 0.08);
   background: #fff;
 }
 
@@ -283,12 +283,12 @@ body.pa-entry-active .wbs-main {
 }
 
 .wbs-panel--progress .wbs-journey__step:nth-child(even) .wbs-journey__card {
-  background: linear-gradient(160deg, #fff 0%, #e8f4fc 100%);
+  background: linear-gradient(160deg, #fff 0%, #f8f1e8 100%);
 }
 
 .wbs-panel--progress .wbs-driver {
   background: #fff;
-  box-shadow: 0 4px 14px rgba(0, 43, 92, 0.06);
+  box-shadow: 0 4px 14px rgba(92, 36, 40, 0.06);
 }
 
 .wbs-panel--progress .wbs-driver--high {
@@ -300,26 +300,26 @@ body.pa-entry-active .wbs-main {
 }
 
 .wbs-panel--progress .wbs-driver--low {
-  border-left-color: #009fda;
+  border-left-color: #e8a91a;
 }
 
 .wbs-panel--progress .wbs-hotspot {
   background: #fff;
   border: 1px solid #e2e8ec;
-  border-left: 4px solid #009fda;
-  box-shadow: 0 4px 16px rgba(0, 43, 92, 0.06);
+  border-left: 4px solid #e8a91a;
+  box-shadow: 0 4px 16px rgba(92, 36, 40, 0.06);
 }
 
 .wbs-panel--progress .wbs-hotspot:nth-child(1) {
-  border-left-color: #009fda;
+  border-left-color: #e8a91a;
 }
 
 .wbs-panel--progress .wbs-hotspot:nth-child(2) {
-  border-left-color: #0077b6;
+  border-left-color: #c48914;
 }
 
 .wbs-panel--progress .wbs-hotspot:nth-child(3) {
-  border-left-color: #002b5c;
+  border-left-color: #5c2428;
 }
 
 .wbs-panel--progress .wbs-hotspot:nth-child(4) {
@@ -328,15 +328,15 @@ body.pa-entry-active .wbs-main {
 
 .wbs-panel--progress .wbs-drivers h3,
 .wbs-panel--progress .wbs-hotspots h3 {
-  color: #002b5c;
+  color: #5c2428;
 }
 
 .wbs-panel--progress .wbs-hotspot__score {
-  color: #009fda;
+  color: #e8a91a;
 }
 
 .wbs-panel--progress .wbs-hotspot__rank {
-  color: rgba(0, 159, 218, 0.2);
+  color: rgba(232, 169, 26, 0.2);
 }
 
 /* ---- Overview hero split ---- */
@@ -379,7 +379,7 @@ body.pa-entry-active .wbs-main {
 
 .wbs-hero-split__visual {
   background:
-    linear-gradient(135deg, rgba(0, 49, 60, 0.2), rgba(0, 119, 182, 0.3)),
+    linear-gradient(135deg, rgba(0, 49, 60, 0.2), rgba(196, 137, 20, 0.3)),
     url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='500'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' style='stop-color:%230077B6'/%3E%3Cstop offset='100%25' style='stop-color:%23009688'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect fill='url(%23g)' width='800' height='500'/%3E%3C/svg%3E") center/cover;
 }
 
@@ -729,7 +729,7 @@ body.pa-entry-active .wbs-main {
 }
 
 .wbs-table tbody th a {
-  color: #0077b6;
+  color: #c48914;
   font-weight: 600;
   text-decoration: none;
 }
@@ -752,7 +752,7 @@ body.pa-entry-active .wbs-main {
 .wbs-table-bar span {
   display: block;
   height: 100%;
-  background: #0077b6;
+  background: #c48914;
   border-radius: 2px;
 }
 
@@ -765,7 +765,7 @@ body.pa-entry-active .wbs-main {
 }
 
 .wbs-status--active { background: #e8f5e9; color: #2e7d32; }
-.wbs-status--growing { background: #e3f2fd; color: #0077b6; }
+.wbs-status--growing { background: #e3f2fd; color: #c48914; }
 .wbs-status--emerging { background: #fff8e1; color: #b45309; }
 
 /* ---- Charts ---- */
@@ -870,7 +870,7 @@ body.pa-entry-active .wbs-main {
 .wbs-cbc-bar span {
   display: block;
   height: 100%;
-  background: #0077b6;
+  background: #c48914;
 }
 
 .wbs-compare-grid {
@@ -936,7 +936,7 @@ body.pa-entry-active .wbs-main {
 
 .wbs-duel-row span { color: #5c6b73; font-weight: 600; }
 .wbs-duel-row strong { text-align: right; color: #8a9aa3; font-weight: 600; }
-.wbs-duel-row strong.is-win { color: #0077b6; }
+.wbs-duel-row strong.is-win { color: #c48914; }
 
 .wbs-compare-links {
   display: flex;
@@ -950,7 +950,7 @@ body.pa-entry-active .wbs-main {
 .wbs-compare-links a {
   font-size: 0.75rem;
   font-weight: 600;
-  color: #0077b6;
+  color: #c48914;
   text-decoration: none;
 }
 
@@ -978,7 +978,7 @@ body.pa-entry-active .wbs-main {
   width: 1.75rem;
   height: 1.75rem;
   border-radius: 50%;
-  background: var(--c, #0077b6);
+  background: var(--c, #c48914);
   color: #fff;
   font-size: 0.72rem;
   font-weight: 700;
@@ -992,7 +992,7 @@ body.pa-entry-active .wbs-main {
   padding: 0.85rem;
   background: #fff;
   border: 1px solid #e2e8ec;
-  border-top: 3px solid var(--c, #0077b6);
+  border-top: 3px solid var(--c, #c48914);
   border-radius: 4px;
   width: 100%;
 }
@@ -1036,7 +1036,7 @@ body.pa-entry-active .wbs-main {
   padding: 1rem;
   background: #fff;
   border: 1px solid #e2e8ec;
-  border-left: 4px solid #0077b6;
+  border-left: 4px solid #c48914;
   border-radius: 4px;
 }
 
@@ -1097,7 +1097,7 @@ body.pa-entry-active .wbs-main {
   top: 1rem;
   right: 1rem;
   font-size: 1.1rem;
-  color: #0077b6;
+  color: #c48914;
 }
 
 .wbs-hotspot h4 {

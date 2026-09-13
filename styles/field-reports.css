@@ -4,17 +4,26 @@
    ========================================================================== */
 
 .wdr-fr {
-  --wdr-ink: #002244;
-  --wdr-navy: #001e3a;
-  --wdr-blue: #0071bc;
-  --wdr-muted: #4d5b63;
-  --wdr-line: #d9dee3;
-  --wdr-wash: #f2f4f6;
+  --wdr-ink: #5c2428;
+  --wdr-navy: #5c2428;
+  --wdr-blue: #b8860b;
+  --wdr-muted: #7a6e68;
+  --wdr-line: rgba(92, 36, 40, 0.14);
+  --wdr-wash: #faf7f2;
 
   padding-top: var(--header-h);
   min-height: 100vh;
   background: #fff;
-  color: #1a1a1a;
+  color: #4a403c;
+}
+
+.wdr-fr .page-back {
+  padding: 0.85rem 0 0;
+  background: transparent;
+}
+
+.wdr-fr .page-back__link:hover {
+  color: #e8a91a;
 }
 
 /* ---- Hero + overlapping About (WDR layered layout) ---- */
@@ -29,7 +38,7 @@
   display: flex;
   align-items: flex-end;
   background:
-    linear-gradient(105deg, rgba(0, 20, 40, 0.72) 0%, rgba(0, 20, 40, 0.35) 55%, rgba(0, 20, 40, 0.2) 100%),
+    linear-gradient(105deg, rgba(42, 16, 20, 0.72) 0%, rgba(42, 16, 20, 0.35) 55%, rgba(42, 16, 20, 0.2) 100%),
     var(--wdr-fr-hero) center / cover no-repeat;
   color: #fff;
   padding: 2.5rem 0 7.5rem;
@@ -51,7 +60,7 @@
   margin: 0 0 0.65rem;
   font-size: 0.82rem;
   font-weight: 600;
-  color: rgba(255, 255, 255, 0.82);
+  color: #e8a91a;
 }
 
 .wdr-fr-hero__title {
@@ -106,7 +115,7 @@
 .wdr-fr-hero-tabs__link.is-active {
   color: #fff;
   background: rgba(0, 0, 0, 0.35);
-  border-bottom-color: #fff;
+  border-bottom-color: #e8a91a;
 }
 
 /* Overlapping About card */
@@ -228,8 +237,8 @@
 }
 
 .wdr-fr-btn--solid:hover {
-  background: #00152c;
-  border-color: #00152c;
+  background: #3d181c;
+  border-color: #3d181c;
   text-decoration: none;
 }
 
@@ -254,7 +263,7 @@
 }
 
 .wdr-fr-btn--chapter:hover {
-  color: #005a94;
+  color: #5c2428;
   text-decoration: underline;
 }
 
@@ -559,15 +568,15 @@
   width: 5.5rem;
   height: 7rem;
   border-radius: 0;
-  background: linear-gradient(165deg, #002244 0%, #0071bc 100%);
+  background: linear-gradient(165deg, #5c2428 0%, #e8a91a 100%);
 }
 
 .wdr-fr-chapter__thumb--annual {
-  background: linear-gradient(165deg, #1a3050 0%, #8b6914 100%);
+  background: linear-gradient(165deg, #3d181c 0%, #b8860b 100%);
 }
 
 .wdr-fr-chapter__thumb--quarterly {
-  background: linear-gradient(165deg, #0a4c5c 0%, #3d7a5a 100%);
+  background: linear-gradient(165deg, #2f7a38 0%, #3f9a4a 100%);
 }
 
 .wdr-fr-chapter__meta {

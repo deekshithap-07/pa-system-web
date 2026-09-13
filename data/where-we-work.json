@@ -1,0 +1,32 @@
+{
+  "hero": {
+    "eyebrow": "Where We Work",
+    "title": "Where We Work.",
+    "titleHtml": "<span>Where we</span> <em>work.</em>",
+    "lead": "Across Africa, we work with communities to build stronger leaders, healthier families and more prosperous futures. Explore our work by country, or use the map to see where transformation is happening.",
+    "image": "assets/where-we-work/hero.png",
+    "imageAlt": "Woman in a colorful headscarf standing outdoors in soft morning light across rural Africa"
+  },
+  "explorer": {
+    "title": "Explore our work across Africa.",
+    "titleHtml": "<span>Explore our work</span> <em>across Africa.</em>",
+    "lead": "Click on a country to see detailed information, communities and impact data.",
+    "legend": [
+      { "id": "active", "label": "Countries where we work" },
+      { "id": "community", "label": "Communities" },
+      { "id": "planned", "label": "Planned expansion" }
+    ]
+  },
+  "otherCountries": {
+    "title": "Other Countries.",
+    "titleHtml": "<span>Other</span> <em>Countries.</em>",
+    "cta": { "label": "View all countries", "href": "#/africa/countries" }
+  },
+  "partner": {
+    "title": "Be part of the transformation.",
+    "titleHtml": "<span>Be part of</span> <em>the transformation.</em>",
+    "lead": "Partner with PA to bring hope, opportunity and lasting change to more communities across Africa.",
+    "cta": { "label": "Partner With Us", "href": "#/about" },
+    "image": "assets/home-overview/tab-places.jpg"
+  }
+}

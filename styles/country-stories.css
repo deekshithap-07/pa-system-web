@@ -207,7 +207,7 @@
   padding-top: 0.5rem;
   font-size: 0.84rem;
   font-weight: 700;
-  color: #009fda;
+  color: #e8a91a;
 }
 
 .cs-empty {
@@ -247,7 +247,7 @@
 }
 
 .story-tabs__link:hover {
-  border-color: #009fda;
+  border-color: #e8a91a;
   color: #002244;
   text-decoration: none;
 }

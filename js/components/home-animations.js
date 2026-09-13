@@ -1,83 +1,181 @@
 import { formatNumber } from "../utils/format.js";
-import { bindWbPageHero } from "./shared/wb-page-hero.js";
 
 export function initLandingAnimations() {
-  bindWbPageHero(document.querySelector(".home-page") || document);
-  initHomeScrollStack();
+  if (typeof gsap === "undefined") return;
 
-  gsap.utils.toArray(".home-page [data-reveal]").forEach((el) => {
-    gsap.from(el, {
-      opacity: 0,
-      y: 20,
+  const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if (reduce) {
+    document.querySelectorAll(".home-page [data-reveal], .home-page [data-stagger] > *").forEach((el) => {
+      el.style.opacity = "1";
+      el.style.transform = "none";
+    });
+    return;
+  }
+
+  initHomePhotoHero();
+  initHomeScrollStack();
+  initHomeSectionMotion();
+  initImpactCounters();
+  initNetworkFlowAnimations();
+}
+
+function animFrom(type) {
+  switch (type) {
+    case "slide-left":
+      return { autoAlpha: 0, x: -36, y: 0, scale: 1 };
+    case "slide-right":
+      return { autoAlpha: 0, x: 36, y: 0, scale: 1 };
+    case "slide-up":
+      return { autoAlpha: 0, y: 32, x: 0, scale: 1 };
+    case "pop":
+      return { autoAlpha: 0, y: 20, scale: 0.92 };
+    case "fade":
+      return { autoAlpha: 0, y: 10, scale: 1 };
+    case "fade-up":
+    default:
+      return { autoAlpha: 0, y: 28, x: 0, scale: 1 };
+  }
+}
+
+function playIn(targets, type, opts = {}) {
+  const els = gsap.utils.toArray(targets).filter(Boolean);
+  if (!els.length) return;
+
+  gsap.fromTo(
+    els,
+    animFrom(type),
+    {
+      autoAlpha: 1,
+      x: 0,
+      y: 0,
+      scale: 1,
+      duration: opts.duration ?? 0.65,
+      stagger: opts.stagger ?? 0,
+      ease: type === "pop" ? "back.out(1.4)" : "power3.out",
+      clearProps: "transform",
+      scrollTrigger: {
+        trigger: opts.trigger || els[0],
+        start: "top 92%",
+        once: true,
+        // If already on screen when mounted, play immediately
+        toggleActions: "play none none none",
+      },
+      ...opts.extra,
+    }
+  );
+}
+
+function initHomeSectionMotion() {
+  const page = document.querySelector(".home-page");
+  if (!page || typeof ScrollTrigger === "undefined") return;
+
+  // Never hide whole sections — only animate inner blocks so content can't stay blank
+  page.querySelectorAll("[data-reveal]").forEach((el) => {
+    // Skip if this element is also a stagger parent (children animate instead)
+    if (el.hasAttribute("data-stagger") && el.children.length) return;
+    const type = el.dataset.anim || "fade-up";
+    playIn(el, type, { trigger: el });
+  });
+
+  page.querySelectorAll("[data-stagger]").forEach((group) => {
+    const type = group.dataset.stagger === "stats" ? "pop" : group.dataset.stagger || "fade-up";
+    const kids = [...group.children];
+    if (!kids.length) return;
+    // Ensure parent stays visible
+    gsap.set(group, { autoAlpha: 1, clearProps: "transform" });
+    playIn(kids, type, {
+      trigger: group,
+      stagger: type === "pop" ? 0.08 : 0.1,
       duration: 0.55,
-      ease: "power2.out",
-      scrollTrigger: { trigger: el, start: "top 88%", once: true },
     });
   });
 
-  initImpactCounters();
-  initNetworkFlowAnimations();
+  // Safety: after a short delay, force any stuck hidden nodes visible
+  window.setTimeout(() => {
+    page.querySelectorAll("[data-reveal], [data-stagger] > *").forEach((el) => {
+      const opacity = window.getComputedStyle(el).opacity;
+      if (opacity === "0") {
+        gsap.set(el, { autoAlpha: 1, x: 0, y: 0, scale: 1, clearProps: "transform" });
+      }
+    });
+  }, 1800);
+
+  const impactBg = page.querySelector(".pa-impact__bg img");
+  if (impactBg) {
+    gsap.fromTo(
+      impactBg,
+      { scale: 1.06, y: -16 },
+      {
+        scale: 1.12,
+        y: 16,
+        ease: "none",
+        scrollTrigger: {
+          trigger: ".pa-impact",
+          start: "top bottom",
+          end: "bottom top",
+          scrub: 0.7,
+        },
+      }
+    );
+  }
+}
+
+function initHomePhotoHero() {
+  const hero = document.querySelector("[data-home-photo-hero]");
+  if (!hero) return;
+
+  const kids = hero.querySelectorAll(".home-photo-hero__copy > *");
+  gsap.fromTo(
+    kids,
+    { autoAlpha: 0, y: 24 },
+    {
+      autoAlpha: 1,
+      y: 0,
+      duration: 0.7,
+      stagger: 0.09,
+      ease: "power3.out",
+      clearProps: "transform",
+    }
+  );
+
+  const watch = hero.querySelector(".home-photo-hero__watch");
+  if (watch) {
+    gsap.fromTo(
+      watch,
+      { autoAlpha: 0, x: 18 },
+      {
+        autoAlpha: 1,
+        x: 0,
+        duration: 0.65,
+        delay: 0.35,
+        ease: "power3.out",
+        clearProps: "transform",
+      }
+    );
+  }
 }
 
 let flowLoopTween = null;
 
 function initHomeScrollStack() {
   const stack = document.querySelector("[data-home-scroll-stack]");
-  if (!stack || typeof gsap === "undefined" || typeof ScrollTrigger === "undefined") return;
+  if (!stack || typeof ScrollTrigger === "undefined") return;
 
   const pin = stack.querySelector(".home-hero-stack__pin");
-  const media = pin?.querySelector(".wph__media");
-  const orbs = [...stack.querySelectorAll(".home-explorer__orb")];
-  const sheet = stack.querySelector(".home-explorer__sheet");
-  const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const media = pin?.querySelector(".home-photo-hero__img");
+  if (!media) return;
 
-  if (prefersReducedMotion) return;
-
-  if (media) {
-    gsap.to(media, {
-      y: 90,
-      scale: 1.12,
-      ease: "none",
-      scrollTrigger: {
-        trigger: stack,
-        start: "top top",
-        end: () => `+=${Math.max(sheet?.offsetHeight || 600, 480)}`,
-        scrub: 0.6,
-      },
-    });
-  }
-
-  orbs.forEach((orb, i) => {
-    gsap.to(orb, {
-      y: (i + 1) * -55,
-      x: i % 2 ? 30 : -24,
-      ease: "none",
-      scrollTrigger: {
-        trigger: stack,
-        start: "top top",
-        end: "bottom top",
-        scrub: 0.85,
-      },
-    });
+  gsap.to(media, {
+    y: 40,
+    scale: 1.06,
+    ease: "none",
+    scrollTrigger: {
+      trigger: stack,
+      start: "top top",
+      end: "+=60%",
+      scrub: 0.65,
+    },
   });
-
-  if (sheet) {
-    gsap.fromTo(
-      sheet,
-      { y: 48, opacity: 0.92 },
-      {
-        y: 0,
-        opacity: 1,
-        ease: "none",
-        scrollTrigger: {
-          trigger: stack,
-          start: "top top",
-          end: "+=320",
-          scrub: 0.45,
-        },
-      }
-    );
-  }
 }
 
 function initNetworkFlowAnimations() {
@@ -180,22 +278,6 @@ function initNetworkFlowAnimations() {
     });
   };
 
-  const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-
-  if (prefersReducedMotion) {
-    cards.forEach((c) => {
-      c.classList.add("is-lit");
-      gsap.set(c, { opacity: 1, scale: 1, y: 0 });
-    });
-    connectors.forEach((conn) => {
-      const progress = conn.querySelector(".pa-flow__connector-progress");
-      if (progress) gsap.set(progress, { [getProgressProp()]: 1 });
-    });
-    section?.classList.add("is-complete");
-    if (legend) gsap.set(legend, { opacity: 1, y: 0 });
-    return;
-  }
-
   gsap.set(cards.slice(1), { opacity: 0.35, scale: 0.94, y: 8 });
   if (legend) gsap.set(legend, { opacity: 0, y: 8 });
 
@@ -231,6 +313,7 @@ function initImpactCounters() {
       el.querySelector(".impact-kpi__value") ||
       el.querySelector(".wb-data-stat__value") ||
       el.querySelector(".wb-impact-stat__value");
+    if (!valueEl || Number.isNaN(value)) return;
     const obj = { val: 0 };
 
     ScrollTrigger.create({
@@ -253,14 +336,18 @@ function initImpactCounters() {
 }
 
 export function destroyHomeAnimations() {
-  ScrollTrigger.getAll().forEach((t) => {
-    const tr = t.trigger;
-    if (tr?.closest?.(".home-page") || tr?.closest?.("[data-home-stories]")) t.kill();
-  });
+  if (typeof ScrollTrigger !== "undefined") {
+    ScrollTrigger.getAll().forEach((t) => {
+      const tr = t.trigger;
+      if (tr?.closest?.(".home-page") || tr?.closest?.("[data-home-stories]")) t.kill();
+    });
+  }
   flowLoopTween?.kill();
   flowLoopTween = null;
-  gsap.killTweensOf(".pa-flow__pulse");
-  gsap.killTweensOf(".pa-flow__connector-progress");
+  if (typeof gsap !== "undefined") {
+    gsap.killTweensOf(".pa-flow__pulse");
+    gsap.killTweensOf(".pa-flow__connector-progress");
+  }
 }
 
 export const initHeroAnimation = initLandingAnimations;

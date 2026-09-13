@@ -1,0 +1,181 @@
+{
+  "hero": {
+    "eyebrow": "News & Updates",
+    "titleHtml": "<span>A current stream</span> <em>of PA activity.</em>",
+    "title": "A current stream of PA activity.",
+    "lead": "News, country notes, events, announcements, and milestones — kept simple so you can skim what is moving across the network.",
+    "image": "assets/field-reports/hero.jpg"
+  },
+  "news": [
+    {
+      "id": "n1",
+      "date": "2025-06-01",
+      "dateLabel": "1 Jun 2025",
+      "title": "New partnership to expand training in Kenya",
+      "summary": "A fresh collaboration will help more rural pastors complete the two-year journey.",
+      "href": "#/country/kenya"
+    },
+    {
+      "id": "n2",
+      "date": "2025-04-15",
+      "dateLabel": "15 Apr 2025",
+      "title": "Annual Impact Report 2024 is live",
+      "summary": "Network indicators, country progress, and field evidence in one place.",
+      "href": "#/resources#kh-reports"
+    },
+    {
+      "id": "n3",
+      "date": "2025-03-08",
+      "dateLabel": "8 Mar 2025",
+      "title": "Women leaders gather in Lilongwe",
+      "summary": "Savings groups and church leaders shared what is working in their communities.",
+      "href": "#/country/malawi"
+    },
+    {
+      "id": "n4",
+      "date": "2025-01-22",
+      "dateLabel": "22 Jan 2025",
+      "title": "Field teams open the year with pastor cohorts",
+      "summary": "New cohorts begin across Kenya, Ethiopia, and Zambia.",
+      "href": "#/work"
+    }
+  ],
+  "countryUpdates": [
+    {
+      "id": "cu-ke",
+      "country": "Kenya",
+      "slug": "kenya",
+      "dateLabel": "This week",
+      "title": "Rachuonyo water projects move into maintenance season",
+      "href": "#/country/kenya"
+    },
+    {
+      "id": "cu-et",
+      "country": "Ethiopia",
+      "slug": "ethiopia",
+      "dateLabel": "This month",
+      "title": "Koka leaders complete mid-journey mentoring clinics",
+      "href": "#/country/ethiopia"
+    },
+    {
+      "id": "cu-mw",
+      "country": "Malawi",
+      "slug": "malawi",
+      "dateLabel": "This month",
+      "title": "Lilongwe savings circles report stronger group funds",
+      "href": "#/country/malawi"
+    },
+    {
+      "id": "cu-zm",
+      "country": "Zambia",
+      "slug": "zambia",
+      "dateLabel": "Recent",
+      "title": "Crop-demo plots expand with local church support",
+      "href": "#/country/zambia"
+    },
+    {
+      "id": "cu-rw",
+      "country": "Rwanda",
+      "slug": "rwanda",
+      "dateLabel": "Recent",
+      "title": "Pastor cohorts begin second-year community projects",
+      "href": "#/country/rwanda"
+    },
+    {
+      "id": "cu-tz",
+      "country": "Tanzania",
+      "slug": "tanzania",
+      "dateLabel": "Recent",
+      "title": "Youth discipleship circles launch in new catchments",
+      "href": "#/country/tanzania"
+    },
+    {
+      "id": "cu-bi",
+      "country": "Burundi",
+      "slug": "burundi",
+      "dateLabel": "Update",
+      "title": "Field visits map priority communities for 2025",
+      "href": "#/country/burundi"
+    }
+  ],
+  "events": [
+    {
+      "id": "ev1",
+      "month": "May",
+      "day": "10",
+      "year": "2025",
+      "title": "PA Leadership Summit",
+      "place": "Nairobi, Kenya",
+      "summary": "Pastors and country leads gather to share practice and plan the next season.",
+      "href": "#/about"
+    },
+    {
+      "id": "ev2",
+      "month": "Jul",
+      "day": "18",
+      "year": "2025",
+      "title": "Partner briefing day",
+      "place": "Online + Nairobi",
+      "summary": "A short window into field evidence, stories, and partnership pathways.",
+      "href": "#/scorecard"
+    },
+    {
+      "id": "ev3",
+      "month": "Sep",
+      "day": "05",
+      "year": "2025",
+      "title": "Country learning exchange",
+      "place": "Lilongwe, Malawi",
+      "summary": "Teams from three countries compare what is working in savings and farming.",
+      "href": "#/country/malawi"
+    }
+  ],
+  "announcements": [
+    {
+      "id": "a3",
+      "tone": "maroon",
+      "label": "Invite",
+      "title": "Churches and friends can walk with PA — start on Partner with us",
+      "href": "#/#partner-support"
+    },
+    {
+      "id": "a4",
+      "tone": "gold",
+      "label": "Summit",
+      "title": "Leadership Summit registration opens for country leads",
+      "href": "#/news#nu-events"
+    }
+  ],
+  "milestones": [
+    {
+      "id": "m1",
+      "year": "2006",
+      "title": "Work begins in Webuye",
+      "summary": "The early field model takes root in western Kenya."
+    },
+    {
+      "id": "m2",
+      "year": "2014",
+      "title": "Multi-country expansion",
+      "summary": "The network grows beyond Kenya into neighbouring countries."
+    },
+    {
+      "id": "m3",
+      "year": "2019",
+      "title": "Seven-country footprint",
+      "summary": "PA presence spans Kenya, Ethiopia, Malawi, Zambia, Rwanda, Tanzania, and Burundi."
+    },
+    {
+      "id": "m4",
+      "year": "2024",
+      "title": "Public evidence layer",
+      "summary": "Impact indicators, stories, and field reports become easier to browse in one place."
+    },
+    {
+      "id": "m5",
+      "year": "2025",
+      "title": "Current season of activity",
+      "summary": "Cohorts, partnerships, and country updates continue across the network."
+    }
+  ]
+}

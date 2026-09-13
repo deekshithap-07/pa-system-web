@@ -457,7 +457,7 @@ function renderProgressPanel(sc, ia) {
 export function renderWbScorecard(data, section = "overview") {
   const sc = data.scorecard;
   const ia = data.insightsAnalytics;
-  if (!sc) return `<div class="container static-page"><h1>Our results are unavailable</h1></div>`;
+  if (!sc) return `<div class="container static-page"><h1>Impact &amp; Data is unavailable</h1></div>`;
 
   const page = ["working", "together", "journey"].includes(section) ? section : "overview";
 
@@ -465,7 +465,7 @@ export function renderWbScorecard(data, section = "overview") {
     const glance = (sc.kpis || []).slice(0, 3);
     return `
     <div class="wbs-page wbs-page--story topic-page--hub" data-wb-scorecard data-results-page="overview">
-      ${renderPageBack({ href: "#/work", label: "What we do" })}
+      ${renderPageBack({ href: "#/", label: "Home" })}
       ${renderWbPageHero({
         id: "scorecard-hero",
         tone: "navy",
@@ -473,10 +473,9 @@ export function renderWbScorecard(data, section = "overview") {
         flush: true,
         crumbs: [
           { label: "Home", href: "#/" },
-          { label: "What we do", href: "#/work" },
-          { label: "Our results" },
+          { label: "Impact & Data" },
         ],
-        eyebrow: "Our results",
+        eyebrow: "Impact & Data",
         title: "How the work is going",
         lead: "Figures for countries, communities, and homes — beside the map, not instead of visiting a place.",
       })}
@@ -531,7 +530,7 @@ export function renderWbScorecard(data, section = "overview") {
   const ch = chapters[page];
   return `
     <div class="wbs-page wbs-page--story topic-page--${page}" data-wb-scorecard data-results-page="${page}">
-      ${renderPageBack({ href: "#/scorecard", label: "Our results" })}
+      ${renderPageBack({ href: "#/scorecard", label: "Impact & Data" })}
       ${renderWbPageHero({
         id: "scorecard-hero",
         tone: ch.tone,
@@ -539,11 +538,10 @@ export function renderWbScorecard(data, section = "overview") {
         flush: true,
         crumbs: [
           { label: "Home", href: "#/" },
-          { label: "What we do", href: "#/work" },
-          { label: "Our results", href: "#/scorecard" },
+          { label: "Impact & Data", href: "#/scorecard" },
           { label: ch.title },
         ],
-        eyebrow: "Our results",
+        eyebrow: "Impact & Data",
         title: ch.title,
         lead: ch.lead,
       })}
@@ -622,7 +620,7 @@ function mountAnalysisCharts(root, sc, ia) {
         type: "radar",
         labels: dims.map((d) => d.label),
         data: dims.map((d) => d.score),
-        color: "#009FDA",
+        color: "#e8a91a",
       });
       radar.dataset.mounted = "1";
     }

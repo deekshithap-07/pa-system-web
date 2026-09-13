@@ -1,0 +1,108 @@
+{
+  "hero": {
+    "eyebrow": "About PA",
+    "title": "Who we are.",
+    "titleHtml": "<span>Who</span> <em>we are.</em>",
+    "lead": "The institutional foundation of Possibilities Africa — vision, approach, leadership, and how to reach us.",
+    "image": "assets/home-overview/tab-about.jpg"
+  },
+  "whoWeAre": {
+    "eyebrow": "Who we are",
+    "title": "A ministry walking with local churches.",
+    "titleHtml": "<span>A ministry walking with</span> <em>local churches.</em>",
+    "lead": "Possibilities Africa exists so rural communities grow in faith, family life, and daily wellbeing — led by pastors already present in the village.",
+    "points": [
+      "We work as one ministry with churches, partners, and communities across seven countries.",
+      "Local churches lead; PA walks beside them for about two years of training and practice.",
+      "Stories and simple results sit side by side so the work stays clear and accountable."
+    ]
+  },
+  "visionMission": {
+    "eyebrow": "Vision and mission",
+    "title": "Whole gospel. Whole person. Whole community.",
+    "titleHtml": "<span>Whole gospel. Whole person.</span> <em>Whole community.</em>",
+    "vision": {
+      "label": "Vision",
+      "text": "With God all things are possible — rural Africa flourishing through pastor-led transformation."
+    },
+    "mission": {
+      "label": "Mission",
+      "text": "The whole gospel transforming the whole person and whole community — faith, families, livelihoods, youth, and responsible citizenship growing together."
+    }
+  },
+  "approach": {
+    "eyebrow": "Our approach",
+    "title": "How the work is carried.",
+    "titleHtml": "<span>How the work</span> <em>is carried.</em>",
+    "lead": "Pastor-led change, community ownership, and a clear two-year journey — not projects dropped in from outside.",
+    "items": [
+      {
+        "title": "Whole-gospel discipleship",
+        "text": "Pastors are equipped so spiritual life and daily life grow together — not as separate tracks."
+      },
+      {
+        "title": "Pastor-led change",
+        "text": "Local pastors carry the vision. Possibilities Africa walks with them through training and practice."
+      },
+      {
+        "title": "Community ownership",
+        "text": "Water, farming, health, and livelihoods are planned and owned by the church and community."
+      },
+      {
+        "title": "Shalom groups",
+        "text": "Groups of 30–50 leaders in each community deepen discipleship, cohesion, and local initiative."
+      },
+      {
+        "title": "A clear two-year journey",
+        "text": "Every community moves through awareness, engagement, training, implementation, and multiplication."
+      }
+    ],
+    "cta": { "label": "See what we do", "href": "#/work" }
+  },
+  "leadership": {
+    "eyebrow": "Leadership",
+    "title": "People who steward the ministry.",
+    "titleHtml": "<span>People who steward</span> <em>the ministry.</em>",
+    "lead": "Board and team profiles will appear here. For now, the field work is led by pastor networks across seven countries.",
+    "people": []
+  },
+  "history": {
+    "eyebrow": "History",
+    "title": "From Webuye to seven countries.",
+    "titleHtml": "<span>From Webuye to</span> <em>seven countries.</em>",
+    "lead": "Possibilities Africa began in Webuye, Kenya, in 2005. The same pastor-led model now reaches communities across East and Southern Africa.",
+    "milestones": [
+      { "year": "2005", "text": "Work begins in Webuye, Kenya" },
+      { "year": "2010s", "text": "Networks grow in Malawi, Ethiopia, and Zambia" },
+      { "year": "2020s", "text": "Newer footprints in Rwanda, Tanzania, and Burundi" },
+      { "year": "Today", "text": "Seven countries · one two-year journey" }
+    ]
+  },
+  "countries": {
+    "eyebrow": "Countries",
+    "title": "Where the ministry is present.",
+    "titleHtml": "<span>Where the ministry</span> <em>is present.</em>",
+    "lead": "Open a country to see communities, stories, and progress.",
+    "cta": { "label": "Where we work", "href": "#/africa" }
+  },
+  "partners": {
+    "eyebrow": "Partners",
+    "title": "Churches and friends walking with us.",
+    "titleHtml": "<span>Churches and friends</span> <em>walking with us.</em>",
+    "lead": "Partner logos and names will appear here as they are confirmed.",
+    "items": []
+  },
+  "contact": {
+    "eyebrow": "Contact",
+    "title": "Get in touch.",
+    "titleHtml": "<span>Get</span> <em>in touch.</em>",
+    "lead": "For partnership, media, or general enquiries, reach Possibilities Africa through the main ministry website.",
+    "email": "",
+    "phone": "",
+    "address": "",
+    "cta": {
+      "label": "Visit possibilitiesafrica.org",
+      "href": "https://www.possibilitiesafrica.org/"
+    }
+  }
+}

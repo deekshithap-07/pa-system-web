@@ -106,7 +106,7 @@
 .hierarchy-step__card {
   flex: 1;
   background: white;
-  border: 1px solid rgba(0, 43, 92, 0.1);
+  border: 1px solid rgba(92, 36, 40, 0.1);
   border-radius: var(--radius);
   padding: 0.85rem;
 }
@@ -157,7 +157,7 @@
   background: white;
   padding: 1.25rem;
   border-radius: var(--radius);
-  border: 1px solid rgba(0, 43, 92, 0.08);
+  border: 1px solid rgba(92, 36, 40, 0.08);
   border-top: 3px solid var(--pa-blue);
 }
 
@@ -243,7 +243,7 @@
   padding: 1.25rem;
   border-radius: var(--radius);
   text-align: center;
-  border: 1px solid rgba(0, 43, 92, 0.08);
+  border: 1px solid rgba(92, 36, 40, 0.08);
 }
 
 .triple-a-card__letter {
@@ -308,7 +308,7 @@
   padding: 1.15rem;
   border-radius: var(--radius);
   border-left: 3px solid var(--pa-blue);
-  box-shadow: 0 1px 3px rgba(0, 43, 92, 0.06);
+  box-shadow: 0 1px 3px rgba(92, 36, 40, 0.06);
 }
 
 .diff-card h3 {
