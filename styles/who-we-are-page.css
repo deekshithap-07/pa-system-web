@@ -1,117 +1,75 @@
-/* Who we are / About PA — maroon / gold / green */
+/* About PA — editorial scroll story (PA brand only) */
 
 .ab-page {
-  background: #fff;
+  /* Section bands — maroon / gold / brown / olive (no pink or mint) */
+  --ab-band-white: #ffffff;
+  --ab-band-gold: #ffe08a;
+  --ab-band-green: #d7e4c8;
+  --ab-band-maroon: #f3ebe8;
+  --ab-band-cream: #fff3c4;
+  --ab-band-stone: #ebe0d4;
+  --ab-band-sand: #f6edd9;
+  background: var(--pa-bg);
   padding-top: var(--header-h);
   min-height: 60vh;
+  overflow-x: clip;
 }
 
+.ab-page--reduced [data-ab-reveal],
+.ab-page--reduced [data-ab-statement-line],
+.ab-page--reduced [data-ab-region-node],
+.ab-page--reduced [data-ab-map-pin] {
+  opacity: 1 !important;
+  transform: none !important;
+}
+
+/* Shared typography tokens */
 .ab-eyebrow {
-  margin: 0 0 0.65rem;
-  font-size: 0.72rem;
+  margin: 0 0 0.75rem;
+  font-size: clamp(0.68rem, 1.2vw, 0.72rem);
   font-weight: 700;
-  letter-spacing: 0.16em;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
   color: var(--pa-gold);
 }
 
 .ab-eyebrow--on-dark {
-  color: var(--pa-gold);
+  color: var(--pa-gold-soft);
 }
 
-.ab-band {
-  position: relative;
-  isolation: isolate;
-  padding: 4rem 0;
-}
-
-.ab-band--skin-gold {
-  background:
-    radial-gradient(ellipse at 12% 0%, rgba(232, 169, 26, 0.16), transparent 52%),
-    linear-gradient(180deg, #fff9ef 0%, #faf7f2 55%, #fff 100%);
-  border-top: 3px solid rgba(232, 169, 26, 0.5);
-  border-bottom: 1px solid rgba(232, 169, 26, 0.16);
-}
-
-.ab-band--skin-green {
-  background:
-    radial-gradient(ellipse at 88% 10%, rgba(63, 154, 74, 0.12), transparent 48%),
-    linear-gradient(180deg, #f3faf4 0%, #eef6ef 50%, #fff 100%);
-  border-top: 3px solid rgba(63, 154, 74, 0.4);
-  border-bottom: 1px solid rgba(63, 154, 74, 0.12);
-}
-
-.ab-band--skin-maroon {
-  background:
-    radial-gradient(ellipse at 20% 0%, rgba(92, 36, 40, 0.1), transparent 50%),
-    linear-gradient(180deg, #f7f1f0 0%, #f3ebe8 48%, #fff 100%);
-  border-top: 3px solid rgba(92, 36, 40, 0.32);
-  border-bottom: 1px solid rgba(92, 36, 40, 0.1);
-}
-
-.ab-band--skin-gold::before,
-.ab-band--skin-green::before,
-.ab-band--skin-maroon::before {
-  content: "";
-  position: absolute;
-  left: 0;
-  top: 1.25rem;
-  bottom: 1.25rem;
-  width: 4px;
-  border-radius: 0 4px 4px 0;
-  pointer-events: none;
-}
-
-.ab-band--skin-gold::before { background: var(--pa-gold); }
-.ab-band--skin-green::before { background: var(--pa-green); }
-.ab-band--skin-maroon::before { background: var(--pa-maroon); }
-
-.ab-band--skin-gold .ab-eyebrow { color: #b8860b; }
-.ab-band--skin-green .ab-eyebrow { color: var(--pa-gold); }
-.ab-band--skin-maroon .ab-eyebrow { color: var(--pa-maroon); }
-
-.ab-band__head {
-  max-width: 40rem;
-  margin-bottom: 2rem;
-}
-
-.ab-band__head .pa-title {
-  margin: 0;
-  font-size: clamp(1.65rem, 3vw, 2.35rem);
-  font-weight: 800;
-  letter-spacing: -0.025em;
-  line-height: 1.15;
+.ab-highlight {
   color: var(--pa-maroon);
-}
-
-.ab-band__head .pa-title em {
-  display: block;
-  font-style: italic;
   font-weight: 700;
-  color: var(--pa-gold);
-}
-
-.ab-band__lead {
-  margin: 0.85rem 0 0;
-  font-size: 1.02rem;
-  line-height: 1.65;
-  color: var(--pa-slate);
-  max-width: 38rem;
 }
 
 .ab-text-link {
   display: inline-flex;
-  margin-top: 1.35rem;
+  margin-top: 1.25rem;
   font-weight: 700;
   color: var(--pa-maroon);
   text-decoration: none;
+  transition: color 0.25s var(--ease-out);
 }
 
 .ab-text-link:hover {
   color: var(--pa-gold);
 }
 
-/* Hero — same placement as What we do (ow-hero) */
+.pa-title span {
+  display: block;
+}
+
+.pa-title em {
+  display: block;
+  font-style: italic;
+  font-weight: 700;
+  color: var(--pa-gold);
+}
+
+/* ==========================================================================
+   Hero — photo band (matches Our Work / Impact)
+   ========================================================================== */
+
 .ab-hero {
   position: relative;
   isolation: isolate;
@@ -151,7 +109,6 @@
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
-  align-items: stretch;
   padding: 3.5rem clamp(1rem, 3.5vw, 2.25rem) 2.75rem;
   box-sizing: border-box;
 }
@@ -170,9 +127,6 @@
 }
 
 .ab-hero__title.pa-title em {
-  display: block;
-  font-style: italic;
-  font-weight: 700;
   color: var(--pa-gold);
 }
 
@@ -183,339 +137,972 @@
   color: rgba(255, 255, 255, 0.92);
 }
 
-.ab-hero__jump {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.55rem 1rem;
-  margin-top: 1.5rem;
+/* ==========================================================================
+   Section 01 — Who We Are (editorial statement)
+   ========================================================================== */
+
+.ab-statement {
+  position: relative;
+  padding: clamp(4rem, 10vh, 7rem) 0 clamp(5rem, 12vh, 8rem);
+  background: var(--ab-band-white);
+  border-top: 1px solid rgba(92, 36, 40, 0.08);
 }
 
-.ab-hero__jump a {
-  font-size: 0.84rem;
-  font-weight: 700;
-  color: rgba(255, 255, 255, 0.85);
-  text-decoration: none;
-  border-bottom: 1px solid rgba(232, 169, 26, 0.55);
+.ab-statement__grid {
+  display: grid;
+  grid-template-columns: minmax(0, 0.32fr) minmax(0, 1fr);
+  gap: clamp(2rem, 5vw, 5rem);
+  align-items: start;
 }
 
-.ab-hero__jump a:hover {
-  color: var(--pa-gold);
-  border-bottom-color: var(--pa-gold);
+.ab-statement__aside {
+  position: sticky;
+  top: calc(var(--header-h) + 2rem);
 }
 
-/* Points */
-.ab-points {
+.ab-statement__heading {
+  margin: 0;
+  font-size: clamp(1.35rem, 2.2vw, 1.75rem);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+  color: var(--pa-maroon);
+}
+
+.ab-statement__lines {
   margin: 0;
   padding: 0;
   list-style: none;
-  display: grid;
-  gap: 0.85rem;
-  max-width: 44rem;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(1rem, 2.5vh, 1.65rem);
+  max-width: 36rem;
 }
 
-.ab-points li {
-  position: relative;
-  padding: 1rem 1.15rem 1rem 1.35rem;
-  border-radius: 0.75rem;
-  background: rgba(255, 255, 255, 0.94);
-  border: 1px solid rgba(232, 169, 26, 0.22);
+.ab-statement__line {
+  font-size: clamp(1rem, 1.5vw, 1.12rem);
+  line-height: 1.65;
   color: var(--pa-slate);
-  line-height: 1.55;
-  border-left: 3px solid var(--pa-gold);
+  padding-left: 1.15rem;
+  border-left: 2px solid rgba(232, 169, 26, 0.45);
 }
 
-/* Vision / mission */
-.ab-vm-grid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 1.15rem;
+.ab-statement__figure {
+  margin: clamp(2.5rem, 5vh, 3.5rem) 0 0;
+  max-width: 28rem;
+  overflow: hidden;
+  border-radius: 0.35rem;
 }
+
+.ab-statement__figure img {
+  display: block;
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+}
+
+/* ==========================================================================
+   Section 02 — Vision & Mission (Vision 2030 + cards)
+   ========================================================================== */
 
 .ab-vm {
-  padding: 1.35rem 1.25rem;
-  border-radius: 0.85rem;
-  background: rgba(255, 255, 255, 0.95);
-  border: 1px solid rgba(63, 154, 74, 0.16);
+  padding: clamp(4rem, 9vh, 6.5rem) 0;
+  background: var(--ab-band-gold);
+  border-top: 1px solid rgba(232, 169, 26, 0.28);
 }
 
-.ab-vm__label {
-  margin: 0 0 0.55rem;
-  font-size: 0.72rem;
-  font-weight: 800;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--pa-gold);
+.ab-vm__head {
+  max-width: 34rem;
+  margin-bottom: clamp(2rem, 4vh, 3rem);
 }
 
-.ab-vm__text {
+.ab-vm__title {
   margin: 0;
-  font-size: 1.08rem;
-  line-height: 1.55;
-  color: var(--pa-maroon);
-  font-weight: 600;
-}
-
-/* Approach */
-.ab-approach-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
-  gap: 1rem;
-}
-
-.ab-approach {
-  padding: 1.15rem 1.1rem;
-  border-radius: 0.85rem;
-  background: rgba(255, 255, 255, 0.95);
-  border: 1px solid rgba(92, 36, 40, 0.1);
-}
-
-.ab-approach__n {
-  display: block;
-  margin-bottom: 0.4rem;
-  font-size: 0.7rem;
+  font-size: clamp(1.5rem, 2.8vw, 2.1rem);
   font-weight: 800;
-  letter-spacing: 0.1em;
-  color: var(--pa-gold);
-}
-
-.ab-approach strong {
+  letter-spacing: -0.025em;
+  line-height: 1.12;
   color: var(--pa-maroon);
-  font-size: 1.02rem;
 }
 
-.ab-approach p {
-  margin: 0.45rem 0 0;
-  font-size: 0.92rem;
+.ab-vm__layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+  gap: clamp(1.25rem, 3vw, 2rem);
+  align-items: stretch;
+}
+
+.ab-vm2030 {
+  padding: clamp(1.25rem, 2.5vw, 1.75rem);
+  background: #fff;
+  border: 1px solid rgba(92, 36, 40, 0.1);
+  border-radius: 0.5rem;
+}
+
+.ab-vm2030__title {
+  margin: 0 0 1.25rem;
+  text-align: center;
+  font-size: clamp(1.35rem, 2.4vw, 1.75rem);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--pa-maroon);
+}
+
+.ab-vm2030__body {
+  display: grid;
+  grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.05fr);
+  gap: clamp(1rem, 2.5vw, 1.75rem);
+  align-items: center;
+}
+
+.ab-vm2030-map {
+  min-height: 14rem;
+}
+
+.ab-vm2030__stats {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.ab-vm2030__stat {
+  padding: 0.85rem 0;
+  border-bottom: 1px solid rgba(92, 36, 40, 0.1);
+}
+
+.ab-vm2030__stat:last-child {
+  border-bottom: 0;
+}
+
+.ab-vm2030__stat-value {
+  display: block;
+  font-size: clamp(1.75rem, 3vw, 2.35rem);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1;
+  color: var(--pa-maroon);
+}
+
+.ab-vm2030__stat-label {
+  display: block;
+  margin-top: 0.25rem;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--pa-maroon);
+}
+
+.ab-vm2030__stat-note {
+  margin: 0.35rem 0 0;
+  font-size: 0.85rem;
   line-height: 1.5;
   color: var(--pa-slate);
 }
 
-/* Leadership */
-.ab-people-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
-  gap: 1rem;
+.ab-vm__cards {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(1rem, 2vw, 1.25rem);
 }
 
-.ab-person {
-  padding: 1rem;
-  border-radius: 0.85rem;
+.ab-vm-card {
+  flex: 1;
+  padding: clamp(1.35rem, 2.5vw, 1.75rem);
+  background: rgba(255, 255, 255, 0.85);
+  border: 1px solid rgba(92, 36, 40, 0.08);
+  border-radius: 0.5rem;
+}
+
+.ab-vm-card--vision {
   background: rgba(255, 255, 255, 0.95);
-  border: 1px solid rgba(232, 169, 26, 0.2);
 }
 
-.ab-person__media {
-  aspect-ratio: 1;
-  border-radius: 0.55rem;
-  overflow: hidden;
-  background: #ebe4dc;
+.ab-vm-card--mission {
+  background: #f7f1f0;
+}
+
+.ab-vm-card__icon {
+  display: inline-flex;
+  width: 2rem;
+  height: 2rem;
   margin-bottom: 0.75rem;
+  color: var(--pa-maroon);
 }
 
-.ab-person__media img {
+.ab-vm-card__icon svg {
+  width: 100%;
+  height: 100%;
+}
+
+.ab-vm-card__label {
+  margin: 0 0 0.65rem;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--pa-maroon);
+}
+
+.ab-vm-card__text {
+  margin: 0;
+  font-size: clamp(0.98rem, 1.4vw, 1.08rem);
+  line-height: 1.65;
+  color: var(--pa-slate);
+}
+
+/* Shared Africa map (Vision 2030 + Countries) */
+.ab-vm2030-map,
+.ab-regions-map {
+  position: relative;
+  width: 100%;
+}
+
+.ab-vm2030-map__svg,
+.ab-regions-map__svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.ab-vm2030-map__ocean,
+.ab-regions-map__ocean {
+  fill: #f3ebe8;
+}
+
+.ab-vm2030-map__land,
+.ab-regions-map__land {
+  fill: #e8dfd8;
+  stroke: rgba(92, 36, 40, 0.08);
+  stroke-width: 0.5;
+}
+
+.ab-vm2030-map__land--pa,
+.ab-regions-map__land--pa {
+  fill: color-mix(in srgb, var(--pa-maroon) 55%, var(--pa-gold) 45%);
+}
+
+.ab-vm2030-map__pin,
+.ab-regions-map__pin {
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.ab-vm2030-map__pin-dot,
+.ab-regions-map__pin-dot {
+  fill: var(--pa-gold);
+  stroke: #fff;
+  stroke-width: 1.5;
+  transition: transform 0.25s var(--ease-out), fill 0.25s ease;
+}
+
+.ab-regions-map__pin:hover .ab-regions-map__pin-dot {
+  fill: var(--pa-gold-bright);
+  transform: scale(1.15);
+}
+
+.ab-regions-map__pin-label {
+  fill: var(--pa-maroon);
+  font-size: 11px;
+  font-weight: 700;
+  text-anchor: middle;
+  pointer-events: none;
+}
+
+/* ==========================================================================
+   Section 03 — Our Approach (sticky chapters)
+   ========================================================================== */
+
+.ab-chapters {
+  padding: clamp(4rem, 8vh, 5.5rem) 0;
+  background: var(--ab-band-green);
+  border-top: 1px solid rgba(63, 154, 74, 0.22);
+}
+
+.ab-chapters__wrap {
+  display: grid;
+  grid-template-columns: minmax(0, 0.38fr) minmax(0, 0.62fr);
+  gap: clamp(2rem, 5vw, 4rem);
+  align-items: start;
+}
+
+.ab-chapters__aside {
+  padding-top: 0.5rem;
+}
+
+.ab-chapters__title {
+  margin: 0;
+  font-size: clamp(1.5rem, 2.6vw, 2rem);
+  font-weight: 800;
+  letter-spacing: -0.025em;
+  line-height: 1.12;
+  color: var(--pa-maroon);
+}
+
+.ab-chapters__lead {
+  margin: 1rem 0 0;
+  font-size: 1rem;
+  line-height: 1.65;
+  color: var(--pa-slate);
+  max-width: 22rem;
+}
+
+.ab-chapters__progress {
+  position: relative;
+  width: 2px;
+  height: 5rem;
+  margin-top: 2rem;
+}
+
+.ab-chapters__progress-track {
+  position: absolute;
+  inset: 0;
+  background: rgba(92, 36, 40, 0.12);
+  border-radius: 2px;
+}
+
+.ab-chapters__progress-fill {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 0%;
+  background: var(--pa-gold);
+  border-radius: 2px;
+  transition: height 0.45s var(--ease-out);
+}
+
+.ab-chapters__cta {
+  margin-top: 1.75rem;
+}
+
+.ab-chapters__track {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.ab-chapter {
+  min-height: clamp(18rem, 42vh, 28rem);
+  padding: clamp(2rem, 5vh, 3.5rem) 0;
+  border-bottom: 1px solid rgba(92, 36, 40, 0.08);
+  opacity: 0.38;
+  transform: translateY(12px);
+  transition:
+    opacity 0.5s var(--ease-out),
+    transform 0.5s var(--ease-out);
+}
+
+.ab-chapter:last-child {
+  border-bottom: 0;
+}
+
+.ab-chapter.is-active {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.ab-chapter.is-past {
+  opacity: 0.55;
+  transform: translateY(0);
+}
+
+.ab-chapter__n {
+  display: block;
+  margin-bottom: 0.75rem;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  color: var(--pa-gold);
+}
+
+.ab-chapter.is-active .ab-chapter__n {
+  color: var(--pa-maroon);
+}
+
+.ab-chapter__title {
+  margin: 0;
+  font-size: clamp(1.35rem, 2.4vw, 2rem);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+  color: var(--pa-maroon);
+  transition: font-size 0.45s var(--ease-out);
+}
+
+.ab-chapter.is-active .ab-chapter__title {
+  font-size: clamp(1.55rem, 2.8vw, 2.35rem);
+}
+
+.ab-chapter__text {
+  margin: 0.85rem 0 0;
+  max-width: 30rem;
+  font-size: clamp(0.95rem, 1.3vw, 1.05rem);
+  line-height: 1.65;
+  color: var(--pa-slate);
+}
+
+/* ==========================================================================
+   Section 04 — Leadership (editorial)
+   ========================================================================== */
+
+.ab-leaders {
+  padding: clamp(4rem, 9vh, 6.5rem) 0;
+  background: var(--ab-band-maroon);
+  border-top: 1px solid rgba(92, 36, 40, 0.16);
+}
+
+.ab-leaders__grid {
+  display: grid;
+  grid-template-columns: minmax(0, 0.34fr) minmax(0, 1fr);
+  gap: clamp(2rem, 5vw, 4rem);
+  align-items: start;
+}
+
+.ab-leaders__title {
+  margin: 0;
+  font-size: clamp(1.5rem, 2.8vw, 2.1rem);
+  font-weight: 800;
+  letter-spacing: -0.025em;
+  line-height: 1.12;
+  color: var(--pa-maroon);
+}
+
+.ab-leaders__lead {
+  margin: 1rem 0 0;
+  font-size: 1rem;
+  line-height: 1.65;
+  color: var(--pa-slate);
+  max-width: 22rem;
+}
+
+.ab-leaders__stage {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.ab-leader {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 1rem;
+  transition: transform 0.35s var(--ease-out);
+}
+
+.ab-leader--featured {
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+  gap: clamp(1.25rem, 3vw, 2rem);
+  align-items: end;
+}
+
+.ab-leader__media {
+  overflow: hidden;
+  border-radius: 0.35rem;
+  background: #ebe4dc;
+  aspect-ratio: 4 / 5;
+}
+
+.ab-leader--featured .ab-leader__media {
+  aspect-ratio: 3 / 4;
+  max-height: 28rem;
+}
+
+.ab-leader__media img,
+.ab-leader__ph {
+  display: block;
   width: 100%;
   height: 100%;
   object-fit: cover;
-  display: block;
+  transition: transform 0.55s var(--ease-out);
 }
 
-.ab-person__ph {
-  display: block;
-  width: 100%;
-  height: 100%;
+.ab-leader__ph {
   background: linear-gradient(135deg, #ebe4dc, #d9cfc4);
 }
 
-.ab-person strong {
+.ab-leader:hover .ab-leader__media img {
+  transform: scale(1.04);
+}
+
+.ab-leader__name {
   display: block;
+  font-size: clamp(1.15rem, 2vw, 1.45rem);
+  color: var(--pa-maroon);
+  transition: color 0.25s ease;
+}
+
+.ab-leader:hover .ab-leader__name {
+  color: var(--pa-gold);
+}
+
+.ab-leader__role {
+  display: block;
+  margin-top: 0.25rem;
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--pa-muted);
+}
+
+.ab-leader__bio {
+  margin: 0.65rem 0 0;
+  font-size: 0.95rem;
+  line-height: 1.55;
+  color: var(--pa-slate);
+}
+
+.ab-leaders__list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
+  gap: 1.25rem;
+}
+
+.ab-leaders__list .ab-leader__media {
+  aspect-ratio: 1;
+}
+
+.ab-leaders__placeholder {
+  padding: clamp(2.5rem, 6vh, 4rem) clamp(1.5rem, 4vw, 2.5rem);
+  border-left: 3px solid var(--pa-gold);
+  background: rgba(255, 255, 255, 0.65);
+}
+
+.ab-leaders__placeholder-lead {
+  margin: 0;
+  font-size: clamp(1.15rem, 2.2vw, 1.55rem);
+  line-height: 1.55;
+  color: var(--pa-slate);
+  max-width: 32rem;
+}
+
+/* ==========================================================================
+   Section 05 — History (vertical timeline)
+   ========================================================================== */
+
+.ab-journey {
+  padding: clamp(4rem, 9vh, 6.5rem) 0;
+  background: var(--ab-band-cream);
+  border-top: 1px solid rgba(232, 169, 26, 0.24);
+}
+
+.ab-journey__head {
+  max-width: 36rem;
+  margin-bottom: 1.5rem;
+}
+
+.ab-journey__title {
+  margin: 0;
+  font-size: clamp(1.5rem, 2.8vw, 2.1rem);
+  font-weight: 800;
+  letter-spacing: -0.025em;
+  line-height: 1.12;
   color: var(--pa-maroon);
 }
 
-.ab-person span {
-  display: block;
-  margin-top: 0.2rem;
-  font-size: 0.85rem;
-  color: var(--pa-gold);
-  font-weight: 700;
-}
-
-.ab-person p {
-  margin: 0.5rem 0 0;
-  font-size: 0.88rem;
+.ab-journey__lead {
+  margin: 1rem 0 0;
+  font-size: 1rem;
+  line-height: 1.65;
   color: var(--pa-slate);
-  line-height: 1.45;
 }
 
-/* History */
-.ab-history-layout {
-  display: grid;
-  grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.05fr);
-  gap: 2rem;
-  align-items: start;
+.ab-journey__roots {
+  margin: 0 0 clamp(2.5rem, 5vh, 3.5rem);
+  max-width: 40rem;
+  font-size: clamp(0.98rem, 1.4vw, 1.08rem);
+  line-height: 1.7;
+  color: var(--pa-slate);
 }
 
-.ab-timeline {
+.ab-journey__track {
+  position: relative;
+  padding-left: 0;
+}
+
+.ab-journey__line {
+  position: absolute;
+  left: clamp(6.5rem, 14vw, 9rem);
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: rgba(232, 169, 26, 0.2);
+  pointer-events: none;
+}
+
+.ab-journey__line-fill {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background: var(--pa-gold);
+  transform: scaleY(0);
+  transform-origin: top center;
+}
+
+.ab-journey__list {
   margin: 0;
   padding: 0;
   list-style: none;
   display: flex;
   flex-direction: column;
-  gap: 0.85rem;
+  gap: 0;
 }
 
-.ab-timeline li {
+.ab-milestone {
   display: grid;
-  grid-template-columns: 5.5rem 1fr;
-  gap: 1rem;
-  align-items: baseline;
-  padding: 0.95rem 1.1rem;
-  border-radius: 0.75rem;
-  background: rgba(255, 255, 255, 0.95);
-  border: 1px solid rgba(63, 154, 74, 0.16);
+  grid-template-columns: clamp(5.5rem, 12vw, 8rem) 1.5rem minmax(0, 1fr);
+  gap: 0 1.25rem;
+  align-items: start;
+  padding: clamp(1.5rem, 3vh, 2.25rem) 0;
+  opacity: 0.45;
+  transition: opacity 0.45s var(--ease-out);
 }
 
-.ab-timeline span {
-  font-weight: 800;
-  color: var(--pa-gold);
+.ab-milestone.is-active {
+  opacity: 1;
 }
 
-.ab-timeline em {
-  font-style: normal;
-  color: var(--pa-slate);
-  line-height: 1.45;
-}
-
-/* Countries */
-.ab-country-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr));
-  gap: 0.85rem;
-}
-
-.ab-country {
+.ab-milestone__year-col {
   display: flex;
   flex-direction: column;
-  gap: 0.35rem;
-  padding: 1.1rem 1.15rem;
-  border-radius: 0.75rem;
-  background: rgba(255, 255, 255, 0.95);
-  border: 1px solid rgba(92, 36, 40, 0.1);
-  text-decoration: none;
-  color: inherit;
-  transition: transform 0.22s ease, border-color 0.22s ease;
+  gap: 0.25rem;
+  text-align: right;
+  padding-top: 0.15rem;
 }
 
-.ab-country:hover {
-  transform: translateY(-2px);
-  border-color: rgba(232, 169, 26, 0.45);
-  text-decoration: none;
-  color: inherit;
-}
-
-.ab-country strong {
-  color: var(--pa-maroon);
-  font-size: 1.05rem;
-}
-
-.ab-country span {
-  font-size: 0.85rem;
-  font-weight: 700;
+.ab-milestone__phase {
+  font-size: 0.65rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
   color: var(--pa-muted);
 }
 
-.ab-country:hover span {
+.ab-milestone__year {
+  font-size: clamp(0.95rem, 1.6vw, 1.15rem);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--pa-maroon);
+  transition: color 0.35s ease;
+}
+
+.ab-milestone.is-active .ab-milestone__year {
   color: var(--pa-gold);
 }
 
-/* Partners */
-.ab-partner-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
-  gap: 1rem;
+.ab-milestone__dot {
+  position: relative;
+  width: 0.75rem;
+  height: 0.75rem;
+  margin-top: 0.35rem;
+  border-radius: 999px;
+  background: #faf7f2;
+  border: 2px solid rgba(232, 169, 26, 0.45);
+  justify-self: center;
+  transition: border-color 0.35s ease, background 0.35s ease, transform 0.35s ease;
 }
 
-.ab-partner {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  min-height: 7rem;
-  padding: 1.15rem;
-  border-radius: 0.75rem;
-  background: rgba(255, 255, 255, 0.95);
-  border: 1px solid rgba(232, 169, 26, 0.2);
-  text-align: center;
+.ab-milestone.is-active .ab-milestone__dot {
+  background: var(--pa-gold);
+  border-color: var(--pa-gold);
+  transform: scale(1.15);
 }
 
-.ab-partner img {
-  max-width: 8rem;
-  max-height: 3.5rem;
-  object-fit: contain;
+.ab-milestone__title {
+  display: block;
+  font-size: clamp(1.05rem, 1.8vw, 1.25rem);
+  color: var(--pa-maroon);
+  letter-spacing: -0.01em;
 }
 
-.ab-partner strong {
+.ab-milestone__text {
+  margin: 0.45rem 0 0;
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: var(--pa-slate);
+  font-style: normal;
+}
+
+/* ==========================================================================
+   Section 06 — Countries (typographic geography)
+   ========================================================================== */
+
+.ab-regions {
+  padding: clamp(4rem, 9vh, 6.5rem) 0;
+  background: var(--ab-band-stone);
+  border-top: 1px solid rgba(92, 36, 40, 0.16);
+}
+
+.ab-regions__head {
+  max-width: 34rem;
+  margin-bottom: clamp(2rem, 4vh, 3rem);
+}
+
+.ab-regions__title {
+  margin: 0;
+  font-size: clamp(1.5rem, 2.8vw, 2.1rem);
+  font-weight: 800;
+  letter-spacing: -0.025em;
+  line-height: 1.12;
   color: var(--pa-maroon);
 }
 
-.ab-partner p {
-  margin: 0.4rem 0 0;
-  font-size: 0.85rem;
+.ab-regions__lead {
+  margin: 1rem 0 0;
+  font-size: 1rem;
+  line-height: 1.65;
   color: var(--pa-slate);
 }
 
-/* Contact */
-.ab-contact-layout {
+.ab-regions__layout {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 0.9fr);
-  gap: 2rem;
+  grid-template-columns: minmax(0, 1.35fr) minmax(0, 0.65fr);
+  gap: clamp(1.5rem, 3vw, 2.5rem);
   align-items: start;
 }
 
-.ab-contact-panel {
-  padding: 1.5rem 1.35rem;
-  border-radius: 0.85rem;
-  background: rgba(255, 255, 255, 0.95);
-  border: 1px solid rgba(63, 154, 74, 0.18);
+.ab-regions-map {
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.7);
+  border: 1px solid rgba(92, 36, 40, 0.08);
+  border-radius: 0.35rem;
 }
 
-.ab-contact-panel p {
-  margin: 0 0 0.85rem;
-  color: var(--pa-slate);
-  line-height: 1.5;
+.ab-regions__aside {
+  padding-top: 0.5rem;
 }
 
-.ab-contact-panel strong {
+.ab-regions__count {
+  margin: 0 0 1.25rem;
+  font-size: 0.85rem;
+  color: var(--pa-muted);
+}
+
+.ab-regions__count strong {
   display: block;
-  margin-bottom: 0.2rem;
-  font-size: 0.72rem;
+  font-size: clamp(2rem, 4vw, 2.5rem);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  color: var(--pa-maroon);
+  line-height: 1;
+}
+
+.ab-regions__list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+}
+
+.ab-regions__list-item {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.35rem 0.75rem;
+  padding: 0.65rem 0;
+  border-bottom: 1px solid rgba(92, 36, 40, 0.08);
+  text-decoration: none;
+  color: inherit;
+  transition: color 0.2s ease;
+}
+
+.ab-regions__list-item:hover {
+  color: var(--pa-maroon);
+  text-decoration: none;
+}
+
+.ab-regions__list-name {
+  font-weight: 700;
+  color: var(--pa-maroon);
+}
+
+.ab-regions__list-status {
+  font-size: 0.68rem;
+  font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--pa-muted);
 }
 
-.ab-contact-panel a {
+.ab-regions__all {
+  margin-top: 1.25rem;
+}
+
+/* ==========================================================================
+   Section 07 — Partners
+   ========================================================================== */
+
+.ab-allies {
+  padding: clamp(4rem, 8vh, 5.5rem) 0;
+  background: var(--ab-band-sand);
+  border-top: 1px solid rgba(63, 154, 74, 0.22);
+}
+
+.ab-allies__head {
+  max-width: 34rem;
+  margin-bottom: clamp(2rem, 4vh, 3rem);
+}
+
+.ab-allies__title {
+  margin: 0;
+  font-size: clamp(1.5rem, 2.8vw, 2.1rem);
+  font-weight: 800;
+  letter-spacing: -0.025em;
+  line-height: 1.12;
   color: var(--pa-maroon);
+}
+
+.ab-allies__lead {
+  margin: 1rem 0 0;
+  font-size: 1rem;
+  line-height: 1.65;
+  color: var(--pa-slate);
+}
+
+.ab-allies__grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: clamp(1rem, 2.5vw, 2rem);
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.ab-ally {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-width: 9rem;
+  min-height: 5.5rem;
+  padding: 1rem 1.25rem;
+  opacity: 0.88;
+  transition: opacity 0.3s ease, transform 0.3s var(--ease-out);
+}
+
+.ab-ally:hover {
+  opacity: 1;
+  transform: translateY(-3px);
+}
+
+.ab-ally img {
+  max-width: 8rem;
+  max-height: 3.25rem;
+  object-fit: contain;
+}
+
+.ab-ally__name {
+  color: var(--pa-maroon);
+  font-size: 1rem;
+}
+
+.ab-ally__note {
+  margin: 0.35rem 0 0;
+  font-size: 0.82rem;
+  color: var(--pa-muted);
+  text-align: center;
+}
+
+.ab-allies__placeholder {
+  padding: 2.5rem 0;
+  max-width: 32rem;
+}
+
+.ab-allies__placeholder p {
+  margin: 0;
+  font-size: 1.05rem;
+  line-height: 1.6;
+  color: var(--pa-muted);
+}
+
+/* ==========================================================================
+   Section 08 — Contact (closing CTA)
+   ========================================================================== */
+
+.ab-closer {
+  padding: clamp(5rem, 12vh, 8rem) 0 clamp(4rem, 10vh, 6rem);
+  background:
+    linear-gradient(165deg, var(--pa-maroon-deep) 0%, var(--pa-maroon) 48%, var(--pa-maroon-dark) 100%);
+  color: #fff;
+  border-top: 3px solid var(--pa-gold);
+}
+
+.ab-closer__inner {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.85fr);
+  gap: clamp(2.5rem, 6vw, 4.5rem);
+  align-items: end;
+}
+
+.ab-closer__title {
+  margin: 0;
+  font-size: clamp(2.25rem, 6vw, 4.25rem);
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  line-height: 0.95;
+  color: #fff;
+}
+
+.ab-closer__title em {
+  color: var(--pa-gold-soft);
+}
+
+.ab-closer__lead {
+  margin: 1.25rem 0 0;
+  max-width: 32rem;
+  font-size: clamp(1rem, 1.5vw, 1.12rem);
+  line-height: 1.65;
+  color: rgba(255, 255, 255, 0.88);
+}
+
+.ab-closer__panel {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.ab-closer__item {
+  margin: 0;
+  font-size: 1rem;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.92);
+}
+
+.ab-closer__item-label {
+  display: block;
+  margin-bottom: 0.2rem;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.55);
+}
+
+.ab-closer__item a {
+  color: #fff;
   font-weight: 700;
   text-decoration: none;
+  border-bottom: 1px solid rgba(232, 169, 26, 0.45);
+  transition: color 0.25s ease, border-color 0.25s ease;
 }
 
-.ab-contact-panel a:hover {
-  color: var(--pa-gold);
+.ab-closer__item a:hover {
+  color: var(--pa-gold-soft);
+  border-bottom-color: var(--pa-gold);
 }
 
-.ab-contact-panel__note {
-  color: var(--pa-muted) !important;
+.ab-closer__note {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.65);
 }
 
 .ab-btn {
   display: inline-flex;
   align-items: center;
-  margin-top: 0.35rem;
-  padding: 0.8rem 1.2rem;
-  border-radius: 0.45rem;
+  align-self: flex-start;
+  margin-top: 0.75rem;
+  padding: 0.85rem 1.35rem;
+  border-radius: 0.35rem;
   font-weight: 700;
   text-decoration: none;
-  transition: transform 0.22s ease, background 0.22s ease;
+  transition: transform 0.25s var(--ease-out), background 0.25s ease;
 }
 
 .ab-btn:hover {
@@ -530,42 +1117,96 @@
 }
 
 .ab-btn--solid:hover {
-  background: #d49816;
+  background: var(--pa-gold-bright);
   color: var(--pa-maroon-deep);
 }
 
-.ab-blank {
-  padding: 2rem 1.35rem;
-  border-radius: 0.85rem;
-  border: 1px dashed rgba(92, 36, 40, 0.22);
-  background: rgba(255, 255, 255, 0.7);
-  text-align: center;
-}
-
-.ab-blank p {
-  margin: 0;
-  color: var(--pa-muted);
-}
+/* ==========================================================================
+   Responsive
+   ========================================================================== */
 
 @media (max-width: 900px) {
-  .ab-vm-grid,
-  .ab-history-layout,
-  .ab-contact-layout {
+  .ab-statement__grid,
+  .ab-leaders__grid,
+  .ab-chapters__wrap,
+  .ab-closer__inner,
+  .ab-vm__layout,
+  .ab-vm2030__body,
+  .ab-regions__layout {
     grid-template-columns: 1fr;
+  }
+
+  .ab-statement__aside {
+    position: static;
+  }
+
+  .ab-chapter {
+    min-height: auto;
+    opacity: 1;
+    transform: none;
+    padding: 1.75rem 0;
+  }
+
+  .ab-chapter.is-active .ab-chapter__title {
+    font-size: clamp(1.35rem, 4vw, 1.65rem);
+  }
+
+  .ab-chapters__progress {
+    display: none;
+  }
+
+  .ab-leader--featured {
+    grid-template-columns: 1fr;
+  }
+
+  .ab-leader--featured .ab-leader__media {
+    max-height: none;
+    aspect-ratio: 4 / 3;
+  }
+
+  .ab-journey__line {
+    left: 0.35rem;
+  }
+
+  .ab-milestone {
+    grid-template-columns: 1fr;
+    gap: 0.5rem;
+    padding-left: 1.5rem;
+  }
+
+  .ab-milestone__year-col {
+    text-align: left;
+  }
+
+  .ab-milestone__dot {
+    position: absolute;
+    left: 0;
+    margin-top: 0;
+  }
+
+  .ab-milestone {
+    position: relative;
+  }
+
+  .ab-regions-map__pin-label {
+    font-size: 9px;
   }
 }
 
 @media (max-width: 640px) {
-  .ab-band {
-    padding: 3rem 0;
-  }
-
   .ab-hero {
     min-height: min(62vh, 28rem);
   }
 
-  .ab-timeline li {
-    grid-template-columns: 1fr;
-    gap: 0.25rem;
+  .ab-statement,
+  .ab-vm,
+  .ab-chapters,
+  .ab-leaders,
+  .ab-journey,
+  .ab-regions,
+  .ab-allies,
+  .ab-closer {
+    padding-top: 3.5rem;
+    padding-bottom: 3.5rem;
   }
 }

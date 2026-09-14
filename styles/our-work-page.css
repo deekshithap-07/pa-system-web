@@ -1,131 +1,62 @@
-/* Our Work page — brand theme matching home design */
+/* What we do — editorial layouts (rails, spines, timelines — not card grids) */
 
 .ow-page {
-  background: #fff;
+  --ow-band-white: #ffffff;
+  --ow-band-gold: #ffe08a;
+  --ow-band-green: #d7e4c8;
+  --ow-band-maroon: #f3ebe8;
+  --ow-band-cream: #fff3c4;
+  --ow-band-sand: #f6edd9;
+  --ow-band-stone: #ebe0d4;
+  background: var(--pa-bg);
   padding-top: var(--header-h);
   min-height: 60vh;
+  overflow-x: clip;
+}
+
+.ow-page--reduced [data-ow-reveal],
+.ow-page--reduced [data-ow-rail-item],
+.ow-page--reduced [data-ow-spine-col],
+.ow-page--reduced [data-ow-stack-row],
+.ow-page--reduced [data-ow-path-step],
+.ow-page--reduced [data-ow-say-line],
+.ow-page--reduced [data-ow-stat] strong {
+  opacity: 1 !important;
+  transform: none !important;
 }
 
 .ow-eyebrow {
-  margin: 0 0 0.65rem;
-  font-size: 0.72rem;
+  margin: 0 0 0.75rem;
+  font-size: clamp(0.68rem, 1.1vw, 0.72rem);
   font-weight: 700;
-  letter-spacing: 0.16em;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
   color: var(--pa-gold);
 }
 
-.ow-band {
-  padding: 4.25rem 0;
-  position: relative;
-}
-
-.ow-band--tint {
-  background: linear-gradient(180deg, #faf7f2 0%, #fff 100%);
-  border-top: 1px solid rgba(92, 36, 40, 0.06);
-}
-
-/* Distinct section skins — brand maroon / gold / green */
-.ow-band--skin-gold {
-  background:
-    radial-gradient(ellipse at 12% 0%, rgba(232, 169, 26, 0.18), transparent 52%),
-    linear-gradient(180deg, #fff9ef 0%, #faf7f2 55%, #fff 100%);
-  border-top: 3px solid rgba(232, 169, 26, 0.55);
-  border-bottom: 1px solid rgba(232, 169, 26, 0.18);
-}
-
-.ow-band--skin-green {
-  background:
-    radial-gradient(ellipse at 88% 10%, rgba(63, 154, 74, 0.14), transparent 48%),
-    linear-gradient(180deg, #f3faf4 0%, #eef6ef 50%, #fff 100%);
-  border-top: 3px solid rgba(63, 154, 74, 0.45);
-  border-bottom: 1px solid rgba(63, 154, 74, 0.14);
-}
-
-.ow-band--skin-maroon {
-  background:
-    radial-gradient(ellipse at 20% 0%, rgba(92, 36, 40, 0.1), transparent 50%),
-    linear-gradient(180deg, #f7f1f0 0%, #f3ebe8 48%, #fff 100%);
-  border-top: 3px solid rgba(92, 36, 40, 0.35);
-  border-bottom: 1px solid rgba(92, 36, 40, 0.1);
-}
-
-.ow-band--skin-gold::before,
-.ow-band--skin-green::before,
-.ow-band--skin-maroon::before {
-  content: "";
-  position: absolute;
-  left: 0;
-  top: 1.25rem;
-  bottom: 1.25rem;
-  width: 4px;
-  border-radius: 0 4px 4px 0;
-}
-
-.ow-band--skin-gold::before { background: var(--pa-gold); }
-.ow-band--skin-green::before { background: var(--pa-green); }
-.ow-band--skin-maroon::before { background: var(--pa-maroon); }
-
-.ow-band--skin-green .ow-eyebrow { color: var(--pa-gold); }
-.ow-band--skin-gold .ow-eyebrow { color: #b8860b; }
-.ow-band--skin-maroon .ow-eyebrow { color: var(--pa-maroon); }
-
-.ow-band--skin-green .ow-card,
-.ow-band--skin-green .ow-stage {
-  background: rgba(255, 255, 255, 0.92);
-  border-color: rgba(63, 154, 74, 0.16);
-}
-
-.ow-band--skin-gold .ow-card,
-.ow-band--skin-gold .ow-model__aside,
-.ow-band--skin-gold .ow-model__card {
-  background: rgba(255, 255, 255, 0.9);
-  border-color: rgba(232, 169, 26, 0.22);
-}
-
-.ow-band--skin-maroon .ow-shalom__stat strong {
-  color: #fff;
-}
-
-.ow-band--skin-green .ow-stage__n {
-  color: var(--pa-green);
-}
-
 .ow-eyebrow--on-dark {
-  color: var(--pa-gold);
+  color: var(--pa-gold-soft);
 }
 
-.ow-band__head {
+.ow-sec-head {
+  max-width: 36rem;
+  margin-bottom: clamp(1.75rem, 4vh, 2.75rem);
+}
+
+.ow-sec-head--wide {
   max-width: 42rem;
-  margin-bottom: 2rem;
 }
 
-.ow-band__head--center {
-  margin-left: auto;
-  margin-right: auto;
-  text-align: center;
-}
-
-.ow-band__head h2,
-.ow-split__copy h2,
-.ow-shalom__copy h2,
-.ow-resources h2,
-.ow-cta h2,
-.ow-title,
-.ow-hero h1 {
+.ow-sec-title {
   margin: 0;
-  font-size: clamp(1.65rem, 3vw, 2.35rem);
+  font-size: clamp(1.65rem, 3.2vw, 2.45rem);
   font-weight: 800;
-  letter-spacing: -0.025em;
-  line-height: 1.15;
+  letter-spacing: -0.03em;
+  line-height: 1.12;
   color: var(--pa-maroon);
 }
 
-.ow-band__head h2 em,
-.ow-shalom__copy h2 em,
-.ow-resources h2 em,
-.ow-cta h2 em,
-.ow-title em,
+.ow-sec-title em,
 .pa-title em {
   display: block;
   font-style: italic;
@@ -133,28 +64,12 @@
   color: var(--pa-gold);
 }
 
-.ow-hero h1,
-.ow-hero .ow-title {
-  font-size: clamp(2rem, 4.5vw, 3.1rem);
-  color: #fff;
-}
-
-.ow-hero h1 em,
-.ow-hero .pa-title em {
-  color: var(--pa-gold);
-}
-
-.ow-band__lead {
+.ow-sec-lead {
   margin: 0.85rem 0 0;
   max-width: 38rem;
-  font-size: 1.02rem;
+  font-size: clamp(0.98rem, 1.4vw, 1.08rem);
   line-height: 1.65;
   color: var(--pa-slate);
-}
-
-.ow-band__head--center .ow-band__lead {
-  margin-left: auto;
-  margin-right: auto;
 }
 
 .ow-text-link {
@@ -163,16 +78,56 @@
   font-weight: 700;
   color: var(--pa-maroon);
   text-decoration: none;
-  transition: transform 0.25s var(--ease-out), color 0.25s ease;
+  border-bottom: 1px solid rgba(232, 169, 26, 0.45);
+  transition: color 0.25s var(--ease-out), border-color 0.25s ease, transform 0.25s var(--ease-out);
 }
 
 .ow-text-link:hover {
-  color: var(--pa-green);
+  color: var(--pa-gold);
+  border-bottom-color: var(--pa-gold);
   text-decoration: none;
-  transform: translateX(4px);
+  transform: translateX(3px);
 }
 
-/* Hero */
+.ow-band {
+  padding: clamp(3.75rem, 9vh, 6rem) 0;
+  position: relative;
+}
+
+.ow-band--gold {
+  background: var(--ow-band-gold);
+  border-top: 1px solid rgba(232, 169, 26, 0.28);
+}
+
+.ow-band--green {
+  background: var(--ow-band-green);
+  border-top: 1px solid rgba(63, 154, 74, 0.22);
+}
+
+.ow-band--rose {
+  background: var(--ow-band-maroon);
+  border-top: 1px solid rgba(92, 36, 40, 0.14);
+}
+
+.ow-band--cream {
+  background: var(--ow-band-cream);
+  border-top: 1px solid rgba(232, 169, 26, 0.24);
+}
+
+.ow-band--mint {
+  background: var(--ow-band-sand);
+  border-top: 1px solid rgba(232, 169, 26, 0.22);
+}
+
+.ow-band--stone {
+  background: var(--ow-band-stone);
+  border-top: 1px solid rgba(92, 36, 40, 0.16);
+}
+
+/* ==========================================================================
+   Hero
+   ========================================================================== */
+
 .ow-hero {
   position: relative;
   isolation: isolate;
@@ -222,33 +177,16 @@
   max-width: 38rem;
 }
 
-.ow-hero__quote {
+.ow-hero__title.pa-title {
   margin: 0;
-  align-self: flex-end;
-  max-width: none;
-  white-space: nowrap;
-  font-family: Georgia, "Times New Roman", serif;
-  font-style: italic;
-  font-size: clamp(1.05rem, 2vw, 1.45rem);
-  line-height: 1.2;
-  color: rgba(255, 255, 255, 0.95);
-  text-align: right;
-  padding-bottom: 0.15rem;
-}
-
-.ow-hero h1 {
-  margin: 0;
+  color: #fff;
   font-size: clamp(2rem, 4.5vw, 3.1rem);
   font-weight: 800;
   letter-spacing: -0.03em;
   line-height: 1.1;
-  color: #fff;
 }
 
-.ow-hero h1 em {
-  display: block;
-  font-style: italic;
-  font-weight: 700;
+.ow-hero__title.pa-title em {
   color: var(--pa-gold);
 }
 
@@ -266,11 +204,22 @@
   margin-top: 1.5rem;
 }
 
+.ow-hero__quote {
+  margin: 0;
+  align-self: flex-end;
+  font-family: Georgia, "Times New Roman", serif;
+  font-style: italic;
+  font-size: clamp(1.05rem, 2vw, 1.45rem);
+  line-height: 1.2;
+  color: rgba(255, 255, 255, 0.95);
+  text-align: right;
+}
+
 .ow-btn {
   display: inline-flex;
   align-items: center;
   padding: 0.8rem 1.2rem;
-  border-radius: 0.45rem;
+  border-radius: 0.35rem;
   font-weight: 700;
   text-decoration: none;
   transition: transform 0.25s var(--ease-out), background 0.25s ease, border-color 0.25s ease, color 0.25s ease;
@@ -288,7 +237,7 @@
 }
 
 .ow-btn--solid:hover {
-  background: #d49816;
+  background: var(--pa-gold-bright);
   color: var(--pa-maroon-deep);
 }
 
@@ -309,435 +258,431 @@
   color: #fff;
 }
 
-.ow-cta .ow-btn--ghost {
-  color: var(--pa-maroon);
-  border-color: rgba(92, 36, 40, 0.35);
-}
+/* ==========================================================================
+   Model — sticky aside + vertical rail
+   ========================================================================== */
 
-.ow-cta .ow-btn--ghost:hover {
-  border-color: var(--pa-gold);
-  background: rgba(232, 169, 26, 0.12);
-  color: var(--pa-maroon);
-}
-
-.ow-cta .ow-btn--solid {
-  background: var(--pa-maroon);
-  color: #fff;
-  border-color: var(--pa-maroon);
-}
-
-.ow-cta .ow-btn--solid:hover {
-  background: var(--pa-maroon-dark);
-  color: #fff;
-}
-
-/* Our Model / How We Transform */
-.ow-model__intro {
+.ow-model {
   display: grid;
-  grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.05fr);
-  gap: 1.5rem 2.5rem;
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+  gap: clamp(2rem, 5vw, 4rem);
   align-items: start;
-  margin-bottom: 0.35rem;
-}
-
-.ow-model__head {
-  max-width: none;
-  margin-bottom: 0;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-}
-
-.ow-model__cta {
-  margin-top: 1rem;
-}
-
-.ow-model__drop {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin: 0.55rem 0 0.15rem 1.75rem;
-  color: var(--pa-gold);
-}
-
-.ow-model__drop-line {
-  width: 3px;
-  height: 2.75rem;
-  border-radius: 999px;
-  background: currentColor;
-}
-
-.ow-model__drop-tip {
-  width: 0;
-  height: 0;
-  margin-top: -1px;
-  border-left: 7px solid transparent;
-  border-right: 7px solid transparent;
-  border-top: 10px solid currentColor;
 }
 
 .ow-model__aside {
-  padding: 1.15rem 1.25rem;
-  border-radius: 0.85rem;
-  background: #faf7f2;
-  border: 1px solid rgba(92, 36, 40, 0.08);
+  position: sticky;
+  top: calc(var(--header-h) + 1.5rem);
 }
 
-.ow-model__aside-lead {
+.ow-model__lead {
   margin: 0;
   font-size: 1.02rem;
   line-height: 1.65;
   color: var(--pa-slate);
 }
 
-.ow-model__aside .ow-list {
-  margin-top: 1rem;
-}
-
-.ow-model__flow {
-  list-style: none;
-  margin: 0;
-  padding: 0.15rem 0 0;
-  display: flex;
-  flex-wrap: nowrap;
-  align-items: stretch;
-  gap: 0;
-}
-
-.ow-model__step {
-  position: relative;
-  flex: 1 1 0;
-  min-width: 0;
-  display: flex;
-  align-items: stretch;
-}
-
-.ow-model__connector {
-  flex: 0 0 auto;
-  display: flex;
-  align-items: center;
-  align-self: center;
-  width: 1.45rem;
-  margin: 0 0.1rem;
-  color: var(--pa-gold);
-}
-
-.ow-model__connector-line {
-  display: block;
-  flex: 1 1 auto;
-  height: 2px;
-  background: currentColor;
-  border-radius: 999px;
-}
-
-.ow-model__connector-tip {
-  width: 0;
-  height: 0;
-  border-top: 5px solid transparent;
-  border-bottom: 5px solid transparent;
-  border-left: 7px solid currentColor;
-}
-
-.ow-model__card {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  text-align: left;
-  gap: 0.55rem;
-  flex: 1 1 auto;
-  width: 100%;
-  height: 100%;
-  min-height: 12.75rem;
-  min-width: 0;
-  padding: 1rem 0.85rem 1.1rem;
-  text-decoration: none;
-  color: inherit;
-  border-radius: 0.85rem;
-  border: 1px solid rgba(92, 36, 40, 0.1);
-  background: #faf7f2;
-  box-sizing: border-box;
-  transition: transform 0.28s var(--ease-out), background 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
-}
-
-.ow-model__card:hover {
-  text-decoration: none;
-  transform: translateY(-4px);
-  border-color: rgba(232, 169, 26, 0.45);
-  box-shadow: 0 14px 30px rgba(92, 36, 40, 0.1);
-  background: #fff;
-}
-
-.ow-model__n {
-  font-size: 0.68rem;
-  font-weight: 800;
-  letter-spacing: 0.1em;
-  color: var(--pa-gold);
-}
-
-.ow-model__icon {
-  width: 2.85rem;
-  height: 2.85rem;
-  border-radius: 50%;
-  display: grid;
-  place-items: center;
-  color: #fff;
-  box-shadow: 0 8px 20px rgba(92, 36, 40, 0.12);
-}
-
-.ow-model__icon svg {
-  width: 1.35rem;
-  height: 1.35rem;
-}
-
-.ow-model__card--maroon .ow-model__icon { background: var(--pa-maroon); }
-.ow-model__card--gold .ow-model__icon { background: var(--pa-gold); color: var(--pa-maroon-deep); }
-.ow-model__card--green .ow-model__icon { background: var(--pa-green); }
-
-.ow-model__card strong {
-  font-size: 0.92rem;
-  line-height: 1.25;
-  color: var(--pa-maroon);
-}
-
-.ow-model__card span:last-child {
-  font-size: 0.8rem;
-  line-height: 1.4;
-  color: var(--pa-slate);
-  flex: 1 1 auto;
-  margin-top: auto;
-}
-
-/* Split / community */
-.ow-split {
-  display: grid;
-  grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
-  gap: 2rem 2.5rem;
-  align-items: center;
-}
-
-.ow-split__media {
-  margin: 0;
-  border-radius: 1rem;
-  overflow: hidden;
-  max-height: 14rem;
-  aspect-ratio: 4 / 3;
-  background: #f3ebe2;
-}
-
-.ow-split__media img {
-  width: 100%;
-  height: 100%;
-  max-height: 14rem;
-  object-fit: cover;
-  transition: transform 0.45s var(--ease-out);
-}
-
-.ow-split:hover .ow-split__media img {
-  transform: scale(1.04);
-}
-
-.ow-list {
-  margin: 1.15rem 0 0;
+.ow-lines {
+  margin: 1.25rem 0 0;
   padding: 0;
   list-style: none;
-  display: grid;
-  gap: 0.7rem;
-}
-
-.ow-list li {
-  position: relative;
-  padding-left: 1.15rem;
-  color: var(--pa-slate);
-  line-height: 1.55;
-}
-
-.ow-list li::before {
-  content: "";
-  position: absolute;
-  left: 0;
-  top: 0.55rem;
-  width: 0.45rem;
-  height: 0.45rem;
-  border-radius: 999px;
-  background: var(--pa-gold);
-}
-
-.ow-list--boxed {
-  background: #fff;
-  border: 1px solid rgba(92, 36, 40, 0.1);
-  border-radius: 1rem;
-  padding: 1.25rem 1.35rem;
-  box-shadow: 0 10px 28px rgba(92, 36, 40, 0.05);
-}
-
-/* Cards */
-.ow-cards {
-  display: grid;
-  gap: 1rem;
-}
-
-.ow-cards--3 {
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-}
-
-.ow-card {
-  background: #fff;
-  border: 1px solid rgba(92, 36, 40, 0.09);
-  border-radius: 0.9rem;
-  padding: 1.25rem 1.2rem;
-  transition: transform 0.28s var(--ease-out), box-shadow 0.28s ease, border-color 0.28s ease;
-}
-
-.ow-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 14px 32px rgba(92, 36, 40, 0.1);
-  border-color: rgba(232, 169, 26, 0.4);
-}
-
-.ow-card__mark {
-  display: inline-grid;
-  place-items: center;
-  width: 2.1rem;
-  height: 2.1rem;
-  margin-bottom: 0.75rem;
-  border-radius: 999px;
-  background: var(--pa-maroon);
-  color: #fff;
-  font-weight: 800;
-  font-size: 0.85rem;
-}
-
-.ow-card h3 {
-  margin: 0;
-  font-size: 1.05rem;
-  color: var(--pa-maroon);
-}
-
-.ow-card p {
-  margin: 0.5rem 0 0;
-  color: var(--pa-slate);
-  line-height: 1.55;
-  font-size: 0.95rem;
-}
-
-/* Shalom */
-.ow-shalom {
-  display: grid;
-  grid-template-columns: minmax(10rem, 0.7fr) minmax(0, 1.3fr);
-  gap: 1.5rem 2rem;
-  align-items: center;
-  background: #fff;
-  border: 1px solid rgba(92, 36, 40, 0.09);
-  border-radius: 1.1rem;
-  padding: 1.75rem;
-  box-shadow: 0 12px 34px rgba(92, 36, 40, 0.06);
-}
-
-.ow-shalom__stat {
-  text-align: center;
-  padding: 1.25rem;
-  border-radius: 0.9rem;
-  background: linear-gradient(160deg, var(--pa-maroon) 0%, var(--pa-maroon-dark) 100%);
-  color: #fff;
-}
-
-.ow-shalom__stat strong {
-  display: block;
-  font-size: clamp(2rem, 4vw, 2.8rem);
-  letter-spacing: -0.03em;
-  line-height: 1;
-}
-
-.ow-shalom__stat span {
-  display: block;
-  margin-top: 0.45rem;
-  font-size: 0.78rem;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--pa-gold-soft);
-}
-
-/* Journey stages */
-.ow-stages {
-  display: grid;
+  display: flex;
+  flex-direction: column;
   gap: 0.85rem;
 }
 
-.ow-stage {
-  display: grid;
-  grid-template-columns: auto 1fr;
-  gap: 1rem;
-  align-items: start;
-  padding: 1.1rem 1.15rem;
-  border-radius: 0.85rem;
-  border: 1px solid rgba(92, 36, 40, 0.08);
-  background: #fff;
-  transition: transform 0.28s var(--ease-out), box-shadow 0.28s ease;
+.ow-lines li {
+  padding-left: 1rem;
+  border-left: 2px solid rgba(232, 169, 26, 0.55);
+  font-size: 0.95rem;
+  line-height: 1.55;
+  color: var(--pa-slate);
 }
 
-.ow-stage:hover {
-  transform: translateX(4px);
-  box-shadow: 0 10px 28px rgba(92, 36, 40, 0.08);
-}
-
-.ow-stage__n {
-  font-size: 0.85rem;
-  font-weight: 800;
-  color: var(--pa-gold);
-  letter-spacing: 0.06em;
-}
-
-.ow-stage h3 {
+.ow-rail {
   margin: 0;
-  color: var(--pa-maroon);
-  font-size: 1.05rem;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  border-top: 1px solid rgba(92, 36, 40, 0.14);
 }
 
-.ow-stage em {
+.ow-rail__item {
+  border-bottom: 1px solid rgba(92, 36, 40, 0.14);
+}
+
+.ow-rail__link {
+  display: grid;
+  grid-template-columns: 3.25rem minmax(0, 1fr) auto;
+  gap: 1rem 1.25rem;
+  align-items: start;
+  padding: clamp(1.15rem, 2.5vh, 1.65rem) 0.35rem;
+  text-decoration: none;
+  color: inherit;
+  transition: background 0.25s ease, padding-left 0.25s var(--ease-out);
+}
+
+.ow-rail__link:hover {
+  text-decoration: none;
+  background: rgba(255, 255, 255, 0.45);
+  padding-left: 0.65rem;
+}
+
+.ow-rail__index {
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  color: var(--pa-gold);
+  padding-top: 0.2rem;
+}
+
+.ow-rail__item--green .ow-rail__index { color: var(--pa-green-dark); }
+.ow-rail__item--maroon .ow-rail__index { color: var(--pa-maroon); }
+
+.ow-rail__title {
   display: block;
-  margin-top: 0.2rem;
-  font-style: normal;
-  font-size: 0.8rem;
+  font-size: clamp(1.05rem, 1.8vw, 1.25rem);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--pa-maroon);
+  transition: color 0.2s ease;
+}
+
+.ow-rail__link:hover .ow-rail__title {
+  color: var(--pa-maroon-dark);
+}
+
+.ow-rail__text {
+  display: block;
+  margin-top: 0.35rem;
+  font-size: 0.95rem;
+  line-height: 1.55;
+  color: var(--pa-slate);
+}
+
+.ow-rail__go {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--pa-gold);
+  opacity: 0;
+  transform: translateX(-6px);
+  transition: opacity 0.25s ease, transform 0.25s var(--ease-out);
+  padding-top: 0.15rem;
+}
+
+.ow-rail__link:hover .ow-rail__go {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* ==========================================================================
+   Leadership — letter spine
+   ========================================================================== */
+
+.ow-spine {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(1.5rem, 4vw, 2.5rem);
+  padding-top: 1.75rem;
+}
+
+.ow-spine__rule {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--pa-maroon), var(--pa-gold), var(--pa-green));
+  border-radius: 2px;
+}
+
+.ow-spine__col {
+  padding-top: 0.35rem;
+}
+
+.ow-spine__letter {
+  display: block;
+  font-size: clamp(3.5rem, 8vw, 5.5rem);
+  font-weight: 800;
+  letter-spacing: -0.06em;
+  line-height: 0.9;
+  color: color-mix(in srgb, var(--pa-maroon) 55%, transparent);
+  margin-bottom: 0.65rem;
+}
+
+.ow-spine__col:nth-child(2) .ow-spine__letter {
+  color: color-mix(in srgb, var(--pa-gold) 70%, var(--pa-maroon));
+}
+
+.ow-spine__col:nth-child(3) .ow-spine__letter {
+  color: color-mix(in srgb, var(--pa-green) 65%, var(--pa-maroon));
+}
+
+.ow-spine__label {
+  margin: 0;
+  font-size: clamp(1.15rem, 2vw, 1.4rem);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--pa-maroon);
+}
+
+.ow-spine__text {
+  margin: 0.55rem 0 0;
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: var(--pa-slate);
+  max-width: 18rem;
+}
+
+/* ==========================================================================
+   Shalom — feature strip
+   ========================================================================== */
+
+.ow-feature {
+  display: grid;
+  grid-template-columns: minmax(0, 0.75fr) minmax(0, 1.25fr);
+  gap: clamp(1.75rem, 4vw, 3rem);
+  align-items: center;
+}
+
+.ow-feature__stat {
+  text-align: left;
+  padding: clamp(1.5rem, 3vw, 2.25rem) 0;
+  border-left: 4px solid var(--pa-maroon);
+  padding-left: clamp(1.25rem, 3vw, 1.75rem);
+}
+
+.ow-feature__stat strong {
+  display: block;
+  font-size: clamp(3.5rem, 10vw, 6.5rem);
+  font-weight: 800;
+  letter-spacing: -0.05em;
+  line-height: 0.9;
+  color: var(--pa-maroon);
+}
+
+.ow-feature__stat span {
+  display: block;
+  margin-top: 0.75rem;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
   color: var(--pa-muted);
 }
 
-.ow-stage p {
-  margin: 0.45rem 0 0;
-  color: var(--pa-slate);
-  line-height: 1.55;
-  font-size: 0.95rem;
-}
+/* ==========================================================================
+   Projects — stacked rows
+   ========================================================================== */
 
-/* Resources */
-.ow-resources {
+.ow-stack-wrap {
   display: grid;
-  grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
-  gap: 1.5rem 2rem;
+  grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+  gap: clamp(2rem, 5vw, 3.5rem);
   align-items: start;
 }
 
-/* CTA */
+.ow-stack {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-top: 2px solid var(--pa-maroon);
+}
+
+.ow-stack__row {
+  display: grid;
+  grid-template-columns: 3rem minmax(0, 1fr);
+  gap: 1rem 1.25rem;
+  padding: clamp(1.25rem, 2.5vh, 1.75rem) 0;
+  border-bottom: 1px solid rgba(92, 36, 40, 0.14);
+  transition: background 0.2s ease;
+}
+
+.ow-stack__row:hover {
+  background: rgba(255, 255, 255, 0.4);
+}
+
+.ow-stack__n {
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  color: var(--pa-gold);
+  padding-top: 0.2rem;
+}
+
+.ow-stack__body h3 {
+  margin: 0;
+  font-size: clamp(1.05rem, 1.8vw, 1.25rem);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--pa-maroon);
+}
+
+.ow-stack__body p {
+  margin: 0.4rem 0 0;
+  font-size: 0.95rem;
+  line-height: 1.55;
+  color: var(--pa-slate);
+}
+
+/* ==========================================================================
+   Journey — vertical path
+   ========================================================================== */
+
+.ow-path {
+  position: relative;
+  max-width: 48rem;
+}
+
+.ow-path__line {
+  position: absolute;
+  left: clamp(5.5rem, 12vw, 7.5rem);
+  top: 0.4rem;
+  bottom: 0.4rem;
+  width: 2px;
+  background: rgba(63, 154, 74, 0.22);
+}
+
+.ow-path__line-fill {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background: var(--pa-green);
+  transform: scaleY(0);
+  transform-origin: top center;
+}
+
+.ow-path__list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.ow-path__step {
+  display: grid;
+  grid-template-columns: clamp(4.5rem, 11vw, 6.5rem) 1.25rem minmax(0, 1fr);
+  gap: 0 1.15rem;
+  align-items: start;
+  padding: clamp(1.15rem, 2.5vh, 1.65rem) 0;
+}
+
+.ow-path__meta {
+  text-align: right;
+  padding-top: 0.1rem;
+}
+
+.ow-path__n {
+  display: block;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  color: var(--pa-green-dark);
+}
+
+.ow-path__month {
+  display: block;
+  margin-top: 0.25rem;
+  font-size: 0.78rem;
+  color: var(--pa-muted);
+}
+
+.ow-path__dot {
+  width: 0.75rem;
+  height: 0.75rem;
+  margin-top: 0.35rem;
+  border-radius: 999px;
+  background: var(--pa-bg);
+  border: 2px solid var(--pa-green);
+  justify-self: center;
+  z-index: 1;
+  transition: background 0.25s ease, transform 0.25s ease;
+}
+
+.ow-path__step:hover .ow-path__dot {
+  background: var(--pa-green);
+  transform: scale(1.15);
+}
+
+.ow-path__body h3 {
+  margin: 0;
+  font-size: clamp(1.1rem, 1.9vw, 1.35rem);
+  font-weight: 800;
+  color: var(--pa-maroon);
+}
+
+.ow-path__body p {
+  margin: 0.4rem 0 0;
+  font-size: 0.95rem;
+  line-height: 1.55;
+  color: var(--pa-slate);
+  max-width: 28rem;
+}
+
+/* ==========================================================================
+   Resources — statement lines
+   ========================================================================== */
+
+.ow-say {
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+  gap: clamp(2rem, 5vw, 3.5rem);
+  align-items: start;
+}
+
+.ow-say__list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(1rem, 2.5vh, 1.5rem);
+}
+
+.ow-say__line {
+  font-size: clamp(1.05rem, 1.8vw, 1.25rem);
+  line-height: 1.55;
+  color: var(--pa-maroon);
+  font-weight: 600;
+  padding-left: 1.15rem;
+  border-left: 3px solid var(--pa-gold);
+}
+
+/* ==========================================================================
+   CTA
+   ========================================================================== */
+
 .ow-cta {
-  padding: 3rem 0;
+  padding: clamp(4rem, 10vh, 6rem) 0;
   background:
-    radial-gradient(ellipse at 10% 0%, rgba(232, 169, 26, 0.2), transparent 48%),
-    linear-gradient(180deg, #f8f1e8 0%, #f0e4d4 100%);
+    linear-gradient(165deg, var(--pa-maroon-deep) 0%, var(--pa-maroon) 48%, var(--pa-maroon-dark) 100%);
+  color: #fff;
   border-top: 3px solid var(--pa-gold);
 }
 
 .ow-cta__inner {
   display: flex;
   flex-wrap: wrap;
-  align-items: center;
+  align-items: flex-end;
   justify-content: space-between;
-  gap: 1.25rem 2rem;
+  gap: 1.5rem 2.5rem;
 }
 
-.ow-cta p {
-  margin: 0.75rem 0 0;
+.ow-cta__title {
+  margin: 0;
+  color: #fff;
+  font-size: clamp(1.85rem, 4vw, 2.75rem);
+}
+
+.ow-cta__title em {
+  color: var(--pa-gold-soft);
+}
+
+.ow-cta__lead {
+  margin: 0.85rem 0 0;
   max-width: 34rem;
-  color: var(--pa-slate);
+  color: rgba(255, 255, 255, 0.88);
   line-height: 1.6;
 }
 
@@ -747,92 +692,53 @@
   gap: 0.75rem;
 }
 
+.ow-cta .ow-btn--ghost {
+  color: #fff;
+  border-color: rgba(255, 255, 255, 0.65);
+}
+
+.ow-cta .ow-btn--ghost:hover {
+  border-color: var(--pa-gold-soft);
+  background: rgba(232, 169, 26, 0.15);
+  color: #fff;
+}
+
+/* ==========================================================================
+   Responsive
+   ========================================================================== */
+
 @media (max-width: 980px) {
-  .ow-hero__layout {
-    padding-top: 4rem;
-    padding-left: clamp(0.65rem, 4vw, 1.25rem);
-  }
-
-  .ow-hero__quote {
-    align-self: flex-end;
-    text-align: right;
-    white-space: normal;
-    max-width: 100%;
-  }
-
-  .ow-hero__media img {
-    object-position: 72% center;
-  }
-
-  .ow-model__intro {
+  .ow-model,
+  .ow-stack-wrap,
+  .ow-say,
+  .ow-feature {
     grid-template-columns: 1fr;
   }
 
-  .ow-model__drop {
-    margin-left: 1.25rem;
+  .ow-model__aside {
+    position: static;
   }
 
-  .ow-model__flow {
-    flex-wrap: wrap;
-    gap: 0.85rem 0.35rem;
+  .ow-spine {
+    grid-template-columns: 1fr;
+    gap: 1.75rem;
   }
 
-  .ow-model__step {
-    flex: 1 1 calc(33.333% - 1rem);
-    min-width: 9rem;
-  }
-
-  .ow-model__connector {
+  .ow-spine__rule {
     display: none;
   }
 
-  .ow-cards--3 {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+  .ow-spine__letter {
+    font-size: 3rem;
   }
 
-  .ow-split,
-  .ow-shalom,
-  .ow-resources {
-    grid-template-columns: 1fr;
+  .ow-hero__quote {
+    white-space: normal;
+    max-width: 100%;
   }
 }
 
 @media (max-width: 640px) {
-  .ow-model__flow {
-    flex-direction: column;
-  }
-
-  .ow-model__step {
-    flex: 1 1 100%;
-    flex-direction: column;
-  }
-
-  .ow-model__connector {
-    display: flex;
-    width: auto;
-    height: 1.35rem;
-    margin: 0.15rem auto;
-    flex-direction: column;
-    justify-content: center;
-  }
-
-  .ow-model__connector-line {
-    width: 2px;
-    height: 100%;
-    flex: 1 1 auto;
-  }
-
-  .ow-model__connector-tip {
-    border-left: 5px solid transparent;
-    border-right: 5px solid transparent;
-    border-top: 7px solid currentColor;
-    border-bottom: 0;
-  }
-
-  .ow-cards--3 {
-    grid-template-columns: 1fr;
-  }
-
   .ow-band {
     padding: 3.25rem 0;
   }
@@ -840,15 +746,30 @@
   .ow-hero {
     min-height: 24rem;
   }
+
+  .ow-rail__link {
+    grid-template-columns: 2.5rem minmax(0, 1fr);
+  }
+
+  .ow-rail__go {
+    display: none;
+  }
+
+  .ow-path__step {
+    grid-template-columns: 3.5rem 1rem minmax(0, 1fr);
+  }
+
+  .ow-path__line {
+    left: 3.85rem;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .ow-model__card,
-  .ow-card,
-  .ow-stage,
   .ow-btn,
   .ow-text-link,
-  .ow-split__media img {
+  .ow-rail__link,
+  .ow-rail__go,
+  .ow-path__dot {
     transition: none !important;
   }
 }

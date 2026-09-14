@@ -14,6 +14,29 @@
   overflow-x: clip;
 }
 
+/* PA photo hero sits above WB chrome */
+.wbs-page--pa-hero {
+  padding-top: var(--header-h);
+  background: #fff;
+}
+
+.wbs-page--pa-hero .wbs-chrome {
+  top: var(--header-h);
+}
+
+.wbs-page--pa-hero .wbs-main {
+  background: #f4f6f8;
+  min-height: 50vh;
+}
+
+.wbs-page--pa-hero .id-next {
+  margin-top: 0;
+}
+
+.wbs-panel[hidden] {
+  display: none !important;
+}
+
 /* Scorecard hides chrome while entry curtain plays */
 body.pa-entry-active .wbs-chrome,
 body.pa-entry-active .wbs-main {

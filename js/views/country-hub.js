@@ -9,6 +9,7 @@ import {
   bindNumbersCarousel,
   bindOverviewTabs,
   featuredStories,
+  initCountryPageAnimations,
 } from "../components/work/CountryWbPage.js";
 import { renderChart, destroyCharts } from "../components/charts.js";
 import { numberCardsFromHub } from "../utils/work-locations.js";
@@ -42,6 +43,7 @@ export function mountCountryHub(root, hub) {
   bindNumbersCarousel(hubEl);
   bindOverviewTabs(hubEl);
   bindLocationMenus(hubEl);
+  initCountryPageAnimations(hubEl);
 
   const cards = numberCardsFromHub(hub);
   cards.forEach((card) => {

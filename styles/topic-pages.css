@@ -24,7 +24,7 @@
 
 .page-back__link:hover {
   text-decoration: underline;
-  color: #005f9e;
+  color: var(--pa-gold);
 }
 
 .topic-hub {

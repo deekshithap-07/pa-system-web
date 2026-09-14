@@ -23,21 +23,21 @@
 .wb-photo--east {
   background-image:
     linear-gradient(180deg, rgba(42, 16, 20, 0.15), rgba(42, 16, 20, 0.55)),
-    linear-gradient(135deg, #1a5f7a 0%, #0b3d4a 40%, #c4a574 100%);
+    linear-gradient(135deg, #5c2428 0%, #3d181c 40%, #c48914 100%);
 }
 
 .wb-photo--1,
 .wb-photo--horn {
   background-image:
-    linear-gradient(180deg, rgba(20, 10, 0, 0.2), rgba(20, 10, 0, 0.55)),
-    linear-gradient(145deg, #c47a3a 0%, #6b3a1c 55%, #1e2a38 100%);
+    linear-gradient(180deg, rgba(42, 16, 20, 0.2), rgba(42, 16, 20, 0.55)),
+    linear-gradient(145deg, #e8a91a 0%, #8a6a10 55%, #2a1014 100%);
 }
 
 .wb-photo--2,
 .wb-photo--south {
   background-image:
-    linear-gradient(180deg, rgba(8, 24, 16, 0.2), rgba(8, 24, 16, 0.55)),
-    linear-gradient(145deg, #5a9468 0%, #1b4d38 50%, #0e2a22 100%);
+    linear-gradient(180deg, rgba(42, 16, 20, 0.2), rgba(42, 16, 20, 0.55)),
+    linear-gradient(145deg, #3f9a4a 0%, #2f7a38 50%, #2a1014 100%);
 }
 
 .wb-loc-hero__photo {
@@ -46,8 +46,8 @@
 }
 
 .wb-loc-bar {
-  background: #d7eaf4;
-  border-bottom: 1px solid #c5dce8;
+  background: #fff3c4;
+  border-bottom: 1px solid rgba(232, 169, 26, 0.35);
 }
 
 .wb-loc-bar__inner {
@@ -63,7 +63,7 @@
   margin: 0;
   font-size: clamp(1.35rem, 2.4vw, 1.85rem);
   font-weight: 800;
-  color: #002244;
+  color: var(--pa-maroon);
   letter-spacing: -0.02em;
 }
 

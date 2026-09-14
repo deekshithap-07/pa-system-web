@@ -22,11 +22,8 @@
     { "id": "countries", "label": "Countries", "value": 7, "trend": "stable", "direction": "neutral" },
     { "id": "communities", "label": "Communities", "value": 59, "trend": "+5", "direction": "up" },
     { "id": "households", "label": "Households", "value": 253000, "trend": "+14%", "direction": "up" },
-    { "id": "projects", "label": "Active Projects", "value": 148, "trend": "+12", "direction": "up" },
     { "id": "lives", "label": "Lives Impacted", "value": 335000, "trend": "+9%", "direction": "up" },
-    { "id": "shalom", "label": "Shalom Groups", "value": 86, "trend": "+8", "direction": "up" },
-    { "id": "leadership", "label": "Leadership Teams", "value": 59, "trend": "+4", "direction": "up" },
-    { "id": "growth", "label": "YoY Growth", "value": 0, "text": "+14%", "trend": "on track", "direction": "up" }
+    { "id": "shalom", "label": "Shalom Groups", "value": 86, "trend": "+8", "direction": "up" }
   ],
   "growthTrends": {
     "communityGrowth": { "type": "line", "title": "Community Growth", "labels": ["2021", "2022", "2023", "2024"], "data": [32, 41, 52, 59], "color": "#5c2428" },
@@ -35,13 +32,13 @@
     "projectDelivery": { "type": "bar", "title": "Project Delivery", "labels": ["Q1", "Q2", "Q3", "Q4"], "data": [28, 35, 42, 43], "color": "#e8a91a" }
   },
   "countryStats": [
-    { "slug": "kenya", "name": "Kenya", "communities": 23, "pastors": 627, "households": 125000, "shalomGroups": 48, "projects": 42, "growth": 14, "progress": 72, "leadershipScore": 74, "status": "Active", "sectors": { "Education": 72, "Health": 58, "Agriculture": 81, "Water": 88, "Livelihood": 70, "Leadership": 74 } },
-    { "slug": "malawi", "name": "Malawi", "communities": 21, "pastors": 754, "households": 48000, "shalomGroups": 22, "projects": 38, "growth": 11, "progress": 68, "leadershipScore": 68, "status": "Active", "sectors": { "Education": 58, "Health": 52, "Agriculture": 84, "Water": 76, "Livelihood": 72, "Leadership": 68 } },
-    { "slug": "ethiopia", "name": "Ethiopia", "communities": 11, "households": 18000, "projects": 28, "pastors": 272, "shalomGroups": 12, "growth": 9, "progress": 55, "leadershipScore": 55, "status": "Growing", "sectors": { "Education": 45, "Health": 40, "Agriculture": 70, "Water": 62, "Livelihood": 48, "Leadership": 62 } },
-    { "slug": "zambia", "name": "Zambia", "communities": 10, "pastors": 224, "households": 12000, "shalomGroups": 8, "projects": 14, "growth": 6, "progress": 41, "leadershipScore": 41, "status": "Emerging", "sectors": { "Education": 38, "Health": 35, "Agriculture": 65, "Water": 55, "Livelihood": 44, "Leadership": 48 } },
-    { "slug": "tanzania", "name": "Tanzania", "communities": 4, "households": 5000, "projects": 6, "pastors": 80, "shalomGroups": 3, "growth": 5, "progress": 28, "leadershipScore": 32, "status": "Emerging", "sectors": { "Education": 28, "Health": 30, "Agriculture": 42, "Water": 40, "Livelihood": 35, "Leadership": 36 } },
-    { "slug": "burundi", "name": "Burundi", "communities": 2, "households": 2000, "projects": 2, "pastors": 40, "shalomGroups": 1, "growth": 2, "progress": 18, "leadershipScore": 24, "status": "Emerging", "sectors": { "Education": 22, "Health": 25, "Agriculture": 30, "Water": 28, "Livelihood": 26, "Leadership": 28 } },
-    { "slug": "rwanda", "name": "Rwanda", "communities": 3, "households": 3500, "projects": 4, "pastors": 55, "shalomGroups": 2, "growth": 4, "progress": 22, "leadershipScore": 28, "status": "Emerging", "sectors": { "Education": 26, "Health": 28, "Agriculture": 35, "Water": 32, "Livelihood": 30, "Leadership": 34 } }
+    { "slug": "kenya", "name": "Kenya", "communities": 23, "pastors": 627, "households": 125000, "shalomGroups": 48, "projects": 42, "growth": 14, "progress": 72, "leadershipScore": 74, "status": "Active", "programs": { "leadership": 74, "discipleship": 70, "economic": 76, "youth": 68, "citizenship": 72 }, "sectors": { "Education": 72, "Health": 58, "Agriculture": 81, "Water": 88, "Livelihood": 70, "Leadership": 74 } },
+    { "slug": "malawi", "name": "Malawi", "communities": 21, "pastors": 754, "households": 48000, "shalomGroups": 22, "projects": 38, "growth": 11, "progress": 68, "leadershipScore": 68, "status": "Active", "programs": { "leadership": 68, "discipleship": 66, "economic": 78, "youth": 62, "citizenship": 64 }, "sectors": { "Education": 58, "Health": 52, "Agriculture": 84, "Water": 76, "Livelihood": 72, "Leadership": 68 } },
+    { "slug": "ethiopia", "name": "Ethiopia", "communities": 11, "households": 18000, "projects": 28, "pastors": 272, "shalomGroups": 12, "growth": 9, "progress": 55, "leadershipScore": 55, "status": "Growing", "programs": { "leadership": 62, "discipleship": 54, "economic": 58, "youth": 50, "citizenship": 52 }, "sectors": { "Education": 45, "Health": 40, "Agriculture": 70, "Water": 62, "Livelihood": 48, "Leadership": 62 } },
+    { "slug": "zambia", "name": "Zambia", "communities": 10, "pastors": 224, "households": 12000, "shalomGroups": 8, "projects": 14, "growth": 6, "progress": 41, "leadershipScore": 41, "status": "Emerging", "programs": { "leadership": 48, "discipleship": 44, "economic": 52, "youth": 40, "citizenship": 42 }, "sectors": { "Education": 38, "Health": 35, "Agriculture": 65, "Water": 55, "Livelihood": 44, "Leadership": 48 } },
+    { "slug": "tanzania", "name": "Tanzania", "communities": 4, "households": 5000, "projects": 6, "pastors": 80, "shalomGroups": 3, "growth": 5, "progress": 28, "leadershipScore": 32, "status": "Emerging", "programs": { "leadership": 36, "discipleship": 32, "economic": 38, "youth": 30, "citizenship": 34 }, "sectors": { "Education": 28, "Health": 30, "Agriculture": 42, "Water": 40, "Livelihood": 35, "Leadership": 36 } },
+    { "slug": "burundi", "name": "Burundi", "communities": 2, "households": 2000, "projects": 2, "pastors": 40, "shalomGroups": 1, "growth": 2, "progress": 18, "leadershipScore": 24, "status": "Emerging", "programs": { "leadership": 28, "discipleship": 24, "economic": 26, "youth": 22, "citizenship": 25 }, "sectors": { "Education": 22, "Health": 25, "Agriculture": 30, "Water": 28, "Livelihood": 26, "Leadership": 28 } },
+    { "slug": "rwanda", "name": "Rwanda", "communities": 3, "households": 3500, "projects": 4, "pastors": 55, "shalomGroups": 2, "growth": 4, "progress": 22, "leadershipScore": 28, "status": "Emerging", "programs": { "leadership": 34, "discipleship": 30, "economic": 32, "youth": 28, "citizenship": 31 }, "sectors": { "Education": 26, "Health": 28, "Agriculture": 35, "Water": 32, "Livelihood": 30, "Leadership": 34 } }
   ],
   "communityStats": [
     { "name": "Kanana", "country": "Kenya", "catchment": "Kwale South", "households": 1, "progress": 81, "stage": "Implementation" },
@@ -62,12 +59,11 @@
     { "title": "Project density", "metric": "Projects per community", "a": { "label": "Kenya", "value": "1.8" }, "b": { "label": "Ethiopia", "value": "2.3" } }
   ],
   "performanceMetrics": [
-    { "sector": "Education", "score": 52, "trend": "+8%", "status": "improving" },
-    { "sector": "Health", "score": 41, "trend": "+5%", "status": "improving" },
-    { "sector": "Agriculture", "score": 78, "trend": "+18%", "status": "strong" },
-    { "sector": "Water", "score": 85, "trend": "+22%", "status": "strong" },
-    { "sector": "Livelihood", "score": 58, "trend": "+11%", "status": "improving" },
-    { "sector": "Leadership", "score": 67, "trend": "+4pts", "status": "on track" }
+    { "sector": "Transformational Leadership", "id": "leadership", "score": 67, "trend": "+4pts", "status": "on track" },
+    { "sector": "Spiritual Discipleship", "id": "discipleship", "score": 58, "trend": "+6%", "status": "improving" },
+    { "sector": "Economic Productivity", "id": "economic", "score": 64, "trend": "+11%", "status": "improving" },
+    { "sector": "Mentoring the Next Generation", "id": "youth", "score": 52, "trend": "+8%", "status": "improving" },
+    { "sector": "Responsible Citizenship", "id": "citizenship", "score": 55, "trend": "+5%", "status": "improving" }
   ],
   "insights": [
     { "id": "growth", "title": "Network Expansion", "metric": "59 communities", "score": 76, "trend": "+14%", "summary": "Community count grew 14% year-over-year across active catchments." },

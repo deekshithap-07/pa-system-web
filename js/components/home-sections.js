@@ -10,10 +10,10 @@ export function renderHero(hero = {}) {
   const secondary = hero.secondaryCta || { label: "See Our Impact", target: "#/scorecard" };
   const image = hero.image || "assets/home-hero/woman.jpg";
   const watch = hero.watchStory || null;
-  const watchHref = watch?.href || "#/stories";
-  const watchAttrs = watchHref.startsWith("#/")
-    ? `href="${watchHref}" data-link`
-    : `href="${watchHref}"${watchHref.startsWith("http") ? ` target="_blank" rel="noopener noreferrer"` : ""}`;
+  const watchUrl = watch?.youtubeUrl || watch?.href || "https://www.youtube.com/watch?v=9OiMry-NzAc&t=5s";
+  const watchId = watch?.videoId || "9OiMry-NzAc";
+  const watchStart = watch?.start ?? 5;
+  const watchTitle = watch?.title || "Possibilities Africa over the years";
 
   return `
     <header class="home-photo-hero" id="home-hero" data-home-photo-hero>
@@ -34,7 +34,7 @@ export function renderHero(hero = {}) {
         </div>
         ${
           watch
-            ? `<a class="home-photo-hero__watch" ${watchAttrs}>
+            ? `<button type="button" class="home-photo-hero__watch" data-home-watch-story data-youtube-url="${watchUrl}" data-video-id="${watchId}" data-video-start="${watchStart}" data-video-title="${watchTitle}" aria-haspopup="dialog">
                 <span class="home-photo-hero__watch-play" aria-hidden="true">
                   <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M8 5.5v13l11-6.5L8 5.5z"/></svg>
                 </span>
@@ -42,7 +42,7 @@ export function renderHero(hero = {}) {
                   <span class="home-photo-hero__watch-label">${watch.label || "Watch Our Story"}</span>
                   ${watch.duration ? `<span class="home-photo-hero__watch-time">${watch.duration}</span>` : ""}
                 </span>
-              </a>`
+              </button>`
             : ""
         }
       </div>
@@ -544,7 +544,7 @@ export function renderPartnerSupport(section = {}) {
 
   const primary = section.primaryCta || {
     label: "Partner with us",
-    href: "https://www.possibilitiesafrica.org/",
+    href: "#/#partner-support",
   };
   const secondary = section.secondaryCta || { label: "Who we are", href: "#/about" };
   const primaryExternal = /^https?:/i.test(primary.href || "");

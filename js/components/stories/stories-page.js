@@ -121,7 +121,7 @@ function renderHero(countryFilter) {
   const lead = countryFilter
     ? `Human stories from ${countryFilter.name} that explain the meaning behind the data.`
     : "Human stories that explain the meaning behind the data.";
-  const image = "assets/home-overview/tab-stories.jpg";
+  const image = "assets/country-heroes/kenya-hero-farmers.jpg";
 
   return `
     <header class="st-hero" data-st-section="hero">

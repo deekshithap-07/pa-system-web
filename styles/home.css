@@ -185,8 +185,15 @@
   display: inline-flex;
   align-items: center;
   gap: 0.7rem;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
   color: var(--pa-white);
   text-decoration: none;
+  cursor: pointer;
+  font: inherit;
+  text-align: left;
   z-index: 2;
 }
 

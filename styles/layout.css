@@ -464,3 +464,220 @@ body.search-modal-open {
   color: var(--pa-muted);
   padding: 1rem 0;
 }
+
+/* YouTube story modal */
+.pa-video-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 220;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.25rem;
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity 0.25s ease, visibility 0.25s ease;
+}
+
+.pa-video-modal.is-open {
+  visibility: visible;
+  opacity: 1;
+}
+
+body.pa-video-modal-open {
+  overflow: hidden;
+}
+
+.pa-video-modal__backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(20, 8, 10, 0.82);
+  cursor: pointer;
+}
+
+.pa-video-modal__dialog {
+  position: relative;
+  z-index: 1;
+  width: min(56rem, calc(100vw - 2rem));
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.pa-video-modal__close {
+  position: absolute;
+  top: -2.6rem;
+  right: 0;
+  width: 2.4rem;
+  height: 2.4rem;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: #fff;
+  font-size: 1.85rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.pa-video-modal__close:hover {
+  color: var(--pa-gold);
+}
+
+.pa-video-modal__frame {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  background: #000;
+  border-radius: 0.35rem;
+  overflow: hidden;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.45);
+}
+
+.pa-video-modal__frame iframe {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+.pa-video-modal__hint {
+  margin: 0;
+  text-align: right;
+}
+
+.pa-video-modal__hint a {
+  color: rgba(255, 255, 255, 0.88);
+  font-size: 0.88rem;
+  font-weight: 600;
+  text-decoration: none;
+  border-bottom: 1px solid rgba(232, 169, 26, 0.55);
+}
+
+.pa-video-modal__hint a:hover {
+  color: var(--pa-gold);
+}
+
+/* Partner contact modal */
+.pa-contact-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 220;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.25rem;
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity 0.25s ease, visibility 0.25s ease;
+}
+
+.pa-contact-modal.is-open {
+  visibility: visible;
+  opacity: 1;
+}
+
+body.pa-contact-modal-open {
+  overflow: hidden;
+}
+
+.pa-contact-modal__backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(42, 16, 20, 0.55);
+  cursor: pointer;
+}
+
+.pa-contact-modal__panel {
+  position: relative;
+  z-index: 1;
+  width: min(28rem, calc(100vw - 2rem));
+  padding: 1.75rem 1.6rem 1.85rem;
+  background: #faf7f2;
+  border-top: 3px solid var(--pa-gold);
+  box-shadow: 0 24px 60px rgba(42, 16, 20, 0.28);
+}
+
+.pa-contact-modal__close {
+  position: absolute;
+  top: 0.65rem;
+  right: 0.75rem;
+  width: 2.2rem;
+  height: 2.2rem;
+  border: 0;
+  background: transparent;
+  color: var(--pa-maroon);
+  font-size: 1.6rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.pa-contact-modal__eyebrow {
+  margin: 0 0 0.45rem;
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--pa-gold);
+}
+
+.pa-contact-modal__title {
+  margin: 0;
+  font-size: clamp(1.45rem, 3vw, 1.85rem);
+  font-weight: 800;
+  color: var(--pa-maroon);
+  letter-spacing: -0.02em;
+}
+
+.pa-contact-modal__title em {
+  color: var(--pa-gold);
+  font-style: italic;
+}
+
+.pa-contact-modal__lead {
+  margin: 0.55rem 0 1.25rem;
+  font-size: 0.95rem;
+  line-height: 1.55;
+  color: var(--pa-slate);
+}
+
+.pa-contact-modal__channels {
+  display: flex;
+  flex-direction: column;
+  gap: 0.95rem;
+}
+
+.pa-contact-modal__channel {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  padding-top: 0.85rem;
+  border-top: 1px solid rgba(92, 36, 40, 0.1);
+}
+
+.pa-contact-modal__label {
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--pa-gold);
+}
+
+.pa-contact-modal__channel a,
+.pa-contact-modal__channel span {
+  font-size: 0.98rem;
+  font-weight: 600;
+  color: var(--pa-maroon);
+  text-decoration: none;
+  line-height: 1.45;
+}
+
+.pa-contact-modal__channel a:hover {
+  color: var(--pa-gold);
+}
+
+@media (max-width: 640px) {
+  .pa-video-modal__close {
+    top: -2.35rem;
+  }
+}

@@ -1,18 +1,9 @@
 /**
- * Our Work hub — ministry model (design mockup + vision order as reference).
- * Order: Hero → Our Model → Community → Leadership → Shalom → PPP/CHIPs → Journey → Resources → CTA
+ * Our Work hub — editorial scroll story (same content, non-card layouts).
+ * Order: Hero → Model → Leadership → Shalom → Projects → Journey → Resources → CTA
  */
 
 import { formatPaTitle } from "../../utils/pa-title.js";
-
-const MODEL_ICONS = {
-  community: `<svg viewBox="0 0 48 48" fill="none" aria-hidden="true"><path d="M24 34c-6-4-10-9-10-14a10 10 0 1120 0c0 5-4 10-10 14z" stroke="currentColor" stroke-width="2"/><circle cx="24" cy="20" r="3" fill="currentColor"/></svg>`,
-  leadership: `<svg viewBox="0 0 48 48" fill="none" aria-hidden="true"><circle cx="24" cy="16" r="6" stroke="currentColor" stroke-width="2"/><path d="M10 38c2.5-7 8-11 14-11s11.5 4 14 11" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>`,
-  shalom: `<svg viewBox="0 0 48 48" fill="none" aria-hidden="true"><circle cx="18" cy="20" r="5" stroke="currentColor" stroke-width="2"/><circle cx="30" cy="20" r="5" stroke="currentColor" stroke-width="2"/><circle cx="24" cy="30" r="5" stroke="currentColor" stroke-width="2"/></svg>`,
-  projects: `<svg viewBox="0 0 48 48" fill="none" aria-hidden="true"><path d="M14 28c4-2 8-2 12 0s8 2 12 0" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M18 22v8M30 22v8M16 22h16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>`,
-  journey: `<svg viewBox="0 0 48 48" fill="none" aria-hidden="true"><circle cx="24" cy="24" r="12" stroke="currentColor" stroke-width="2"/><path d="M24 16v9l6 3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M34 14l4 2-2 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
-  resources: `<svg viewBox="0 0 48 48" fill="none" aria-hidden="true"><path d="M24 12v24M16 20h16M18 36h12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="24" cy="12" r="3" fill="currentColor"/></svg>`,
-};
 
 function linkAttrs(href = "#") {
   if (!href) return `href="#"`;
@@ -32,188 +23,193 @@ function renderHero(hero = {}) {
         <span class="ow-hero__veil"></span>
       </div>
       <div class="container ow-hero__layout">
-        <div class="ow-hero__inner" data-reveal data-anim="fade-up">
+        <div class="ow-hero__inner" data-ow-reveal>
           <p class="ow-eyebrow ow-eyebrow--on-dark">${hero.eyebrow || "Our Work"}</p>
-          <h1 class="pa-title ow-title">${formatPaTitle(hero, "Holistic transformation for lasting change.")}</h1>
+          <h1 class="pa-title ow-hero__title">${formatPaTitle(hero, "Holistic transformation for lasting change.")}</h1>
           ${hero.lead ? `<p class="ow-hero__lead">${hero.lead}</p>` : ""}
           <div class="ow-hero__actions">
             ${primary.href ? `<a class="ow-btn ow-btn--solid" ${linkAttrs(primary.href)}>${primary.label || "Explore"} →</a>` : ""}
             ${secondary.href ? `<a class="ow-btn ow-btn--ghost" ${linkAttrs(secondary.href)}>${secondary.label || "Learn more"}</a>` : ""}
           </div>
         </div>
-        ${hero.quote ? `<p class="ow-hero__quote" data-reveal data-anim="slide-left">${hero.quote}</p>` : ""}
+        ${hero.quote ? `<p class="ow-hero__quote" data-ow-reveal>${hero.quote}</p>` : ""}
       </div>
     </header>`;
 }
 
-/** Our Model overview — title left, story copy right, staged pillars with arrows. */
+/** Ministry model — sticky intro + vertical numbered rail (not cards). */
 function renderModel(section = {}) {
   if (!section.title) return "";
   const cta = section.cta || {};
-  const sidePoints = (section.sidePoints || []).map((p) => `<li>${p}</li>`).join("");
+  const sidePoints = (section.sidePoints || []).map((p) => `<li data-ow-line>${p}</li>`).join("");
   const steps = (section.steps || [])
     .map(
-      (s, i, arr) => `
-      <li class="ow-model__step">
-        <a class="ow-model__card ow-model__card--${s.tone || "maroon"}" ${linkAttrs(s.href || "#")}>
-          <span class="ow-model__n">${String(i + 1).padStart(2, "0")}</span>
-          <span class="ow-model__icon" aria-hidden="true">${MODEL_ICONS[s.id] || MODEL_ICONS.community}</span>
-          <strong>${s.title}</strong>
-          <span>${s.text || ""}</span>
+      (s, i) => `
+      <li class="ow-rail__item ow-rail__item--${s.tone || "maroon"}" data-ow-rail-item>
+        <a class="ow-rail__link" ${linkAttrs(s.href || "#")}>
+          <span class="ow-rail__index">${String(i + 1).padStart(2, "0")}</span>
+          <span class="ow-rail__body">
+            <strong class="ow-rail__title">${s.title}</strong>
+            <span class="ow-rail__text">${s.text || ""}</span>
+          </span>
+          <span class="ow-rail__go" aria-hidden="true">→</span>
         </a>
-        ${
-          i < arr.length - 1
-            ? `<span class="ow-model__connector" aria-hidden="true">
-                <span class="ow-model__connector-line"></span>
-                <span class="ow-model__connector-tip"></span>
-              </span>`
-            : ""
-        }
       </li>`
     )
     .join("");
 
   return `
-    <section class="ow-band ow-band--model ow-band--skin-gold" id="work-model" data-ow-section="model" aria-labelledby="ow-model-title">
-      <div class="container">
-        <div class="ow-model__intro">
-          <header class="ow-band__head ow-model__head" data-reveal data-anim="fade-up">
+    <section class="ow-band ow-band--gold" id="work-model" data-ow-section="model" aria-labelledby="ow-model-title">
+      <div class="container ow-model">
+        <aside class="ow-model__aside" data-ow-sticky>
+          <header class="ow-sec-head" data-ow-reveal>
             ${section.eyebrow ? `<p class="ow-eyebrow">${section.eyebrow}</p>` : ""}
-            <h2 id="ow-model-title" class="pa-title">${formatPaTitle(section)}</h2>
-            ${
-              cta.href
-                ? `<a class="ow-text-link ow-model__cta" ${linkAttrs(cta.href)}>${cta.label} →</a>
-                   <span class="ow-model__drop" aria-hidden="true">
-                     <span class="ow-model__drop-line"></span>
-                     <span class="ow-model__drop-tip"></span>
-                   </span>`
-                : ""
-            }
+            <h2 id="ow-model-title" class="ow-sec-title pa-title">${formatPaTitle(section)}</h2>
+            ${cta.href ? `<a class="ow-text-link" ${linkAttrs(cta.href)}>${cta.label} →</a>` : ""}
           </header>
-          <aside class="ow-model__aside" data-reveal data-anim="slide-right">
-            ${section.sideLead ? `<p class="ow-model__aside-lead">${section.sideLead}</p>` : ""}
-            ${sidePoints ? `<ul class="ow-list">${sidePoints}</ul>` : ""}
-          </aside>
-        </div>
-        <ol class="ow-model__flow">${steps}</ol>
+          ${section.sideLead ? `<p class="ow-model__lead" data-ow-reveal>${section.sideLead}</p>` : ""}
+          ${sidePoints ? `<ul class="ow-lines" data-ow-reveal>${sidePoints}</ul>` : ""}
+        </aside>
+        <ol class="ow-rail" data-ow-rail>${steps}</ol>
       </div>
     </section>`;
 }
 
+/** Triple-A — editorial letter spine, not cards. */
 function renderLeadership(section = {}, tripleA = {}) {
   if (!section.title) return "";
   const dims = (tripleA.dimensions || [])
     .map(
-      (d) => `<article class="ow-card">
-        <span class="ow-card__mark">${(d.label || "?").charAt(0)}</span>
-        <h3>${d.label}</h3>
-        <p>${d.description || ""}</p>
+      (d, i) => `<article class="ow-spine__col" data-ow-spine-col style="--i:${i}">
+        <span class="ow-spine__letter" aria-hidden="true">${(d.label || "?").charAt(0)}</span>
+        <h3 class="ow-spine__label">${d.label}</h3>
+        <p class="ow-spine__text">${d.description || ""}</p>
       </article>`
     )
     .join("");
   const cta = section.cta || {};
   return `
-    <section class="ow-band ow-band--skin-green" id="work-leadership" data-ow-section="leadership" aria-labelledby="ow-leadership-title">
+    <section class="ow-band ow-band--green" id="work-leadership" data-ow-section="leadership" aria-labelledby="ow-leadership-title">
       <div class="container">
-        <header class="ow-band__head" data-reveal data-anim="fade-up">
+        <header class="ow-sec-head ow-sec-head--wide" data-ow-reveal>
           ${section.eyebrow ? `<p class="ow-eyebrow">${section.eyebrow}</p>` : ""}
-          <h2 id="ow-leadership-title" class="pa-title">${formatPaTitle(section)}</h2>
-          ${section.lead ? `<p class="ow-band__lead">${section.lead}</p>` : ""}
+          <h2 id="ow-leadership-title" class="ow-sec-title pa-title">${formatPaTitle(section)}</h2>
+          ${section.lead ? `<p class="ow-sec-lead">${section.lead}</p>` : ""}
           ${cta.href ? `<a class="ow-text-link" ${linkAttrs(cta.href)}>${cta.label} →</a>` : ""}
         </header>
-        <div class="ow-cards ow-cards--3" data-reveal data-stagger="slide-up">${dims}</div>
+        <div class="ow-spine" data-ow-spine>
+          <span class="ow-spine__rule" aria-hidden="true" data-ow-spine-rule></span>
+          ${dims}
+        </div>
       </div>
     </section>`;
 }
 
+/** Shalom — full-bleed number + copy strip (no card shell). */
 function renderShalom(section = {}) {
   if (!section.title) return "";
   const cta = section.cta || {};
   return `
-    <section class="ow-band ow-band--skin-maroon" id="work-shalom" data-ow-section="shalom" aria-labelledby="ow-shalom-title">
-      <div class="container ow-shalom" data-reveal data-anim="pop">
-        <div class="ow-shalom__stat">
+    <section class="ow-band ow-band--rose" id="work-shalom" data-ow-section="shalom" aria-labelledby="ow-shalom-title">
+      <div class="container ow-feature" data-ow-reveal>
+        <div class="ow-feature__stat" data-ow-stat>
           <strong>${section.stat || "30–50"}</strong>
           <span>${section.statLabel || "leaders per group"}</span>
         </div>
-        <div class="ow-shalom__copy">
+        <div class="ow-feature__copy">
           ${section.eyebrow ? `<p class="ow-eyebrow">${section.eyebrow}</p>` : ""}
-          <h2 id="ow-shalom-title" class="pa-title">${formatPaTitle(section)}</h2>
-          ${section.lead ? `<p class="ow-band__lead">${section.lead}</p>` : ""}
+          <h2 id="ow-shalom-title" class="ow-sec-title pa-title">${formatPaTitle(section)}</h2>
+          ${section.lead ? `<p class="ow-sec-lead">${section.lead}</p>` : ""}
           ${cta.href ? `<a class="ow-text-link" ${linkAttrs(cta.href)}>${cta.label} →</a>` : ""}
         </div>
       </div>
     </section>`;
 }
 
+/** Projects — stacked rule rows, not cards. */
 function renderProjects(section = {}) {
   if (!section.title) return "";
   const items = (section.items || [])
     .map(
-      (it) => `<article class="ow-card">
-        <h3>${it.title}</h3>
-        <p>${it.text || ""}</p>
-      </article>`
+      (it, i) => `<li class="ow-stack__row" data-ow-stack-row style="--i:${i}">
+        <span class="ow-stack__n">${String(i + 1).padStart(2, "0")}</span>
+        <div class="ow-stack__body">
+          <h3>${it.title}</h3>
+          <p>${it.text || ""}</p>
+        </div>
+      </li>`
     )
     .join("");
   const cta = section.cta || {};
   return `
-    <section class="ow-band ow-band--skin-gold" id="work-projects" data-ow-section="projects" aria-labelledby="ow-projects-title">
-      <div class="container">
-        <header class="ow-band__head" data-reveal data-anim="slide-right">
+    <section class="ow-band ow-band--cream" id="work-projects" data-ow-section="projects" aria-labelledby="ow-projects-title">
+      <div class="container ow-stack-wrap">
+        <header class="ow-sec-head" data-ow-reveal>
           ${section.eyebrow ? `<p class="ow-eyebrow">${section.eyebrow}</p>` : ""}
-          <h2 id="ow-projects-title" class="pa-title">${formatPaTitle(section)}</h2>
-          ${section.lead ? `<p class="ow-band__lead">${section.lead}</p>` : ""}
+          <h2 id="ow-projects-title" class="ow-sec-title pa-title">${formatPaTitle(section)}</h2>
+          ${section.lead ? `<p class="ow-sec-lead">${section.lead}</p>` : ""}
           ${cta.href ? `<a class="ow-text-link" ${linkAttrs(cta.href)}>${cta.label} →</a>` : ""}
         </header>
-        <div class="ow-cards ow-cards--3" data-reveal data-stagger="pop">${items}</div>
+        <ol class="ow-stack" data-ow-stack>${items}</ol>
       </div>
     </section>`;
 }
 
+/** Journey — vertical timeline. */
 function renderJourney(section = {}, journey = {}) {
   if (!section.title) return "";
   const stages = (journey.stages || [])
     .map(
-      (s, i) => `<article class="ow-stage">
-        <span class="ow-stage__n">${String(i + 1).padStart(2, "0")}</span>
-        <div>
+      (s, i) => `<li class="ow-path__step" data-ow-path-step style="--i:${i}">
+        <div class="ow-path__meta">
+          <span class="ow-path__n">${String(i + 1).padStart(2, "0")}</span>
+          <span class="ow-path__month">Month ${s.month}</span>
+        </div>
+        <span class="ow-path__dot" aria-hidden="true"></span>
+        <div class="ow-path__body">
           <h3>${s.label}</h3>
-          <em>Month ${s.month}</em>
           <p>${s.description || ""}</p>
         </div>
-      </article>`
+      </li>`
     )
     .join("");
   const cta = section.cta || {};
   return `
-    <section class="ow-band ow-band--skin-green" id="work-journey" data-ow-section="journey" aria-labelledby="ow-journey-title">
+    <section class="ow-band ow-band--mint" id="work-journey" data-ow-section="journey" aria-labelledby="ow-journey-title">
       <div class="container">
-        <header class="ow-band__head" data-reveal data-anim="fade-up">
+        <header class="ow-sec-head ow-sec-head--wide" data-ow-reveal>
           ${section.eyebrow ? `<p class="ow-eyebrow">${section.eyebrow}</p>` : ""}
-          <h2 id="ow-journey-title" class="pa-title">${formatPaTitle(section)}</h2>
-          ${section.lead ? `<p class="ow-band__lead">${section.lead}</p>` : ""}
+          <h2 id="ow-journey-title" class="ow-sec-title pa-title">${formatPaTitle(section)}</h2>
+          ${section.lead ? `<p class="ow-sec-lead">${section.lead}</p>` : ""}
           ${cta.href ? `<a class="ow-text-link" ${linkAttrs(cta.href)}>${cta.label} →</a>` : ""}
         </header>
-        <div class="ow-stages" data-reveal data-stagger="slide-left">${stages}</div>
+        <div class="ow-path" data-ow-path>
+          <div class="ow-path__line" aria-hidden="true">
+            <span class="ow-path__line-fill" data-ow-path-fill></span>
+          </div>
+          <ol class="ow-path__list">${stages}</ol>
+        </div>
       </div>
     </section>`;
 }
 
+/** Resources — statement lines. */
 function renderResources(section = {}) {
   if (!section.title) return "";
-  const points = (section.points || []).map((p) => `<li>${p}</li>`).join("");
+  const points = (section.points || [])
+    .map((p) => `<li class="ow-say__line" data-ow-say-line>${p}</li>`)
+    .join("");
   const cta = section.cta || {};
   return `
-    <section class="ow-band ow-band--skin-maroon" id="work-resources" data-ow-section="resources" aria-labelledby="ow-resources-title">
-      <div class="container ow-resources" data-reveal data-anim="slide-left">
-        <div>
+    <section class="ow-band ow-band--stone" id="work-resources" data-ow-section="resources" aria-labelledby="ow-resources-title">
+      <div class="container ow-say">
+        <header class="ow-sec-head" data-ow-reveal>
           ${section.eyebrow ? `<p class="ow-eyebrow">${section.eyebrow}</p>` : ""}
-          <h2 id="ow-resources-title" class="pa-title">${formatPaTitle(section)}</h2>
-          ${section.lead ? `<p class="ow-band__lead">${section.lead}</p>` : ""}
+          <h2 id="ow-resources-title" class="ow-sec-title pa-title">${formatPaTitle(section)}</h2>
+          ${section.lead ? `<p class="ow-sec-lead">${section.lead}</p>` : ""}
           ${cta.href ? `<a class="ow-text-link" ${linkAttrs(cta.href)}>${cta.label} →</a>` : ""}
-        </div>
-        ${points ? `<ul class="ow-list ow-list--boxed">${points}</ul>` : ""}
+        </header>
+        ${points ? `<ul class="ow-say__list" data-ow-say>${points}</ul>` : ""}
       </div>
     </section>`;
 }
@@ -224,11 +220,11 @@ function renderCtaBand(section = {}) {
   const secondary = section.secondaryCta || {};
   return `
     <section class="ow-cta" id="work-next" data-ow-section="cta" aria-labelledby="ow-cta-title">
-      <div class="container ow-cta__inner" data-reveal data-anim="pop">
+      <div class="container ow-cta__inner" data-ow-reveal>
         <div>
-          ${section.eyebrow ? `<p class="ow-eyebrow">${section.eyebrow}</p>` : ""}
-          <h2 id="ow-cta-title" class="pa-title">${formatPaTitle(section)}</h2>
-          ${section.lead ? `<p>${section.lead}</p>` : ""}
+          ${section.eyebrow ? `<p class="ow-eyebrow ow-eyebrow--on-dark">${section.eyebrow}</p>` : ""}
+          <h2 id="ow-cta-title" class="pa-title ow-cta__title">${formatPaTitle(section)}</h2>
+          ${section.lead ? `<p class="ow-cta__lead">${section.lead}</p>` : ""}
         </div>
         <div class="ow-cta__actions">
           ${primary.href ? `<a class="ow-btn ow-btn--solid" ${linkAttrs(primary.href)}>${primary.label} →</a>` : ""}
@@ -238,10 +234,6 @@ function renderCtaBand(section = {}) {
     </section>`;
 }
 
-/**
- * Full Our Work hub page.
- * Order: Hero → Our Model → Leadership → Shalom → PPP/CHIPs → Journey → Resources → CTA
- */
 export function renderOurWorkPage(page = {}, ministryModel = {}) {
   return `
     <div class="ow-page" data-what-we-do data-work-section="overview" data-our-work-page>
@@ -261,148 +253,185 @@ export function initOurWorkAnimations(root = document) {
   if (!page || typeof gsap === "undefined") return;
 
   if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-    page.querySelectorAll("[data-reveal], [data-stagger] > *").forEach((el) => {
-      el.style.opacity = "1";
-      el.style.transform = "none";
-    });
+    page.classList.add("ow-page--reduced");
     return;
   }
 
-  const fromMap = {
-    "slide-left": { opacity: 0, x: -36 },
-    "slide-right": { opacity: 0, x: 36 },
-    "slide-up": { opacity: 0, y: 28 },
-    pop: { opacity: 0, y: 18, scale: 0.94 },
-    "fade-up": { opacity: 0, y: 24 },
-  };
-
-  const play = (targets, type, opts = {}) => {
-    const els = gsap.utils.toArray(targets).filter(Boolean);
-    if (!els.length) return;
+  const reveal = (els, from, opts = {}) => {
+    const list = gsap.utils.toArray(els).filter(Boolean);
+    if (!list.length) return;
     gsap.fromTo(
-      els,
-      fromMap[type] || fromMap["fade-up"],
+      list,
+      from,
       {
         opacity: 1,
         x: 0,
         y: 0,
         scale: 1,
-        duration: opts.duration || 0.65,
+        clipPath: "inset(0% 0% 0% 0%)",
+        duration: opts.duration || 0.7,
         stagger: opts.stagger || 0,
-        ease: type === "pop" ? "back.out(1.4)" : "power3.out",
-        clearProps: "transform",
+        ease: opts.ease || "power3.out",
+        clearProps: opts.clearProps || "transform",
         scrollTrigger: {
-          trigger: opts.trigger || els[0],
-          start: "top 88%",
+          trigger: opts.trigger || list[0],
+          start: opts.start || "top 86%",
           once: true,
         },
       }
     );
   };
 
-  // Whole-section lift so bands feel distinct as you scroll
-  page.querySelectorAll(".ow-band[data-ow-section]").forEach((band, i) => {
-    gsap.fromTo(
-      band,
-      { opacity: 0.35, y: 28 },
-      {
-        opacity: 1,
-        y: 0,
-        duration: 0.7,
-        ease: "power2.out",
-        delay: Math.min(i * 0.02, 0.08),
-        scrollTrigger: {
-          trigger: band,
-          start: "top 92%",
-          once: true,
-        },
-      }
-    );
+  page.querySelectorAll("[data-ow-reveal]").forEach((el) => {
+    reveal(el, { opacity: 0, y: 28 }, { trigger: el, duration: 0.75 });
   });
 
-  page.querySelectorAll("[data-reveal]").forEach((el) => {
-    if (el.hasAttribute("data-stagger") && el.children.length) return;
-    if (el.classList.contains("ow-model__flow")) return;
-    play(el, el.dataset.anim || "fade-up", { trigger: el.closest(".ow-band") || el });
-  });
-
-  page.querySelectorAll("[data-stagger]").forEach((group) => {
-    if (group.classList.contains("ow-model__flow")) return;
-    gsap.set(group, { opacity: 1 });
-    play([...group.children], group.dataset.stagger || "fade-up", {
-      trigger: group.closest(".ow-band") || group,
-      stagger: 0.1,
+  /* Model rail — sequential slide-in */
+  const railItems = page.querySelectorAll("[data-ow-rail-item]");
+  if (railItems.length) {
+    gsap.set(railItems, { opacity: 0, x: 40 });
+    gsap.to(railItems, {
+      opacity: 1,
+      x: 0,
       duration: 0.55,
+      stagger: 0.12,
+      ease: "power3.out",
+      clearProps: "transform",
+      scrollTrigger: {
+        trigger: page.querySelector("[data-ow-rail]"),
+        start: "top 78%",
+        once: true,
+      },
     });
-  });
+  }
 
-  // Ministry model flow: starts when the card row enters view (not the band top)
-  const flow = page.querySelector(".ow-model__flow");
-  const drop = page.querySelector(".ow-model__drop");
-  if (flow) {
-    const cards = [...flow.querySelectorAll(".ow-model__card")];
-    const connectors = [...flow.querySelectorAll(".ow-model__connector")];
-    const dropLine = drop?.querySelector(".ow-model__drop-line");
-    const dropTip = drop?.querySelector(".ow-model__drop-tip");
-
-    gsap.set(cards, { opacity: 0, y: 28, scale: 0.94 });
-    gsap.set(connectors, { opacity: 0, scale: 0.5 });
-    if (dropLine) gsap.set(dropLine, { scaleY: 0, transformOrigin: "top center" });
-    if (dropTip) gsap.set(dropTip, { opacity: 0 });
-    gsap.set(flow, { opacity: 1 });
-
+  /* Leadership spine — rule draw + columns */
+  const spineRule = page.querySelector("[data-ow-spine-rule]");
+  const spineCols = page.querySelectorAll("[data-ow-spine-col]");
+  if (spineRule || spineCols.length) {
     const tl = gsap.timeline({
       scrollTrigger: {
-        trigger: flow,
+        trigger: page.querySelector("[data-ow-spine]"),
+        start: "top 80%",
+        once: true,
+      },
+    });
+    if (spineRule) {
+      gsap.set(spineRule, { scaleX: 0, transformOrigin: "left center" });
+      tl.to(spineRule, { scaleX: 1, duration: 0.7, ease: "power2.out" });
+    }
+    if (spineCols.length) {
+      gsap.set(spineCols, { opacity: 0, y: 24 });
+      tl.to(
+        spineCols,
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.55,
+          stagger: 0.14,
+          ease: "power3.out",
+          clearProps: "transform",
+        },
+        "-=0.25"
+      );
+    }
+  }
+
+  /* Shalom stat punch */
+  const stat = page.querySelector("[data-ow-stat] strong");
+  if (stat) {
+    gsap.fromTo(
+      stat,
+      { opacity: 0, scale: 0.85, y: 16 },
+      {
+        opacity: 1,
+        scale: 1,
+        y: 0,
+        duration: 0.8,
+        ease: "back.out(1.6)",
+        clearProps: "transform",
+        scrollTrigger: { trigger: stat, start: "top 88%", once: true },
+      }
+    );
+  }
+
+  /* Project stack rows */
+  const stackRows = page.querySelectorAll("[data-ow-stack-row]");
+  if (stackRows.length) {
+    gsap.set(stackRows, { opacity: 0, y: 20 });
+    gsap.to(stackRows, {
+      opacity: 1,
+      y: 0,
+      duration: 0.5,
+      stagger: 0.1,
+      ease: "power2.out",
+      clearProps: "transform",
+      scrollTrigger: {
+        trigger: page.querySelector("[data-ow-stack]"),
         start: "top 82%",
         once: true,
       },
     });
+  }
 
-    if (dropLine) {
-      tl.to(dropLine, { scaleY: 1, duration: 0.55, ease: "power2.out" });
+  /* Journey path fill + steps */
+  const pathFill = page.querySelector("[data-ow-path-fill]");
+  const pathSteps = page.querySelectorAll("[data-ow-path-step]");
+  if (pathFill || pathSteps.length) {
+    const tl = gsap.timeline({
+      scrollTrigger: {
+        trigger: page.querySelector("[data-ow-path]"),
+        start: "top 78%",
+        once: true,
+      },
+    });
+    if (pathFill) {
+      gsap.set(pathFill, { scaleY: 0, transformOrigin: "top center" });
+      tl.to(pathFill, { scaleY: 1, duration: 1.1, ease: "power2.inOut" });
     }
-    if (dropTip) {
-      tl.to(dropTip, { opacity: 1, duration: 0.25, ease: "power1.out" }, "-=0.15");
+    if (pathSteps.length) {
+      gsap.set(pathSteps, { opacity: 0, x: -18 });
+      tl.to(
+        pathSteps,
+        {
+          opacity: 1,
+          x: 0,
+          duration: 0.45,
+          stagger: 0.12,
+          ease: "power3.out",
+          clearProps: "transform",
+        },
+        0.15
+      );
     }
+  }
 
-    tl.to({}, { duration: 0.2 }); // brief pause so the first card is clearly on-screen
-
-    cards.forEach((card, i) => {
-      tl.to(card, {
-        opacity: 1,
-        y: 0,
-        scale: 1,
-        duration: 0.65,
-        ease: "power3.out",
-        clearProps: "transform",
-      });
-      if (connectors[i]) {
-        tl.to(
-          connectors[i],
-          {
-            opacity: 1,
-            scale: 1,
-            duration: 0.4,
-            ease: "power2.out",
-            clearProps: "transform",
-          },
-          "-=0.12"
-        );
-      }
-      // hold between steps so the sequence reads clearly while scrolling
-      if (i < cards.length - 1) tl.to({}, { duration: 0.18 });
+  /* Resource statement lines */
+  const sayLines = page.querySelectorAll("[data-ow-say-line]");
+  if (sayLines.length) {
+    gsap.set(sayLines, { opacity: 0, x: -24 });
+    gsap.to(sayLines, {
+      opacity: 1,
+      x: 0,
+      duration: 0.55,
+      stagger: 0.12,
+      ease: "power3.out",
+      clearProps: "transform",
+      scrollTrigger: {
+        trigger: page.querySelector("[data-ow-say]"),
+        start: "top 84%",
+        once: true,
+      },
     });
   }
 
   window.setTimeout(() => {
     page
       .querySelectorAll(
-        "[data-reveal], [data-stagger] > *, .ow-band[data-ow-section], .ow-model__card, .ow-model__connector, .ow-model__drop-line, .ow-model__drop-tip"
+        "[data-ow-reveal], [data-ow-rail-item], [data-ow-spine-col], [data-ow-stack-row], [data-ow-path-step], [data-ow-say-line]"
       )
       .forEach((el) => {
-        const opacity = window.getComputedStyle(el).opacity;
-        if (opacity === "0" || opacity === "0.35") {
+        if (window.getComputedStyle(el).opacity === "0") {
           gsap.set(el, { opacity: 1, x: 0, y: 0, scale: 1, clearProps: "transform" });
         }
       });

@@ -160,6 +160,7 @@ export function bindHubGeoMap(root, { countrySlug, catchmentSlug, onCatchmentNav
     const runLayout = () => {
       const vb = parseViewBox(svg.getAttribute("viewBox"));
       const viewBounds = { x: vb.x, y: vb.y, width: vb.width, height: vb.height };
+      const radialBase = Math.max(12, Math.min(22, vb.width * 0.08));
 
       const catchmentLabelLayer = svg.querySelector(".hub-geo-map__labels--catchments");
       if (catchmentLabelLayer?.childElementCount) {
@@ -168,28 +169,30 @@ export function bindHubGeoMap(root, { countrySlug, catchmentSlug, onCatchmentNav
           anchorSelector: ".hub-geo-map__catchment-anchor",
           idKey: "entityId",
           moveAnchors: false,
-          spread: 1,
-          maxOffset: Math.min(32, vb.width * 0.15),
-          gap: 4,
+          layoutMode: "radial",
+          radialOffset: radialBase,
+          radialGap: 5,
+          maxOffset: Math.min(56, vb.width * 0.28),
+          gap: 6,
           viewBounds,
+          showLeaders: true,
         });
       }
 
       const communityLabelLayer = svg.querySelector(".hub-geo-map__labels--communities");
       if (communityLabelLayer?.childElementCount) {
-        const isSchematic = mapEl.classList.contains("hub-geo-map--schematic");
         layoutMapLabels(svg, mapEl, {
           labelSelector: ".hub-geo-map__community-label",
           anchorSelector: ".hub-geo-map__community-anchor",
           idKey: "entityId",
           moveAnchors: false,
-          layoutMode: isSchematic ? "radial" : "spread",
-          radialOffset: isSchematic ? 10 : 12,
-          radialGap: 3,
-          spread: 1,
-          maxOffset: isSchematic ? Math.min(22, vb.width * 0.1) : Math.min(32, vb.width * 0.15),
-          gap: 4,
+          layoutMode: "radial",
+          radialOffset: Math.max(10, radialBase * 0.85),
+          radialGap: 4,
+          maxOffset: Math.min(48, vb.width * 0.24),
+          gap: 5,
           viewBounds,
+          showLeaders: true,
         });
       }
     };

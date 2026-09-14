@@ -4,6 +4,12 @@
  */
 
 import { formatPaTitle } from "../utils/pa-title.js";
+import { formatNumber } from "../utils/format.js";
+import {
+  getCountryBySlug,
+  getCatchmentsByCountry,
+  getCommunitiesByCatchment,
+} from "../utils/data.js";
 
 const PROGRAM_ICONS = {
   leadership: `<svg viewBox="0 0 48 48" fill="none" aria-hidden="true"><circle cx="24" cy="16" r="6" stroke="currentColor" stroke-width="2"/><path d="M10 38c2.5-7 8-11 14-11s11.5 4 14 11" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="36" cy="18" r="4" stroke="currentColor" stroke-width="2"/></svg>`,
@@ -22,7 +28,7 @@ function linkAttrs(href = "#") {
 export { formatPaTitle } from "../utils/pa-title.js";
 
 /** PA Across Africa band chrome around the existing interactive map root. */
-export function renderAfricaExploreBand(band = {}, mapSection = {}) {
+export function renderAfricaExploreBand(band = {}, mapSection = {}, countries = []) {
   const stats = (band.stats || [])
     .map(
       (s) => `<div class="pa-africa__stat">
@@ -35,6 +41,19 @@ export function renderAfricaExploreBand(band = {}, mapSection = {}) {
   const explore = band.exploreCta || mapSection.countriesCta || { label: "Explore Africa", href: "#/africa" };
   const exploreHref = explore.href || explore.target || "#/africa";
   const panelCta = band.panelCta || { label: "View interactive map", href: "#home-africa-map-root" };
+
+  const paCountries = (countries || []).filter((c) => c.isPaNetwork);
+  const options = paCountries.length
+    ? paCountries
+        .map((c) => `<option value="${c.slug}">${c.name}</option>`)
+        .join("")
+    : `<option value="kenya">Kenya</option>
+            <option value="ethiopia">Ethiopia</option>
+            <option value="malawi">Malawi</option>
+            <option value="zambia">Zambia</option>
+            <option value="tanzania">Tanzania</option>
+            <option value="rwanda">Rwanda</option>
+            <option value="burundi">Burundi</option>`;
 
   return `
     <section class="pa-africa" id="pa-across-africa" aria-labelledby="pa-africa-title" data-home-section="africa">
@@ -52,13 +71,7 @@ export function renderAfricaExploreBand(band = {}, mapSection = {}) {
           <label class="pa-africa__select-label" for="pa-africa-country">Select a country</label>
           <select id="pa-africa-country" class="pa-africa__select" data-pa-country-select>
             <option value="">Choose a country</option>
-            <option value="kenya">Kenya</option>
-            <option value="ethiopia">Ethiopia</option>
-            <option value="malawi">Malawi</option>
-            <option value="zambia">Zambia</option>
-            <option value="tanzania">Tanzania</option>
-            <option value="rwanda">Rwanda</option>
-            <option value="burundi">Burundi</option>
+            ${options}
           </select>
           <a class="pa-africa__panel-link" ${linkAttrs(panelCta.href || "#home-africa-map-root")}>${panelCta.label || "View interactive map"} →</a>
         </aside>
@@ -70,15 +83,208 @@ export function renderAfricaExploreBand(band = {}, mapSection = {}) {
     </section>`;
 }
 
-export function bindAfricaCountrySelect(root = document) {
+function countryDrawerPayload(data, slug) {
+  const country = getCountryBySlug(data.countries, slug);
+  if (!country || !country.isPaNetwork) return null;
+
+  const catchments = getCatchmentsByCountry(data.catchments, country.id);
+  const communities = catchments.flatMap((ct) =>
+    getCommunitiesByCatchment(data.communities, ct.id).map((com) => ({
+      ...com,
+      catchmentSlug: ct.slug,
+      catchmentName: ct.name,
+    }))
+  );
+
+  const summary = country.summary || {};
+  const communityCount = summary.communities ?? country.communities ?? communities.length;
+  const catchmentCount = summary.catchments ?? catchments.length;
+  const shalom = summary.shalomGroups ?? country.shalomGroups ?? 0;
+  const households = summary.households ?? country.households ?? 0;
+
+  return {
+    country,
+    catchments,
+    communities,
+    communityCount,
+    catchmentCount,
+    shalom,
+    households,
+  };
+}
+
+function renderCountryDrawerHtml(payload) {
+  const { country, catchments, communities, communityCount, catchmentCount, shalom, households } = payload;
+  const countryHref = `#/country/${country.slug}`;
+
+  const catchmentRows = catchments.length
+    ? catchments
+        .map((ct) => {
+          const href = `#/catchment/${country.slug}/${ct.slug}`;
+          const inCatchment = communities.filter((com) => com.catchmentSlug === ct.slug);
+          const names = inCatchment.length
+            ? inCatchment.map((com) => com.name).join(" · ")
+            : "Communities coming soon";
+          return `<a class="pa-drawer__row" href="${href}" data-link>
+            <span class="pa-drawer__row-copy">
+              <strong>${ct.name}</strong>
+              <span class="pa-drawer__comms">${names}</span>
+            </span>
+            <span class="pa-drawer__arrow" aria-hidden="true">→</span>
+          </a>`;
+        })
+        .join("")
+    : `<p class="pa-drawer__empty">No catchments listed yet for ${country.name}.</p>`;
+
+  return `
+    <div class="pa-drawer__head">
+      <div>
+        <p class="pa-drawer__eyebrow">Country</p>
+        <h2 id="pa-country-drawer-title">${country.name}</h2>
+      </div>
+      <button type="button" class="pa-drawer__close" data-pa-drawer-close aria-label="Close">×</button>
+    </div>
+
+    <div class="pa-drawer__metrics">
+      <a class="pa-drawer__metric" href="#pa-drawer-catchments" data-pa-drawer-jump="catchments">
+        <span class="pa-drawer__metric-label">Catchments</span>
+        <span class="pa-drawer__metric-value">${formatNumber(catchmentCount)}</span>
+        <span class="pa-drawer__arrow" aria-hidden="true">→</span>
+      </a>
+      <div class="pa-drawer__metric pa-drawer__metric--static">
+        <span class="pa-drawer__metric-label">Communities</span>
+        <span class="pa-drawer__metric-value">${formatNumber(communityCount)}</span>
+      </div>
+      <div class="pa-drawer__metric pa-drawer__metric--static">
+        <span class="pa-drawer__metric-label">Shalom groups</span>
+        <span class="pa-drawer__metric-value">${formatNumber(shalom)}</span>
+      </div>
+      <div class="pa-drawer__metric pa-drawer__metric--static">
+        <span class="pa-drawer__metric-label">Households</span>
+        <span class="pa-drawer__metric-value">${formatNumber(households)}</span>
+      </div>
+    </div>
+
+    <section class="pa-drawer__block" id="pa-drawer-catchments">
+      <header class="pa-drawer__block-head">
+        <h3>Catchments</h3>
+        <span>${formatNumber(catchments.length)}</span>
+      </header>
+      <div class="pa-drawer__list">${catchmentRows}</div>
+    </section>
+
+    <a class="pa-drawer__country" href="${countryHref}" data-link>Open ${country.name} country page →</a>`;
+}
+
+function ensureCountryDrawer() {
+  let root = document.getElementById("pa-country-drawer-root");
+  if (root) return root;
+
+  root = document.createElement("div");
+  root.id = "pa-country-drawer-root";
+  root.className = "pa-drawer-root";
+  root.innerHTML = `
+    <div class="pa-drawer__backdrop" data-pa-drawer-close tabindex="-1" aria-hidden="true"></div>
+    <aside class="pa-drawer" id="pa-country-drawer" role="dialog" aria-modal="true" aria-labelledby="pa-country-drawer-title" hidden>
+      <div class="pa-drawer__scroll" data-pa-drawer-body></div>
+    </aside>`;
+  document.body.appendChild(root);
+  return root;
+}
+
+function openCountryDrawer(payload) {
+  const root = ensureCountryDrawer();
+  const panel = root.querySelector(".pa-drawer");
+  const body = root.querySelector("[data-pa-drawer-body]");
+  if (!panel || !body) return;
+
+  body.innerHTML = renderCountryDrawerHtml(payload);
+  panel.hidden = false;
+  root.classList.add("is-open");
+  document.body.classList.add("pa-drawer-open");
+
+  requestAnimationFrame(() => {
+    panel.classList.add("is-visible");
+    root.querySelector("[data-pa-drawer-close]")?.focus?.();
+  });
+}
+
+export function closeCountryDrawer() {
+  const root = document.getElementById("pa-country-drawer-root");
+  if (!root) return;
+  const panel = root.querySelector(".pa-drawer");
+  panel?.classList.remove("is-visible");
+  root.classList.remove("is-open");
+  document.body.classList.remove("pa-drawer-open");
+  window.setTimeout(() => {
+    if (!root.classList.contains("is-open") && panel) panel.hidden = true;
+  }, 280);
+}
+
+let drawerBound = false;
+
+function bindCountryDrawerChrome(data) {
+  if (drawerBound) return;
+  drawerBound = true;
+  const root = ensureCountryDrawer();
+
+  root.addEventListener("click", (e) => {
+    if (e.target.closest("[data-pa-drawer-close]")) {
+      e.preventDefault();
+      closeCountryDrawer();
+      return;
+    }
+    const jump = e.target.closest("[data-pa-drawer-jump]");
+    if (jump) {
+      e.preventDefault();
+      const id = jump.getAttribute("data-pa-drawer-jump");
+      const target = root.querySelector(`#pa-drawer-${id}`);
+      target?.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  });
+
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && root.classList.contains("is-open")) {
+      closeCountryDrawer();
+    }
+  });
+}
+
+export function bindAfricaCountrySelect(root = document, data = null) {
   const select = root.querySelector("[data-pa-country-select]");
   if (!select || select.dataset.bound) return;
   select.dataset.bound = "true";
+
+  if (data) bindCountryDrawerChrome(data);
+
   select.addEventListener("change", () => {
     const slug = select.value;
-    if (!slug) return;
-    location.hash = `#/country/${slug}`;
+    if (!slug) {
+      closeCountryDrawer();
+      return;
+    }
+
+    if (!data) {
+      location.hash = `#/country/${slug}`;
+      return;
+    }
+
+    const payload = countryDrawerPayload(data, slug);
+    if (!payload) {
+      location.hash = `#/country/${slug}`;
+      return;
+    }
+
+    openCountryDrawer(payload);
   });
+}
+
+export function destroyAfricaCountryDrawer() {
+  closeCountryDrawer();
+  const root = document.getElementById("pa-country-drawer-root");
+  root?.remove();
+  drawerBound = false;
+  document.body.classList.remove("pa-drawer-open");
 }
 
 export function renderOurWorkPrograms(section = {}) {
@@ -321,12 +527,14 @@ export function renderStoriesBand(section = {}) {
   const cta = section.cta || { label: "View all stories", href: "#/stories" };
   const cards = (section.cards || [])
     .map(
-      (c) => `<a class="pa-stories__card" ${linkAttrs(c.href || "#/stories")}>
-        <span class="pa-stories__media">
-          ${c.image ? `<img src="${c.image}" alt="${c.imageAlt || c.title}" loading="eager" decoding="async">` : ""}
+      (c, i) => `<a class="pa-stories__strip${i === 0 ? " is-lead" : ""}" ${linkAttrs(c.href || "#/stories")} style="${c.image ? `--pa-story-shot:url('${c.image}')` : ""}">
+        <span class="pa-stories__shot" aria-hidden="true"></span>
+        <span class="pa-stories__veil" aria-hidden="true"></span>
+        <span class="pa-stories__copy">
+          <span class="pa-stories__meta">${c.country || ""} · ${c.program || ""}</span>
+          <strong class="pa-stories__title">${c.title}</strong>
+          <span class="pa-stories__go">Read story →</span>
         </span>
-        <span class="pa-stories__meta">${c.country || ""} · ${c.program || ""}</span>
-        <h3>${c.title}</h3>
       </a>`
     )
     .join("");
@@ -342,7 +550,7 @@ export function renderStoriesBand(section = {}) {
           </div>
           <a class="pa-stories__all" ${linkAttrs(cta.href)}>${cta.label} →</a>
         </header>
-        <div class="pa-stories__grid" data-reveal data-stagger="slide-left">${cards}</div>
+        <div class="pa-stories__mosaic" data-reveal data-stagger="slide-left">${cards}</div>
       </div>
     </section>`;
 }
@@ -393,23 +601,36 @@ export function renderKnowledgeNewsSplit(section = {}) {
 
 export function renderPartnerBanner(section = {}) {
   if (!section.title) return "";
-  const primary = section.primaryCta || {
-    label: "Partner With Us",
-    href: "https://www.possibilitiesafrica.org/",
-  };
+  const contact = section.contact || {};
+  const primary = section.primaryCta || { label: "Partner With Us" };
   const secondary = section.secondaryCta || { label: "What we do", href: "#/work" };
+  const email = contact.email || "karibu@possibilitiesafrica.org";
+  const phone = contact.phone || "+254 721 238 198";
+  const address = (contact.address || "P.O. Box: 55604 - 00200\nNairobi, Kenya").replace(/\n/g, "\\n");
 
   return `
     <section class="pa-partner" id="partner-support" aria-labelledby="partner-banner-title" data-home-section="partner">
-      <div class="container pa-partner__inner" data-reveal data-anim="pop">
+      <div class="container pa-partner__inner pa-partner__inner--cta" data-reveal data-anim="pop">
         <div class="pa-partner__copy">
           ${section.eyebrow ? `<p class="pa-partner__eyebrow">${section.eyebrow}</p>` : ""}
           <h2 id="partner-banner-title" class="pa-title">${formatPaTitle(section)}</h2>
           ${section.lead ? `<p>${section.lead}</p>` : ""}
         </div>
         <div class="pa-partner__actions">
-          <a class="pa-partner__btn pa-partner__btn--solid" ${linkAttrs(primary.href)}>${primary.label} →</a>
-          <a class="pa-partner__btn pa-partner__btn--ghost" ${linkAttrs(secondary.href)}>${secondary.label}</a>
+          <button
+            type="button"
+            class="pa-partner__btn pa-partner__btn--solid"
+            data-partner-contact
+            data-email="${email}"
+            data-phone="${phone}"
+            data-address="${address.replace(/"/g, "&quot;")}"
+            aria-haspopup="dialog"
+          >${primary.label || "Partner With Us"} →</button>
+          ${
+            secondary.href
+              ? `<a class="pa-partner__btn pa-partner__btn--ghost" ${linkAttrs(secondary.href)}>${secondary.label}</a>`
+              : ""
+          }
         </div>
       </div>
     </section>`;

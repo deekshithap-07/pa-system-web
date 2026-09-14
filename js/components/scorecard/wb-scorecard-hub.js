@@ -1,7 +1,5 @@
 import { formatNumber } from "../../utils/format.js";
 import { renderChart, destroyCharts } from "../charts.js";
-import { renderWbPageHero, bindWbPageHero, renderPageBack, renderTopicHub } from "../shared/wb-page-hero.js";
-import { bindStoryReveals } from "../shared/story-chapters.js";
 
 const WB_THEMES = [
   { name: "orange", color: "#de8a0a" },
@@ -137,29 +135,100 @@ function buildOverviewCards(sc) {
     else if (k.id === "leadership") expected = 70;
     else expected = Math.max(val + 10, Math.round(val * 1.15));
 
+    const achievedLabel =
+      k.text || (typeof val === "number" && val >= 1000 ? formatNumber(val) : val);
+    const expectedLabel =
+      typeof expected === "number" && expected >= 1000 ? formatNumber(expected) : expected;
+
     return {
       id: k.id,
       label: k.label,
-      achieved: k.text || val,
-      expected,
+      achieved: achievedLabel,
+      expected: expectedLabel,
       progress: pct(val || 1, expected),
       summary: `Trend: ${k.trend || "stable"}. Period ${sc.meta?.period || "2024"}.`,
-      link: k.id === "growth" ? "#/africa" : "#/scorecard/working",
+      link: "#/africa",
     };
   });
 }
 
-function renderOverviewPanel(sc, ia) {
+function renderPaHero(sc = {}) {
+  const meta = sc.meta || {};
+  const ov = sc.overview || {};
+  const image = sc.heroImage || "assets/home-overview/tab-results.jpg";
+  return `
+    <header class="id-hero" data-id-section="hero">
+      <div class="id-hero__media" aria-hidden="true">
+        <img src="${image}" alt="" fetchpriority="high">
+        <span class="id-hero__veil"></span>
+      </div>
+      <div class="container id-hero__layout">
+        <div class="id-hero__inner" data-id-reveal>
+          <p class="id-eyebrow id-eyebrow--on-dark">Impact &amp; Data</p>
+          <h1 class="pa-title id-hero__title"><span>How the work</span> <em>is going.</em></h1>
+          <p class="id-hero__lead">${
+            ov.description ||
+            "The public data and evidence layer — indicators, trends, and side-by-side country progress."
+          }</p>
+          <p class="id-hero__meta">Reporting ${meta.reportingPeriod || meta.period || "2024"} · Updated ${
+            meta.lastUpdatedLabel || meta.lastUpdated || ""
+          }</p>
+          <div class="id-hero__actions">
+            <button type="button" class="id-btn id-btn--solid" data-wbs-jump="overview">Key indicators →</button>
+            <button type="button" class="id-btn id-btn--ghost" data-wbs-jump="data">Country figures</button>
+          </div>
+        </div>
+      </div>
+    </header>`;
+}
+
+function renderChrome(sc = {}, activeTab = "overview") {
+  const tabs = [
+    { id: "overview", label: "Overview" },
+    { id: "outcomes", label: "What’s working" },
+    { id: "analysis", label: "What is changing" },
+    { id: "progress", label: "Journey" },
+    { id: "data", label: "Data" },
+  ];
+  return `
+    <div class="wbs-chrome">
+      <div class="wbs-topbar">
+        <div class="wbs-topbar__brand">
+          <span class="wbs-topbar__org">Possibilities Africa</span>
+          <span class="wbs-topbar__divider" aria-hidden="true"></span>
+          <span class="wbs-topbar__title">Scorecard</span>
+        </div>
+        <nav class="wbs-tabs" role="tablist" aria-label="Impact sections">
+          ${tabs
+            .map(
+              (t) => `<button
+                type="button"
+                class="wbs-tabs__btn${t.id === activeTab ? " is-active" : ""}"
+                role="tab"
+                id="wbs-tab-${t.id}"
+                aria-selected="${t.id === activeTab ? "true" : "false"}"
+                aria-controls="tab-${t.id}"
+                data-wbs-tab="${t.id}"
+              >${t.label}</button>`
+            )
+            .join("")}
+        </nav>
+        <p class="wbs-topbar__date">Updated ${sc.meta?.lastUpdatedLabel || sc.meta?.lastUpdated || ""}</p>
+      </div>
+    </div>`;
+}
+
+function renderOverviewPanel(sc) {
   const cards = buildOverviewCards(sc);
   const ov = sc.overview || {};
 
   return `
-    <section class="wbs-panel wbs-panel--overview is-active" data-panel="overview" id="tab-overview">
+    <section class="wbs-panel wbs-panel--overview is-active" data-panel="overview" id="tab-overview" role="tabpanel" aria-labelledby="wbs-tab-overview">
       <div class="wbs-hero-split">
         <div class="wbs-hero-split__copy">
-          <h2>How big is the work?</h2>
-          <p>Countries, communities, and homes — a simple picture of reach.</p>
-          <p class="wbs-hero-split__date">Updated ${sc.meta.lastUpdated}</p>
+          <h2>Measuring impact</h2>
+          <p>${ov.description || "Countries, communities, and homes — achieved against expected reach."}</p>
+          <p class="wbs-hero-split__date">Reporting ${sc.meta?.reportingPeriod || sc.meta?.period || "2024"} · Updated ${sc.meta?.lastUpdatedLabel || sc.meta?.lastUpdated || ""}</p>
         </div>
       </div>
       <div class="wbs-cards-wrap">
@@ -175,7 +244,7 @@ function renderOutcomesPanel(sc, ia) {
   const progress = sc.progressIndicators || [];
 
   return `
-    <section class="wbs-panel is-page" data-panel="outcomes" id="tab-outcomes">
+    <section class="wbs-panel" data-panel="outcomes" id="tab-outcomes" role="tabpanel" aria-labelledby="wbs-tab-outcomes" hidden>
       <header class="wbs-panel-head">
         <h2>What’s working</h2>
         <p>Water, farming, health, schools, jobs, and leadership — and how far communities have come on the two-year journey.</p>
@@ -236,7 +305,7 @@ function renderAnalysisPanel(sc, ia) {
   const next = arc.next || {};
 
   return `
-    <section class="wbs-narrative wbs-panel is-page" data-panel="analysis" id="tab-analysis">
+    <section class="wbs-narrative wbs-panel" data-panel="analysis" id="tab-analysis" role="tabpanel" aria-labelledby="wbs-tab-analysis" hidden>
       <div class="container wbs-narrative__lede-wrap">
         <p class="wbs-narrative__lede">${ed.intro || "Figures alone do not tell the story. This page walks through where the work began, what the field shows today, and what may come next."}</p>
       </div>
@@ -350,9 +419,9 @@ function renderDataPanel(sc, ia) {
   const trends = sc.growthTrends || ia?.trendAnalysis || {};
 
   return `
-    <section class="wbs-data-sheet wbs-panel is-page" data-panel="data" id="tab-data">
+    <section class="wbs-data-sheet wbs-panel" data-panel="data" id="tab-data" role="tabpanel" aria-labelledby="wbs-tab-data" hidden>
       <div class="container">
-        <p class="wbs-data-sheet__note">Country figures and trend lines only. For what they mean over time, open <a href="#/scorecard/together" data-link>What is changing</a>.</p>
+        <p class="wbs-data-sheet__note">Country figures and trend lines — same style of achieved / expected reading as the World Bank Scorecard overview.</p>
 
         <header class="wbs-data-sheet__head">
           <h2>Country figures</h2>
@@ -396,7 +465,7 @@ function renderProgressPanel(sc, ia) {
   const hotspots = ia?.whyProgressing || [];
 
   return `
-    <section class="wbs-panel wbs-panel--progress is-page" data-panel="progress" id="tab-progress">
+    <section class="wbs-panel wbs-panel--progress" data-panel="progress" id="tab-progress" role="tabpanel" aria-labelledby="wbs-tab-progress" hidden>
       <div class="wbs-panel-hero wbs-panel-hero--progress">
         <header class="wbs-panel-head">
           <h2>The two-year journey</h2>
@@ -454,98 +523,55 @@ function renderProgressPanel(sc, ia) {
     </section>`;
 }
 
+const TAB_BY_SECTION = {
+  overview: "overview",
+  working: "outcomes",
+  together: "analysis",
+  journey: "progress",
+  countries: "data",
+};
+
 export function renderWbScorecard(data, section = "overview") {
   const sc = data.scorecard;
   const ia = data.insightsAnalytics;
   if (!sc) return `<div class="container static-page"><h1>Impact &amp; Data is unavailable</h1></div>`;
 
-  const page = ["working", "together", "journey"].includes(section) ? section : "overview";
+  const activeTab = TAB_BY_SECTION[section] || "overview";
 
-  if (page === "overview") {
-    const glance = (sc.kpis || []).slice(0, 3);
-    return `
-    <div class="wbs-page wbs-page--story topic-page--hub" data-wb-scorecard data-results-page="overview">
-      ${renderPageBack({ href: "#/", label: "Home" })}
-      ${renderWbPageHero({
-        id: "scorecard-hero",
-        tone: "navy",
-        skin: "who",
-        flush: true,
-        crumbs: [
-          { label: "Home", href: "#/" },
-          { label: "Impact & Data" },
-        ],
-        eyebrow: "Impact & Data",
-        title: "How the work is going",
-        lead: "Figures for countries, communities, and homes — beside the map, not instead of visiting a place.",
-      })}
-      <section class="container" style="padding:0 0 1rem">
-        <div class="wbs-glance">
-          ${glance
-            .map(
-              (k) => `<div class="wbs-glance__item">
-                <strong>${k.text || k.value}</strong>
-                <span>${k.label}</span>
-              </div>`
-            )
-            .join("")}
+  return `
+    <div class="wbs-page wbs-page--pa-hero" data-wb-scorecard data-impact-data data-results-page="hub" data-wbs-initial="${activeTab}">
+      ${renderPaHero(sc)}
+      ${renderChrome(sc, activeTab)}
+      <main class="wbs-main">
+        ${renderOverviewPanel(sc)}
+        ${renderOutcomesPanel(sc, ia)}
+        ${renderAnalysisPanel(sc, ia)}
+        ${renderProgressPanel(sc, ia)}
+        ${renderDataPanel(sc, ia)}
+      </main>
+      <section class="id-next" id="id-next" aria-labelledby="id-cta-title">
+        <div class="container id-next__inner">
+          <header class="id-next__intro">
+            <p class="id-eyebrow">Keep exploring</p>
+            <h2 id="id-cta-title" class="pa-title"><span>From the numbers</span> <em>to the field.</em></h2>
+            <p class="id-next__lead">Impact figures point to places and people. Step into a country, a story, or the map.</p>
+          </header>
+          <div class="id-next__paths" role="list">
+            <a class="id-next__path" href="#/africa" data-link role="listitem">
+              <span class="id-next__path-kicker">Map</span>
+              <span class="id-next__path-title">Where we work</span>
+              <span class="id-next__path-note">Countries, catchments, and communities across the network.</span>
+              <span class="id-next__path-go" aria-hidden="true">→</span>
+            </a>
+            <a class="id-next__path" href="#/stories" data-link role="listitem">
+              <span class="id-next__path-kicker">Stories</span>
+              <span class="id-next__path-title">Voices from the field</span>
+              <span class="id-next__path-note">Households, leaders, and journeys behind the indicators.</span>
+              <span class="id-next__path-go" aria-hidden="true">→</span>
+            </a>
+          </div>
         </div>
       </section>
-      ${renderTopicHub({
-        eyebrow: "Topics",
-        title: "Open a results page",
-        lead: "Each card is figures only — not a repeat of How places work or the two-year journey.",
-        items: [
-          { href: "#/scorecard/working", kind: "Results", title: "What’s working", text: "Water, farming, health, schools, jobs, and leadership — in plain words.", cta: "Open" },
-          { href: "#/scorecard/together", kind: "Change", title: "What is changing", text: "Where the work began, what the field shows now, and what may come next.", cta: "Open" },
-        ],
-      })}
-    </div>`;
-  }
-
-  const chapters = {
-    working: {
-      skin: "who",
-      tone: "navy",
-      title: "What’s working",
-      lead: "Water, farming, health, schools, jobs, and leadership — and how far communities have come.",
-      body: renderOutcomesPanel(sc, ia),
-    },
-    together: {
-      skin: "who",
-      tone: "navy",
-      title: "What is changing",
-      lead: "Where the work began, what the field shows now, and what may come next.",
-      body: renderAnalysisPanel(sc, ia),
-    },
-    journey: {
-      skin: "who",
-      tone: "navy",
-      title: "Journey stage counts",
-      lead: "How many communities sit in each stage. For the path itself, open The two-year journey under What we do.",
-      body: renderProgressPanel(sc, ia),
-    },
-  };
-
-  const ch = chapters[page];
-  return `
-    <div class="wbs-page wbs-page--story topic-page--${page}" data-wb-scorecard data-results-page="${page}">
-      ${renderPageBack({ href: "#/scorecard", label: "Impact & Data" })}
-      ${renderWbPageHero({
-        id: "scorecard-hero",
-        tone: ch.tone,
-        skin: ch.skin,
-        flush: true,
-        crumbs: [
-          { label: "Home", href: "#/" },
-          { label: "Impact & Data", href: "#/scorecard" },
-          { label: ch.title },
-        ],
-        eyebrow: "Impact & Data",
-        title: ch.title,
-        lead: ch.lead,
-      })}
-      <main class="wbs-main">${ch.body}</main>
     </div>`;
 }
 
@@ -555,25 +581,79 @@ export function mountWbScorecard(data, section = "overview") {
   const root = document.querySelector("[data-wb-scorecard]");
   if (!root) return;
 
-  bindWbPageHero(root);
-  bindStoryReveals(root);
   destroyCharts();
   activeCharts = [];
 
   const sc = data.scorecard;
   const ia = data.insightsAnalytics;
-  const page = root.dataset.resultsPage || section;
+  root._wbsData = { sc, ia };
+  const initial = root.dataset.wbsInitial || TAB_BY_SECTION[section] || "overview";
+
+  bindTabs(root, initial);
+  bindCardSelection(root);
+  bindHeroJumps(root);
+  scheduleScorecardContentReveal(root);
 
   requestAnimationFrame(() => {
-    if (page === "together") mountAnalysisCharts(root, sc, ia);
-    if (page === "working") bindCardSelection(root);
+    if (initial === "analysis") mountAnalysisCharts(root, sc, ia);
+    if (initial === "data") mountDataCharts(root, sc, ia);
     ScrollTrigger?.refresh?.();
   });
 
-  if (page === "working") bindCardSelection(root);
-  scheduleScorecardContentReveal(root);
-
   document.getElementById("site-header")?.classList.add("site-header--on-scorecard");
+}
+
+function bindHeroJumps(root) {
+  root.querySelectorAll("[data-wbs-jump]").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const id = btn.getAttribute("data-wbs-jump");
+      const tab = root.querySelector(`[data-wbs-tab="${id}"]`);
+      tab?.click();
+      root.querySelector(".wbs-chrome")?.scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+  });
+}
+
+function bindTabs(root, initial = "overview") {
+  const tabs = [...root.querySelectorAll("[data-wbs-tab]")];
+  const panels = [...root.querySelectorAll("[data-panel]")];
+  if (!tabs.length || !panels.length) return;
+
+  const show = (id, { animate = true } = {}) => {
+    const { sc, ia } = root._wbsData || {};
+    tabs.forEach((t) => {
+      const on = t.dataset.wbsTab === id;
+      t.classList.toggle("is-active", on);
+      t.setAttribute("aria-selected", on ? "true" : "false");
+    });
+
+    panels.forEach((p) => {
+      const on = p.dataset.panel === id;
+      p.classList.toggle("is-active", on);
+      if (on) {
+        p.removeAttribute("hidden");
+        if (animate && typeof gsap !== "undefined" && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+          gsap.fromTo(p, { autoAlpha: 0, y: 14 }, { autoAlpha: 1, y: 0, duration: 0.38, ease: "power2.out" });
+        }
+      } else {
+        p.setAttribute("hidden", "");
+      }
+    });
+
+    root.dataset.wbsActive = id;
+
+    if (id === "analysis" && sc) mountAnalysisCharts(root, sc, ia);
+    if (id === "data" && sc) mountDataCharts(root, sc, ia);
+    if (id === "overview" || id === "outcomes") {
+      requestAnimationFrame(() => animateScorecardContent(root, true));
+    }
+  };
+
+  tabs.forEach((t) => {
+    t.addEventListener("click", () => show(t.dataset.wbsTab));
+  });
+
+  show(initial, { animate: false });
 }
 
 function scheduleScorecardContentReveal(root) {
@@ -716,11 +796,13 @@ function bindCardSelection(root) {
   });
 }
 
-function animateScorecardContent(root) {
-  if (root.dataset.wbsContentRevealed) return;
+function animateScorecardContent(root, force = false) {
+  if (!force && root.dataset.wbsContentRevealed) return;
   root.dataset.wbsContentRevealed = "1";
 
-  const cards = root.querySelectorAll(".wbs-card");
+  const activePanel = root.querySelector(".wbs-panel.is-active") || root;
+  const cards = activePanel.querySelectorAll(".wbs-card");
+  if (!cards.length) return;
 
   if (typeof gsap === "undefined") {
     cards.forEach((c) => c.classList.add("is-visible"));

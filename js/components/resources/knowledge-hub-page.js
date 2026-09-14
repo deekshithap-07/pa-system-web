@@ -58,9 +58,6 @@ function renderHero(hero = {}) {
           <p class="nu-hero__lead">${
             hero.lead || "PA as a source of knowledge, learning and evidence."
           }</p>
-          <nav class="nu-hero__jump" aria-label="Hub sections">
-            ${JUMP.map((j) => `<a href="#${j.id}">${j.label}</a>`).join("")}
-          </nav>
         </div>
       </div>
     </header>`;
@@ -157,8 +154,9 @@ function renderSearch(lib = {}, collections = [], countries = [], programs = [])
               ${programs.map((p) => `<option value="${p}">${p}</option>`).join("")}
             </select>
           </label>
+          <button type="button" class="kh-tools__apply" data-kh-apply>Show results</button>
         </div>
-        <p class="kh-search-hint" data-kh-reveal>Results filter the streams above — scroll up to browse after you search.</p>
+        <p class="kh-search-hint" data-kh-reveal>Set filters, then press Show results to jump to matching items.</p>
       </div>
     </section>`;
 }
@@ -338,8 +336,9 @@ function bindFilters(page) {
   const typeSel = page.querySelector("#kh-filter-type");
   const countrySel = page.querySelector("#kh-filter-country");
   const programSel = page.querySelector("#kh-filter-program");
+  const applyBtn = page.querySelector("[data-kh-apply]");
 
-  const apply = () => {
+  const apply = ({ scrollToResults = false } = {}) => {
     const q = (search?.value || "").trim().toLowerCase();
     const type = typeSel?.value || "all";
     const countryId = countrySel?.value || "all";
@@ -366,18 +365,44 @@ function bindFilters(page) {
       if (empty) empty.style.display = visible ? "none" : "";
       section.classList.toggle("is-empty-filter", !visible);
     });
+
+    if (scrollToResults) {
+      const firstItem = [...page.querySelectorAll("[data-kh-item]")].find(
+        (el) => el.style.display !== "none"
+      );
+      const section =
+        firstItem?.closest?.("[data-kh-section]") ||
+        page.querySelector("[data-kh-section]:not(#kh-search):not(.is-empty-filter)") ||
+        page.querySelector("[data-kh-rail]") ||
+        page;
+      const headerH =
+        parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--header-h")) || 64;
+      const top = section.getBoundingClientRect().top + window.scrollY - headerH - 12;
+      window.scrollTo({ top: Math.max(0, top), behavior: "smooth" });
+    }
   };
 
-  search?.addEventListener("input", apply);
-  typeSel?.addEventListener("change", apply);
-  countrySel?.addEventListener("change", apply);
-  programSel?.addEventListener("change", apply);
+  const onApplyClick = () => apply({ scrollToResults: true });
+  const onSearchKey = (e) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      apply({ scrollToResults: true });
+    }
+  };
+  const onFilterChange = () => apply();
+
+  applyBtn?.addEventListener("click", onApplyClick);
+  search?.addEventListener("keydown", onSearchKey);
+  typeSel?.addEventListener("change", onFilterChange);
+  countrySel?.addEventListener("change", onFilterChange);
+  programSel?.addEventListener("change", onFilterChange);
 
   return () => {
-    search?.removeEventListener("input", apply);
-    typeSel?.removeEventListener("change", apply);
-    countrySel?.removeEventListener("change", apply);
-    programSel?.removeEventListener("change", apply);
+    applyBtn?.removeEventListener("click", onApplyClick);
+    search?.removeEventListener("keydown", onSearchKey);
+    typeSel?.removeEventListener("change", onFilterChange);
+    countrySel?.removeEventListener("change", onFilterChange);
+    programSel?.removeEventListener("change", onFilterChange);
   };
 }
 

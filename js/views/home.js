@@ -2,6 +2,7 @@ import { renderHero } from "../components/home-sections.js";
 import {
   renderAfricaExploreBand,
   bindAfricaCountrySelect,
+  destroyAfricaCountryDrawer,
   renderOurWorkPrograms,
   bindOurWorkPrograms,
   renderImpactDataBand,
@@ -15,6 +16,8 @@ import {
   destroyHomeAfricaMap,
 } from "../components/home-level1.js";
 import { initLandingAnimations, destroyHomeAnimations } from "../components/home-animations.js";
+import { bindHomeWatchStory, closeVideoModal } from "../components/video-modal.js";
+import { bindPartnerContact, closeContactModal } from "../components/contact-modal.js";
 
 /**
  * Order from PA Website Designs mockup (+ vision as reference):
@@ -22,15 +25,20 @@ import { initLandingAnimations, destroyHomeAnimations } from "../components/home
  * Stories → Knowledge / News → Partner
  * Interactive map mount/root unchanged.
  */
+
+let unbindWatchStory = null;
+let unbindPartnerContact = null;
+
 export function renderHome(data) {
   const home = data.home || {};
+  const paCountries = data.countries?.countries || [];
 
   return `
     <div class="home-page" data-level="1">
       <div class="home-hero-stack" data-home-scroll-stack>
         <div class="home-hero-stack__pin">${renderHero(home.hero)}</div>
       </div>
-      ${renderAfricaExploreBand(home.africaBand, home.level1?.africaMap)}
+      ${renderAfricaExploreBand(home.africaBand, home.level1?.africaMap, paCountries)}
       ${renderOurWorkPrograms(home.ourWork)}
       ${renderImpactDataBand(home.impactData)}
       ${renderStoriesBand(home.storiesBand)}
@@ -42,7 +50,15 @@ export function renderHome(data) {
 export function mountHome(data) {
   requestAnimationFrame(() => {
     try {
-      bindAfricaCountrySelect();
+      if (typeof unbindWatchStory === "function") unbindWatchStory();
+      unbindWatchStory = bindHomeWatchStory(document);
+      if (typeof unbindPartnerContact === "function") unbindPartnerContact();
+      unbindPartnerContact = bindPartnerContact(document);
+    } catch (err) {
+      console.error("[mountHome] watch/partner bind failed:", err);
+    }
+    try {
+      bindAfricaCountrySelect(document, data);
       bindOurWorkPrograms(document, data.home?.ourWork || {});
     } catch (err) {
       console.error("[mountHome] country select bind failed:", err);
@@ -72,6 +88,17 @@ export function mountHome(data) {
 export function destroyHome() {
   destroyHomeAnimations();
   destroyHomeAfricaMap();
+  destroyAfricaCountryDrawer();
+  if (typeof unbindWatchStory === "function") {
+    unbindWatchStory();
+    unbindWatchStory = null;
+  }
+  if (typeof unbindPartnerContact === "function") {
+    unbindPartnerContact();
+    unbindPartnerContact = null;
+  }
+  closeVideoModal();
+  closeContactModal();
 }
 
 export const renderLanding = renderHome;

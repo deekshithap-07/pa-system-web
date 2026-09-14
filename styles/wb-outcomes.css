@@ -3,7 +3,7 @@
 
 .wb-out {
   background: #fff;
-  color: #002244;
+  color: var(--pa-maroon);
   padding-top: var(--header-h);
   min-height: 60vh;
 }
@@ -11,20 +11,20 @@
 .wb-out .ch-section {
   padding: 3.25rem 0;
   background: #fff;
-  border-top: 1px solid #e8eef3;
+  border-top: 1px solid rgba(92, 36, 40, 0.08);
 }
 
 .wb-out .ch-section__head h2 {
   margin: 0 0 0.5rem;
   font-size: clamp(1.45rem, 2.6vw, 1.85rem);
   font-weight: 800;
-  color: #002244;
+  color: var(--pa-maroon);
 }
 
 .wb-out .ch-section__desc {
   margin: 0;
   max-width: 36rem;
-  color: #5b6b7c;
+  color: var(--pa-slate);
   line-height: 1.55;
 }
 
@@ -33,8 +33,8 @@
 }
 
 .wb-out .hub-geo-map {
-  background: #f4f8fb;
-  border: 1px solid #d7e3ec;
+  background: #fff9ef;
+  border: 1px solid rgba(232, 169, 26, 0.28);
   border-radius: 2px;
 }
 
@@ -51,8 +51,8 @@
 
 .wb-out__snapshot {
   padding: 2.75rem 0 3rem;
-  background: #f7f9fc;
-  border-bottom: 1px solid #e4ebf2;
+  background: #fff9ef;
+  border-bottom: 1px solid rgba(232, 169, 26, 0.22);
 }
 
 .wb-out__snapshot-head h2 {
@@ -65,7 +65,7 @@
 .wb-out__snapshot-head p {
   margin: 0;
   max-width: 40rem;
-  color: #5b6b7c;
+  color: var(--pa-slate);
   line-height: 1.6;
   font-size: 1.02rem;
 }
@@ -122,7 +122,7 @@
 
 .wb-out__places-head p {
   margin: 0;
-  color: #5b6b7c;
+  color: var(--pa-slate);
   line-height: 1.55;
 }
 
@@ -138,7 +138,7 @@
   font-weight: 800;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: #6b7c8f;
+  color: var(--pa-maroon);
 }
 
 .wb-out__places-map .hub-geo-map {
@@ -165,9 +165,9 @@
 }
 
 .wb-out__why--light {
-  background: #f7f9fc;
-  border-top: 1px solid #e8eef3;
-  border-bottom: 1px solid #e8eef3;
+  background: #fff9ef;
+  border-top: 1px solid rgba(232, 169, 26, 0.2);
+  border-bottom: 1px solid rgba(232, 169, 26, 0.2);
 }
 
 .wb-out__snapshot-grid--leadership {
@@ -209,7 +209,7 @@
 
 .cm-out .story-section {
   padding: 3.5rem 0 4rem;
-  background: #002244;
+  background: var(--pa-maroon);
   color: #fff;
 }
 
@@ -234,8 +234,8 @@
 }
 
 .wb-out .page-back {
-  background: #eef4f8;
-  border-bottom-color: #d5e3ec;
+  background: #fff9ef;
+  border-bottom-color: rgba(232, 169, 26, 0.25);
 }
 
 .wb-out__status {
@@ -315,7 +315,7 @@
   font-size: 1.12rem;
   line-height: 1.55;
   font-weight: 600;
-  color: #002244;
+  color: var(--pa-maroon);
 }
 
 .wb-out__quote cite {
@@ -440,7 +440,7 @@
   margin: 0 0 0.55rem;
   font-size: clamp(1.5rem, 2.8vw, 2rem);
   font-weight: 800;
-  color: #002244;
+  color: var(--pa-maroon);
 }
 
 .wb-out__briefs-head p {
@@ -503,7 +503,7 @@
   margin-top: 0.5rem;
   font-size: 0.88rem;
   font-weight: 700;
-  color: #005f9e;
+  color: var(--pa-gold);
 }
 
 /* Topics / insights */
@@ -543,7 +543,7 @@
   display: block;
   margin: 0.35rem 0;
   font-size: 1.05rem;
-  color: #002244;
+  color: var(--pa-maroon);
 }
 
 .wb-out-topic p {
@@ -564,7 +564,7 @@
 
 .wb-out__featured {
   padding: 3.5rem 0;
-  background: #002244;
+  background: var(--pa-maroon);
   color: #fff;
 }
 
@@ -606,7 +606,7 @@
   display: block;
   height: 9rem;
   background:
-    linear-gradient(145deg, #1a5f7a, #0b3d4a 55%, #c4a574);
+    linear-gradient(145deg, #5c2428, #3d181c 55%, #e8a91a);
   background-size: cover;
   background-position: center;
 }
@@ -637,7 +637,7 @@
   padding-top: 0.75rem;
   font-size: 0.88rem;
   font-weight: 700;
-  color: #9ad8f0;
+  color: var(--pa-gold-soft);
 }
 
 .wb-out-activity {

@@ -1,0 +1,240 @@
+POSSIBILITIES AFRICA
+Website Vision & Development Framework
+A digital window into the ministry
+Leadership + Developer Reference Document
+1. Executive Summary
+Possibilities Africa (PA) needs a new website that goes beyond a conventional organisational or communication website. The website should present PA as a ministry that understands its work, shows evidence of transformation, shares knowledge, and uses technology to connect people with what is happening across Africa.
+The website should take inspiration from large institutional platforms such as the World Bank and United Nations for their structure, authority, knowledge and country-level presentation, while borrowing selected data-visualisation ideas from high-data platforms such as Bloomberg and stock-market portals.
+It is important, however, that this remains a WEBSITE—not an internal dashboard or community management system. The PA tracking system remains the operational source of data. The website will consume selected, approved information from that system and present it to the public in a clear, useful and engaging way.
+2. The Vision
+The proposed website should be a digital window into PA’s ministry.
+A visitor should be able to understand who PA is, what PA does, where PA works, how communities are progressing, what PA has learned, and how people can engage or support the work.
+The experience should allow a user to move naturally from:
+AFRICA  →  COUNTRY  →  COMMUNITY  →  PROGRAM  →  PROGRESS  →  STORY  →  KNOWLEDGE
+3. What We Are Building
+WE ARE BUILDING
+WE ARE NOT BUILDING
+A dynamic institutional website
+A replacement for the internal PA tracking system
+A public window into the ministry
+An internal operations dashboard
+A knowledge and impact platform
+A Power BI-style reporting application
+A geographic exploration experience
+A system exposing sensitive community information
+A website powered by selected PA data
+A website that owns all operational data
+4. What We Learn From Other Platforms
+Reference
+What PA Should Borrow
+What PA Should Avoid
+World Bank
+Institutional authority, country pages, research, data, reports and knowledge architecture
+Making the site feel like a financial institution
+United Nations
+Global presence, country structure, programmes, stories, publications and clear calls to action
+Excessive institutional complexity
+Bloomberg / data portals
+Clean numbers, charts, trends, filters, comparisons and data freshness
+Turning the whole website into a dashboard
+5. Who the Website Should Serve
+PA leadership — to understand the scale, reach and progress of the ministry.
+Partners and supporters — to see credible evidence of work and transformation.
+Churches, leaders and communities — to understand PA’s approach and work.
+Researchers and practitioners — to access reports, knowledge and insights.
+The general public — to understand who PA is and what is happening across Africa.
+Potential partners and funders — to understand opportunities for collaboration and support.
+6. Proposed Website Structure
+Home
+The front door to PA. It should communicate the vision, scale, current activity and impact of the ministry.
+Hero / PA proposition
+PA at a glance
+Explore Africa
+How PA works
+Latest impact and updates
+Transformation stories
+Featured knowledge
+Partner / Support CTA
+About PA
+The institutional foundation of the website.
+Who we are
+Vision and mission
+Our approach
+Leadership
+History
+Countries
+Partners
+Contact
+Our Work
+Explains the PA ministry model rather than simply listing projects.
+Community transformation
+Leadership development
+Shalom Groups
+PPP & CHIPs
+2-year transformation journey
+Resource mobilisation / local ownership
+Where We Work
+The geographic experience: Africa → Country → Community.
+Interactive Africa map
+Country pages
+Country statistics
+Community profiles
+Geographic filtering
+Our Impact / Impact & Data
+The public data and evidence layer.
+Key indicators
+Growth trends
+Progress indicators
+Country comparisons
+Programme comparisons
+Data freshness / reporting date
+Stories
+Human stories that explain the meaning behind the data.
+Transformation stories
+Community stories
+Leadership stories
+Country stories
+Photo/video content
+Knowledge Hub
+PA as a source of knowledge, learning and evidence.
+Reports
+Research
+Case studies
+Guides
+Training resources
+Publications
+Videos
+Search and filters
+News & Updates
+A current stream of PA activity.
+News
+Country updates
+Events
+Announcements
+Milestones
+7. The Data Experience
+Data should strengthen the website without taking it over. The public should see meaningful, approved aggregates and trends rather than the full operational detail used by PA staff.
+PA at a glance: countries, communities, households, Shalom Groups, projects and other approved indicators.
+Growth over time: selected indicators displayed as simple, readable charts.
+Geographic view: Africa and country maps showing where PA is working.
+Comparisons: selected country, community or programme comparisons where appropriate.
+Progress: high-level indicators showing movement through PA’s transformation model.
+Data freshness: clearly show when figures were last updated.
+Source transparency: where appropriate, explain that figures are drawn from PA’s reporting/tracking data.
+8. Example: Country Page
+A country page should feel like a mini PA country portal—not a dashboard.
+Country introduction and PA presence
+Key statistics
+Country map
+Where PA is working
+Programmes and activities
+Growth / progress trends
+Featured transformation stories
+Country reports and resources
+Recent updates
+Relevant contact / engagement information
+9. Example: Community Profile
+Community pages should provide a public, high-level picture of transformation while protecting sensitive information.
+Community name and general location
+Stage in the 2-year journey
+Number of Shalom Groups and households, where approved for public display
+Projects being implemented
+High-level progress indicators
+Community transformation story
+Map / geographic context
+Related reports, photos or videos
+Sensitive personal, household, financial or operational information should remain inside PA’s internal systems and should not be exposed through the public website.
+10. Technical Architecture for the Developer
+The website should sit above the PA data and tracking infrastructure rather than replacing it.
+PA INTERNAL SYSTEMS↓DATA / DATABASE LAYER↓API / DATA SERVICES↓PUBLIC PA WEBSITE
+The existing PA tracking/community system remains the operational source of truth.
+Create or expose APIs for approved public data.
+The website consumes only data that has been intentionally approved for public display.
+Use a CMS for website content such as stories, news, pages, reports and resources.
+Separate operational data from editorial website content.
+Design the frontend mobile-first and with low-data usage in mind.
+Build reusable components for country pages, community profiles, indicators, charts and stories.
+Include strong SEO foundations so PA’s knowledge and country content can be discovered through search engines.
+Use role-based access on any administrative/editorial area.
+Log data update times and failures so the website does not silently display stale information.
+11. Core Functional Requirements
+Area
+Requirement
+Priority
+Content
+CMS for pages, stories, news, reports and resources
+Must
+Navigation
+Clear institutional navigation and strong search
+Must
+Geography
+Africa → Country → Community exploration
+Must
+Data
+Approved live/regularly updated indicators
+Must
+Maps
+Interactive map with country/community exploration
+Phase 2/3
+Charts
+Trend and comparison visualisations
+Phase 3/4
+Knowledge
+Searchable and filterable resource library
+Must
+Media
+Photo/video storytelling
+Must
+SEO
+Technical SEO, metadata, structured content and indexable pages
+Must
+Performance
+Fast loading, mobile-first and low-data experience
+Must
+Security
+Secure APIs, admin access and protection of sensitive data
+Must
+Analytics
+Website usage and content performance measurement
+Must
+12. Recommended Implementation Phases
+Phase
+Indicative Time
+Main Outcome
+Phase 1 — Foundation
+3 weeks
+Design system, information architecture, CMS, homepage, About, Our Work, basic Knowledge Hub, News, SEO and core responsive frontend.
+Phase 2 — Countries & Content
+3 weeks
+Country pages, structured content, country statistics, stories, resource filters and initial data integration.
+Phase 3 — Geography
+4 weeks
+Interactive Africa map, country exploration and approved community-level geographic information.
+Phase 4 — Impact & Data
+5 weeks
+Indicators, trends, comparisons and richer public data visualisation.
+Phase 5 — Advanced Intelligence
+Future
+Advanced analytics, projections, deeper research/data experiences and AI-assisted knowledge discovery where justified.
+13. Content & Data Governance
+PA leadership should approve the public indicators and the level of community information that can be published.
+Define who owns website content, who publishes it and who approves sensitive information.
+Define the update frequency for each public indicator.
+Every dynamic figure should have a clear reporting/update date.
+The public website should never expose personal or sensitive operational records.
+The data/API layer should be designed so the website can evolve without changing the core tracking system.
+14. What Success Looks Like
+The project is successful if:
+A first-time visitor can understand PA within a few minutes.
+Leadership can clearly see the scale and geographic reach of the ministry.
+Partners can find credible evidence, stories, reports and progress.
+A visitor can move from Africa to a country and, where appropriate, to a community.
+PA’s ministry model is clearly explained and consistently represented.
+The website is regularly updated rather than becoming a static brochure.
+The site is fast, mobile-friendly, searchable and easy to maintain.
+The website and PA tracking system work together without becoming the same product.
+15. Guiding Principle for the Design & Development Team
+“PA’s website should not simply talk about the ministry. It should give people a digital window into the ministry.”
+The final experience should combine the institutional clarity of the World Bank and United Nations, the evidence-driven presentation of high-data platforms, and the human stories of PA’s work—while remaining simple enough for ordinary visitors to understand.
+16. Basis of This Framework
+This framework develops the existing Possibilities Africa Website Concept, particularly its emphasis on data, geography, stories, Africa → Country → Community exploration, knowledge resources, trends and comparisons. The main adjustment is to position those capabilities inside a public institutional website rather than treating the website itself as a dashboard or operational system.

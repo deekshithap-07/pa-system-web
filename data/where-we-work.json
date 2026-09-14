@@ -26,7 +26,7 @@
     "title": "Be part of the transformation.",
     "titleHtml": "<span>Be part of</span> <em>the transformation.</em>",
     "lead": "Partner with PA to bring hope, opportunity and lasting change to more communities across Africa.",
-    "cta": { "label": "Partner With Us", "href": "#/about" },
+    "cta": { "label": "Partner With Us", "href": "#/#partner-support" },
     "image": "assets/home-overview/tab-places.jpg"
   }
 }

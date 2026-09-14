@@ -21,6 +21,8 @@ import { destroyInsights } from "./views/insights-hub.js";
 import { renderAbout, mountAbout, destroyAbout } from "./views/about.js";
 import { renderWhatWeDo, mountWhatWeDo, destroyWhatWeDo } from "./views/what-we-do.js";
 import { closeSearchModal } from "./components/search-modal.js";
+import { closeVideoModal } from "./components/video-modal.js";
+import { closeContactModal } from "./components/contact-modal.js";
 import { renderStoriesHub, mountStoriesHub, destroyStoriesHub } from "./views/stories-hub.js";
 import { renderNewsUpdates, mountNewsUpdates, destroyNewsUpdates } from "./views/news-updates.js";
 import { cleanupPageEntry } from "./components/shared/page-entry.js";
@@ -138,6 +140,8 @@ function handleRoute() {
   }
 
   closeSearchModal();
+  closeVideoModal();
+  closeContactModal();
   cleanupPageEntry();
   document.body.classList.remove("pa-entry-active");
 
@@ -220,20 +224,26 @@ function handleRoute() {
     hub = { section: parts[1] || "overview" };
     html = renderScorecard(appData, hub.section);
   } else if (parts[0] === "work") {
-    if (parts[1] === "places") {
-      location.hash = "#/work";
+    const workRedirects = {
+      places: "#/work",
+      journey: "#/work#work-journey",
+      leadership: "#/work#work-leadership",
+      projects: "#/work#work-projects",
+    };
+    if (parts[1] && workRedirects[parts[1]]) {
+      location.hash = workRedirects[parts[1]];
       return;
     }
     view = "work";
-    hub = { section: parts[1] || "overview" };
-    html = renderWhatWeDo(appData, hub.section);
+    hub = { section: "overview" };
+    html = renderWhatWeDo(appData);
   } else if (parts[0] === "about") {
     if (parts[1] === "how-we-work") {
       location.hash = "#/work";
       return;
     }
     if (parts[1] === "journey") {
-      location.hash = "#/work/journey";
+      location.hash = "#/work#work-journey";
       return;
     }
     view = "static";

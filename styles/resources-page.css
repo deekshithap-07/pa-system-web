@@ -1613,13 +1613,52 @@
 
 .kh-search-band .kh-tools__bar {
   margin-top: 0;
-  max-width: 44rem;
+  max-width: 52rem;
+  grid-template-columns: minmax(0, 1.4fr) repeat(3, minmax(7.5rem, 0.7fr)) auto;
+  align-items: end;
+}
+
+.kh-tools__apply {
+  appearance: none;
+  border: 0;
+  border-radius: 0.4rem;
+  padding: 0.72rem 1.15rem;
+  background: #5c2428;
+  color: #fff;
+  font-size: 0.88rem;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.kh-tools__apply:hover {
+  background: #3f9a4a;
+  transform: translateY(-1px);
 }
 
 .kh-search-hint {
   margin: 1rem 0 0;
   font-size: 0.88rem;
   color: var(--pa-slate, #7a6e68);
+}
+
+@media (max-width: 900px) {
+  .kh-search-band .kh-tools__bar {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .kh-tools__apply {
+    grid-column: 1 / -1;
+    width: 100%;
+  }
+}
+
+@media (max-width: 560px) {
+  .kh-search-band .kh-tools__bar {
+    grid-template-columns: 1fr;
+  }
 }
 
 .kh-page [data-kh-section].is-empty-filter .nu-stream {

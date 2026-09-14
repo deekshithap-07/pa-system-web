@@ -1,3 +1,8 @@
+/**
+ * Country hub — “field spotlight” layout (unique to country pages).
+ * Not cards: spotlight reel, metric ribbon, index rail, story river, ledger.
+ */
+
 import { formatNumber } from "../../utils/format.js";
 import { numberCardsFromHub, storiesForCountry } from "../../utils/work-locations.js";
 
@@ -5,102 +10,14 @@ function storyHref(story) {
   return `#/story/${story.slug}`;
 }
 
-function storiesAllHref(slug) {
-  return `#/country/${slug}/stories`;
-}
-
 function storyHeroImage(story, hub) {
   return hub?.heroStoryImages?.[story.id] || story.image;
 }
 
-function storyMedia(story, className, hub) {
-  const src = storyHeroImage(story, hub);
-  const img = src
-    ? `<img class="${className}-img" src="${src}" alt="" loading="eager" decoding="async">`
-    : "";
-  return `<span class="${className}-media" aria-hidden="true">${img}<span class="${className}-wash"></span></span>`;
-}
-
-export function renderCountryStoryHero(hub, stories = []) {
-  const list = (stories.length ? stories : hub.stories || []).slice(0, 3);
-  if (!list.length) {
-    return `
-      <section class="wb-feat" aria-label="${hub.countryName}">
-        <div class="container">
-          <p class="wb-feat__kicker">${hub.heroTagline || "Where we work"}</p>
-          <h1 class="wb-feat__country">${hub.countryName}</h1>
-          <p class="wb-feat__intro">${hub.description || hub.overview || ""}</p>
-        </div>
-      </section>`;
-  }
-
-  const [main, ...side] = list;
-  const sideCards = side
-    .map(
-      (s) => `<a href="${storyHref(s)}" class="wb-feat__card" data-link>
-        ${storyMedia(s, "wb-feat__card", hub)}
-        <span class="wb-feat__card-copy">
-          <span class="wb-feat__kicker">${s.program || hub.countryName}</span>
-          <strong>${s.title}</strong>
-          <span class="wb-feat__link">Read the story</span>
-        </span>
-      </a>`
-    )
-    .join("");
-
-  return `
-    <section class="wb-feat" aria-label="Stories from ${hub.countryName}">
-      <div class="container">
-        <div class="wb-feat__grid${side.length ? "" : " is-solo"}">
-          <a href="${storyHref(main)}" class="wb-feat__main" data-link>
-            ${storyMedia(main, "wb-feat__main", hub)}
-            <span class="wb-feat__main-copy">
-              <span class="wb-feat__kicker">${main.program || hub.countryName}</span>
-              <h1>${main.title}</h1>
-              <p>${main.excerpt || ""}</p>
-              <span class="wb-feat__link">Read the story</span>
-            </span>
-          </a>
-          ${side.length ? `<div class="wb-feat__side">${sideCards}</div>` : ""}
-        </div>
-      </div>
-    </section>`;
-}
-
-export function renderByTheNumbers(hub) {
-  const cards = numberCardsFromHub(hub);
-  if (!cards.length) return "";
-
-  const items = cards
-    .map(
-      (c) => `<article class="wb-num-card" data-num-card data-chart-key="${c.key}">
-        <a href="${c.titleHref || "#/africa"}" class="wb-num-card__title" data-link>${c.title}</a>
-        <p class="wb-num-card__sub">${c.chartKind ? `<span class="wb-num-card__kind">${c.chartKind}</span>` : ""}${c.subtitle}</p>
-        <div class="wb-num-card__chart">
-          <canvas data-wb-num="${c.key}"></canvas>
-          ${c.center ? `<span class="wb-num-card__center">${c.center}</span>` : ""}
-        </div>
-        <a href="${c.source?.href || "#/resources/cases"}" class="wb-num-card__source" data-link>${c.source?.label || "Source · Field reports"}</a>
-      </article>`
-    )
-    .join("");
-
-  return `
-    <section class="wb-numbers" data-wb-numbers>
-      <div class="container">
-        <header class="wb-numbers__head">
-          <h2>By the numbers: ${hub.countryName}</h2>
-          <a href="#/scorecard" class="wb-numbers__more" data-link>Explore more data</a>
-        </header>
-        <div class="wb-numbers__row">
-          <div class="wb-numbers__track" data-num-track>${items}</div>
-          <div class="wb-numbers__arrows">
-            <button type="button" class="wb-arrow" data-num-prev aria-label="Previous">‹</button>
-            <button type="button" class="wb-arrow" data-num-next aria-label="Next">›</button>
-          </div>
-        </div>
-      </div>
-    </section>`;
+export function featuredStories(data, hub) {
+  const fromHub = hub.stories || [];
+  if (fromHub.length) return fromHub;
+  return storiesForCountry(data, hub.country?.id);
 }
 
 function kpiVal(hub, id) {
@@ -185,135 +102,254 @@ function overviewTabs(hub) {
   ];
 }
 
-function renderTabPanel(tab, isActive) {
-  const more = (tab.more || "").trim();
-  const extraHtml =
-    tab.id === "dashboard"
-      ? `<p>${more.replace(
-          "open Our results",
-          `<a href="#/scorecard" data-link>open Impact &amp; Data</a>`
-        )}</p>`
-      : `<p>${more}</p>`;
+/** Spotlight story reel — full-bleed active story + peek strips (no cards). */
+export function renderCountryStoryHero(hub, stories = []) {
+  const list = (stories.length ? stories : hub.stories || []).slice(0, 4);
+  const allHref = `#/country/${hub.country?.slug || ""}/stories`;
+
+  if (!list.length) {
+    return `
+      <section class="cp-mast" data-cp-section="mast" aria-label="${hub.countryName}">
+        <div class="container cp-mast__inner" data-cp-reveal>
+          <p class="cp-kicker">${hub.heroTagline || "Where we work"}</p>
+          <h1 class="cp-mast__name">${hub.countryName}</h1>
+          <p class="cp-mast__intro">${hub.description || hub.overview || ""}</p>
+        </div>
+      </section>`;
+  }
+
+  const panels = list
+    .map((s, i) => {
+      const src = storyHeroImage(s, hub);
+      return `
+        <article class="cp-reel__panel${i === 0 ? " is-active" : ""}" data-cp-panel="${i}" style="${src ? `--cp-shot:url('${src}')` : ""}">
+          <a class="cp-reel__hit" href="${storyHref(s)}" data-link aria-label="${s.title}">
+            <span class="cp-reel__photo" aria-hidden="true"></span>
+            <span class="cp-reel__veil" aria-hidden="true"></span>
+            <span class="cp-reel__copy">
+              <span class="cp-kicker cp-kicker--light">${s.program || hub.countryName}</span>
+              <strong class="cp-reel__title">${s.title}</strong>
+              ${s.excerpt ? `<span class="cp-reel__excerpt">${s.excerpt}</span>` : ""}
+              <span class="cp-reel__go">Read the story →</span>
+            </span>
+          </a>
+        </article>`;
+    })
+    .join("");
+
+  const peeks = list
+    .map(
+      (s, i) => `
+      <button type="button" class="cp-reel__peek${i === 0 ? " is-active" : ""}" data-cp-peek="${i}" aria-pressed="${i === 0 ? "true" : "false"}">
+        <span class="cp-reel__peek-n">${String(i + 1).padStart(2, "0")}</span>
+        <span class="cp-reel__peek-label">${s.title}</span>
+      </button>`
+    )
+    .join("");
+
   return `
-    <div
-      class="wb-ov-panel${isActive ? " is-active" : ""}"
-      id="tab-${tab.id}"
-      role="tabpanel"
-      data-ov-panel="${tab.id}"
-      ${isActive ? "" : "hidden"}
-    >
-      <p class="wb-ov-teaser">${tab.teaser}</p>
-      ${more ? `<div class="wb-ov-extra" data-ov-extra hidden>${extraHtml}</div>` : ""}
-      ${
-        more
-          ? `<button type="button" class="wb-ov-more" data-ov-more aria-expanded="false">
-              <span data-ov-more-label>Read more</span>
-              <span class="wb-ov-more__chevron" aria-hidden="true">▾</span>
-            </button>`
-          : ""
-      }
-    </div>`;
+    <section class="cp-mast" data-cp-section="mast" aria-label="Stories from ${hub.countryName}">
+      <div class="container cp-mast__bar" data-cp-reveal>
+        <div>
+          <p class="cp-kicker">${hub.heroTagline || "PA Network"}</p>
+          <h1 class="cp-mast__name">${hub.countryName}</h1>
+        </div>
+        <a class="cp-text-link" href="${allHref}" data-link>All stories →</a>
+      </div>
+      <div class="cp-reel" data-cp-reel>
+        <div class="cp-reel__stage">${panels}</div>
+        <div class="cp-reel__peeks" role="tablist" aria-label="Featured stories">${peeks}</div>
+      </div>
+    </section>`;
 }
 
-export function renderCountryOverview(hub) {
-  const tabs = overviewTabs(hub);
-  return `
-    <section class="wb-overview" id="overview">
-      <div class="container">
-        <h2>Overview: ${hub.countryName}</h2>
-        <div class="wb-ov-tabs" role="tablist" aria-label="Overview of ${hub.countryName}">
-          ${tabs
-            .map(
-              (t, i) => `<button
-                type="button"
-                class="wb-ov-tab${i === 0 ? " is-active" : ""}"
-                role="tab"
-                id="ov-tab-${t.id}"
-                aria-selected="${i === 0 ? "true" : "false"}"
-                aria-controls="tab-${t.id}"
-                data-ov-tab="${t.id}"
-              >${t.label}</button>`
-            )
-            .join("")}
+/** Metric ribbon — continuous strip, not chart cards. */
+export function renderByTheNumbers(hub) {
+  const cards = numberCardsFromHub(hub);
+  if (!cards.length) return "";
+
+  const items = cards
+    .map(
+      (c, i) => `
+      <article class="cp-ribbon__item" data-cp-ribbon-item style="--i:${i}">
+        <div class="cp-ribbon__meta">
+          <a href="${c.titleHref || "#/scorecard"}" class="cp-ribbon__label" data-link>${c.title}</a>
+          <p class="cp-ribbon__sub">${c.subtitle || ""}</p>
         </div>
-        <div class="wb-ov-panels">
-          ${tabs.map((t, i) => renderTabPanel(t, i === 0)).join("")}
+        <div class="cp-ribbon__chart">
+          <canvas data-wb-num="${c.key}" aria-hidden="true"></canvas>
+          ${c.center ? `<span class="cp-ribbon__center">${c.center}</span>` : ""}
+        </div>
+      </article>`
+    )
+    .join("");
+
+  return `
+    <section class="cp-ribbon" data-cp-section="numbers" data-wb-numbers aria-labelledby="cp-numbers-title">
+      <div class="container">
+        <header class="cp-sec-head" data-cp-reveal>
+          <p class="cp-kicker">By the numbers</p>
+          <h2 id="cp-numbers-title" class="cp-sec-title">${hub.countryName} in figures</h2>
+          <a href="#/scorecard" class="cp-text-link" data-link>Explore Impact &amp; Data →</a>
+        </header>
+        <div class="cp-ribbon__row">
+          <div class="cp-ribbon__track" data-num-track>${items}</div>
+          <div class="cp-ribbon__arrows">
+            <button type="button" class="cp-arrow" data-num-prev aria-label="Previous">‹</button>
+            <button type="button" class="cp-arrow" data-num-next aria-label="Next">›</button>
+          </div>
         </div>
       </div>
     </section>`;
 }
 
+/** Overview — vertical index rail + wash panel (hover/click). */
+export function renderCountryOverview(hub) {
+  const tabs = overviewTabs(hub);
+  return `
+    <section class="cp-index" id="overview" data-cp-section="overview" aria-labelledby="cp-overview-title">
+      <div class="container cp-index__wrap">
+        <header class="cp-sec-head" data-cp-reveal>
+          <p class="cp-kicker">Overview</p>
+          <h2 id="cp-overview-title" class="cp-sec-title">Inside ${hub.countryName}</h2>
+        </header>
+        <div class="cp-index__body" data-cp-index>
+          <div class="cp-index__rail" role="tablist" aria-label="Overview of ${hub.countryName}">
+            ${tabs
+              .map(
+                (t, i) => `<button
+                  type="button"
+                  class="cp-index__tab${i === 0 ? " is-active" : ""}"
+                  role="tab"
+                  id="ov-tab-${t.id}"
+                  aria-selected="${i === 0 ? "true" : "false"}"
+                  aria-controls="tab-${t.id}"
+                  data-ov-tab="${t.id}"
+                ><span>${t.label}</span></button>`
+              )
+              .join("")}
+          </div>
+          <div class="cp-index__panels">
+            ${tabs
+              .map((t, i) => {
+                const more = (t.more || "").trim();
+                const extraHtml =
+                  t.id === "dashboard"
+                    ? `<p>${more.replace(
+                        "open Our results",
+                        `<a href="#/scorecard" data-link>open Impact &amp; Data</a>`
+                      )}</p>`
+                    : `<p>${more}</p>`;
+                return `
+                <div
+                  class="cp-index__panel${i === 0 ? " is-active" : ""}"
+                  id="tab-${t.id}"
+                  role="tabpanel"
+                  data-ov-panel="${t.id}"
+                  ${i === 0 ? "" : "hidden"}
+                >
+                  <p class="cp-index__teaser">${t.teaser}</p>
+                  ${more ? `<div class="cp-index__extra" data-ov-extra hidden>${extraHtml}</div>` : ""}
+                  ${
+                    more
+                      ? `<button type="button" class="cp-index__more" data-ov-more aria-expanded="false">
+                          <span data-ov-more-label>Read more</span>
+                        </button>`
+                      : ""
+                  }
+                </div>`;
+              })
+              .join("")}
+          </div>
+        </div>
+      </div>
+    </section>`;
+}
+
+/** Latest stories — alternating river bands. */
 export function renderCountryLatest(hub, stories) {
   const all = stories || hub.stories || [];
   if (all.length <= 3) return "";
   const list = all.slice(3, 6);
   if (!list.length) return "";
   const allHref = `#/country/${hub.country.slug}/stories`;
-  const cards = list
-    .map(
-      (s) => `<a href="${storyHref(s)}" class="wb-latest-card" data-link>
-        ${
-          s.image
-            ? `<span class="wb-latest-card__media"><img class="wb-latest-card__thumb" src="${s.image}" alt="" loading="lazy"><span class="wb-latest-card__wash"></span></span>`
-            : `<span class="wb-latest-card__thumb wb-photo--0" aria-hidden="true"></span>`
-        }
-        <span class="wb-latest-card__type">${s.program || "Story"}</span>
-        <strong>${s.title}</strong>
-        <span>Read the story</span>
-      </a>`
-    )
+
+  const bands = list
+    .map((s, i) => {
+      const src = storyHeroImage(s, hub) || s.image;
+      return `
+        <a class="cp-river__band${i % 2 ? " cp-river__band--flip" : ""}" href="${storyHref(s)}" data-link data-cp-river-band style="${src ? `--cp-shot:url('${src}')` : ""}">
+          <span class="cp-river__shot" aria-hidden="true"></span>
+          <span class="cp-river__copy">
+            <span class="cp-kicker">${s.program || "Story"}</span>
+            <strong class="cp-river__title">${s.title}</strong>
+            <span class="cp-river__go">Read the story →</span>
+          </span>
+        </a>`;
+    })
     .join("");
 
   return `
-    <section class="wb-latest">
+    <section class="cp-river" data-cp-section="latest" aria-labelledby="cp-latest-title">
       <div class="container">
-        <header class="wb-latest__head">
-          <h2>The latest from ${hub.countryName}</h2>
-          <a href="${allHref}" class="wb-latest__all" data-link>See all stories</a>
+        <header class="cp-sec-head cp-sec-head--row" data-cp-reveal>
+          <div>
+            <p class="cp-kicker">More from the field</p>
+            <h2 id="cp-latest-title" class="cp-sec-title">The latest from ${hub.countryName}</h2>
+            <p class="cp-sec-lead">Stories from pastors and communities in this country.</p>
+          </div>
+          <a href="${allHref}" class="cp-text-link" data-link>See all stories →</a>
         </header>
-        <p class="wb-latest__intro">Stories from pastors and communities in this country.</p>
-        <div class="wb-latest__grid">${cards}</div>
+        <div class="cp-river__list">${bands}</div>
       </div>
     </section>`;
 }
 
+/** Projects — dual ledger lists. */
 export function renderCountryProjects(hub) {
   const reports = hub.reports || [];
   const catchments = hub.catchments || [];
   return `
-    <section class="wb-projects">
+    <section class="cp-ledger" data-cp-section="projects" aria-labelledby="cp-projects-title">
       <div class="container">
-        <h2>Projects &amp; results</h2>
-        <p class="wb-projects__lead">Nearby groups of communities, and reports from this country.</p>
-        <div class="wb-projects__grid">
-          <div>
-            <h3>Nearby groups</h3>
+        <header class="cp-sec-head" data-cp-reveal>
+          <p class="cp-kicker">Projects &amp; results</p>
+          <h2 id="cp-projects-title" class="cp-sec-title">Nearby groups and reports</h2>
+          <p class="cp-sec-lead">Clusters of communities, and reports from this country.</p>
+        </header>
+        <div class="cp-ledger__grid">
+          <div class="cp-ledger__col" data-cp-reveal>
+            <h3 class="cp-ledger__heading">Nearby groups</h3>
             ${
               catchments.length
-                ? catchments
+                ? `<ul class="cp-ledger__list">${catchments
                     .map(
-                      (c) => `<a href="#/catchment/${hub.country.slug}/${c.slug}" class="wb-projects__row" data-link>
-                        <strong>${c.name}</strong>
-                        <span>${c.region || "Open communities"}</span>
-                      </a>`
+                      (c) => `<li>
+                        <a href="#/catchment/${hub.country.slug}/${c.slug}" class="cp-ledger__row" data-link>
+                          <strong>${c.name}</strong>
+                          <span>${c.region || "Open communities"}</span>
+                        </a>
+                      </li>`
                     )
-                    .join("")
-                : `<p>Groups will appear as the work grows.</p>`
+                    .join("")}</ul>`
+                : `<p class="cp-ledger__empty">Groups will appear as the work grows.</p>`
             }
           </div>
-          <div>
-            <h3>Reports</h3>
+          <div class="cp-ledger__col" data-cp-reveal>
+            <h3 class="cp-ledger__heading">Reports</h3>
             ${
               reports.length
-                ? reports
+                ? `<ul class="cp-ledger__list">${reports
                     .map(
-                      (r) => `<a href="#/resources/cases" class="wb-projects__row" data-link>
-                        <strong>${r.title}</strong>
-                        <span>${r.summary || r.period || ""}</span>
-                      </a>`
+                      (r) => `<li>
+                        <a href="#/resources/cases" class="cp-ledger__row" data-link>
+                          <strong>${r.title}</strong>
+                          <span>${r.summary || r.period || ""}</span>
+                        </a>
+                      </li>`
                     )
-                    .join("")
-                : `<p>Reports for this country will appear here.</p>`
+                    .join("")}</ul>`
+                : `<p class="cp-ledger__empty">Reports for this country will appear here.</p>`
             }
           </div>
         </div>
@@ -321,14 +357,40 @@ export function renderCountryProjects(hub) {
     </section>`;
 }
 
-export function bindCountryStoryHero() {}
+export function bindCountryStoryHero(root) {
+  const reel = root.querySelector("[data-cp-reel]");
+  if (!reel) return;
+
+  const panels = [...reel.querySelectorAll("[data-cp-panel]")];
+  const peeks = [...reel.querySelectorAll("[data-cp-peek]")];
+  if (!panels.length) return;
+
+  const activate = (i) => {
+    panels.forEach((p, n) => p.classList.toggle("is-active", n === i));
+    peeks.forEach((p, n) => {
+      const on = n === i;
+      p.classList.toggle("is-active", on);
+      p.setAttribute("aria-pressed", on ? "true" : "false");
+    });
+  };
+
+  peeks.forEach((peek) => {
+    const i = Number(peek.dataset.cpPeek);
+    peek.addEventListener("mouseenter", () => activate(i));
+    peek.addEventListener("focus", () => activate(i));
+    peek.addEventListener("click", (e) => {
+      e.preventDefault();
+      activate(i);
+    });
+  });
+}
 
 export function bindNumbersCarousel(root) {
   const track = root.querySelector("[data-num-track]");
   if (!track) return;
   const prev = root.querySelector("[data-num-prev]");
   const next = root.querySelector("[data-num-next]");
-  const step = () => Math.min(track.clientWidth * 0.7, 340);
+  const step = () => Math.min(track.clientWidth * 0.7, 320);
   prev?.addEventListener("click", () => track.scrollBy({ left: -step(), behavior: "smooth" }));
   next?.addEventListener("click", () => track.scrollBy({ left: step(), behavior: "smooth" }));
 }
@@ -352,7 +414,10 @@ export function bindOverviewTabs(root) {
   };
 
   tabs.forEach((tab) => {
-    tab.addEventListener("click", () => show(tab.dataset.ovTab));
+    const id = tab.dataset.ovTab;
+    tab.addEventListener("mouseenter", () => show(id));
+    tab.addEventListener("focus", () => show(id));
+    tab.addEventListener("click", () => show(id));
   });
 
   root.querySelectorAll("[data-ov-more]").forEach((btn) => {
@@ -376,8 +441,103 @@ export function bindOverviewTabs(root) {
   }
 }
 
-export function featuredStories(data, hub) {
-  const fromHub = hub.stories || [];
-  if (fromHub.length) return fromHub;
-  return storiesForCountry(data, hub.country?.id);
+/** Country-page-only motion language (curtain / wipe / ribbon). */
+export function initCountryPageAnimations(root = document) {
+  const page = root.querySelector?.("[data-country-hub]") || document.querySelector("[data-country-hub]");
+  if (!page || typeof gsap === "undefined") return;
+
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    page.classList.add("cp-page--reduced");
+    return;
+  }
+
+  page.querySelectorAll("[data-cp-reveal]").forEach((el) => {
+    gsap.fromTo(
+      el,
+      { opacity: 0, y: 22 },
+      {
+        opacity: 1,
+        y: 0,
+        duration: 0.7,
+        ease: "power3.out",
+        clearProps: "transform",
+        scrollTrigger: { trigger: el, start: "top 88%", once: true },
+      }
+    );
+  });
+
+  const reel = page.querySelector("[data-cp-reel]");
+  if (reel) {
+    const stage = reel.querySelector(".cp-reel__stage");
+    const peeks = reel.querySelectorAll(".cp-reel__peek");
+    if (stage) {
+      gsap.fromTo(
+        stage,
+        { clipPath: "inset(8% 12% 8% 12% round 0)" },
+        {
+          clipPath: "inset(0% 0% 0% 0%)",
+          duration: 1.05,
+          ease: "power3.out",
+          scrollTrigger: { trigger: reel, start: "top 85%", once: true },
+        }
+      );
+    }
+    if (peeks.length) {
+      gsap.fromTo(
+        peeks,
+        { opacity: 0, x: 24 },
+        {
+          opacity: 1,
+          x: 0,
+          duration: 0.45,
+          stagger: 0.08,
+          ease: "power2.out",
+          clearProps: "transform",
+          scrollTrigger: { trigger: reel, start: "top 80%", once: true },
+        }
+      );
+    }
+  }
+
+  const ribbonItems = page.querySelectorAll("[data-cp-ribbon-item]");
+  if (ribbonItems.length) {
+    gsap.fromTo(
+      ribbonItems,
+      { opacity: 0, y: 30, rotateX: 8 },
+      {
+        opacity: 1,
+        y: 0,
+        rotateX: 0,
+        duration: 0.55,
+        stagger: 0.09,
+        ease: "power3.out",
+        clearProps: "transform",
+        scrollTrigger: {
+          trigger: page.querySelector("[data-cp-section='numbers']"),
+          start: "top 82%",
+          once: true,
+        },
+      }
+    );
+  }
+
+  const riverBands = page.querySelectorAll("[data-cp-river-band]");
+  if (riverBands.length) {
+    riverBands.forEach((band) => {
+      gsap.fromTo(
+        band,
+        { opacity: 0, x: band.classList.contains("cp-river__band--flip") ? 40 : -40 },
+        {
+          opacity: 1,
+          x: 0,
+          duration: 0.7,
+          ease: "power3.out",
+          clearProps: "transform",
+          scrollTrigger: { trigger: band, start: "top 86%", once: true },
+        }
+      );
+    });
+  }
+
+  if (typeof ScrollTrigger !== "undefined") ScrollTrigger.refresh();
 }

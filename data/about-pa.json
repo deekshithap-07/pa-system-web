@@ -4,7 +4,8 @@
     "title": "Who we are.",
     "titleHtml": "<span>Who</span> <em>we are.</em>",
     "lead": "The institutional foundation of Possibilities Africa — vision, approach, leadership, and how to reach us.",
-    "image": "assets/home-overview/tab-about.jpg"
+    "image": "assets/country-heroes/ethiopia-hero-leaders.jpg",
+    "imageAlt": "Local church leader teaching from an open book with community members seated under open sky"
   },
   "whoWeAre": {
     "eyebrow": "Who we are",
@@ -66,24 +67,44 @@
     "lead": "Board and team profiles will appear here. For now, the field work is led by pastor networks across seven countries.",
     "people": []
   },
-  "history": {
-    "eyebrow": "History",
-    "title": "From Webuye to seven countries.",
-    "titleHtml": "<span>From Webuye to</span> <em>seven countries.</em>",
-    "lead": "Possibilities Africa began in Webuye, Kenya, in 2005. The same pastor-led model now reaches communities across East and Southern Africa.",
-    "milestones": [
-      { "year": "2005", "text": "Work begins in Webuye, Kenya" },
-      { "year": "2010s", "text": "Networks grow in Malawi, Ethiopia, and Zambia" },
-      { "year": "2020s", "text": "Newer footprints in Rwanda, Tanzania, and Burundi" },
-      { "year": "Today", "text": "Seven countries · one two-year journey" }
-    ]
-  },
   "countries": {
     "eyebrow": "Countries",
-    "title": "Where the ministry is present.",
-    "titleHtml": "<span>Where the ministry</span> <em>is present.</em>",
-    "lead": "Open a country to see communities, stories, and progress.",
-    "cta": { "label": "Where we work", "href": "#/africa" }
+    "title": "Seven countries on the network.",
+    "titleHtml": "<span>Seven countries on</span> <em>the network.</em>",
+    "lead": "We work as one ministry with churches, partners, and communities across seven countries."
+  },
+  "history": {
+    "eyebrow": "History",
+    "title": "Two decades of possibility.",
+    "titleHtml": "<span>Two decades of</span> <em>possibility.</em>",
+    "lead": "From a single missionary's burden to a continental movement — the story behind Possibilities Africa.",
+    "roots": "During a mission trip to Kenya with students and faculty from Moody Graduate School, founder Martin Simiyu shared his desire to help rural Africa build a sustainable, self-reliant future. Possibilities Africa embarked on a holistic approach — training pastors to build capacity in their communities.",
+    "milestones": [
+      {
+        "phase": "01",
+        "year": "2002 – 2008",
+        "title": "Ideation, learning & discovery",
+        "text": "On a mission trip to Kenya with Moody Graduate School USA, Martin shared his desire to return to Africa to serve poor communities."
+      },
+      {
+        "phase": "02",
+        "year": "2009 – 2016",
+        "title": "Mission acceptance & expansion",
+        "text": "PA initiated training programs for pastors to build capacity for holistic ministry, reaching communities across Kenya, Malawi and Rwanda."
+      },
+      {
+        "phase": "03",
+        "year": "2017 – 2019",
+        "title": "Evaluation & repositioning",
+        "text": "A ‘Know Your Client’ survey reshaped the baseline — focusing on motivated, committed pastor leaders."
+      },
+      {
+        "phase": "04",
+        "year": "2020 →",
+        "title": "Vision 2030 initiated",
+        "text": "A new growth agenda to establish 20 new countries of operation in strategic locations across Africa."
+      }
+    ]
   },
   "partners": {
     "eyebrow": "Partners",
@@ -95,14 +116,10 @@
   "contact": {
     "eyebrow": "Contact",
     "title": "Get in touch.",
-    "titleHtml": "<span>Get</span> <em>in touch.</em>",
-    "lead": "For partnership, media, or general enquiries, reach Possibilities Africa through the main ministry website.",
-    "email": "",
-    "phone": "",
-    "address": "",
-    "cta": {
-      "label": "Visit possibilitiesafrica.org",
-      "href": "https://www.possibilitiesafrica.org/"
-    }
+    "titleHtml": "<span>Get in</span> <em>touch.</em>",
+    "lead": "For partnership, media, or general enquiries, reach Possibilities Africa using the details below.",
+    "email": "karibu@possibilitiesafrica.org",
+    "phone": "+254 721 238 198",
+    "address": "P.O. Box: 55604 - 00200, Nairobi, Kenya"
   }
 }

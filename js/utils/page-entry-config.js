@@ -104,18 +104,12 @@ export function getPageEntryConfig(view, parts, data, hub) {
         subtitle: "News, country updates, events, announcements, and milestones.",
       };
 
-    case "work": {
-      const chapter = {
-        journey: { title: "The two-year <strong>journey</strong>", subtitle: "From first steps to sharing the work." },
-        leadership: { title: "Leadership <strong>growth</strong>", subtitle: "Awareness, ability, and action." },
-        projects: { title: "Community <strong>projects</strong>", subtitle: "Pastor-planned and church-led work." },
-      }[parts[1]] || { title: "What we <strong>do</strong>", subtitle: "Pastor-led work across Africa." };
+    case "work":
       return {
         eyebrow: "What we do",
-        title: chapter.title,
-        subtitle: chapter.subtitle,
+        title: "What we <strong>do</strong>",
+        subtitle: "Pastor-led work across Africa.",
       };
-    }
 
     case "static": {
       const chapter = {
@@ -123,8 +117,7 @@ export function getPageEntryConfig(view, parts, data, hub) {
         mission: { title: "Vision &amp; <strong>mission</strong>", subtitle: "Whole gospel. Whole person. Whole community." },
         approach: { title: "Our <strong>approach</strong>", subtitle: "How the work is carried with local churches." },
         leadership: { title: "<strong>Leadership</strong>", subtitle: "People who steward the ministry." },
-        history: { title: "<strong>History</strong>", subtitle: "From Webuye to seven countries." },
-        countries: { title: "<strong>Countries</strong>", subtitle: "Where the ministry is present." },
+        history: { title: "<strong>History</strong>", subtitle: "Two decades of possibility across Africa." },
         partners: { title: "<strong>Partners</strong>", subtitle: "Churches and friends walking with us." },
         contact: { title: "<strong>Contact</strong>", subtitle: "Get in touch with Possibilities Africa." },
       }[parts[1]] || {

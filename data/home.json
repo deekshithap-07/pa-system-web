@@ -13,8 +13,11 @@
     "secondaryCta": { "label": "See Our Impact", "target": "#/scorecard" },
     "watchStory": {
       "label": "Watch Our Story",
-      "duration": "2:45",
-      "href": "#/stories"
+      "duration": "8:27",
+      "title": "Possibilities Africa over the years",
+      "youtubeUrl": "https://www.youtube.com/watch?v=9OiMry-NzAc&t=5s",
+      "videoId": "9OiMry-NzAc",
+      "start": 5
     }
   },
   "africaBand": {
@@ -48,7 +51,7 @@
         "text": "Developing leaders at every level.",
         "description": "Equipping leaders to guide communities with vision, character and purpose.",
         "tone": "maroon",
-        "href": "#/work/leadership"
+        "href": "#/work#work-leadership"
       },
       {
         "id": "discipleship",
@@ -209,8 +212,12 @@
     "titleHtml": "<span>Partner with</span> <em>Possibilities Africa.</em>",
     "lead": "See credible evidence of transformation — then take a next step with the ministry.",
     "primaryCta": {
-      "label": "Partner With Us",
-      "href": "https://www.possibilitiesafrica.org/"
+      "label": "Partner With Us"
+    },
+    "contact": {
+      "email": "karibu@possibilitiesafrica.org",
+      "phone": "+254 721 238 198",
+      "address": "P.O. Box: 55604 - 00200\\nNairobi, Kenya"
     },
     "secondaryCta": {
       "label": "What we do",

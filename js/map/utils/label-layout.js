@@ -408,7 +408,7 @@ export function applyRadialLabelLayout(container, SVG_NS, options = {}) {
 
     let best = { x: anchorX, y: anchorY - baseOffset - height / 2, score: Infinity };
 
-    for (let distMul = 1; distMul <= 3; distMul += 1) {
+    for (let distMul = 1; distMul <= 5; distMul += 1) {
       const dist = baseOffset * distMul + height / 2;
       for (const [dx, dy] of dirs) {
         const x = anchorX + dx * dist;
@@ -425,11 +425,22 @@ export function applyRadialLabelLayout(container, SVG_NS, options = {}) {
           }
         }
         const candidate = { x, y, width, height };
-        if (placed.some((p) => boxesOverlap(candidate, p, gap))) continue;
+        const hits = placed.some((p) => boxesOverlap(candidate, p, gap));
+        if (hits) continue;
         const score = Math.hypot(x - anchorX, y - anchorY) + distMul * 0.5;
         if (score < best.score) best = { x, y, score };
       }
       if (best.score < Infinity) break;
+    }
+
+    if (best.score === Infinity) {
+      const fallbackDist = baseOffset * 3.2 + height / 2;
+      const [dx, dy] = dirs[index % dirs.length];
+      best = {
+        x: anchorX + dx * fallbackDist,
+        y: anchorY + dy * fallbackDist,
+        score: fallbackDist,
+      };
     }
 
     placed.push({ x: best.x, y: best.y, width, height });

@@ -64,7 +64,7 @@
     "title": "Pastors grow in awareness, ability, and action.",
     "titleHtml": "<span>Pastors grow in awareness,</span> <em>ability, and action.</em>",
     "lead": "Triple-A leadership is how pastor leaders mature through the journey — vision, skill, and practice.",
-    "cta": { "label": "Open leadership growth", "href": "#/work/leadership" }
+    "cta": { "label": "Open leadership growth", "href": "#/work#work-leadership" }
   },
   "shalom": {
     "eyebrow": "Shalom Groups",
@@ -94,14 +94,14 @@
         "text": "Communities mobilise their own resources before outside support."
       }
     ],
-    "cta": { "label": "Open community projects", "href": "#/work/projects" }
+    "cta": { "label": "Open community projects", "href": "#/work#work-projects" }
   },
   "journey": {
     "eyebrow": "2-year transformation journey",
     "title": "A clear path from first steps to multiplication.",
     "titleHtml": "<span>A clear path</span> <em>from first steps to multiplication.</em>",
     "lead": "Every community walks five stages over about 24 months — tracked so progress stays visible without becoming a dashboard.",
-    "cta": { "label": "Open the full journey", "href": "#/work/journey" }
+    "cta": { "label": "Open the full journey", "href": "#/work#work-journey" }
   },
   "resources": {
     "eyebrow": "Resource mobilisation / local ownership",
