@@ -260,8 +260,8 @@
 
 .cm-out .wb-out__featured--stories .ch-story-card,
 .cm-out .story-section .ch-story-card {
-  background: #0a3355;
-  border-color: rgba(255, 255, 255, 0.12);
+  background: #3d181c;
+  border-color: rgba(232, 169, 26, 0.28);
   color: #fff;
 }
 
@@ -275,6 +275,249 @@
 .cm-out .story-section .ch-story-grid {
   width: min(100% - 2.5rem, 72rem);
   margin-inline: auto;
+}
+
+/* Compact community map — small canvas, labels + list still clickable */
+.cm-out .cm-places--compact {
+  padding-top: 1.75rem;
+  padding-bottom: 1.75rem;
+}
+
+.cm-out .cm-places__layout {
+  display: grid;
+  grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.15fr);
+  gap: 1.5rem 2rem;
+  align-items: center;
+}
+
+.cm-out .cm-places--compact .wb-out__places-head {
+  margin-bottom: 0;
+  max-width: 22rem;
+}
+
+.cm-out .cm-places--compact .wb-out__places-head h2 {
+  font-size: clamp(1.25rem, 2.2vw, 1.55rem);
+}
+
+.cm-out .cm-places--compact .wb-out__places-maps--single {
+  max-width: 26rem;
+  justify-self: end;
+  width: 100%;
+}
+
+.cm-out .cm-places--compact .hub-geo-map {
+  grid-template-columns: minmax(0, 1fr) 9.5rem;
+  gap: 0.65rem;
+  background: #fff9ef;
+  border: 1px solid rgba(232, 169, 26, 0.3);
+  border-radius: 2px;
+  padding: 0.55rem;
+}
+
+.cm-out .cm-places--compact .hub-geo-map__canvas {
+  min-height: 148px;
+  max-height: 168px;
+  overflow: hidden;
+}
+
+.cm-out .cm-places--compact .hub-geo-map__svg {
+  min-height: 148px;
+}
+
+.cm-out .cm-places--compact .hub-geo-map__community-anchor {
+  stroke: #fff;
+  stroke-width: 1.1;
+}
+
+.cm-out .cm-places--compact .hub-geo-map__community-label__text {
+  font-size: 8.5px;
+  font-weight: 700;
+}
+
+.cm-out .cm-places--compact .hub-geo-map__panel {
+  padding: 0.15rem 0.1rem 0.15rem 0.35rem;
+  border: none;
+  background: transparent;
+}
+
+.cm-out .cm-places--compact .hub-geo-map__panel h3 {
+  font-size: 0.62rem;
+  margin-bottom: 0.35rem;
+  color: var(--pa-maroon);
+}
+
+.cm-out .cm-places--compact .hub-geo-map__list-btn {
+  font-size: 0.78rem;
+  padding: 0.28rem 0.2rem;
+  gap: 0.35rem;
+}
+
+.cm-out .cm-places--compact .hub-geo-map__dot {
+  width: 0.45rem;
+  height: 0.45rem;
+}
+
+@media (max-width: 800px) {
+  .cm-out .cm-places__layout {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .cm-out .cm-places--compact .wb-out__places-maps--single {
+    max-width: 22rem;
+    justify-self: start;
+  }
+
+  .cm-out .cm-places--compact .hub-geo-map {
+    grid-template-columns: 1fr 8.5rem;
+  }
+}
+
+@media (max-width: 520px) {
+  .cm-out .cm-places--compact .hub-geo-map {
+    grid-template-columns: 1fr;
+  }
+
+  .cm-out .cm-places--compact .hub-geo-map__canvas {
+    min-height: 160px;
+    max-height: 180px;
+  }
+}
+
+/* Five programmes rail — editorial strips, not pale cards */
+.cm-progs {
+  position: relative;
+  padding: 3.75rem 0 4rem;
+  background:
+    radial-gradient(ellipse 80% 60% at 0% 0%, rgba(232, 169, 26, 0.12), transparent 55%),
+    linear-gradient(180deg, #fff9ef 0%, #fff 42%, #faf6f0 100%);
+  overflow: hidden;
+}
+
+.cm-progs::before {
+  content: "";
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 4px;
+  background: linear-gradient(180deg, var(--pa-gold), var(--pa-maroon));
+  opacity: 0.85;
+}
+
+.cm-progs__head {
+  max-width: 36rem;
+  margin-bottom: 2rem;
+}
+
+.cm-progs__head h2 {
+  margin: 0 0 0.55rem;
+  font-size: clamp(1.55rem, 2.8vw, 2.05rem);
+  font-weight: 800;
+  color: var(--pa-maroon);
+  letter-spacing: -0.02em;
+}
+
+.cm-progs__head p {
+  margin: 0;
+  color: #5c3a3d;
+  line-height: 1.55;
+  font-size: 1.02rem;
+}
+
+.cm-progs__rail {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  border-top: 1px solid rgba(92, 36, 40, 0.12);
+}
+
+.cm-prog {
+  display: grid;
+  grid-template-columns: 3.25rem minmax(0, 1fr) auto;
+  gap: 1rem 1.35rem;
+  align-items: center;
+  padding: 1.35rem 0.35rem 1.35rem 0;
+  border-bottom: 1px solid rgba(92, 36, 40, 0.12);
+  position: relative;
+  transition: background 0.25s ease, padding-left 0.25s ease;
+}
+
+.cm-prog::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 0;
+  background: var(--pa-gold);
+  transition: width 0.28s ease;
+}
+
+.cm-prog:hover {
+  background: rgba(232, 169, 26, 0.08);
+  padding-left: 0.65rem;
+}
+
+.cm-prog:hover::before {
+  width: 3px;
+}
+
+.cm-prog__index {
+  font-size: 1.35rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  color: var(--pa-gold);
+  line-height: 1;
+}
+
+.cm-prog__body h3 {
+  margin: 0 0 0.35rem;
+  font-size: clamp(1.1rem, 2vw, 1.3rem);
+  font-weight: 800;
+  color: var(--pa-maroon);
+}
+
+.cm-prog__body p {
+  margin: 0;
+  max-width: 38rem;
+  font-size: 0.95rem;
+  line-height: 1.55;
+  color: #5c3a3d;
+}
+
+.cm-prog__link {
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: var(--pa-maroon);
+  text-decoration: none;
+  white-space: nowrap;
+  border-bottom: 2px solid var(--pa-gold);
+  padding-bottom: 0.1rem;
+  transition: color 0.2s ease, border-color 0.2s ease;
+}
+
+.cm-prog__link:hover {
+  color: var(--pa-gold);
+  border-color: var(--pa-maroon);
+  text-decoration: none;
+}
+
+@media (max-width: 640px) {
+  .cm-prog {
+    grid-template-columns: 2.5rem minmax(0, 1fr);
+    gap: 0.65rem 0.85rem;
+  }
+
+  .cm-prog__link {
+    grid-column: 2;
+    justify-self: start;
+  }
+}
+
+.cm-out [data-cm-section] {
+  will-change: clip-path, opacity;
 }
 
 

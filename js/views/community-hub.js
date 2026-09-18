@@ -29,7 +29,14 @@ export function renderCommunityHub(countrySlug, catchmentSlug, communitySlug, da
 
   const dash = getDashboard(data.charts, `community:${community.id}`);
   const payload = attachCommunityHubGeoMap(
-    { community, country, catchment, dash, analytics: data.insightsAnalytics },
+    {
+      community,
+      country,
+      catchment,
+      dash,
+      analytics: data.insightsAnalytics,
+      programmes: data.home?.ourWork?.programs || null,
+    },
     data
   );
 
