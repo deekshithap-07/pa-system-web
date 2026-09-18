@@ -1,7 +1,7 @@
 import { formatNumber } from "../../utils/format.js";
 import { renderHubGeoMap, bindHubGeoMap } from "../../map/components/HubGeoMap.js";
 import { highlightCatchmentOnMap } from "../../utils/hub-geo-maps.js";
-import { renderCatchmentScrollShell, wrapScrollPanel } from "./catchment-academy-hero.js";
+import { renderCatchmentScrollShell, wrapScrollStack } from "./catchment-academy-hero.js";
 
 function kpiValue(k) {
   if (k?.text) return k.text;
@@ -15,7 +15,7 @@ function scoreExpected(value) {
   return Math.ceil(n * 1.15) || n;
 }
 
-function renderRegionSnapshot(hub) {
+function regionSnapshotHtml(hub) {
   const summary = hub.catchment?.summary || {};
   const tiles = [
     { label: "Communities", value: summary.communities ?? hub.communities?.length ?? 0 },
@@ -24,9 +24,7 @@ function renderRegionSnapshot(hub) {
     { label: "Households", value: summary.households ?? 0 },
   ];
 
-  return wrapScrollPanel(
-    "cth-region",
-    `<div class="wb-out__snapshot-head">
+  return `<div class="wb-out__snapshot-head">
           <div>
             <p class="wb-out__eyebrow">Region profile</p>
             <h2>${hub.catchmentName}${hub.catchment?.region ? ` · ${hub.catchment.region}` : ""}</h2>
@@ -42,11 +40,10 @@ function renderRegionSnapshot(hub) {
             </div>`
             )
             .join("")}
-        </dl>`
-  );
+        </dl>`;
 }
 
-function renderPlacesSection(hub) {
+function placesSectionHtml(hub) {
   const countryMap = hub.countryGeoMap
     ? renderHubGeoMap(hub.countryGeoMap, { variant: "full", mapId: "catchment-country" })
     : "";
@@ -56,9 +53,7 @@ function renderPlacesSection(hub) {
 
   if (!countryMap && !catchmentMap) return "";
 
-  return wrapScrollPanel(
-    "cth-places",
-    `<header class="wb-out__places-head">
+  return `<header class="wb-out__places-head">
           <p class="wb-out__eyebrow">Places &amp; map</p>
           <h2>Where ${hub.catchmentName} sits in ${hub.countryName}</h2>
           <p>Click a nearby group on the country map — or open a community on the catchment map.</p>
@@ -80,14 +75,11 @@ function renderPlacesSection(hub) {
             </div>`
               : ""
           }
-        </div>`
-  );
+        </div>`;
 }
 
-function renderWhyMatter(hub) {
-  return wrapScrollPanel(
-    "cth-why",
-    `<div class="wb-out__why-grid">
+function whyMatterHtml(hub) {
+  return `<div class="wb-out__why-grid">
         <div>
           <p class="wb-out__eyebrow">Why it matters</p>
           <h2>Why outcomes matter here</h2>
@@ -98,8 +90,15 @@ function renderWhyMatter(hub) {
           <blockquote>A catchment is how Possibilities Africa groups 3–5 communities under coordinated pastor leadership — country strategy becomes community action here.</blockquote>
           <cite>Nearby group · ${hub.countryName}</cite>
         </aside>
-      </div>`
-  );
+      </div>`;
+}
+
+function renderIntroStack(hub) {
+  return wrapScrollStack("cth-region", [
+    { id: "cth-region-profile", html: regionSnapshotHtml(hub) },
+    { id: "cth-places", html: placesSectionHtml(hub) },
+    { id: "cth-why", html: whyMatterHtml(hub) },
+  ]);
 }
 
 function renderScorecard(hub) {
@@ -167,7 +166,7 @@ function renderCommunityBriefs(hub) {
 }
 
 function renderInsightTopics(hub) {
-  const insights = hub.insights || [];
+  const insights = (hub.insights || []).slice(0, 5);
   if (!insights.length) return "";
 
   const chips = insights
@@ -199,7 +198,7 @@ function renderFeaturedStories(hub) {
     const cards = stories
       .slice(0, 3)
       .map((s) => {
-        const href = s.slug ? `#/story/${s.slug}` : `#/resources/cases`;
+        const href = s.slug ? `#/story/${s.slug}` : `#/field-reports`;
         return `<a href="${href}" class="wb-out-feat" data-link>
           <span class="wb-out-feat__media" style="${s.image ? `background-image:url('${s.image}')` : ""}" aria-hidden="true"></span>
           <span class="wb-out-feat__body">
@@ -259,7 +258,7 @@ function renderResources(hub) {
             <strong>Our results</strong>
             <span>Network-wide figures and what is improving</span>
           </a>
-          <a href="${reports[0] ? "#/resources" : "#/resources/cases"}" class="wb-out-resource" data-link>
+          <a href="#/field-reports" class="wb-out-resource" data-link>
             <strong>Field reports</strong>
             <span>Case studies and insight packs from the field</span>
           </a>
@@ -269,11 +268,7 @@ function renderResources(hub) {
 }
 
 export function renderCatchmentOutcomes(hub) {
-  const scrollSections = [
-    renderRegionSnapshot(hub),
-    renderPlacesSection(hub),
-    renderWhyMatter(hub),
-  ].join("");
+  const scrollSections = renderIntroStack(hub);
 
   return `
     <div class="wb-out cth-academy" data-catchment-outcomes data-country-slug="${hub.countrySlug}" data-catchment-slug="${hub.catchmentSlug}">

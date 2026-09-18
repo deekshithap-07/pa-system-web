@@ -144,7 +144,7 @@ function renderReportsList(reports = []) {
   if (!reports.length) return "";
   return `<div class="d360-reports">
     <h3>Reports from this country</h3>
-    <ul>${reports.map((r) => `<li><a href="#/resources/cases" data-link>${r.title}</a> <span>${r.summary || r.period || ""}</span></li>`).join("")}</ul>
+    <ul>${reports.map((r) => `<li><a href="#/field-reports" data-link>${r.title}</a> <span>${r.summary || r.period || ""}</span></li>`).join("")}</ul>
   </div>`;
 }
 

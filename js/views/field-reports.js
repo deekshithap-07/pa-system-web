@@ -134,7 +134,7 @@ export function renderFieldReports(data) {
 
   return `
     <div class="wdr-fr" data-field-reports>
-      ${renderPageBack({ href: "#/#knowledge-news", label: "Knowledge & news" })}
+      ${renderPageBack({ href: "#/resources", label: "Knowledge Hub" })}
       <div class="wdr-fr-hero-wrap">
         <header class="wdr-fr-hero" style="--wdr-fr-hero:url('${heroImage}')">
           <div class="wdr-fr-hero__shade" aria-hidden="true"></div>

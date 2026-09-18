@@ -1,7 +1,6 @@
 import { getCountryName, downloadJson, buildInsightPack } from "../utils/hub-filters.js";
 import { initResourcesAnimations } from "../components/resources-animations.js";
 import { renderWbPageHero, renderPageBack, bindWbPageHero } from "../components/shared/wb-page-hero.js";
-import { renderFieldReports, mountFieldReports } from "./field-reports.js";
 import {
   renderKnowledgeHubPage,
   mountKnowledgeHubPage,
@@ -110,7 +109,7 @@ function renderResourceLibrary(data, hub, caseStudies, insightPacks, programs, c
             ? `<nav class="rlib__nav" aria-label="Library sections" data-rlib-scroll>
             ${sections
               .map(
-                (s, i) => `<a href="#/resources/${s.id === "packs" ? "packs" : "cases"}" class="rlib__nav-link${i === 0 ? " is-active" : ""}" data-link data-rlib-reveal>${s.label}</a>`
+                (s, i) => `<a href="${s.id === "packs" ? "#/resources/packs" : "#/field-reports"}" class="rlib__nav-link${i === 0 ? " is-active" : ""}" data-link data-rlib-reveal>${s.label}</a>`
               )
               .join("")}
           </nav>`
@@ -159,7 +158,7 @@ function renderResourceLibrary(data, hub, caseStudies, insightPacks, programs, c
             : `<p class="rlib__child-note" data-rlib-reveal>${
                 mode === "cases"
                   ? `<a href="#/resources/packs" data-link>Insight packs</a>`
-                  : `<a href="#/resources/cases" data-link>Case studies</a>`
+                  : `<a href="#/field-reports" data-link>Field reports</a>`
               } · <a href="#/resources" data-link>All stories &amp; reports</a></p>`}
         </div>
       </div>
@@ -189,7 +188,7 @@ function storiesForTheme(themeId, caseStudies, reports, insightPacks, countries,
       stories.push({
         ...cs,
         meta: getCountryName(data.countries, cs.countryId),
-        href: country ? `#/country/${country.slug}` : "#/resources/cases",
+        href: country ? `#/country/${country.slug}` : "#/field-reports",
       });
     }
     const report = reports.find((r) => r.type === "quarterly");
@@ -212,7 +211,7 @@ function storiesForTheme(themeId, caseStudies, reports, insightPacks, countries,
         stories.push({
           ...cs,
           meta: getCountryName(data.countries, cs.countryId),
-          href: country ? `#/country/${country.slug}` : "#/resources/cases",
+          href: country ? `#/country/${country.slug}` : "#/field-reports",
         });
       });
   }
@@ -224,7 +223,7 @@ function storiesForTheme(themeId, caseStudies, reports, insightPacks, countries,
       stories.push({
         ...cs,
         meta: getCountryName(data.countries, cs.countryId),
-        href: country ? `#/country/${country.slug}` : "#/resources/cases",
+        href: country ? `#/country/${country.slug}` : "#/field-reports",
       });
     }
     stories.push({
@@ -271,7 +270,7 @@ function renderThemeSection(theme, caseStudies, reports, insightPacks, countries
   const exploreHref =
     theme.id === "data"
       ? "#/resources/packs"
-      : "#/resources/cases";
+      : "#/field-reports";
 
   return `
     <section
@@ -316,11 +315,7 @@ export function renderResources(data, section = "overview") {
   const programs = hub.programs || [];
   const countries = data.countries?.countries?.filter((c) => c.isPaNetwork) || [];
   const socialLinks = hub.socialLinks || [];
-  const page = section === "cases" || section === "packs" ? section : "overview";
-
-  if (page === "cases") {
-    return renderFieldReports(data);
-  }
+  const page = section === "packs" ? section : "overview";
 
   if (page === "packs") {
     return `
@@ -347,12 +342,6 @@ export function renderResources(data, section = "overview") {
 }
 
 export function mountResources(data) {
-  const fieldReportsRoot = document.querySelector("[data-field-reports]");
-  if (fieldReportsRoot) {
-    mountFieldReports();
-    return;
-  }
-
   const root = document.querySelector("[data-resources-hub]");
   if (!root) return;
 

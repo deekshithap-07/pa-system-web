@@ -1007,7 +1007,7 @@
 
 .rlib__filter {
   display: flex;
-  flex-direction: column;
+    flex-direction: column;
   gap: 0.3rem;
   font-size: 0.62rem;
   font-weight: 700;
@@ -1282,7 +1282,7 @@
 .rlib-pack {
   display: flex;
   gap: 1rem;
-  align-items: flex-start;
+    align-items: flex-start;
   padding: 1.1rem 1.2rem;
   background: #fff;
   border: 1px solid #e2e8ec;

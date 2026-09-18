@@ -80,8 +80,8 @@
 
 .wb-out__snapshot-tile {
   padding: 1.15rem 1.1rem;
-  background: #fff;
-  border: 1px solid #dce6ef;
+  background: #fff9ef;
+  border: 1px solid rgba(232, 169, 26, 0.32);
   border-radius: 2px;
 }
 
@@ -91,15 +91,64 @@
   font-weight: 800;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: #6b7c8f;
+  color: rgba(92, 36, 40, 0.62);
 }
 
 .wb-out__snapshot-tile dd {
   margin: 0;
   font-size: clamp(1.45rem, 2.5vw, 1.85rem);
   font-weight: 800;
-  color: #5c2428;
+  color: var(--pa-maroon);
   letter-spacing: -0.02em;
+}
+
+/* Community / catchment: profile + map + why as one continuous band */
+.wb-out__intro-stack {
+  background: #fff;
+  border-bottom: 1px solid rgba(232, 169, 26, 0.2);
+}
+
+.wb-out__intro-stack .wb-out__snapshot,
+.wb-out__intro-stack .wb-out__places,
+.wb-out__intro-stack .wb-out__why {
+  background: #fff;
+  border: none;
+  margin: 0;
+}
+
+.wb-out__intro-stack .wb-out__snapshot {
+  padding: 2.75rem 0 2.25rem;
+}
+
+.wb-out__intro-stack .wb-out__places {
+  padding: 2.25rem 0;
+}
+
+.wb-out__intro-stack .wb-out__why {
+  padding: 2.25rem 0 3rem;
+}
+
+.wb-out__intro-stack .wb-out__places,
+.wb-out__intro-stack .wb-out__why {
+  border-top: 1px solid rgba(232, 169, 26, 0.18);
+}
+
+.wb-out__intro-stack .wb-out__quote {
+  background: #fff9ef;
+  border-left-color: var(--pa-gold);
+}
+
+.wb-out__intro-stack .wb-out__quote cite {
+  color: var(--pa-maroon);
+  font-weight: 700;
+}
+
+.wb-out__intro-stack .wb-out__why p {
+  color: #5c3a3d;
+}
+
+.wb-out__intro-stack .wb-out__eyebrow {
+  color: var(--pa-gold);
 }
 
 /* Places & map */
@@ -178,10 +227,19 @@
   font-size: 1.05rem;
 }
 
-/* Community outcomes page */
+/* Community outcomes — clear header, full hero photo */
 .cm-out .page-back {
   background: #eef4f8;
   border-bottom-color: #d5e3ec;
+}
+
+.cm-out > .wph--has-photo {
+  margin-top: 0;
+}
+
+.cm-out > .wph--has-photo .wph__inner {
+  padding-top: clamp(2.5rem, 6vh, 3.75rem);
+  padding-bottom: clamp(2.75rem, 7vh, 4rem);
 }
 
 .cm-out .wb-out__featured--stories {
@@ -227,6 +285,10 @@
 
 .cth-scroll-panel .wb-out__places-maps {
   margin-top: 1.25rem;
+}
+
+.cth-scroll-stack__block .wb-out__places-head {
+  margin-bottom: 1.25rem;
 }
 
 .wb-out > .wph--offset {
@@ -301,13 +363,13 @@
   margin: 0 0 1rem;
   font-size: 1.05rem;
   line-height: 1.65;
-  color: #3d4f63;
+  color: #5c3a3d;
 }
 
 .wb-out__quote {
   padding: 1.75rem 1.5rem;
-  background: #f4f7fa;
-  border-left: 4px solid #e8a91a;
+  background: #fff9ef;
+  border-left: 4px solid var(--pa-gold);
 }
 
 .wb-out__quote blockquote {
@@ -321,8 +383,8 @@
 .wb-out__quote cite {
   font-style: normal;
   font-size: 0.88rem;
-  font-weight: 650;
-  color: #5b6b7c;
+  font-weight: 700;
+  color: var(--pa-maroon);
 }
 
 /* Scorecard metrics */

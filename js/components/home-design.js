@@ -527,8 +527,8 @@ export function renderStoriesBand(section = {}) {
   const cta = section.cta || { label: "View all stories", href: "#/stories" };
   const cards = (section.cards || [])
     .map(
-      (c, i) => `<a class="pa-stories__strip${i === 0 ? " is-lead" : ""}" ${linkAttrs(c.href || "#/stories")} style="${c.image ? `--pa-story-shot:url('${c.image}')` : ""}">
-        <span class="pa-stories__shot" aria-hidden="true"></span>
+      (c, i) => `<a class="pa-stories__strip${i === 0 ? " is-lead" : ""}" ${linkAttrs(c.href || "#/stories")}>
+        <span class="pa-stories__shot" aria-hidden="true">${c.image ? `<img src="${c.image}" alt="" loading="lazy" decoding="async">` : ""}</span>
         <span class="pa-stories__veil" aria-hidden="true"></span>
         <span class="pa-stories__copy">
           <span class="pa-stories__meta">${c.country || ""} · ${c.program || ""}</span>
@@ -561,10 +561,10 @@ export function renderKnowledgeNewsSplit(section = {}) {
   if (!knowledge.title && !news.title) return "";
 
   const kCta = knowledge.cta || { label: "Visit knowledge centre", href: "#/resources" };
-  const nCta = news.cta || { label: "View all news", href: "#/resources/cases" };
+  const nCta = news.cta || { label: "View all news", href: "#/news" };
   const items = (news.items || [])
     .map(
-      (item) => `<a class="pa-split__news-item" ${linkAttrs(item.href || "#/resources/cases")}>
+      (item, i) => `<a class="pa-split__news-item" ${linkAttrs(item.href || "#/news")} style="--i:${i}">
         <span class="pa-split__news-tag">${item.tag || "News"}</span>
         <span class="pa-split__news-date">${item.date || ""}</span>
         <strong>${item.title}</strong>
@@ -575,25 +575,29 @@ export function renderKnowledgeNewsSplit(section = {}) {
   return `
     <section class="pa-split" id="knowledge-news" aria-label="Knowledge and news" data-home-section="knowledge">
       <div class="container pa-split__grid">
-        <article class="pa-split__knowledge" data-reveal data-anim="slide-left">
-          ${knowledge.eyebrow ? `<p class="pa-split__eyebrow">${knowledge.eyebrow}</p>` : ""}
-          <h2 class="pa-title">${formatPaTitle(knowledge, "Knowledge Centre")}</h2>
-          ${knowledge.lead ? `<p>${knowledge.lead}</p>` : ""}
-          <a class="pa-split__cta" ${linkAttrs(kCta.href)}>${kCta.label} →</a>
-          <figure class="pa-split__report">
+        <article class="pa-split__knowledge" data-reveal data-anim="fade-up">
+          <div class="pa-split__copy">
+            ${knowledge.eyebrow ? `<p class="pa-split__eyebrow">${knowledge.eyebrow}</p>` : ""}
+            <h2 class="pa-title">${formatPaTitle(knowledge, "Knowledge Centre")}</h2>
+            ${knowledge.lead ? `<p>${knowledge.lead}</p>` : ""}
+            <a class="pa-split__cta" ${linkAttrs(kCta.href)}>${kCta.label} →</a>
+          </div>
+          <figure class="pa-split__report" data-reveal data-anim="pop">
             ${
               knowledge.image
-                ? `<img src="${knowledge.image}" alt="${knowledge.imageAlt || ""}" loading="lazy" decoding="async">`
+                ? `<a href="#/field-reports" data-link aria-label="Open field reports"><img src="${knowledge.image}" alt="${knowledge.imageAlt || "Field Reports"}" loading="lazy" decoding="async"></a>`
                 : ""
             }
           </figure>
         </article>
-        <article class="pa-split__news" data-reveal data-anim="slide-right">
-          ${news.eyebrow ? `<p class="pa-split__eyebrow">${news.eyebrow}</p>` : ""}
-          <h2 class="pa-title">${formatPaTitle(news, "Latest from PA")}</h2>
-          ${news.lead ? `<p>${news.lead}</p>` : ""}
-          <a class="pa-split__cta" ${linkAttrs(nCta.href)}>${nCta.label} →</a>
-          <div class="pa-split__news-list" data-stagger="fade">${items}</div>
+        <article class="pa-split__news" data-reveal data-anim="slide-up">
+          <div class="pa-split__copy">
+            ${news.eyebrow ? `<p class="pa-split__eyebrow">${news.eyebrow}</p>` : ""}
+            <h2 class="pa-title">${formatPaTitle(news, "Latest from PA")}</h2>
+            ${news.lead ? `<p>${news.lead}</p>` : ""}
+            <a class="pa-split__cta" ${linkAttrs(nCta.href)}>${nCta.label} →</a>
+          </div>
+          <div class="pa-split__news-list" data-stagger="slide-up">${items}</div>
         </article>
       </div>
     </section>`;

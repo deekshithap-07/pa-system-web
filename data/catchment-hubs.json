@@ -24,8 +24,7 @@
         { "id": "health", "title": "Health", "metric": "1 health outreach", "score": 38, "trend": "new", "summary": "Nutrition awareness programmes through Shalom groups." },
         { "id": "agriculture", "title": "Agriculture", "metric": "8 farming initiatives", "score": 75, "trend": "+20%", "summary": "Irrigation and crop diversification across Kwale South." },
         { "id": "water", "title": "Water", "metric": "3 trench dam projects", "score": 90, "trend": "+35%", "summary": "Community-led water infrastructure addressing seasonal scarcity." },
-        { "id": "livelihood", "title": "Livelihood", "metric": "15 income activities", "score": 52, "trend": "+8%", "summary": "Fishing cooperatives and small business training." },
-        { "id": "leadership", "title": "Leadership", "metric": "73 avg score", "score": 73, "trend": "+4pts", "summary": "Pastor leader development across five communities." }
+        { "id": "livelihood", "title": "Livelihood", "metric": "15 income activities", "score": 52, "trend": "+8%", "summary": "Fishing cooperatives and small business training." }
       ],
       "charts": {
         "communityGrowth": { "type": "bar", "title": "Community Growth", "labels": ["2021", "2022", "2023", "2024"], "data": [3, 4, 5, 5], "color": "#002B5C" },
@@ -239,8 +238,7 @@
         { "id": "health", "title": "Health", "metric": "2 outreaches", "score": 42, "trend": "+3%", "summary": "Community health awareness." },
         { "id": "agriculture", "title": "Agriculture", "metric": "10 farming groups", "score": 70, "trend": "+12%", "summary": "Pastoral and crop diversification." },
         { "id": "water", "title": "Water", "metric": "4 initiatives", "score": 48, "trend": "+6%", "summary": "Water access for livestock." },
-        { "id": "livelihood", "title": "Livelihood", "metric": "20 income activities", "score": 62, "trend": "+10%", "summary": "Livestock cooperatives and trade." },
-        { "id": "leadership", "title": "Leadership", "metric": "71 avg score", "score": 71, "trend": "+3pts", "summary": "Strong pastoral leadership network." }
+        { "id": "livelihood", "title": "Livelihood", "metric": "20 income activities", "score": 62, "trend": "+10%", "summary": "Livestock cooperatives and trade." }
       ],
       "charts": {
         "communityGrowth": { "type": "bar", "title": "Community Growth", "labels": ["2021", "2022", "2023", "2024"], "data": [4, 5, 5, 6], "color": "#002B5C" },

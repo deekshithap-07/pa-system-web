@@ -2,14 +2,14 @@
 
 .wb-country {
   --cp-band-ink: #2a1014;
-  --cp-band-gold: #ffe08a;
-  --cp-band-green: #d7e4c8;
-  --cp-band-stone: #ebe0d4;
-  --cp-band-cream: #fff3c4;
-  --cp-band-sand: #f4e6d8;
+  --cp-band-gold: #e8d5a3;
+  --cp-band-green: #c9d4bc;
+  --cp-band-stone: #ddd4c8;
+  --cp-band-cream: #e6dcc8;
+  --cp-band-sand: #e8dccf;
   background:
-    radial-gradient(ellipse at 100% 0%, rgba(232, 169, 26, 0.12), transparent 42%),
-    var(--pa-bg);
+    radial-gradient(ellipse at 100% 0%, rgba(232, 169, 26, 0.08), transparent 42%),
+    #e8e0d4;
   padding-top: var(--header-h);
   overflow-x: clip;
   color: var(--pa-slate);
@@ -181,12 +181,18 @@
 .cp-reel__photo {
   position: absolute;
   inset: 0;
-  background:
-    linear-gradient(120deg, rgba(42, 16, 20, 0.2), transparent 50%),
-    var(--cp-shot, none) center / cover no-repeat,
-    linear-gradient(145deg, #5c2428, #3d181c);
+  overflow: hidden;
+  background: linear-gradient(145deg, #5c2428, #3d181c);
   transform: scale(1.04);
   transition: transform 0.8s var(--ease-out);
+}
+
+.cp-reel__photo img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
 }
 
 .cp-reel__panel.is-active .cp-reel__photo {
@@ -541,10 +547,19 @@
 }
 
 .cp-river__shot {
+  position: relative;
   min-height: 12rem;
-  background:
-    var(--cp-shot, none) center / cover no-repeat,
-    linear-gradient(135deg, #5c2428, #e8a91a);
+  overflow: hidden;
+  background: linear-gradient(135deg, #5c2428, #e8a91a);
+}
+
+.cp-river__shot img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  min-height: 12rem;
+  object-fit: cover;
+  object-position: center;
 }
 
 .cp-river__copy {

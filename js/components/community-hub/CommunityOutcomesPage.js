@@ -14,6 +14,7 @@ function renderWhyMatter(payload) {
     <section class="wb-out__why">
       <div class="container wb-out__why-grid">
         <div>
+          <p class="wb-out__eyebrow">Why it matters</p>
           <h2>Why outcomes matter here</h2>
           <p>${intro}</p>
           <p>Transformation is measured through pastors equipped, households reached, Shalom groups formed, and projects that change daily life.</p>
@@ -106,7 +107,7 @@ function renderFocusAreas(payload) {
     ...timeline.slice(0, 2).map((t) => ({ title: t.title, metric: t.year, trend: "Activity", summary: t.description })),
     ...ppps.slice(0, 1).map((p) => ({ title: p, metric: "PPP project", trend: "Project" })),
     ...chips.slice(0, 1).map((c) => ({ title: c, metric: "CHIP activity", trend: "Project" })),
-  ].slice(0, 6);
+  ].slice(0, 5);
 
   if (!topics.length) return "";
 
@@ -237,6 +238,15 @@ function renderResources(payload) {
 
 export function renderCommunityOutcomes(payload, storySection = "") {
   const stage = payload.community.journeyStage || payload.community.status || "Active";
+  const countrySlug = payload.country.slug || "kenya";
+  const heroImage =
+    {
+      kenya: "assets/country-heroes/kenya-hero-farmers.jpg",
+      malawi: "assets/country-heroes/malawi-hero-savings.jpg",
+      ethiopia: "assets/country-heroes/ethiopia-hero-farm.jpg",
+      zambia: "assets/country-heroes/zambia-hero-crops.jpg",
+    }[countrySlug] || "assets/country-heroes/kenya-hero-farmers.jpg";
+
   return `
     <div class="wb-out cm-out" data-community-outcomes data-country-slug="${payload.country.slug}" data-catchment-slug="${payload.catchment.slug}" data-community-slug="${payload.community.slug}">
       ${renderPageBack({ href: `#/catchment/${payload.country.slug}/${payload.catchment.slug}`, label: payload.catchment.name })}
@@ -244,13 +254,14 @@ export function renderCommunityOutcomes(payload, storySection = "") {
         id: "community-outcomes-hero",
         tone: "navy",
         skin: "ink",
+        image: heroImage,
         crumbs: [
           { label: "Where we work", href: "#/africa" },
           { label: payload.country.name, href: `#/country/${payload.country.slug}` },
           { label: payload.catchment.name, href: `#/catchment/${payload.country.slug}/${payload.catchment.slug}` },
           { label: payload.community.name },
         ],
-        eyebrow: "Outcomes · One community",
+        eyebrow: "One community · " + payload.catchment.name,
         title: payload.community.name,
         lead: payload.dash?.hero?.description || `Explore pastor-led work, local projects, and the two-year journey in ${payload.community.name}.`,
         actions: [
@@ -259,9 +270,11 @@ export function renderCommunityOutcomes(payload, storySection = "") {
         ],
       })}
       <p class="wb-out__status container"><span>${payload.catchment.name}</span> · <span>${stage}</span></p>
-      ${renderProfileSnapshot(payload)}
-      ${renderPlaces(payload)}
-      ${renderWhyMatter(payload)}
+      <div class="wb-out__intro-stack">
+        ${renderProfileSnapshot(payload)}
+        ${renderPlaces(payload)}
+        ${renderWhyMatter(payload)}
+      </div>
       ${renderCommunityScorecard(payload)}
       ${renderFocusAreas(payload)}
       ${renderLeadership(payload)}
@@ -285,7 +298,7 @@ export function mountCommunityOutcomes(root, payload) {
   if (typeof gsap === "undefined" || typeof ScrollTrigger === "undefined") return;
   if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
-  page.querySelectorAll(".wb-out__snapshot, .wb-out__places, .wb-out__why, .wb-out__score, .wb-out__topics, .wb-out__briefs, .wb-out__resources, .story-section").forEach((section) => {
+  page.querySelectorAll(".wb-out__intro-stack, .wb-out__snapshot, .wb-out__places, .wb-out__why, .wb-out__score, .wb-out__topics, .wb-out__briefs, .wb-out__resources, .story-section").forEach((section) => {
     const items = section.querySelectorAll(".wb-out__snapshot-tile, .wb-out-metric, .wb-out-topic, .wb-out-brief, .wb-out-resource, .hub-geo-map, .wb-out__why-grid > *, .story-card");
     if (!items.length) return;
 

@@ -400,8 +400,8 @@ export function renderHomeLatestField(section = {}) {
   const cards = (section.cards || []).slice(0, 3);
   if (!cards.length) return "";
 
-  const more = section.cta || { label: "All reports", href: "#/resources/cases" };
-  const moreAttrs = more.href?.startsWith("#/") ? ` href="${more.href}" data-link` : ` href="${more.href || "#/resources/cases"}"`;
+  const more = section.cta || { label: "All reports", href: "#/field-reports" };
+  const moreAttrs = more.href?.startsWith("#/") ? ` href="${more.href}" data-link` : ` href="${more.href || "#/field-reports"}"`;
 
   const cardHtml = cards
     .map((card, i) => {

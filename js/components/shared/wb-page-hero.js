@@ -157,6 +157,7 @@ export function renderWbPageHero({
   asideHtml = "",
   extraClass = "",
   afterActionsHtml = "",
+  image = "",
 } = {}) {
   const split = Boolean((variant === "split" || asideHtml) && (visualHtml || asideHtml));
   const isHome = skin === "spotlight";
@@ -164,6 +165,8 @@ export function renderWbPageHero({
   const visualClass = visualHtml
     ? "wph__visual ch-hero__visual ch-hero__context-map-wrap"
     : "wph__visual wph__aside";
+  const hasImage = Boolean(image);
+  const mediaStyle = hasImage ? ` style="--wph-photo:url('${image}')"` : "";
 
   let footer = "";
   if (isHome && stats.length) footer = renderStats(stats);
@@ -171,9 +174,9 @@ export function renderWbPageHero({
   else if (chapterNext) footer = renderChapterNext(chapterNext);
 
   return `
-    <header class="wph wph--${tone} wph--${layoutClass} wph--skin-${skin}${flush ? " wph--flush" : " wph--offset"} ${extraClass}" id="${id}" data-wb-hero data-skin="${skin}">
+    <header class="wph wph--${tone} wph--${layoutClass} wph--skin-${skin}${hasImage ? " wph--has-photo" : ""}${flush ? " wph--flush" : " wph--offset"} ${extraClass}" id="${id}" data-wb-hero data-skin="${skin}">
       <div class="wph__stage">
-        <div class="wph__media" aria-hidden="true"></div>
+        <div class="wph__media"${mediaStyle} aria-hidden="true"></div>
         <div class="wph__veil" aria-hidden="true"></div>
         <div class="container wph__inner">
           <div class="wph__copy">
@@ -245,6 +248,8 @@ export function renderWbOrgBand({ eyebrow = "", title = "", items = [] } = {}) {
 export function bindWbPageHero(root = document) {
   const hero = root?.querySelector?.("[data-wb-hero]") || document.querySelector("[data-wb-hero]");
   if (!hero || typeof gsap === "undefined") return;
+  if (hero.dataset.wphBound === "1") return;
+  hero.dataset.wphBound = "1";
   if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
   const media = hero.querySelector(".wph__media");

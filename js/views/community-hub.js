@@ -64,8 +64,9 @@ export function mountCommunityHub(root, hub) {
       const wrap = root.querySelector("[data-community-outcomes]");
       if (wrap) mountCountryHubCharts(wrap, progressCharts);
     }
-    initCountryHubAnimations(root.querySelector("[data-community-outcomes]") || root);
-    ScrollTrigger.refresh();
+    const page = root.querySelector("[data-community-outcomes]") || root;
+    initCountryHubAnimations(page);
+    if (typeof ScrollTrigger !== "undefined") ScrollTrigger.refresh();
   });
 }
 

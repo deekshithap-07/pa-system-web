@@ -58,7 +58,10 @@
       "heroStoryImages": {
         "story-kenya-dams": "assets/country-heroes/kenya-hero-dams.jpg",
         "story-owino": "assets/country-heroes/kenya-hero-youth.jpg",
-        "story-rachuonyo": "assets/country-heroes/kenya-hero-farmers.jpg"
+        "story-rachuonyo": "assets/country-heroes/kenya-hero-farmers.jpg",
+        "story-webuye": "assets/stories/story-webuye.jpg",
+        "story-bungoma-school": "assets/stories/story-bungoma-school.jpg",
+        "story-kilifi-youth": "assets/stories/story-kilifi-youth.jpg"
       },
       "reportIds": ["sep-2024", "annual-2024"]
     },
@@ -120,7 +123,10 @@
       "heroStoryImages": {
         "story-malawi-mary": "assets/country-heroes/malawi-hero-savings.jpg",
         "story-jeremiah": "assets/country-heroes/malawi-hero-health.jpg",
-        "story-liwedi": "assets/country-heroes/kenya-hero-farmers.jpg"
+        "story-liwedi": "assets/country-heroes/kenya-hero-farmers.jpg",
+        "story-lilongwe-savings": "assets/stories/story-lilongwe-savings.jpg",
+        "story-ntchisi-health": "assets/stories/story-ntchisi-health.jpg",
+        "story-mzimba-cooperative": "assets/stories/story-mzimba-cooperative.png"
       },
       "reportIds": ["sep-2024", "aug-2024", "annual-2024"]
     },

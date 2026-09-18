@@ -86,7 +86,7 @@ function renderResults(query) {
   const storyCards = storyHits
     .slice(0, 4)
     .map(
-      (s) => `<a href="#/resources/cases" class="search-modal__item" data-link>
+      (s) => `<a href="#/field-reports" class="search-modal__item" data-link>
         <span class="search-modal__item-type">Story</span>
         <strong>${s.title}</strong>
         <span>${s.program}</span>

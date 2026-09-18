@@ -63,6 +63,29 @@ export function wrapScrollPanel(id, content) {
     </section>`;
 }
 
+/** One continuous white panel for region / map / why — no gaps between blocks. */
+export function wrapScrollStack(anchorId, blocks) {
+  const parts = (blocks || [])
+    .filter((b) => b?.html)
+    .map(
+      (b) => `<div class="cth-scroll-stack__block"${b.id ? ` id="${b.id}"` : ""}>
+          ${b.html}
+        </div>`
+    )
+    .join("");
+
+  if (!parts) return "";
+
+  return `
+    <section class="cth-scroll-section cth-scroll-section--stack" id="${anchorId}" data-scroll-section>
+      <div class="container">
+        <div class="cth-scroll-panel cth-scroll-panel--stack" data-scroll-reveal>
+          ${parts}
+        </div>
+      </div>
+    </section>`;
+}
+
 export function bindCatchmentScrollStory(root) {
   root?.querySelector?.("[data-hero-scroll]")?.addEventListener("click", (e) => {
     e.preventDefault();

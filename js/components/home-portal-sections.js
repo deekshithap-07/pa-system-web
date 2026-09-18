@@ -101,7 +101,7 @@ export function renderFeaturedStories(data, section) {
                   .join("")}</ul>`
               : ""
           }
-          <a href="#/resources/cases" class="hp-story-card__link" data-link>Read full story &rarr;</a>
+          <a href="#/field-reports" class="hp-story-card__link" data-link>Read full story &rarr;</a>
         </div>
       </article>`
     )
@@ -127,7 +127,7 @@ export function renderPublicationsTeaser(data, section) {
 
   const rows = reports
     .map(
-      (r, i) => `<a href="#/resources/cases" class="wb-pub-row" data-link data-reveal>
+      (r, i) => `<a href="#/field-reports" class="wb-pub-row" data-link data-reveal>
         <div class="wb-pub-row__cover wb-pub-row__cover--${i === 0 ? "annual" : "report"}" aria-hidden="true"></div>
         <div class="wb-pub-row__body">
           <span class="wb-pub-row__type">${TYPE_LABELS[r.type] || r.type}</span>

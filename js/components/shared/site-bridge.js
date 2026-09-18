@@ -96,7 +96,7 @@ export const BRIDGE = {
     cards: [
       { type: "Next zoom", title: "Nearby communities", description: "Open a group of 3–5 neighbouring communities, then one community.", target: `#ch-map`, tone: "story" },
       { type: "Results", title: "What is changing", description: "See how this country fits the wider story in Our results.", target: "#/scorecard/together", tone: "data" },
-      { type: "Read more", title: "Stories & reports", description: "Field reports that explain the numbers on this page.", target: "#/resources/cases", tone: "story" },
+      { type: "Read more", title: "Stories & reports", description: "Field reports that explain the numbers on this page.", target: "#/field-reports", tone: "story" },
     ],
   }),
   catchment: (countrySlug, countryName) => ({
@@ -114,7 +114,7 @@ export const BRIDGE = {
     cards: [
       { type: "Nearby", title: "The neighbouring group", description: "See nearby communities and recent activity.", target: `#/catchment/${countrySlug}/${catchmentSlug}`, tone: "story" },
       { type: "Results", title: "Our results", description: "How this community sits on the two-year journey.", target: "#/scorecard#sc-communities", tone: "data" },
-      { type: "Stories", title: "Stories & reports", description: "Read what change looks like in places like this.", target: "#/resources/cases", tone: "story" },
+      { type: "Stories", title: "Stories & reports", description: "Read what change looks like in places like this.", target: "#/field-reports", tone: "story" },
     ],
   }),
   scorecard: () => ({
@@ -132,7 +132,7 @@ export const BRIDGE = {
     cards: [
       { type: "Country", title: "Open a country", description: "See nearby communities, stories, and updates.", target: "#/country/kenya", tone: "story" },
       { type: "Results", title: "Our results", description: "Reach, country lists, and the two-year journey.", target: "#/scorecard", tone: "data" },
-      { type: "Read", title: "Case studies", description: "Stories from the field.", target: "#/resources/cases", tone: "story" },
+      { type: "Read", title: "Field reports", description: "Ministry updates from the field.", target: "#/field-reports", tone: "story" },
     ],
   }),
   resources: () => ({

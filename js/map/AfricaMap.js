@@ -41,10 +41,10 @@ const INACTIVE_BORDER = "#2A3A52";
 // Zoom-aware line-width for active (in-network) vs inactive borders
 const COUNTRY_ACTIVE_WIDTH = [
   "interpolate", ["linear"], ["zoom"],
-  2, ["case", ["==", ["get", "in_network"], true], 3.0, 0.35],
-  4, ["case", ["==", ["get", "in_network"], true], 3.4, 0.45],
-  6, ["case", ["==", ["get", "in_network"], true], 3.8, 0.55],
-  9, ["case", ["==", ["get", "in_network"], true], 4.2, 0.7],
+  2, ["case", ["==", ["get", "in_network"], true], 5.5, 0.35],
+  4, ["case", ["==", ["get", "in_network"], true], 6.2, 0.45],
+  6, ["case", ["==", ["get", "in_network"], true], 7.0, 0.55],
+  9, ["case", ["==", ["get", "in_network"], true], 7.8, 0.7],
 ];
 const COUNTRY_ACTIVE_OPACITY = [
   "interpolate", ["linear"], ["zoom"],
@@ -492,10 +492,10 @@ export class AfricaMap {
           "line-color": "#ffffff",
           "line-width": [
             "interpolate", ["linear"], ["zoom"],
-            2, 5.2,
-            4, 5.8,
-            6, 6.4,
-            9, 7.0,
+            2, 8.5,
+            4, 9.5,
+            6, 10.5,
+            9, 11.5,
           ],
           "line-opacity": 0.9,
         },

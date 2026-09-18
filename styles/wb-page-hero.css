@@ -877,6 +877,53 @@ header.ch-hero.wph::after {
   color: #111;
 }
 
+/* Photo hero — full-bleed field image with readable dark veil */
+.wph--has-photo .wph__stage {
+  min-height: min(52vh, 28rem);
+}
+
+.wph--has-photo .wph__media {
+  inset: 0;
+  background-color: #1a0a0c;
+  background-image: var(--wph-photo);
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.wph--has-photo .wph__veil {
+  display: block;
+  border: 0;
+  background:
+    linear-gradient(105deg, rgba(26, 10, 12, 0.82) 0%, rgba(42, 16, 20, 0.55) 48%, rgba(42, 16, 20, 0.28) 100%),
+    linear-gradient(180deg, rgba(26, 10, 12, 0.35) 0%, transparent 40%, rgba(26, 10, 12, 0.45) 100%);
+}
+
+.wph--has-photo .wph__title,
+.wph--has-photo .wph__crumbs,
+.wph--has-photo .wph__lead,
+.wph--has-photo .wph__question {
+  color: #fff;
+}
+
+.wph--has-photo .wph__crumbs a {
+  color: rgba(255, 255, 255, 0.92);
+}
+
+.wph--has-photo .wph__eyebrow {
+  color: #f5d78a;
+}
+
+.wph--has-photo .wph__btn--solid {
+  background: #e8a91a;
+  color: #1a0a0c;
+}
+
+.wph--has-photo .wph__btn--ghost {
+  color: #fff;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.55);
+}
+
 .wph--skin-masthead .wph__btn--ghost:hover,
 .wph--skin-report .wph__btn--ghost:hover,
 .wph--skin-essay .wph__btn--ghost:hover,

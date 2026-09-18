@@ -251,6 +251,81 @@
   padding: calc(var(--header-h) + 1.5rem) 0 3rem;
 }
 
+/* Region + map + why as one continuous page (no full-viewport gaps) */
+.cth-scroll-section--stack {
+  min-height: 0;
+  align-items: flex-start;
+  padding-top: calc(var(--header-h) + 1.75rem);
+  padding-bottom: 3.5rem;
+}
+
+.cth-scroll-panel {
+  background: rgba(255, 255, 255, 0.96);
+  border: 1px solid rgba(232, 169, 26, 0.22);
+  border-radius: 2px;
+  padding: clamp(1.5rem, 3vw, 2.25rem);
+  box-shadow: 0 18px 48px rgba(42, 16, 20, 0.22);
+  backdrop-filter: blur(8px);
+}
+
+.cth-scroll-panel--stack {
+  padding: 0;
+  overflow: hidden;
+}
+
+.cth-scroll-stack__block {
+  padding: clamp(1.5rem, 3vw, 2.35rem);
+}
+
+.cth-scroll-stack__block + .cth-scroll-stack__block {
+  border-top: 1px solid rgba(232, 169, 26, 0.22);
+  padding-top: clamp(1.65rem, 3.2vw, 2.5rem);
+}
+
+.cth-scroll-panel .wb-out__snapshot-head h2,
+.cth-scroll-panel .wb-out__places-head h2,
+.cth-scroll-panel .wb-out__why-grid h2 {
+  color: var(--pa-maroon);
+}
+
+.cth-scroll-panel .wb-out__snapshot-head p,
+.cth-scroll-panel .wb-out__places-head p,
+.cth-scroll-panel .wb-out__why-grid p {
+  color: #5c3a3d;
+}
+
+.cth-scroll-panel .wb-out__eyebrow {
+  color: var(--pa-gold);
+}
+
+.cth-scroll-panel .wb-out__snapshot-tile {
+  background: #fff9ef;
+  border-color: rgba(232, 169, 26, 0.32);
+}
+
+.cth-scroll-panel .wb-out__snapshot-tile dt {
+  color: rgba(92, 36, 40, 0.62);
+}
+
+.cth-scroll-panel .wb-out__snapshot-tile dd {
+  color: var(--pa-maroon);
+}
+
+.cth-scroll-panel .wb-out__quote {
+  background: #fff9ef;
+  border-left-color: var(--pa-gold);
+}
+
+.cth-scroll-panel .wb-out__quote cite {
+  color: var(--pa-maroon);
+  font-weight: 700;
+}
+
+.cth-scroll-panel .hub-geo-map {
+  border-color: rgba(232, 169, 26, 0.28);
+  background: #fff9ef;
+}
+
 .cth-scroll-section--hero {
   position: relative;
   align-items: flex-end;
@@ -371,37 +446,6 @@
   letter-spacing: 0.14em;
   text-transform: uppercase;
   color: rgba(255, 255, 255, 0.55);
-}
-
-.cth-scroll-panel {
-  background: rgba(255, 255, 255, 0.96);
-  border: 1px solid rgba(232, 169, 26, 0.22);
-  border-radius: 2px;
-  padding: clamp(1.5rem, 3vw, 2.25rem);
-  box-shadow: 0 18px 48px rgba(42, 16, 20, 0.22);
-  backdrop-filter: blur(8px);
-}
-
-.cth-scroll-panel .wb-out__snapshot-head h2,
-.cth-scroll-panel .wb-out__places-head h2,
-.cth-scroll-panel .wb-out__why-grid h2 {
-  color: var(--pa-maroon);
-}
-
-.cth-scroll-panel .wb-out__snapshot-head p,
-.cth-scroll-panel .wb-out__places-head p,
-.cth-scroll-panel .wb-out__why-grid p {
-  color: #5b6b7c;
-}
-
-.cth-scroll-panel .wb-out__quote {
-  background: #f4f7fa;
-  border-left-color: #e8a91a;
-}
-
-.cth-scroll-panel .hub-geo-map {
-  border-color: rgba(232, 169, 26, 0.28);
-  background: #fff9ef;
 }
 
 .cth-academy__tail {

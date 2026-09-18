@@ -122,9 +122,9 @@ export function renderCountryStoryHero(hub, stories = []) {
     .map((s, i) => {
       const src = storyHeroImage(s, hub);
       return `
-        <article class="cp-reel__panel${i === 0 ? " is-active" : ""}" data-cp-panel="${i}" style="${src ? `--cp-shot:url('${src}')` : ""}">
+        <article class="cp-reel__panel${i === 0 ? " is-active" : ""}" data-cp-panel="${i}">
           <a class="cp-reel__hit" href="${storyHref(s)}" data-link aria-label="${s.title}">
-            <span class="cp-reel__photo" aria-hidden="true"></span>
+            <span class="cp-reel__photo" aria-hidden="true">${src ? `<img src="${src}" alt="" loading="${i === 0 ? "eager" : "lazy"}" decoding="async">` : ""}</span>
             <span class="cp-reel__veil" aria-hidden="true"></span>
             <span class="cp-reel__copy">
               <span class="cp-kicker cp-kicker--light">${s.program || hub.countryName}</span>
@@ -278,8 +278,8 @@ export function renderCountryLatest(hub, stories) {
     .map((s, i) => {
       const src = storyHeroImage(s, hub) || s.image;
       return `
-        <a class="cp-river__band${i % 2 ? " cp-river__band--flip" : ""}" href="${storyHref(s)}" data-link data-cp-river-band style="${src ? `--cp-shot:url('${src}')` : ""}">
-          <span class="cp-river__shot" aria-hidden="true"></span>
+        <a class="cp-river__band${i % 2 ? " cp-river__band--flip" : ""}" href="${storyHref(s)}" data-link data-cp-river-band>
+          <span class="cp-river__shot" aria-hidden="true">${src ? `<img src="${src}" alt="" loading="lazy" decoding="async">` : ""}</span>
           <span class="cp-river__copy">
             <span class="cp-kicker">${s.program || "Story"}</span>
             <strong class="cp-river__title">${s.title}</strong>
@@ -342,7 +342,7 @@ export function renderCountryProjects(hub) {
                 ? `<ul class="cp-ledger__list">${reports
                     .map(
                       (r) => `<li>
-                        <a href="#/resources/cases" class="cp-ledger__row" data-link>
+                        <a href="#/field-reports" class="cp-ledger__row" data-link>
                           <strong>${r.title}</strong>
                           <span>${r.summary || r.period || ""}</span>
                         </a>

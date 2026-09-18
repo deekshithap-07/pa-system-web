@@ -168,9 +168,9 @@
         "ring": { "fill": 0.44, "headline": "7", "context": "nations where youth mentoring connects young people with pastor leaders and community role models" },
         "stories": [
           { "tag": "NEXT GENERATION", "title": "Mentoring the next generation of community leaders", "summary": "Programmes focus on character, practical skills, and civic participation — building a pipeline of leaders.", "href": "#/resources" },
-          { "tag": "FIELD STORY", "title": "Pastor Timothy: ministry beyond the church walls", "summary": "After MI training in Arusha, pastors learn that transformation reaches the whole community — not only congregants.", "href": "#/resources/cases" }
+          { "tag": "FIELD STORY", "title": "Pastor Timothy: ministry beyond the church walls", "summary": "After MI training in Arusha, pastors learn that transformation reaches the whole community — not only congregants.", "href": "#/field-reports" }
         ],
-        "explore": { "label": "Read youth stories", "href": "#/resources/cases" }
+        "explore": { "label": "Read youth stories", "href": "#/field-reports" }
       },
       {
         "id": "citizenship",

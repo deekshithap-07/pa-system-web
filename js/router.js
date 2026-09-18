@@ -17,6 +17,7 @@ import { renderCommunityHub, mountCommunityHub, destroyCommunityHub } from "./vi
 import { teardownDashboard } from "./views/dashboard.js";
 import { renderScorecard, mountScorecard, destroyScorecard } from "./views/scorecard.js";
 import { renderResources, mountResources, destroyResources } from "./views/resources-hub.js";
+import { renderFieldReports, mountFieldReports, destroyFieldReports } from "./views/field-reports.js";
 import { destroyInsights } from "./views/insights-hub.js";
 import { renderAbout, mountAbout, destroyAbout } from "./views/about.js";
 import { renderWhatWeDo, mountWhatWeDo, destroyWhatWeDo } from "./views/what-we-do.js";
@@ -163,6 +164,7 @@ function handleRoute() {
   destroyStoriesHub();
   destroyNewsUpdates();
   destroyResources();
+  destroyFieldReports();
   destroyAbout();
   destroyWhatWeDo();
   destroyCountryStoriesPage();
@@ -255,9 +257,16 @@ function handleRoute() {
   } else if (parts[0] === "news") {
     view = "news";
     html = renderNewsUpdates(appData);
-  } else if (parts[0] === "resources" || parts[0] === "reports") {
+  } else if (parts[0] === "field-reports" || parts[0] === "reports") {
+    view = "field-reports";
+    html = renderFieldReports(appData);
+  } else if (parts[0] === "resources") {
     if (targetAnchor === "res-case-studies" || targetAnchor === "res-catalog") {
-      location.hash = "#/resources/cases";
+      location.hash = "#/field-reports";
+      return;
+    }
+    if (parts[1] === "cases" || parts[1] === "field-reports") {
+      location.hash = "#/field-reports";
       return;
     }
     if (targetAnchor === "res-packs") {
@@ -307,6 +316,8 @@ function handleRoute() {
       mountStoriesHub(appData);
     } else if (view === "news") {
       mountNewsUpdates();
+    } else if (view === "field-reports") {
+      mountFieldReports();
     } else if (view === "resources") {
       mountResources(appData, hub?.section || "overview");
     } else if (view === "work") {

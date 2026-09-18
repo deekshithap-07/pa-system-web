@@ -113,14 +113,16 @@ function buildDefaultCatchmentPayload(
       { id: "growth", label: "Growth Status", value: 0, text: catchment.status, direction: "neutral" },
     ],
     activities: [],
-    insights: Object.entries(dashboard.sectors || {}).map(([key, s]) => ({
-      id: key,
-      title: key.charAt(0).toUpperCase() + key.slice(1),
-      metric: s.metric,
-      score: s.score,
-      trend: s.trend,
-      summary: s.metric,
-    })),
+    insights: Object.entries(dashboard.sectors || {})
+      .slice(0, 5)
+      .map(([key, s]) => ({
+        id: key,
+        title: key.charAt(0).toUpperCase() + key.slice(1),
+        metric: s.metric,
+        score: s.score,
+        trend: s.trend,
+        summary: s.metric,
+      })),
     charts: {
       communityGrowth: dashboard.charts?.communityGrowth || { type: "bar", title: "Community Growth", labels: [], data: [] },
       householdReach: dashboard.charts?.timelineArea || { type: "area", title: "Household Reach", labels: [], data: [] },

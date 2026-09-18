@@ -1,7 +1,7 @@
-ï»¿/**
- * Knowledge Hub â€” PA as a source of knowledge, learning and evidence.
- * Order: Reports Â· Research Â· Case studies Â· Guides Â· Training Â·
- * Publications Â· Videos Â· Search and filters
+/**
+ * Knowledge Hub — PA as a source of knowledge, learning and evidence.
+ * Order: Reports · Research · Case studies · Guides · Training ·
+ * Publications · Videos · Search and filters
  * UI: stream / rail (same language as News & Updates).
  */
 
@@ -77,23 +77,23 @@ function renderRail() {
 
 function renderStreamRows(items, type) {
   if (!items.length) {
-    return `<p class="nu-empty">No ${type.replace("-", " ")} published here yet â€” check back soon.</p>`;
+    return `<p class="nu-empty">No ${type.replace("-", " ")} published here yet — check back soon.</p>`;
   }
 
   return items
     .map((item, i) => {
       const meta = [item.dateLabel || item.year || item.period, item.program, item.format]
         .filter(Boolean)
-        .join(" Â· ");
+        .join(" · ");
       return `
       <a class="nu-stream__row" ${linkAttrs(item)} data-kh-item data-kh-type="${type}" data-country-id="${item.countryId || ""}" data-program="${item.program || ""}" data-kh-text="${searchBlob(item)}" data-kh-stagger-item style="--i:${i}">
-        <time class="nu-stream__date">${meta || "â€”"}</time>
+        <time class="nu-stream__date">${meta || "—"}</time>
         <span class="nu-stream__pulse" aria-hidden="true"></span>
         <span class="nu-stream__body">
           <strong>${item.title}</strong>
           ${item.summary || item.description ? `<span class="nu-stream__sum">${item.summary || item.description}</span>` : ""}
         </span>
-        <span class="nu-stream__go" aria-hidden="true">â†’</span>
+        <span class="nu-stream__go" aria-hidden="true">?</span>
       </a>`;
     })
     .join("");
@@ -134,7 +134,7 @@ function renderSearch(lib = {}, collections = [], countries = [], programs = [])
         <div class="kh-tools__bar" data-kh-filters data-kh-reveal>
           <label class="kh-tools__search">
             <span class="sr-only">Search</span>
-            <input type="search" id="kh-search-input" placeholder="${lib.searchPlaceholder || "Search reports, guides, videosâ€¦"}" autocomplete="off">
+            <input type="search" id="kh-search-input" placeholder="${lib.searchPlaceholder || "Search reports, guides, videos…"}" autocomplete="off">
           </label>
           <label class="kh-tools__filter">
             <span>${lib.filters?.typeLabel || "Type"}</span>
@@ -183,7 +183,7 @@ function collectItems(data) {
       summary: "Ongoing field reports from Kenya, Ethiopia, Malawi, and Zambia.",
       year: "2025",
       dateLabel: "Ongoing",
-      href: "#/resources/cases",
+      href: "#/field-reports",
     },
     ...reportsRaw.map((r) => ({
       id: r.id,
@@ -192,7 +192,7 @@ function collectItems(data) {
       year: r.period || r.year,
       dateLabel: r.period || r.year,
       countryId: (r.countryIds || [])[0] || "",
-      href: "#/resources/cases",
+      href: "#/field-reports",
     })),
   ];
 
@@ -205,7 +205,7 @@ function collectItems(data) {
     program: cs.program,
     countryId: cs.countryId,
     year: cs.year,
-    href: cs.storySlug ? `#/story/${cs.storySlug}` : "#/resources/cases",
+    href: cs.storySlug ? `#/story/${cs.storySlug}` : "#/field-reports",
   }));
 
   const guides = items.guides || [];
