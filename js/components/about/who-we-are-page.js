@@ -394,7 +394,7 @@ function renderCountries(data, section = {}) {
           <aside class="ab-regions__aside" data-ab-reveal>
             <p class="ab-regions__count"><strong>${countries.length}</strong> network countries</p>
             <div class="ab-regions__list">${list}</div>
-            <a class="ab-text-link ab-regions__all" href="#/africa/countries" data-link>View all countries →</a>
+            <a class="ab-text-link ab-regions__all" href="#/africa" data-link>View all countries →</a>
           </aside>
         </div>
       </div>

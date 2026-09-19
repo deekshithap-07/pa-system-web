@@ -1,6 +1,5 @@
 import {
   renderRegionPage,
-  renderCountriesIndex,
   renderPlacesGroupedPage,
   bindLocationMenus,
 } from "../components/work/LocationBrowse.js";
@@ -16,7 +15,6 @@ import {
 
 export function renderAfricaIntelligence(data, section = "overview", regionId = null) {
   if (section === "region") return renderRegionPage(data, regionId);
-  if (section === "countries") return renderCountriesIndex(data);
   if (section === "places") return renderPlacesGroupedPage(data);
 
   return renderWhereWeWorkPage(data);

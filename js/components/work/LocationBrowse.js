@@ -1,6 +1,5 @@
 import { formatNumber } from "../../utils/format.js";
 import { getPaCountries, getRegions } from "../../utils/work-locations.js";
-import { renderCountryScrollTopics } from "./CountryScrollTopics.js";
 
 function countryMeta(data, slug) {
   const country = getPaCountries(data).find((c) => c.slug === slug);
@@ -23,7 +22,7 @@ export function countriesByNetworkSize(data) {
 export function renderLocationHero(data) {
   const countries = countriesByNetworkSize(data);
   const countryItems = [
-    `<a href="#/africa/countries" class="wb-loc-menu__item" data-link>All countries</a>`,
+    `<a href="#/africa" class="wb-loc-menu__item" data-link>All countries</a>`,
     ...countries.map((c) => `<a href="#/country/${c.slug}" class="wb-loc-menu__item" data-link>${c.name}</a>`),
   ].join("");
 
@@ -110,16 +109,6 @@ export function renderRegionPage(data, regionId) {
     </div>`;
 }
 
-export function renderCountriesIndex(data) {
-  return `
-    <div class="wb-place-page" data-work-place>
-      ${renderLocationHero(data)}
-      <section class="wb-place-body wb-place-body--flush">
-        ${renderCountryScrollTopics(data)}
-      </section>
-    </div>`;
-}
-
 export function renderPlacesGroupedPage(data) {
   return `
     <div class="wb-place-page" data-work-place>
@@ -134,7 +123,7 @@ export function renderPlacesGroupedPage(data) {
               <span>01</span>
               <h3>Country</h3>
               <p>A national pastor network — stories, figures, and nearby groups.</p>
-              <a href="#/africa/countries" data-link>Browse countries</a>
+              <a href="#/africa" data-link>Browse countries</a>
             </article>
             <article>
               <span>02</span>

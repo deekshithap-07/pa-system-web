@@ -118,7 +118,7 @@ function renderExplorer(page = {}, data, featuredSlug) {
         <div class="www-explorer__card" data-www-reveal>
           <aside class="www-nav" aria-label="Countries">
             ${list}
-            <a class="www-nav__more" href="#/africa/countries" data-link>and more…</a>
+            <a class="www-nav__more" href="#/africa#where-other-countries" data-link>and more…</a>
           </aside>
 
           <div class="www-map-col">
@@ -140,7 +140,7 @@ function renderExplorer(page = {}, data, featuredSlug) {
 
           <aside class="www-side">
             <div class="www-kpis">${kpiHtml}</div>
-            <a class="www-side__all" href="#/africa/countries" data-link>View all countries →</a>
+            <a class="www-side__all" href="#/africa#where-other-countries" data-link>View all countries →</a>
           </aside>
         </div>
         <article class="www-featured www-featured--row" data-www-featured data-www-reveal>
@@ -171,7 +171,7 @@ function renderFeatured(featured) {
 
 function renderOtherCountries(section = {}, data, featuredSlug) {
   const countries = getPaCountries(data).filter((c) => c.slug !== featuredSlug);
-  const cta = section.cta || { label: "View all countries", href: "#/africa/countries" };
+  const cta = section.cta || { label: "View all countries", href: "#/africa#where-other-countries" };
   const cards = countries
     .map((c) => {
       const stats = countryStats(data, c.slug);

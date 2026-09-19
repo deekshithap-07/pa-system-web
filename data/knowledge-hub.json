@@ -25,7 +25,7 @@
       "label": "Reports",
       "title": "Reports",
       "description": "Monthly, quarterly, and annual field reports from across the network.",
-      "href": "#kh-reports"
+      "href": "#/field-reports"
     },
     {
       "id": "research",

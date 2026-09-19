@@ -20,7 +20,7 @@
   "otherCountries": {
     "title": "Other Countries.",
     "titleHtml": "<span>Other</span> <em>Countries.</em>",
-    "cta": { "label": "View all countries", "href": "#/africa/countries" }
+    "cta": { "label": "View all countries", "href": "#/africa#where-other-countries" }
   },
   "partner": {
     "title": "Be part of the transformation.",

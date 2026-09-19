@@ -45,17 +45,30 @@ function renderStoryMetricsPanel(story, variant = "card") {
   </div>`;
 }
 
+function storyImageUrl(story) {
+  return (
+    story.image ||
+    story.photo ||
+    story.heroImage ||
+    "assets/country-heroes/kenya-hero-dams.jpg"
+  );
+}
+
 function renderStoryCard(story, communityName) {
   const body = (story.body || [])
     .map((p) => `<p>${p}</p>`)
     .join("");
   const program = story.program ? `<span class="ch-story-card__program">${story.program}</span>` : "";
   const metricsPanel = renderStoryMetricsPanel(story);
+  const image = storyImageUrl(story);
+  const alt = story.title ? `${story.title}` : "Field story photo";
 
   return `<article class="ch-story-card" id="${story.slug}" data-reveal-section>
     <div class="ch-story-card__layout">
       <div class="ch-story-card__media">
-        <div class="ch-story-card__image" aria-hidden="true"><span>Field photo</span></div>
+        <div class="ch-story-card__image${story.image ? "" : " ch-story-card__image--fallback"}">
+          <img src="${image}" alt="${alt}" loading="lazy" />
+        </div>
       </div>
       <div class="ch-story-card__main">
         <span class="ch-story-card__community">${communityName}</span>

@@ -28,6 +28,7 @@ export function renderCommunityHub(countrySlug, catchmentSlug, communitySlug, da
   if (!community) return { html: `<div class="container static-page"><h1>Community not found</h1></div>` };
 
   const dash = getDashboard(data.charts, `community:${community.id}`);
+  const catchmentHub = data.catchmentHubs?.hubs?.[catchment.slug] || null;
   const payload = attachCommunityHubGeoMap(
     {
       community,
@@ -36,6 +37,7 @@ export function renderCommunityHub(countrySlug, catchmentSlug, communitySlug, da
       dash,
       analytics: data.insightsAnalytics,
       programmes: data.home?.ourWork?.programs || null,
+      catchmentActivities: catchmentHub?.activities || [],
     },
     data
   );

@@ -134,7 +134,7 @@ export function renderFieldReports(data) {
 
   return `
     <div class="wdr-fr" data-field-reports>
-      ${renderPageBack({ href: "#/resources", label: "Knowledge Hub" })}
+      ${renderPageBack({ href: "#/", label: "Home" })}
       <div class="wdr-fr-hero-wrap">
         <header class="wdr-fr-hero" style="--wdr-fr-hero:url('${heroImage}')">
           <div class="wdr-fr-hero__shade" aria-hidden="true"></div>
@@ -167,8 +167,8 @@ export function renderFieldReports(data) {
                     <a href="${secondaryHref}" class="wdr-fr-btn wdr-fr-btn--outline"${secondaryHref.startsWith("#/") ? " data-link" : ""}>${page.secondaryDownload?.label || "Download overview"}</a>
                   </div>
                   <p class="wdr-fr-about__press">
-                    <span class="wdr-fr-about__press-label">Press release</span>
-                    <a href="#/resources" class="wdr-fr-link" data-link>Stories &amp; reports hub</a>
+                    <span class="wdr-fr-about__press-label">Also on Home</span>
+                    <a href="#/" class="wdr-fr-link" data-link>Open from the home Knowledge section</a>
                   </p>
                 </div>
               </div>

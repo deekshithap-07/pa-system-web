@@ -41,8 +41,8 @@ export function mountCatchmentHubAnimations(root) {
     });
   }
 
-  root.querySelectorAll(".cth-academy__tail .wb-out__score, .cth-academy__tail .wb-out__topics, .cth-academy__tail .wb-out__featured, .cth-academy__tail .wb-out__resources").forEach((section) => {
-    const items = section.querySelectorAll(".wb-out-metric, .wb-out-topic, .wb-out-feat, .wb-out-resource");
+  root.querySelectorAll(".cth-academy__tail .wb-out__score, .cth-academy__tail .wb-priorities-band, .cth-academy__tail .wb-out__featured, .cth-academy__tail .wb-out__resources").forEach((section) => {
+    const items = section.querySelectorAll(".wb-out-metric, .wb-priority-panel, .wb-out-feat, .wb-out-resource");
     if (!items.length) return;
 
     scrollTriggers.push(

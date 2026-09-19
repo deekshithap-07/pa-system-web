@@ -2,6 +2,10 @@ import { formatNumber } from "../../utils/format.js";
 import { renderHubGeoMap, bindHubGeoMap } from "../../map/components/HubGeoMap.js";
 import { highlightCatchmentOnMap } from "../../utils/hub-geo-maps.js";
 import { renderCatchmentScrollShell, wrapScrollStack } from "./catchment-academy-hero.js";
+import { paPriorityTopics } from "../shared/pa-programmes.js";
+import { renderDevelopmentTopics, bindDevelopmentTopics } from "../home-development-topics.js";
+
+let prioritiesBinding = null;
 
 function kpiValue(k) {
   if (k?.text) return k.text;
@@ -166,28 +170,14 @@ function renderCommunityBriefs(hub) {
 }
 
 function renderInsightTopics(hub) {
-  const insights = (hub.insights || []).slice(0, 5);
-  if (!insights.length) return "";
-
-  const chips = insights
-    .map(
-      (ins) => `<article class="wb-out-topic">
-        <span>${ins.trend || "Focus"}</span>
-        <strong>${ins.title}</strong>
-        <p>${ins.summary || ins.metric || ""}</p>
-        <em>${ins.metric || ""}</em>
-      </article>`
-    )
-    .join("");
-
-  return `
-    <section class="wb-out__topics">
-      <div class="container">
-        <p class="wb-out__eyebrow">What is changing</p>
-        <h2>Focus areas in this group</h2>
-        <div class="wb-out-topics">${chips}</div>
-      </div>
-    </section>`;
+  return renderDevelopmentTopics({
+    sectionId: "cth-priorities",
+    idPrefix: "cth-",
+    bandClass: "wb-priorities-band--outcomes",
+    titleHtml: `<span class="wb-priorities-band__lead">WHAT IS</span> <strong>CHANGING</strong>`,
+    description: `Five programmes across ${hub.catchmentName} — click + to expand each priority.`,
+    topics: paPriorityTopics(hub.programmes),
+  });
 }
 
 function renderFeaturedStories(hub) {
@@ -243,25 +233,49 @@ function renderFeaturedStories(hub) {
 }
 
 function renderResources(hub) {
-  const reports = hub.reports || [];
+  const items = [
+    {
+      tag: "Country",
+      title: `${hub.countryName} country page`,
+      text: "Stories and figures for the whole nation",
+      href: `#/country/${hub.countrySlug}`,
+      tone: "maroon",
+    },
+    {
+      tag: "Results",
+      title: "Our results",
+      text: "Network-wide figures and what is improving",
+      href: "#/scorecard",
+      tone: "gold",
+    },
+    {
+      tag: "Field",
+      title: "Field reports",
+      text: "The same ministry updates opened from Home",
+      href: "#/field-reports",
+      tone: "green",
+    },
+  ];
+
   return `
-    <section class="wb-out__resources">
+    <section class="wb-out__resources wb-out__resources--rich">
       <div class="container">
-        <p class="wb-out__eyebrow">Additional resources</p>
-        <h2>Keep exploring</h2>
-        <div class="wb-out-resources">
-          <a href="#/country/${hub.countrySlug}" class="wb-out-resource" data-link>
-            <strong>${hub.countryName} country page</strong>
-            <span>Stories and figures for the whole nation</span>
-          </a>
-          <a href="#/scorecard" class="wb-out-resource" data-link>
-            <strong>Our results</strong>
-            <span>Network-wide figures and what is improving</span>
-          </a>
-          <a href="#/field-reports" class="wb-out-resource" data-link>
-            <strong>Field reports</strong>
-            <span>Case studies and insight packs from the field</span>
-          </a>
+        <div class="wb-out__resources-head">
+          <p class="wb-out__eyebrow">Additional resources</p>
+          <h2>Keep exploring</h2>
+          <p>Move from this nearby group into country stories, results, and field reports.</p>
+        </div>
+        <div class="wb-out-resources wb-out-resources--tiles">
+          ${items
+            .map(
+              (item) => `<a href="${item.href}" class="wb-out-resource wb-out-resource--tile wb-out-resource--${item.tone}" data-link>
+            <span class="wb-out-resource__tag">${item.tag}</span>
+            <strong>${item.title}</strong>
+            <span>${item.text}</span>
+            <span class="wb-out-resource__cta">Open →</span>
+          </a>`
+            )
+            .join("")}
         </div>
       </div>
     </section>`;
@@ -292,6 +306,12 @@ export function mountCatchmentOutcomes(root, hub) {
 
   bindHubGeoMap(page, { countrySlug, catchmentSlug });
   highlightCatchmentOnMap(page, catchmentId);
+
+  prioritiesBinding?.destroy?.();
+  prioritiesBinding = bindDevelopmentTopics(page);
 }
 
-export function destroyCatchmentOutcomes() {}
+export function destroyCatchmentOutcomes() {
+  prioritiesBinding?.destroy?.();
+  prioritiesBinding = null;
+}

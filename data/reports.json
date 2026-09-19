@@ -43,7 +43,7 @@
     "relatedCards": [
       { "title": "Our results", "text": "See the numbers reports feed into", "href": "#/scorecard", "imageUrl": "assets/stories/story-ntchisi-health.jpg" },
       { "title": "Field stories", "text": "People and progress from the network", "href": "#/resources", "imageUrl": "assets/stories/story-tanzania.jpg" },
-      { "title": "Where we work", "text": "Browse countries and communities", "href": "#/africa/countries", "imageUrl": "assets/stories/story-zambia-crops.jpg" },
+      { "title": "Where we work", "text": "Browse countries and communities", "href": "#/africa", "imageUrl": "assets/stories/story-zambia-crops.jpg" },
       { "title": "Insight packs", "text": "Short downloads beside the stories", "href": "#/resources/packs", "imageUrl": "assets/stories/story-bungoma-school.jpg" }
     ],
     "relatedLinks": [

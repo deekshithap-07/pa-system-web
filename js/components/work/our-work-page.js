@@ -222,7 +222,7 @@ function renderCtaBand(section = {}) {
     <section class="ow-cta" id="work-next" data-ow-section="cta" aria-labelledby="ow-cta-title">
       <div class="container ow-cta__inner" data-ow-reveal>
         <div>
-          ${section.eyebrow ? `<p class="ow-eyebrow ow-eyebrow--on-dark">${section.eyebrow}</p>` : ""}
+          ${section.eyebrow ? `<p class="ow-eyebrow">${section.eyebrow}</p>` : ""}
           <h2 id="ow-cta-title" class="pa-title ow-cta__title">${formatPaTitle(section)}</h2>
           ${section.lead ? `<p class="ow-cta__lead">${section.lead}</p>` : ""}
         </div>

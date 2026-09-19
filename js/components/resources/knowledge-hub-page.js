@@ -1,7 +1,7 @@
 /**
- * Knowledge Hub ó PA as a source of knowledge, learning and evidence.
- * Order: Reports ∑ Research ∑ Case studies ∑ Guides ∑ Training ∑
- * Publications ∑ Videos ∑ Search and filters
+ * Knowledge Hub ù PA as a source of knowledge, learning and evidence.
+ * Order: Reports ù Research ù Case studies ù Guides ù Training ù
+ * Publications ù Videos ù Search and filters
  * UI: stream / rail (same language as News & Updates).
  */
 
@@ -77,17 +77,17 @@ function renderRail() {
 
 function renderStreamRows(items, type) {
   if (!items.length) {
-    return `<p class="nu-empty">No ${type.replace("-", " ")} published here yet ó check back soon.</p>`;
+    return `<p class="nu-empty">No ${type.replace("-", " ")} published here yet ù check back soon.</p>`;
   }
 
   return items
     .map((item, i) => {
       const meta = [item.dateLabel || item.year || item.period, item.program, item.format]
         .filter(Boolean)
-        .join(" ∑ ");
+        .join(" ù ");
       return `
       <a class="nu-stream__row" ${linkAttrs(item)} data-kh-item data-kh-type="${type}" data-country-id="${item.countryId || ""}" data-program="${item.program || ""}" data-kh-text="${searchBlob(item)}" data-kh-stagger-item style="--i:${i}">
-        <time class="nu-stream__date">${meta || "ó"}</time>
+        <time class="nu-stream__date">${meta || "ù"}</time>
         <span class="nu-stream__pulse" aria-hidden="true"></span>
         <span class="nu-stream__body">
           <strong>${item.title}</strong>
@@ -134,7 +134,7 @@ function renderSearch(lib = {}, collections = [], countries = [], programs = [])
         <div class="kh-tools__bar" data-kh-filters data-kh-reveal>
           <label class="kh-tools__search">
             <span class="sr-only">Search</span>
-            <input type="search" id="kh-search-input" placeholder="${lib.searchPlaceholder || "Search reports, guides, videosÖ"}" autocomplete="off">
+            <input type="search" id="kh-search-input" placeholder="${lib.searchPlaceholder || "Search reports, guides, videosù"}" autocomplete="off">
           </label>
           <label class="kh-tools__filter">
             <span>${lib.filters?.typeLabel || "Type"}</span>
@@ -236,8 +236,17 @@ export function renderKnowledgeHubPage(data) {
       skin: SKINS[0],
       eyebrow: "Reports",
       titleHtml: "<span>Field evidence,</span> <em>written down.</em>",
-      lead: "Monthly, quarterly, and annual reports from across the network.",
-      items: bag.reports,
+      lead: "Open the main Field Reports page ó the same ministry updates from Home.",
+      items: [
+        {
+          id: "open-field-reports",
+          title: "Field Reports",
+          summary: "Monthly, quarterly, and annual ministry reports from across the network.",
+          year: "Network",
+          dateLabel: "Open page",
+          href: "#/field-reports",
+        },
+      ],
       type: "reports",
     },
     {

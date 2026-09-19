@@ -181,9 +181,12 @@ function handleRoute() {
     view = "landing";
     html = renderHome(appData);
   } else if (parts[0] === "africa") {
+    if (parts[1] === "countries") {
+      location.hash = "#/africa";
+      return;
+    }
     view = "africa";
-    if (parts[1] === "countries") html = renderAfricaIntelligence(appData, "countries");
-    else if (parts[1] === "region" && parts[2]) html = renderAfricaIntelligence(appData, "region", parts[2]);
+    if (parts[1] === "region" && parts[2]) html = renderAfricaIntelligence(appData, "region", parts[2]);
     else if (parts[1] === "how-places-are-grouped") html = renderAfricaIntelligence(appData, "places");
     else html = renderAfricaIntelligence(appData);
   } else if (parts[0] === "story" && parts[1]) {

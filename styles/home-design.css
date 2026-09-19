@@ -852,16 +852,45 @@ a.pa-impact__delta {
 .pa-impact__card--green .pa-impact__delta { color: var(--pa-green); }
 .pa-impact__card--maroon .pa-impact__delta { color: var(--pa-maroon); }
 
-/* ---- Stories — distinct mid band (not Impact maroon, not Knowledge stone) ---- */
+/* ---- Stories — rich mid band between Impact maroon and Knowledge cream ---- */
 .pa-stories {
+  position: relative;
+  isolation: isolate;
   padding: clamp(4rem, 9vh, 5.5rem) 0;
   background:
-    radial-gradient(ellipse at 12% 0%, rgba(232, 169, 26, 0.22), transparent 42%),
-    radial-gradient(ellipse at 90% 100%, rgba(63, 154, 74, 0.18), transparent 48%),
-    linear-gradient(165deg, #1e3226 0%, #243a2c 42%, #16241c 100%);
+    radial-gradient(ellipse 90% 70% at 8% 0%, rgba(232, 169, 26, 0.32), transparent 48%),
+    radial-gradient(ellipse 75% 65% at 95% 15%, rgba(92, 36, 40, 0.55), transparent 52%),
+    radial-gradient(ellipse 70% 55% at 70% 100%, rgba(63, 154, 74, 0.35), transparent 55%),
+    radial-gradient(ellipse 50% 40% at 20% 85%, rgba(232, 169, 26, 0.12), transparent 50%),
+    linear-gradient(
+      148deg,
+      #2a1014 0%,
+      #3d221c 22%,
+      #2a3828 48%,
+      #1e3a2c 72%,
+      #16241c 100%
+    );
   color: #fff;
   border-top: 3px solid var(--pa-gold);
   border-bottom: 3px solid rgba(232, 169, 26, 0.55);
+  overflow: hidden;
+}
+
+.pa-stories::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(180deg, rgba(42, 16, 20, 0.35) 0%, transparent 28%),
+    linear-gradient(0deg, rgba(247, 241, 232, 0.08) 0%, transparent 22%);
+  opacity: 0.9;
+}
+
+.pa-stories > .container {
+  position: relative;
+  z-index: 1;
 }
 
 .pa-stories__eyebrow {

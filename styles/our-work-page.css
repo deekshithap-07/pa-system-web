@@ -656,9 +656,11 @@
 .ow-cta {
   padding: clamp(4rem, 10vh, 6rem) 0;
   background:
-    linear-gradient(165deg, var(--pa-maroon-deep) 0%, var(--pa-maroon) 48%, var(--pa-maroon-dark) 100%);
-  color: #fff;
+    radial-gradient(ellipse 70% 80% at 100% 0%, rgba(232, 169, 26, 0.18), transparent 55%),
+    linear-gradient(165deg, #fff9ef 0%, #f3ebe0 55%, #ebe0d2 100%);
+  color: var(--pa-maroon);
   border-top: 3px solid var(--pa-gold);
+  border-bottom: 1px solid rgba(232, 169, 26, 0.35);
 }
 
 .ow-cta__inner {
@@ -671,18 +673,18 @@
 
 .ow-cta__title {
   margin: 0;
-  color: #fff;
+  color: var(--pa-maroon);
   font-size: clamp(1.85rem, 4vw, 2.75rem);
 }
 
 .ow-cta__title em {
-  color: var(--pa-gold-soft);
+  color: #a67c12;
 }
 
 .ow-cta__lead {
   margin: 0.85rem 0 0;
   max-width: 34rem;
-  color: rgba(255, 255, 255, 0.88);
+  color: #5c3a3d;
   line-height: 1.6;
 }
 
@@ -693,14 +695,14 @@
 }
 
 .ow-cta .ow-btn--ghost {
-  color: #fff;
-  border-color: rgba(255, 255, 255, 0.65);
+  color: var(--pa-maroon);
+  border-color: rgba(92, 36, 40, 0.45);
 }
 
 .ow-cta .ow-btn--ghost:hover {
-  border-color: var(--pa-gold-soft);
-  background: rgba(232, 169, 26, 0.15);
-  color: #fff;
+  border-color: var(--pa-gold);
+  background: rgba(232, 169, 26, 0.18);
+  color: var(--pa-maroon);
 }
 
 /* ==========================================================================

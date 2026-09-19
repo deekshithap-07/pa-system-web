@@ -56,6 +56,7 @@ export function buildCatchmentHubPayload(countrySlug, catchmentSlug, data) {
         catchmentName: catchment.name,
         countryName: country.name,
         ...hubEntry,
+        programmes: data.home?.ourWork?.programs || null,
       },
       data
     );

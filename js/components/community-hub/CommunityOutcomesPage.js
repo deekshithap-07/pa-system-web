@@ -3,54 +3,13 @@ import { renderPageBack, renderWbPageHero, bindWbPageHero } from "../shared/wb-p
 import { renderHubGeoMap, bindHubGeoMap } from "../../map/components/HubGeoMap.js";
 import { highlightCommunityOnMap } from "../../utils/hub-geo-maps.js";
 import { renderJourneyTrack } from "../shared/story-chapters.js";
+import { paPriorityTopics } from "../shared/pa-programmes.js";
+import { renderDevelopmentTopics, bindDevelopmentTopics } from "../home-development-topics.js";
 
-/** Official PA programmes — same five as home / Our Work (no invented topics). */
-const PA_PROGRAMMES = [
-  {
-    id: "leadership",
-    title: "Transformational Leadership",
-    text: "Developing leaders at every level.",
-    description: "Equipping leaders to guide communities with vision, character and purpose.",
-    href: "#/work#work-leadership",
-  },
-  {
-    id: "discipleship",
-    title: "Spiritual Discipleship",
-    text: "Building strong faith and values.",
-    description: "Rooting households and churches in faith that shapes daily life, relationships and hope.",
-    href: "#/work",
-  },
-  {
-    id: "economic",
-    title: "Economic Productivity",
-    text: "Creating sustainable livelihoods.",
-    description: "Helping families grow sustainable livelihoods through skills, savings and community enterprise.",
-    href: "#/work",
-  },
-  {
-    id: "youth",
-    title: "Mentoring the Next Generation",
-    text: "Equipping young people for a better future.",
-    description: "Walking with young people so they grow in faith, character and opportunity for the future.",
-    href: "#/work",
-  },
-  {
-    id: "citizenship",
-    title: "Responsible Citizenship",
-    text: "Building peaceful, engaged communities.",
-    description: "Building peaceful, engaged communities where neighbours take responsibility for shared wellbeing.",
-    href: "#/work",
-  },
-];
+let prioritiesBinding = null;
 
 function analyticsFor(community, analytics) {
   return analytics?.communityComparison?.communities?.find((c) => c.id === community.id) || null;
-}
-
-function programmesFor(payload) {
-  const fromHome = payload.programmes;
-  if (Array.isArray(fromHome) && fromHome.length >= 5) return fromHome.slice(0, 5);
-  return PA_PROGRAMMES;
 }
 
 function renderWhyMatter(payload) {
@@ -150,34 +109,15 @@ function renderSiblingBriefs(payload) {
 }
 
 function renderFocusAreas(payload) {
-  const programmes = programmesFor(payload);
-  const rows = programmes
-    .map((p, i) => {
-      const n = String(i + 1).padStart(2, "0");
-      const blurb = p.description || p.text || "";
-      const href = p.href || "#/work";
-      return `<li class="cm-prog" data-cm-prog data-tone="${p.tone || "maroon"}">
-        <span class="cm-prog__index" aria-hidden="true">${n}</span>
-        <div class="cm-prog__body">
-          <h3>${p.title}</h3>
-          <p>${blurb}</p>
-        </div>
-        <a href="${href}" class="cm-prog__link" data-link>Explore</a>
-      </li>`;
-    })
-    .join("");
-
-  return `
-    <section class="cm-progs" data-cm-section>
-      <div class="container">
-        <header class="cm-progs__head" data-cm-rise>
-          <p class="wb-out__eyebrow">What is changing</p>
-          <h2>Five programmes in ${payload.community.name}</h2>
-          <p>PA’s programmes work together here — the same five across every community.</p>
-        </header>
-        <ol class="cm-progs__rail">${rows}</ol>
-      </div>
-    </section>`;
+  const place = payload.community.name;
+  return renderDevelopmentTopics({
+    sectionId: "cm-priorities",
+    idPrefix: "cm-",
+    bandClass: "wb-priorities-band--outcomes",
+    titleHtml: `<span class="wb-priorities-band__lead">WHAT IS</span> <strong>CHANGING</strong>`,
+    description: `Five programmes work together in ${place} — click + to expand, same as on the home page.`,
+    topics: paPriorityTopics(payload.programmes),
+  });
 }
 
 function renderProfileSnapshot(payload) {
@@ -274,27 +214,151 @@ function renderLeadership(payload) {
     </section>`;
 }
 
-function renderResources(payload) {
+function collectCommunityPpps(payload) {
+  const items = [];
+  const seen = new Set();
+  const name = payload.community?.name || "";
+
+  const push = (entry) => {
+    const title = String(entry.name || "").trim();
+    if (!title) return;
+    const key = title.toLowerCase();
+    if ([...seen].some((k) => k.includes(key) || key.includes(k))) return;
+    seen.add(key);
+    items.push({
+      name: title,
+      status: entry.status || "Active",
+      summary: entry.summary || `Pastor-Planned Project in ${name}.`,
+      date: entry.date || null,
+    });
+  };
+
+  (payload.dash?.ppps || []).forEach((p) => {
+    if (typeof p === "string") {
+      const timeline = (payload.dash?.timeline || []).find(
+        (t) =>
+          /ppp/i.test(t.title || "") ||
+          (t.title || "").toLowerCase().includes(p.toLowerCase()) ||
+          (t.description || "").toLowerCase().includes(p.toLowerCase())
+      );
+      push({
+        name: p,
+        status: timeline ? "Completed" : "Active",
+        summary: timeline?.description || `Local Pastor-Planned Project focused on ${p.toLowerCase()}.`,
+        date: timeline?.year || null,
+      });
+      return;
+    }
+    push({
+      name: p.title || p.name,
+      status: p.status || "Active",
+      summary: p.summary || p.description || "",
+      date: p.date || p.year || null,
+    });
+  });
+
+  const skip = /training|mentoring|cohort|awareness|shalom/i;
+  (payload.catchmentActivities || [])
+    .filter((a) => a.community === name && a.project && !skip.test(a.project))
+    .forEach((a) => {
+      push({
+        name: a.project,
+        status: a.status || "Active",
+        summary: `Community-led Pastor-Planned Project in ${name}.`,
+        date: a.date || null,
+      });
+    });
+
+  return items;
+}
+
+function formatPppDate(value) {
+  if (!value) return "";
+  if (/^\d{4}$/.test(String(value))) return String(value);
+  const d = new Date(value);
+  if (Number.isNaN(d.getTime())) return String(value);
+  return d.toLocaleDateString("en-GB", { month: "short", year: "numeric" });
+}
+
+function renderCommunityPpps(payload) {
+  const ppps = collectCommunityPpps(payload);
+  const place = payload.community.name;
+
+  const body = ppps.length
+    ? `<ul class="cm-ppp__list">
+        ${ppps
+          .map(
+            (p) => `<li class="cm-ppp__item" data-cm-rise>
+            <div class="cm-ppp__top">
+              <span class="cm-ppp__badge">PPP</span>
+              ${p.status ? `<span class="cm-ppp__status">${p.status}</span>` : ""}
+              ${p.date ? `<span class="cm-ppp__date">${formatPppDate(p.date)}</span>` : ""}
+            </div>
+            <h3>${p.name}</h3>
+            <p>${p.summary}</p>
+          </li>`
+          )
+          .join("")}
+      </ul>`
+    : `<p class="cm-ppp__empty" data-cm-rise>No Pastor-Planned Projects are recorded for ${place} yet. PPPs are community-owned plans for water, farming, health, and livelihoods.</p>`;
+
   return `
-    <section class="wb-out__resources" data-cm-section>
+    <section class="cm-ppp" data-cm-section id="cm-ppps">
       <div class="container">
-        <div data-cm-rise>
+        <header class="cm-ppp__head" data-cm-rise>
+          <p class="wb-out__eyebrow">Pastor-Planned Projects</p>
+          <h2>PPPs in ${place}</h2>
+          <p>Local plans owned by the community — water, farming, health, and livelihoods led by pastor leaders.</p>
+        </header>
+        ${body}
+      </div>
+    </section>`;
+}
+
+function renderResources(payload) {
+  const items = [
+    {
+      tag: "Nearby group",
+      title: `${payload.catchment.name}`,
+      text: "All communities and figures for this catchment",
+      href: `#/catchment/${payload.country.slug}/${payload.catchment.slug}`,
+      tone: "maroon",
+    },
+    {
+      tag: "Country",
+      title: `${payload.country.name} page`,
+      text: "Stories and figures for the whole nation",
+      href: `#/country/${payload.country.slug}`,
+      tone: "gold",
+    },
+    {
+      tag: "Field reports",
+      title: "Field reports",
+      text: "The same ministry updates opened from Home",
+      href: "#/field-reports",
+      tone: "green",
+    },
+  ];
+
+  return `
+    <section class="wb-out__resources wb-out__resources--rich" data-cm-section>
+      <div class="container">
+        <div class="wb-out__resources-head" data-cm-rise>
           <p class="wb-out__eyebrow">Additional resources</p>
           <h2>Keep exploring</h2>
+          <p>Continue from this community into the wider network.</p>
         </div>
-        <div class="wb-out-resources">
-          <a href="#/catchment/${payload.country.slug}/${payload.catchment.slug}" class="wb-out-resource" data-link data-cm-rise>
-            <strong>${payload.catchment.name} nearby group</strong>
-            <span>All communities and figures for this catchment</span>
-          </a>
-          <a href="#/country/${payload.country.slug}" class="wb-out-resource" data-link data-cm-rise>
-            <strong>${payload.country.name} country page</strong>
-            <span>Stories and figures for the whole nation</span>
-          </a>
-          <a href="#/scorecard" class="wb-out-resource" data-link data-cm-rise>
-            <strong>Our results</strong>
-            <span>Compare progress across the network</span>
-          </a>
+        <div class="wb-out-resources wb-out-resources--tiles">
+          ${items
+            .map(
+              (item) => `<a href="${item.href}" class="wb-out-resource wb-out-resource--tile wb-out-resource--${item.tone}" data-link data-cm-rise>
+            <span class="wb-out-resource__tag">${item.tag}</span>
+            <strong>${item.title}</strong>
+            <span>${item.text}</span>
+            <span class="wb-out-resource__cta">Open →</span>
+          </a>`
+            )
+            .join("")}
         </div>
       </div>
     </section>`;
@@ -345,6 +409,7 @@ export function renderCommunityOutcomes(payload, storySection = "") {
       ${renderFocusAreas(payload)}
       ${renderLeadership(payload)}
       ${storySection}
+      ${renderCommunityPpps(payload)}
       ${renderSiblingBriefs(payload)}
       ${renderResources(payload)}
     </div>`;
@@ -361,10 +426,12 @@ export function mountCommunityOutcomes(root, payload) {
   });
   highlightCommunityOnMap(page, payload.community.slug);
 
+  prioritiesBinding?.destroy?.();
+  prioritiesBinding = bindDevelopmentTopics(page);
+
   if (typeof gsap === "undefined" || typeof ScrollTrigger === "undefined") return;
   if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
-  /* Community motion: horizontal wipe + rail stagger — not catchment sticky panels */
   page.querySelectorAll("[data-cm-section]").forEach((section) => {
     gsap.fromTo(
       section,
@@ -418,30 +485,12 @@ export function mountCommunityOutcomes(root, payload) {
     }
   }
 
-  const progs = page.querySelectorAll("[data-cm-prog]");
-  if (progs.length) {
-    gsap.from(progs, {
-      x: -48,
-      opacity: 0,
-      duration: 0.65,
-      stagger: 0.1,
-      ease: "power3.out",
-      scrollTrigger: { trigger: page.querySelector(".cm-progs"), start: "top 82%", once: true },
-    });
-    gsap.from(page.querySelectorAll(".cm-prog__index"), {
-      scale: 0.6,
-      opacity: 0,
-      duration: 0.5,
-      stagger: 0.1,
-      ease: "back.out(1.6)",
-      scrollTrigger: { trigger: page.querySelector(".cm-progs"), start: "top 82%", once: true },
-    });
-  }
-
   ScrollTrigger.refresh();
 }
 
 export function destroyCommunityOutcomes() {
+  prioritiesBinding?.destroy?.();
+  prioritiesBinding = null;
   ScrollTrigger?.getAll?.().forEach((t) => {
     if (t.trigger?.closest?.("[data-community-outcomes]")) t.kill();
   });

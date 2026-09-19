@@ -1015,13 +1015,25 @@
 .ch-story-card__image {
   height: 100%;
   min-height: 180px;
-  background: linear-gradient(135deg, var(--pa-navy), var(--pa-blue));
+  background: linear-gradient(145deg, #5c2428, #3d181c 55%, #e8a91a);
   display: grid;
   place-items: center;
   color: rgba(255, 255, 255, 0.45);
   font-size: 0.7rem;
   text-transform: uppercase;
   letter-spacing: 0.06em;
+  overflow: hidden;
+  position: relative;
+}
+
+.ch-story-card__image img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
 }
 
 .ch-story-card__main {

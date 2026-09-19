@@ -121,6 +121,42 @@
       "storyIds": ["story-kenya-dams"],
       "reportIds": ["sep-2024"],
       "gallery": ["assets/gallery-1.jpg"]
+    },
+    "community:vanga": {
+      "hero": { "tagline": "Kwale South, Kenya", "description": "Coastal community advancing livelihoods through pastor-led cooperatives." },
+      "kpis": [
+        { "label": "Pastors", "value": 24, "trend": "stable", "direction": "neutral" },
+        { "label": "Journey Stage", "value": 0, "trend": "", "direction": "neutral", "text": "Training" },
+        { "label": "Shalom Groups", "value": 0, "trend": "pending", "direction": "neutral" },
+        { "label": "Households", "value": 0, "trend": "—", "direction": "neutral" }
+      ],
+      "insights": ["Fishing cooperative work is underway through local pastor leadership."],
+      "timeline": [
+        { "year": "2024", "title": "Fishing cooperative PPP", "description": "Pastor-led fishing cooperative setup to strengthen coastal livelihoods." }
+      ],
+      "programs": ["Economic Productivity", "Responsible Citizenship"],
+      "ppps": ["Fishing cooperative"],
+      "chips": [],
+      "storyIds": ["story-kenya-dams"],
+      "reportIds": ["sep-2024"]
+    },
+    "community:dzombo": {
+      "hero": { "tagline": "Kwale South, Kenya", "description": "Leadership training preparing the community for Pastor-Planned Projects." },
+      "kpis": [
+        { "label": "Pastors", "value": 45, "trend": "stable", "direction": "neutral" },
+        { "label": "Journey Stage", "value": 0, "trend": "", "direction": "neutral", "text": "Training" },
+        { "label": "Leadership Score", "value": 72, "trend": "+4pts", "direction": "up" },
+        { "label": "Shalom Groups", "value": 0, "trend": "pending", "direction": "neutral" }
+      ],
+      "insights": ["Training cohort underway before local PPP implementation."],
+      "timeline": [
+        { "year": "2024", "title": "Leadership training", "description": "Leadership development cohort preparing pastors for community projects." }
+      ],
+      "programs": ["Transformational Leadership"],
+      "ppps": [],
+      "chips": [],
+      "storyIds": [],
+      "reportIds": ["sep-2024"]
     }
   },
   "defaultDashboard": {

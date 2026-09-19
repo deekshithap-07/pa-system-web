@@ -132,7 +132,7 @@ export function renderDashboard({ type, entity, breadcrumbs, childCards, data })
   const reportItems = getReportsByIds(reports, dash.reportIds).map((r) => ({
     name: r.title,
     desc: r.summary,
-    href: `#/reports`,
+    href: `#/field-reports`,
   }));
 
   const gallery = (dash.gallery || [])
