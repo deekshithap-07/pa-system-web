@@ -1,19 +1,24 @@
 import { buildCountryHubPayload } from "../utils/country-hub-data.js";
+import { attachCountryHubGeoMap } from "../utils/hub-geo-maps.js";
+import { renderDataFreshness } from "../utils/public-api.js";
 import {
-  renderCountryStoryHero,
-  renderByTheNumbers,
-  renderCountryOverview,
-  renderCountryLatest,
-  renderCountryProjects,
+  renderCountryIntro,
+  renderCountryStats,
+  renderCountryMapSection,
+  renderCountryWhere,
+  renderCountryProgrammes,
+  renderCountryTrends,
+  renderCountryFeaturedStories,
+  renderCountryReports,
+  renderCountryUpdates,
+  renderCountryEngage,
   bindCountryStoryHero,
-  bindNumbersCarousel,
-  bindOverviewTabs,
+  bindCountryMap,
+  bindCountryEngage,
   featuredStories,
   initCountryPageAnimations,
 } from "../components/work/CountryWbPage.js";
-import { renderChart, destroyCharts } from "../components/charts.js";
-import { numberCardsFromHub } from "../utils/work-locations.js";
-import { bindLocationMenus } from "../components/work/LocationBrowse.js";
+import { mountCountryHubCharts, teardownCountryHub } from "../components/country-hub/country-hub-mount.js";
 
 export function renderCountryHub(slug, data) {
   const hub = buildCountryHubPayload(slug, data);
@@ -21,15 +26,22 @@ export function renderCountryHub(slug, data) {
     return { html: `<div class="container static-page"><h1>Country not found</h1></div>` };
   }
 
+  attachCountryHubGeoMap(hub, data);
   const stories = featuredStories(data, hub);
 
   const html = `
     <div class="wb-country" data-country-hub data-country-slug="${slug}">
-      ${renderCountryStoryHero(hub, stories)}
-      ${renderByTheNumbers(hub)}
-      ${renderCountryOverview(hub)}
-      ${renderCountryLatest(hub, stories)}
-      ${renderCountryProjects(hub)}
+      ${renderCountryIntro(hub)}
+      <div class="container">${renderDataFreshness(data, { datasetId: "country-hubs" })}</div>
+      ${renderCountryStats(hub)}
+      ${renderCountryMapSection(hub)}
+      ${renderCountryWhere(hub)}
+      ${renderCountryProgrammes(hub, data)}
+      ${renderCountryTrends(hub)}
+      ${renderCountryFeaturedStories(hub, stories)}
+      ${renderCountryReports(hub)}
+      ${renderCountryUpdates(hub, data)}
+      ${renderCountryEngage(hub)}
     </div>`;
 
   return { html, hub };
@@ -40,23 +52,27 @@ export function mountCountryHub(root, hub) {
   if (!hubEl) return;
 
   bindCountryStoryHero(hubEl);
-  bindNumbersCarousel(hubEl);
-  bindOverviewTabs(hubEl);
-  bindLocationMenus(hubEl);
+  bindCountryMap(hubEl, hub?.country?.slug || hubEl.dataset.countrySlug);
+  bindCountryEngage(hubEl);
   initCountryPageAnimations(hubEl);
 
-  const cards = numberCardsFromHub(hub);
-  cards.forEach((card) => {
-    const canvas = hubEl.querySelector(`[data-wb-num="${card.key}"]`);
-    if (canvas) renderChart(canvas, card.config);
-  });
+  if (hub?.charts) {
+    // Brand colours on trend charts (override legacy blues in JSON)
+    const branded = Object.fromEntries(
+      Object.entries(hub.charts).map(([key, cfg]) => [
+        key,
+        {
+          ...cfg,
+          color: cfg.color && cfg.color.startsWith("#00") ? "#e8a91a" : cfg.color || "#e8a91a",
+        },
+      ])
+    );
+    mountCountryHubCharts(hubEl, branded);
+  }
 }
 
 export function destroyCountryHub(root) {
   const hubEl = root.querySelector("[data-country-hub]");
   if (!hubEl) return;
-  const hero = hubEl.querySelector("[data-cstory]");
-  if (hero?._timer) clearInterval(hero._timer);
-  hubEl._locMenuOff?.();
-  destroyCharts();
+  teardownCountryHub(hubEl);
 }

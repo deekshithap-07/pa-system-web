@@ -1,8 +1,24 @@
+/**
+ * Community profile — public, high-level transformation picture.
+ * Sensitive personal, household, financial, or operational detail stays internal.
+ *
+ * Section order (community brief):
+ * 1. Name & general location
+ * 2. Stage in the 2-year journey
+ * 3. Shalom Groups & households (public-approved only)
+ * 4. Projects being implemented
+ * 5. High-level progress indicators
+ * 6. Community transformation story
+ * 7. Map / geographic context
+ * 8. Related reports, photos or videos
+ */
+
 import { formatNumber } from "../../utils/format.js";
 import { renderPageBack, renderWbPageHero, bindWbPageHero } from "../shared/wb-page-hero.js";
 import { renderHubGeoMap, bindHubGeoMap } from "../../map/components/HubGeoMap.js";
 import { highlightCommunityOnMap } from "../../utils/hub-geo-maps.js";
 import { renderJourneyTrack } from "../shared/story-chapters.js";
+import { renderDataFreshness } from "../../utils/public-api.js";
 import { paPriorityTopics } from "../shared/pa-programmes.js";
 import { renderDevelopmentTopics, bindDevelopmentTopics } from "../home-development-topics.js";
 
@@ -12,204 +28,130 @@ function analyticsFor(community, analytics) {
   return analytics?.communityComparison?.communities?.find((c) => c.id === community.id) || null;
 }
 
-function renderWhyMatter(payload) {
-  const intro =
+/** Public reach flags — omit unless approved for public display. */
+function publicReach(community, analytics) {
+  const a = analyticsFor(community, analytics);
+  const flags = community.publicDisplay || {};
+  const shalom =
+    flags.shalomGroups === false
+      ? null
+      : community.shalomGroups ?? a?.shalomGroups ?? null;
+  const households =
+    flags.households === false ? null : community.households ?? a?.households ?? null;
+
+  return {
+    shalom: typeof shalom === "number" ? shalom : null,
+    households: typeof households === "number" ? households : null,
+  };
+}
+
+function journeyStage(payload) {
+  const a = analyticsFor(payload.community, payload.analytics);
+  return (
+    a?.stage ||
+    payload.community.journeyStage ||
+    payload.community.status ||
+    payload.dash?.kpis?.find((k) => k.text)?.text ||
+    "Awareness"
+  );
+}
+
+function locationLine(payload) {
+  const region = payload.catchment.region || payload.community.region;
+  const parts = [payload.catchment.name, region, payload.country.name].filter(Boolean);
+  return parts.join(" · ");
+}
+
+/* 1 — Community name and general location */
+function renderIdentity(payload) {
+  const stage = journeyStage(payload);
+  const place = locationLine(payload);
+  const lead =
     payload.dash?.hero?.description ||
-    `${payload.community.name} is one place in the ${payload.catchment.name} nearby group — homes, pastors, faith groups, and local projects on the two-year journey.`;
+    `${payload.community.name} is one community in the ${payload.catchment.name} nearby group — a public picture of pastor-led transformation.`;
+
   return `
-    <section class="wb-out__why" data-cm-section>
-      <div class="container wb-out__why-grid">
-        <div data-cm-rise>
-          <p class="wb-out__eyebrow">Why it matters</p>
-          <h2>Why outcomes matter here</h2>
-          <p>${intro}</p>
-          <p>Transformation is measured through pastors equipped, households reached, Shalom groups formed, and projects that change daily life.</p>
-        </div>
-        <aside class="wb-out__quote" data-cm-rise>
-          <blockquote>Each community is the closest view — where the whole gospel meets whole people and whole places.</blockquote>
-          <cite>${payload.catchment.name} · ${payload.country.name}</cite>
-        </aside>
+    <section class="cm-profile__identity" data-cm-section id="cm-identity">
+      <div class="container" data-cm-rise>
+        <p class="wb-out__eyebrow">Community profile</p>
+        <h2>${payload.community.name}</h2>
+        <p class="cm-profile__location">${place}</p>
+        <p class="cm-profile__lead">${lead}</p>
+        <p class="cm-profile__note">This page shares a high-level public view. Detailed personal, household, financial, and operational records remain inside PA’s internal systems.</p>
+        <p class="wb-out__status"><span>${payload.catchment.name}</span> · <span>${stage}</span></p>
       </div>
     </section>`;
 }
 
-function renderCommunityScorecard(payload) {
-  const a = analyticsFor(payload.community, payload.analytics);
-  const tiles = [
-    { label: "Pastors", value: payload.community.pastors ?? 0 },
-    { label: "Households", value: payload.community.households ?? 0 },
-    { label: "Shalom groups", value: payload.community.shalomGroups ?? a?.shalomGroups ?? 0 },
-    {
-      label: "Leadership score",
-      value:
-        a?.leadershipScore ??
-        payload.dash?.kpis?.find((k) => k.label === "Leadership Score")?.value ??
-        "—",
-    },
-  ];
-
-  const cards = tiles
-    .map((t) => {
-      const achieved = typeof t.value === "number" ? t.value : 0;
-      const expected = achieved > 0 ? Math.ceil(achieved * 1.12) : 0;
-      const pct = expected ? Math.min(100, Math.round((achieved / expected) * 100)) : achieved > 0 ? 100 : 0;
-      return `<article class="wb-out-metric" data-cm-rise>
-        <p class="wb-out-metric__label"><strong>${t.label}</strong> in ${payload.community.name}</p>
-        <p class="wb-out-metric__value">${typeof t.value === "number" ? formatNumber(t.value) : t.value}</p>
-        <div class="wb-out-metric__bar" aria-hidden="true"><span style="width:${pct}%"></span></div>
-        <p class="wb-out-metric__meta"><span>Field tracking</span>${expected ? ` · toward ${formatNumber(expected)}` : ""}</p>
-      </article>`;
-    })
-    .join("");
-
+/* 2 — Stage in the 2-year journey */
+function renderJourney(payload) {
+  const stage = journeyStage(payload);
   return `
-    <section class="wb-out__score" data-cm-section>
+    <section class="cm-profile__journey" data-cm-section id="cm-journey">
       <div class="container">
-        <div class="wb-out__score-head" data-cm-rise>
-          <div>
-            <p class="wb-out__eyebrow">Community scorecard</p>
-            <h2>Track progress in <strong>${payload.community.name}</strong></h2>
-            <p>Simple measures beside the people and projects on the ground.</p>
-          </div>
-          <a href="#/scorecard" class="wb-out__btn" data-link>Open Our results</a>
-        </div>
-        <div class="wb-out-metrics">${cards}</div>
+        <header class="cm-profile__head" data-cm-rise>
+          <p class="wb-out__eyebrow">Two-year journey</p>
+          <h2>Stage in ${payload.community.name}</h2>
+          <p>Communities move through awareness, engagement, training, implementation, and multiplication over about two years.</p>
+          <p class="cm-profile__stage-now">Current stage: <strong>${stage}</strong></p>
+        </header>
+        <div data-cm-rise>${renderJourneyTrack(stage)}</div>
       </div>
     </section>`;
 }
 
-function renderSiblingBriefs(payload) {
-  const siblings = (payload.siblingCommunities || []).filter((c) => c.slug !== payload.community.slug);
-  if (!siblings.length) return "";
+/* 3 — Shalom Groups and households (public-approved) */
+function renderPublicReach(payload) {
+  const reach = publicReach(payload.community, payload.analytics);
+  const tiles = [];
 
-  const items = siblings
-    .map(
-      (c) => `<a href="#/community/${payload.country.slug}/${payload.catchment.slug}/${c.slug}" class="wb-out-brief" data-link data-cm-rise>
-        <span class="wb-out-brief__tag">${c.journeyStage || c.status || "Community"}</span>
-        <h3>${c.name}</h3>
-        <p>${formatNumber(c.pastors ?? 0)} pastors${c.shalomGroups ? ` · ${formatNumber(c.shalomGroups)} faith groups` : ""}</p>
-        <span class="wb-out-brief__cta">Open community →</span>
-      </a>`
-    )
-    .join("");
+  if (reach.shalom != null) {
+    tiles.push({
+      label: "Shalom Groups",
+      value: formatNumber(reach.shalom),
+      note: "Faith groups walking with households",
+    });
+  }
+  if (reach.households != null) {
+    tiles.push({
+      label: "Households",
+      value: formatNumber(reach.households),
+      note: "Households reached in public reporting",
+    });
+  }
 
-  return `
-    <section class="wb-out__briefs" data-cm-section>
-      <div class="container">
-        <div class="wb-out__briefs-head" data-cm-rise>
-          <div>
-            <p class="wb-out__eyebrow">Other communities</p>
-            <h2>More places in ${payload.catchment.name}</h2>
-            <p>Each brief is one community in this nearby group — open it for people, projects, and journey stage.</p>
-          </div>
-        </div>
-        <div class="wb-out-briefs">${items}</div>
-      </div>
-    </section>`;
-}
-
-function renderFocusAreas(payload) {
-  const place = payload.community.name;
-  return renderDevelopmentTopics({
-    sectionId: "cm-priorities",
-    idPrefix: "cm-",
-    bandClass: "wb-priorities-band--outcomes",
-    titleHtml: `<span class="wb-priorities-band__lead">WHAT IS</span> <strong>CHANGING</strong>`,
-    description: `Five programmes work together in ${place} — click + to expand, same as on the home page.`,
-    topics: paPriorityTopics(payload.programmes),
-  });
-}
-
-function renderProfileSnapshot(payload) {
-  const a = analyticsFor(payload.community, payload.analytics);
-  const stage =
-    a?.stage || payload.community.journeyStage || payload.dash?.kpis?.find((k) => k.text)?.text || "—";
-  const facts = [
-    { label: "Catchment", value: payload.catchment.name },
-    { label: "Region", value: payload.catchment.region || payload.community.region || "—" },
-    { label: "Journey stage", value: stage },
-    { label: "Active projects", value: a?.projects ?? payload.dash?.timeline?.length ?? 0 },
-  ];
-
-  return `
-    <section class="wb-out__snapshot" data-cm-section>
-      <div class="container">
-        <div class="wb-out__snapshot-head" data-cm-rise>
-          <div>
-            <p class="wb-out__eyebrow">Community profile</p>
-            <h2>${payload.community.name} · ${payload.catchment.name}</h2>
-            <p>${payload.dash?.hero?.description || `Life, leadership, and local projects in ${payload.community.name}.`}</p>
-          </div>
-        </div>
-        <dl class="wb-out__snapshot-grid">
-          ${facts
-            .map(
-              (t) => `<div class="wb-out__snapshot-tile" data-cm-rise>
-              <dt>${t.label}</dt>
-              <dd>${typeof t.value === "number" ? formatNumber(t.value) : t.value}</dd>
-            </div>`
-            )
-            .join("")}
-        </dl>
-        ${renderJourneyTrack(stage)}
-      </div>
-    </section>`;
-}
-
-function renderPlaces(payload) {
-  if (!payload.geoMap) return "";
-  return `
-    <section class="wb-out__places cm-places--compact" id="cm-places" data-cm-section>
-      <div class="container">
-        <div class="cm-places__layout">
-          <header class="wb-out__places-head" data-cm-rise>
-            <p class="wb-out__eyebrow">Place on the map</p>
-            <h2>Where ${payload.community.name} sits</h2>
-            <p>Tap a neighbour on the map or list to open another community in ${payload.catchment.name}.</p>
+  if (!tiles.length) {
+    return `
+      <section class="cm-profile__reach" data-cm-section id="cm-reach">
+        <div class="container">
+          <header class="cm-profile__head" data-cm-rise>
+            <p class="wb-out__eyebrow">Public reach</p>
+            <h2>Shalom Groups and households</h2>
+            <p>Public counts for ${payload.community.name} are not approved for display yet. Internal tracking continues separately.</p>
           </header>
-          <div class="wb-out__places-maps wb-out__places-maps--single" data-cm-map>
-            ${renderHubGeoMap(payload.geoMap, { variant: "full", mapId: "community-outcomes" })}
-          </div>
         </div>
-      </div>
-    </section>`;
-}
-
-function renderLeadership(payload) {
-  const a = analyticsFor(payload.community, payload.analytics);
-  const items = [
-    {
-      label: "Triple-A leadership",
-      value:
-        a?.leadershipScore != null
-          ? `Score ${a.leadershipScore} — Awareness, Ability, Action`
-          : "Field tracking active",
-    },
-    { label: "Pastor leaders", value: formatNumber(payload.community.pastors ?? 0) },
-    { label: "Shalom leaders", value: a?.shalomLeaders ?? "—" },
-    {
-      label: "Participation",
-      value: payload.community.participationRate != null ? `${payload.community.participationRate}%` : "—",
-    },
-  ];
+      </section>`;
+  }
 
   return `
-    <section class="wb-out__why wb-out__why--light" data-cm-section>
+    <section class="cm-profile__reach" data-cm-section id="cm-reach">
       <div class="container">
-        <div data-cm-rise>
-          <p class="wb-out__eyebrow">Leadership &amp; engagement</p>
-          <h2>People leading change</h2>
-        </div>
-        <dl class="wb-out__snapshot-grid wb-out__snapshot-grid--leadership">
-          ${items
+        <header class="cm-profile__head" data-cm-rise>
+          <p class="wb-out__eyebrow">Public reach</p>
+          <h2>Shalom Groups and households</h2>
+          <p>Only figures approved for public display appear here.</p>
+        </header>
+        <div class="cm-profile__reach-grid">
+          ${tiles
             .map(
-              (f) => `<div class="wb-out__snapshot-tile" data-cm-rise>
-              <dt>${f.label}</dt>
-              <dd>${f.value}</dd>
-            </div>`
+              (t) => `<article class="cm-profile__reach-card" data-cm-rise>
+              <strong>${t.value}</strong>
+              <span>${t.label}</span>
+              <p>${t.note}</p>
+            </article>`
             )
             .join("")}
-        </dl>
+        </div>
       </div>
     </section>`;
 }
@@ -228,7 +170,7 @@ function collectCommunityPpps(payload) {
     items.push({
       name: title,
       status: entry.status || "Active",
-      summary: entry.summary || `Pastor-Planned Project in ${name}.`,
+      summary: entry.summary || `Community project underway in ${name}.`,
       date: entry.date || null,
     });
   };
@@ -244,7 +186,7 @@ function collectCommunityPpps(payload) {
       push({
         name: p,
         status: timeline ? "Completed" : "Active",
-        summary: timeline?.description || `Local Pastor-Planned Project focused on ${p.toLowerCase()}.`,
+        summary: timeline?.description || `Local project focused on ${p.toLowerCase()}.`,
         date: timeline?.year || null,
       });
       return;
@@ -264,10 +206,20 @@ function collectCommunityPpps(payload) {
       push({
         name: a.project,
         status: a.status || "Active",
-        summary: `Community-led Pastor-Planned Project in ${name}.`,
+        summary: `Community-led project in ${name}.`,
         date: a.date || null,
       });
     });
+
+  (payload.dash?.timeline || []).forEach((t) => {
+    if (!t.title) return;
+    push({
+      name: t.title,
+      status: t.status || "Active",
+      summary: t.description || "",
+      date: t.year || t.date || null,
+    });
+  });
 
   return items;
 }
@@ -280,17 +232,32 @@ function formatPppDate(value) {
   return d.toLocaleDateString("en-GB", { month: "short", year: "numeric" });
 }
 
-function renderCommunityPpps(payload) {
-  const ppps = collectCommunityPpps(payload);
+/* What is changing — five PA programmes (community-level) */
+function renderWhatIsChanging(payload) {
+  const place = payload.community.name;
+  return renderDevelopmentTopics({
+    sectionId: "cm-priorities",
+    idPrefix: "cm-",
+    bandClass: "wb-priorities-band--outcomes",
+    titleHtml: `<span class="wb-priorities-band__lead">WHAT IS</span> <strong>CHANGING</strong>`,
+    description: `Five programmes at work in ${place} — click + to expand each priority.`,
+    topics: paPriorityTopics(payload.programmes),
+  });
+}
+
+/* 4 — Projects being implemented */
+function renderProjects(payload) {
+  const projects = collectCommunityPpps(payload);
   const place = payload.community.name;
 
-  const body = ppps.length
+  const body = projects.length
     ? `<ul class="cm-ppp__list">
-        ${ppps
+        ${projects
+          .slice(0, 8)
           .map(
             (p) => `<li class="cm-ppp__item" data-cm-rise>
             <div class="cm-ppp__top">
-              <span class="cm-ppp__badge">PPP</span>
+              <span class="cm-ppp__badge">Project</span>
               ${p.status ? `<span class="cm-ppp__status">${p.status}</span>` : ""}
               ${p.date ? `<span class="cm-ppp__date">${formatPppDate(p.date)}</span>` : ""}
             </div>
@@ -300,27 +267,156 @@ function renderCommunityPpps(payload) {
           )
           .join("")}
       </ul>`
-    : `<p class="cm-ppp__empty" data-cm-rise>No Pastor-Planned Projects are recorded for ${place} yet. PPPs are community-owned plans for water, farming, health, and livelihoods.</p>`;
+    : `<p class="cm-ppp__empty" data-cm-rise>No public project summaries are listed for ${place} yet. Field teams continue planning water, farming, health, and livelihood work locally.</p>`;
 
   return `
-    <section class="cm-ppp" data-cm-section id="cm-ppps">
+    <section class="cm-ppp" data-cm-section id="cm-projects">
       <div class="container">
         <header class="cm-ppp__head" data-cm-rise>
-          <p class="wb-out__eyebrow">Pastor-Planned Projects</p>
-          <h2>PPPs in ${place}</h2>
-          <p>Local plans owned by the community — water, farming, health, and livelihoods led by pastor leaders.</p>
+          <p class="wb-out__eyebrow">Projects being implemented</p>
+          <h2>What is underway in ${place}</h2>
+          <p>High-level community projects — titles and status only. Budgets, household lists, and operational detail stay internal.</p>
         </header>
         ${body}
       </div>
     </section>`;
 }
 
-function renderResources(payload) {
-  const items = [
+/* 5 — High-level progress indicators */
+function renderProgress(payload) {
+  const a = analyticsFor(payload.community, payload.analytics);
+  const reach = publicReach(payload.community, payload.analytics);
+  const projects = collectCommunityPpps(payload).length;
+  const stage = journeyStage(payload);
+
+  const indicators = [
+    { label: "Journey stage", value: stage },
+    { label: "Public projects", value: formatNumber(projects) },
+  ];
+
+  if (reach.shalom != null) {
+    indicators.push({ label: "Shalom Groups", value: formatNumber(reach.shalom) });
+  }
+  if (reach.households != null) {
+    indicators.push({ label: "Households (public)", value: formatNumber(reach.households) });
+  }
+  if (a?.projects != null && !projects) {
+    indicators.push({ label: "Tracked projects", value: formatNumber(a.projects) });
+  }
+
+  const hasChart = Boolean(payload.dash?.charts?.impactLine);
+
+  return `
+    <section class="cm-profile__progress" data-cm-section id="cm-progress">
+      <div class="container">
+        <header class="cm-profile__head" data-cm-rise>
+          <p class="wb-out__eyebrow">High-level progress</p>
+          <h2>Indicators for ${payload.community.name}</h2>
+          <p>Simple public signals of movement — not a private operational dashboard.</p>
+        </header>
+        <div class="cm-profile__progress-grid">
+          ${indicators
+            .map(
+              (i) => `<article class="cm-profile__progress-card" data-cm-rise>
+              <span>${i.label}</span>
+              <strong>${i.value}</strong>
+            </article>`
+            )
+            .join("")}
+        </div>
+        ${
+          hasChart
+            ? `<div class="cm-profile__chart" data-chart="impactLine" data-cm-rise>
+                <h3>${payload.dash.charts.impactLine.title || "Progress over time"}</h3>
+                <div class="cm-profile__chart-wrap"><canvas aria-label="Community progress chart"></canvas></div>
+              </div>`
+            : ""
+        }
+      </div>
+    </section>`;
+}
+
+/* 7 — Map / geographic context */
+function renderMap(payload) {
+  if (!payload.geoMap) {
+    return `
+      <section class="wb-out__places cm-places--compact" id="cm-places" data-cm-section>
+        <div class="container">
+          <header class="wb-out__places-head" data-cm-rise>
+            <p class="wb-out__eyebrow">Map and context</p>
+            <h2>Where ${payload.community.name} sits</h2>
+            <p>${locationLine(payload)}. A detailed map will appear as geographic data expands.</p>
+          </header>
+        </div>
+      </section>`;
+  }
+
+  return `
+    <section class="wb-out__places cm-places--compact" id="cm-places" data-cm-section>
+      <div class="container">
+        <div class="cm-places__layout">
+          <header class="wb-out__places-head" data-cm-rise>
+            <p class="wb-out__eyebrow">Map and context</p>
+            <h2>Where ${payload.community.name} sits</h2>
+            <p>${locationLine(payload)}. Tap a neighbour to open another community in this nearby group.</p>
+          </header>
+          <div class="wb-out__places-maps wb-out__places-maps--single" data-cm-map>
+            ${renderHubGeoMap(payload.geoMap, { variant: "full", mapId: "community-outcomes" })}
+          </div>
+        </div>
+      </div>
+    </section>`;
+}
+
+/* 8 — Related reports, photos or videos */
+function renderMediaResources(payload, media = {}) {
+  const reports = media.reports || [];
+  const photos = media.photos || [];
+  const videos = media.videos || [];
+
+  const reportHtml = reports.length
+    ? reports
+        .slice(0, 3)
+        .map(
+          (r) => `<a href="#/field-reports" class="cm-media__card" data-link data-cm-rise>
+            <span class="cm-media__tag">Report</span>
+            <strong>${r.title}</strong>
+            <span>${r.summary || r.period || "Field report"}</span>
+          </a>`
+        )
+        .join("")
+    : `<a href="#/field-reports" class="cm-media__card" data-link data-cm-rise>
+        <span class="cm-media__tag">Report</span>
+        <strong>Field Reports</strong>
+        <span>Ministry updates from across the network</span>
+      </a>`;
+
+  const photoHtml = photos
+    .slice(0, 3)
+    .map(
+      (p) => `<figure class="cm-media__photo" data-cm-rise>
+        <img src="${p.src}" alt="${p.alt || payload.community.name}" loading="lazy" decoding="async">
+        ${p.caption ? `<figcaption>${p.caption}</figcaption>` : ""}
+      </figure>`
+    )
+    .join("");
+
+  const videoHtml = videos
+    .slice(0, 2)
+    .map(
+      (v) => `<a href="${v.href || "#/resources"}" class="cm-media__card" data-link data-cm-rise>
+        <span class="cm-media__tag">Video</span>
+        <strong>${v.title}</strong>
+        <span>${v.summary || "Watch related media"}</span>
+      </a>`
+    )
+    .join("");
+
+  const explore = [
     {
       tag: "Nearby group",
-      title: `${payload.catchment.name}`,
-      text: "All communities and figures for this catchment",
+      title: payload.catchment.name,
+      text: "Other communities in this catchment",
       href: `#/catchment/${payload.country.slug}/${payload.catchment.slug}`,
       tone: "maroon",
     },
@@ -332,31 +428,36 @@ function renderResources(payload) {
       tone: "gold",
     },
     {
-      tag: "Field reports",
-      title: "Field reports",
-      text: "The same ministry updates opened from Home",
-      href: "#/field-reports",
+      tag: "Knowledge",
+      title: "Knowledge Hub",
+      text: "Reports, guides, and learning resources",
+      href: "#/resources",
       tone: "green",
     },
   ];
 
   return `
-    <section class="wb-out__resources wb-out__resources--rich" data-cm-section>
+    <section class="cm-media" data-cm-section id="cm-media">
       <div class="container">
-        <div class="wb-out__resources-head" data-cm-rise>
-          <p class="wb-out__eyebrow">Additional resources</p>
-          <h2>Keep exploring</h2>
-          <p>Continue from this community into the wider network.</p>
+        <header class="cm-profile__head" data-cm-rise>
+          <p class="wb-out__eyebrow">Reports, photos and videos</p>
+          <h2>Related public resources</h2>
+          <p>Open field evidence and media that sit beside this community profile.</p>
+        </header>
+        <div class="cm-media__grid">
+          ${reportHtml}
+          ${videoHtml}
         </div>
-        <div class="wb-out-resources wb-out-resources--tiles">
-          ${items
+        ${photoHtml ? `<div class="cm-media__photos">${photoHtml}</div>` : ""}
+        <div class="wb-out-resources wb-out-resources--tiles cm-media__explore">
+          ${explore
             .map(
               (item) => `<a href="${item.href}" class="wb-out-resource wb-out-resource--tile wb-out-resource--${item.tone}" data-link data-cm-rise>
-            <span class="wb-out-resource__tag">${item.tag}</span>
-            <strong>${item.title}</strong>
-            <span>${item.text}</span>
-            <span class="wb-out-resource__cta">Open →</span>
-          </a>`
+              <span class="wb-out-resource__tag">${item.tag}</span>
+              <strong>${item.title}</strong>
+              <span>${item.text}</span>
+              <span class="wb-out-resource__cta">Open →</span>
+            </a>`
             )
             .join("")}
         </div>
@@ -364,8 +465,21 @@ function renderResources(payload) {
     </section>`;
 }
 
-export function renderCommunityOutcomes(payload, storySection = "") {
-  const stage = payload.community.journeyStage || payload.community.status || "Active";
+function collectMedia(payload, data) {
+  const reports = (data?.reports?.reports || []).filter((r) =>
+    (r.countryIds || []).includes(payload.country.id)
+  );
+  const storyPhotos = (data?.stories?.stories || [])
+    .filter((s) => s.communityId === payload.community.id || s.communityId === payload.community.slug)
+    .filter((s) => s.image)
+    .map((s) => ({ src: s.image, alt: s.title, caption: s.title }));
+
+  const videos = (data?.knowledgeHub?.items?.videos || data?.knowledgeHub?.videos || []).slice(0, 2);
+
+  return { reports, photos: storyPhotos, videos };
+}
+
+export function renderCommunityOutcomes(payload, storySection = "", data = null) {
   const countrySlug = payload.country.slug || "kenya";
   const heroImage =
     {
@@ -375,8 +489,10 @@ export function renderCommunityOutcomes(payload, storySection = "") {
       zambia: "assets/country-heroes/zambia-hero-crops.jpg",
     }[countrySlug] || "assets/country-heroes/kenya-hero-farmers.jpg";
 
+  const media = collectMedia(payload, data);
+
   return `
-    <div class="wb-out cm-out" data-community-outcomes data-country-slug="${payload.country.slug}" data-catchment-slug="${payload.catchment.slug}" data-community-slug="${payload.community.slug}">
+    <div class="wb-out cm-out cm-profile" data-community-outcomes data-country-slug="${payload.country.slug}" data-catchment-slug="${payload.catchment.slug}" data-community-slug="${payload.community.slug}">
       ${renderPageBack({ href: `#/catchment/${payload.country.slug}/${payload.catchment.slug}`, label: payload.catchment.name })}
       ${renderWbPageHero({
         id: "community-outcomes-hero",
@@ -391,27 +507,22 @@ export function renderCommunityOutcomes(payload, storySection = "") {
         ],
         eyebrow: "One community · " + payload.catchment.name,
         title: payload.community.name,
-        lead:
-          payload.dash?.hero?.description ||
-          `Explore pastor-led work, local projects, and the two-year journey in ${payload.community.name}.`,
+        lead: locationLine(payload),
         actions: [
           { label: "Back to nearby group", href: `#/catchment/${payload.country.slug}/${payload.catchment.slug}` },
-          { label: "Our results", href: "#/scorecard", primary: false },
+          { label: "Field reports", href: "#/field-reports", primary: false },
         ],
       })}
-      <p class="wb-out__status container" data-cm-rise><span>${payload.catchment.name}</span> · <span>${stage}</span></p>
-      <div class="wb-out__intro-stack">
-        ${renderProfileSnapshot(payload)}
-        ${renderPlaces(payload)}
-        ${renderWhyMatter(payload)}
-      </div>
-      ${renderCommunityScorecard(payload)}
-      ${renderFocusAreas(payload)}
-      ${renderLeadership(payload)}
+      ${renderIdentity(payload)}
+      <div class="container">${renderDataFreshness(data, { datasetId: "communities" })}</div>
+      ${renderJourney(payload)}
+      ${renderPublicReach(payload)}
+      ${renderProjects(payload)}
+      ${renderWhatIsChanging(payload)}
+      ${renderProgress(payload)}
       ${storySection}
-      ${renderCommunityPpps(payload)}
-      ${renderSiblingBriefs(payload)}
-      ${renderResources(payload)}
+      ${renderMap(payload)}
+      ${renderMediaResources(payload, media)}
     </div>`;
 }
 
@@ -458,40 +569,9 @@ export function mountCommunityOutcomes(root, payload) {
       });
     }
   });
-
-  const mapHost = page.querySelector("[data-cm-map]");
-  if (mapHost) {
-    gsap.from(mapHost, {
-      scale: 0.88,
-      opacity: 0,
-      transformOrigin: "center center",
-      duration: 0.75,
-      ease: "back.out(1.4)",
-      scrollTrigger: { trigger: mapHost, start: "top 90%", once: true },
-    });
-    const anchors = mapHost.querySelectorAll(".hub-geo-map__community-anchor");
-    if (anchors.length) {
-      gsap.fromTo(
-        anchors,
-        { attr: { r: 0 } },
-        {
-          attr: { r: 4.5 },
-          duration: 0.45,
-          stagger: 0.05,
-          ease: "back.out(2)",
-          scrollTrigger: { trigger: mapHost, start: "top 88%", once: true },
-        }
-      );
-    }
-  }
-
-  ScrollTrigger.refresh();
 }
 
 export function destroyCommunityOutcomes() {
   prioritiesBinding?.destroy?.();
   prioritiesBinding = null;
-  ScrollTrigger?.getAll?.().forEach((t) => {
-    if (t.trigger?.closest?.("[data-community-outcomes]")) t.kill();
-  });
 }

@@ -94,7 +94,7 @@ export const BRIDGE = {
     title: `What to explore next in ${name}`,
     description: "Numbers make more sense next to stories. Pick a path below.",
     cards: [
-      { type: "Next zoom", title: "Nearby communities", description: "Open a group of 3–5 neighbouring communities, then one community.", target: `#ch-map`, tone: "story" },
+      { type: "Next zoom", title: "Nearby communities", description: "Open a group of 3–5 neighbouring communities, then one community.", target: `#/country/${slug}#cp-where`, tone: "story" },
       { type: "Results", title: "What is changing", description: "See how this country fits the wider story in Our results.", target: "#/scorecard/together", tone: "data" },
       { type: "Read more", title: "Stories & reports", description: "Field reports that explain the numbers on this page.", target: "#/field-reports", tone: "story" },
     ],

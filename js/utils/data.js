@@ -1,7 +1,17 @@
 /**
- * Static JSON data layer.
- * Replace fetch() URLs with API endpoints when backend is connected.
+ * Static JSON data layer — public website side of the architecture.
+ *
+ * PA INTERNAL SYSTEMS → DATA / DB → API → PUBLIC WEBSITE
+ * Replace FILES fetch URLs with approved public API endpoints when connected.
+ * Do not load operational/private records into this layer.
  */
+
+import {
+  beginPublicDataLoad,
+  markPublicSourceOk,
+  markPublicSourceFailed,
+  finishPublicDataLoad,
+} from "./public-api.js";
 
 const cache = {};
 
@@ -28,43 +38,74 @@ const FILES = {
   whereWeWork: "data/where-we-work.json",
   aboutPa: "data/about-pa.json",
   newsUpdates: "data/news-updates.json",
+  publicCatalog: "data/public-catalog.json",
 };
 
 async function load(key) {
   if (cache[key]) return cache[key];
-  const res = await fetch(FILES[key]);
-  if (!res.ok) throw new Error(`Failed to load ${key}`);
-  cache[key] = await res.json();
-  return cache[key];
+  try {
+    const res = await fetch(FILES[key]);
+    if (!res.ok) throw new Error(`Failed to load ${key} (${res.status})`);
+    cache[key] = await res.json();
+    markPublicSourceOk(key);
+    return cache[key];
+  } catch (err) {
+    markPublicSourceFailed(key, err);
+    throw err;
+  }
+}
+
+/** Soft-load optional catalog — site still boots if missing. */
+async function loadOptional(key) {
+  if (cache[key]) return cache[key];
+  try {
+    const res = await fetch(FILES[key]);
+    if (!res.ok) throw new Error(`Failed to load ${key} (${res.status})`);
+    cache[key] = await res.json();
+    markPublicSourceOk(key);
+    return cache[key];
+  } catch (err) {
+    markPublicSourceFailed(key, err);
+    return null;
+  }
 }
 
 export async function getAllData() {
-  const [countries, catchments, communities, stories, reports, charts, mapPaths, home, mapMetrics, countryHubs, catchmentHubs, africaIntelligence, geoLocations, scorecard, knowledgeHub, insightsAnalytics, ministryModel, workLocations, ourWork, whereWeWork, aboutPa, newsUpdates] =
-    await Promise.all([
-      load("countries"),
-      load("catchments"),
-      load("communities"),
-      load("stories"),
-      load("reports"),
-      load("charts"),
-      load("mapPaths"),
-      load("home"),
-      load("mapMetrics"),
-      load("countryHubs"),
-      load("catchmentHubs"),
-      load("africaIntelligence"),
-      load("geoLocations"),
-      load("scorecard"),
-      load("knowledgeHub"),
-      load("insightsAnalytics"),
-      load("ministryModel"),
-      load("workLocations"),
-      load("ourWork"),
-      load("whereWeWork"),
-      load("aboutPa"),
-      load("newsUpdates"),
-    ]);
-  return { countries, catchments, communities, stories, reports, charts, mapPaths, home, mapMetrics, countryHubs, catchmentHubs, africaIntelligence, geoLocations, scorecard, knowledgeHub, insightsAnalytics, ministryModel, workLocations, ourWork, whereWeWork, aboutPa, newsUpdates };
+  beginPublicDataLoad();
+
+  const keys = [
+    "countries",
+    "catchments",
+    "communities",
+    "stories",
+    "reports",
+    "charts",
+    "mapPaths",
+    "home",
+    "mapMetrics",
+    "countryHubs",
+    "catchmentHubs",
+    "africaIntelligence",
+    "geoLocations",
+    "scorecard",
+    "knowledgeHub",
+    "insightsAnalytics",
+    "ministryModel",
+    "workLocations",
+    "ourWork",
+    "whereWeWork",
+    "aboutPa",
+    "newsUpdates",
+  ];
+
+  const values = await Promise.all(keys.map((k) => load(k)));
+  const publicCatalog = await loadOptional("publicCatalog");
+  const loadStatus = finishPublicDataLoad();
+
+  const data = Object.fromEntries(keys.map((k, i) => [k, values[i]]));
+  data.publicCatalog = publicCatalog;
+  data.publicLoadStatus = loadStatus;
+  return data;
 }
 
 export function getCountryBySlug(countries, slug) {

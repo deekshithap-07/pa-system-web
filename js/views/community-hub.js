@@ -4,6 +4,7 @@ import {
   getCommunityBySlug,
   getDashboard,
 } from "../utils/data.js";
+import { toPublicCommunity, toPublicCommunityAnalytics } from "../utils/public-api.js";
 import { renderStorySection } from "../components/shared/StoryCards.js";
 import { attachCommunityHubGeoMap } from "../utils/hub-geo-maps.js";
 import {
@@ -24,8 +25,15 @@ export function renderCommunityHub(countrySlug, catchmentSlug, communitySlug, da
   const catchment = getCatchmentBySlug(data.catchments, country.id, catchmentSlug);
   if (!catchment) return { html: `<div class="container static-page"><h1>Community not found</h1></div>` };
 
-  const community = getCommunityBySlug(data.communities, catchment.id, communitySlug);
-  if (!community) return { html: `<div class="container static-page"><h1>Community not found</h1></div>` };
+  const rawCommunity = getCommunityBySlug(data.communities, catchment.id, communitySlug);
+  if (!rawCommunity) return { html: `<div class="container static-page"><h1>Community not found</h1></div>` };
+
+  // Public website only — strip sensitive operational fields at the boundary
+  const community = toPublicCommunity(rawCommunity);
+  const publicAnalyticsRow = toPublicCommunityAnalytics(data.insightsAnalytics, community.id);
+  const analytics = publicAnalyticsRow
+    ? { communityComparison: { communities: [publicAnalyticsRow] } }
+    : null;
 
   const dash = getDashboard(data.charts, `community:${community.id}`);
   const catchmentHub = data.catchmentHubs?.hubs?.[catchment.slug] || null;
@@ -35,7 +43,7 @@ export function renderCommunityHub(countrySlug, catchmentSlug, communitySlug, da
       country,
       catchment,
       dash,
-      analytics: data.insightsAnalytics,
+      analytics,
       programmes: data.home?.ourWork?.programs || null,
       catchmentActivities: catchmentHub?.activities || [],
     },
@@ -49,12 +57,15 @@ export function renderCommunityHub(countrySlug, catchmentSlug, communitySlug, da
     stories: communityStories.length ? communityStories : (data.stories?.stories || []).slice(0, 1),
     communities: data.communities,
     sectionId: "cm-stories",
-    title: communityStories.length ? "Stories changing lives" : "A story from the network",
-    description: "Transformation is easier to understand through people — read the narrative, then explore the data sections above.",
+    title: communityStories.length
+      ? `Transformation story · ${community.name}`
+      : "A transformation story from the network",
+    description:
+      "A public narrative of change in this place — not private household or financial detail.",
     sectionClass: "wb-out__featured wb-out__featured--stories story-section",
   });
 
-  const html = renderCommunityOutcomes(payload, storySection);
+  const html = renderCommunityOutcomes(payload, storySection, data);
 
   return { html, hub: payload };
 }
@@ -62,9 +73,10 @@ export function renderCommunityHub(countrySlug, catchmentSlug, communitySlug, da
 export function mountCommunityHub(root, hub) {
   mountCommunityOutcomes(root, hub);
 
+  // High-level progress only — no leadership radar / sensitive score charts
   const progressCharts = Object.fromEntries(
-    ["impactLine", "leadershipRadar"]
-      .filter((k) => hub.dash.charts?.[k])
+    ["impactLine"]
+      .filter((k) => hub.dash?.charts?.[k])
       .map((k) => [k, hub.dash.charts[k]])
   );
 

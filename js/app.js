@@ -35,6 +35,12 @@ async function boot() {
 
   try {
     const data = await getAllData();
+    if (data.publicLoadStatus?.hasFailures) {
+      console.warn(
+        "[PA public data] Some sources failed:",
+        data.publicLoadStatus.failed
+      );
+    }
     initSearchModal(data);
     initRouter(data);
   } catch (err) {

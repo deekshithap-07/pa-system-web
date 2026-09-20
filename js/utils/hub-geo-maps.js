@@ -4,6 +4,25 @@ import {
   buildCatchmentGeoMapModel,
 } from "../map/utils/hub-geo-data.js";
 
+export function attachCountryHubGeoMap(hub, data) {
+  if (!hub?.country) return hub;
+
+  const catchments = hub.catchments?.length
+    ? hub.catchments
+    : getCatchmentsByCountry(data.catchments, hub.country.id);
+
+  hub.geoMap = buildCountryGeoMapModel({
+    country: hub.country,
+    catchments,
+    communities: data.communities,
+    catchmentMap: hub.catchmentMap,
+    mapPaths: data.mapPaths,
+    geoLocations: data.geoLocations,
+  });
+
+  return hub;
+}
+
 export function attachCatchmentHubGeoMaps(hub, data) {
   if (!hub?.country) return hub;
 

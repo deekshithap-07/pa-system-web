@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+
+# Public SPA — hash routes are indexed via HTML shell + client SEO meta.
+Sitemap: ./sitemap.xml

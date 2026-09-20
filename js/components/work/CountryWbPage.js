@@ -1,10 +1,14 @@
 /**
- * Country hub — “field spotlight” layout (unique to country pages).
- * Not cards: spotlight reel, metric ribbon, index rail, story river, ledger.
+ * Country hub — mini PA country portal (not a dashboard).
+ * Section order matches the country-page content brief.
  */
 
 import { formatNumber } from "../../utils/format.js";
-import { numberCardsFromHub, storiesForCountry } from "../../utils/work-locations.js";
+import { storiesForCountry } from "../../utils/work-locations.js";
+import { renderHubGeoMap, bindHubGeoMap } from "../../map/components/HubGeoMap.js";
+import { resolvePaProgrammes } from "../shared/pa-programmes.js";
+import { renderExploreBridge, BRIDGE } from "../shared/site-bridge.js";
+import { bindPartnerContact } from "../contact-modal.js";
 
 function storyHref(story) {
   return `#/story/${story.slug}`;
@@ -20,100 +24,223 @@ export function featuredStories(data, hub) {
   return storiesForCountry(data, hub.country?.id);
 }
 
-function kpiVal(hub, id) {
-  return hub.kpis?.find((k) => k.id === id)?.value;
+function formatDate(iso) {
+  if (!iso) return "";
+  return new Date(iso).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" });
 }
 
-function insight(hub, id) {
-  return (hub.insights || []).find((i) => i.id === id);
+const STAT_ORDER = ["communities", "pastors", "catchments", "growth", "ppp", "households"];
+
+/* 1 — Country introduction and PA presence */
+export function renderCountryIntro(hub) {
+  const slug = hub.country?.slug || "";
+  const presence = hub.isPaNetwork
+    ? `Possibilities Africa is present in ${hub.countryName} through pastor-led networks, nearby community groups, and a shared two-year journey.`
+    : `This page shares regional context for ${hub.countryName}. Possibilities Africa does not currently operate a full network here.`;
+
+  return `
+    <section class="cp-intro" data-cp-section="intro" aria-labelledby="cp-intro-title">
+      <div class="container cp-intro__inner" data-cp-reveal>
+        <p class="cp-kicker">${hub.heroTagline || "Where we work"}</p>
+        <h1 id="cp-intro-title" class="cp-intro__name">${hub.countryName}</h1>
+        <p class="cp-intro__lead">${hub.overview || hub.description || presence}</p>
+        <p class="cp-intro__presence">${presence}</p>
+        <div class="cp-intro__actions">
+          <a class="cp-btn cp-btn--solid" href="#cp-where">See where PA works</a>
+          <a class="cp-btn cp-btn--ghost" href="#/country/${slug}/stories" data-link>Country stories</a>
+        </div>
+      </div>
+    </section>`;
 }
 
-function overviewTabs(hub) {
-  const name = hub.countryName;
-  const communities = kpiVal(hub, "communities") ?? hub.country?.communities ?? 0;
-  const pastors = kpiVal(hub, "pastors") ?? hub.country?.pastors ?? 0;
+/* 2 — Key statistics */
+export function renderCountryStats(hub) {
+  const byId = Object.fromEntries((hub.kpis || []).map((k) => [k.id, k]));
+  const stats = STAT_ORDER.map((id) => byId[id]).filter(Boolean).slice(0, 5);
+  if (!stats.length) return "";
+
+  const items = stats
+    .map((k) => {
+      const value =
+        k.text ||
+        (typeof k.value === "number"
+          ? k.value >= 1000
+            ? formatNumber(k.value)
+            : `${k.prefix || ""}${k.value}${k.suffix || ""}`
+          : k.value);
+      return `
+        <article class="cp-stats__item" data-cp-reveal>
+          <strong class="cp-stats__value">${value}</strong>
+          <span class="cp-stats__label">${k.label}</span>
+          ${k.trend ? `<span class="cp-stats__trend">${k.trend}</span>` : ""}
+        </article>`;
+    })
+    .join("");
+
+  return `
+    <section class="cp-stats" data-cp-section="stats" aria-labelledby="cp-stats-title">
+      <div class="container">
+        <header class="cp-sec-head" data-cp-reveal>
+          <p class="cp-kicker">Key statistics</p>
+          <h2 id="cp-stats-title" class="cp-sec-title">${hub.countryName} at a glance</h2>
+          <p class="cp-sec-lead">A short national picture — then the places, programmes, and stories behind it.</p>
+        </header>
+        <div class="cp-stats__row">${items}</div>
+      </div>
+    </section>`;
+}
+
+/* 3 — Country map */
+export function renderCountryMapSection(hub) {
+  if (!hub.geoMap) {
+    return `
+      <section class="cp-map" id="cp-map" data-cp-section="map" aria-labelledby="cp-map-title">
+        <div class="container">
+          <header class="cp-sec-head" data-cp-reveal>
+            <p class="cp-kicker">Country map</p>
+            <h2 id="cp-map-title" class="cp-sec-title">Map of ${hub.countryName}</h2>
+            <p class="cp-sec-lead">Catchment mapping will appear as geographic data expands.</p>
+          </header>
+        </div>
+      </section>`;
+  }
+
+  return `
+    <section class="cp-map" id="cp-map" data-cp-section="map" aria-labelledby="cp-map-title">
+      <div class="container">
+        <header class="cp-sec-head" data-cp-reveal>
+          <p class="cp-kicker">Country map</p>
+          <h2 id="cp-map-title" class="cp-sec-title">Map of ${hub.countryName}</h2>
+          <p class="cp-sec-lead">Nearby groups across the country — click a place to open its communities.</p>
+        </header>
+        <div class="cp-map__frame" data-cp-reveal>
+          ${renderHubGeoMap(hub.geoMap, { variant: "full", mapId: "country-portal" })}
+        </div>
+      </div>
+    </section>`;
+}
+
+/* 4 — Where PA is working */
+export function renderCountryWhere(hub) {
   const catchments = hub.catchments || [];
-  const growth = kpiVal(hub, "growth");
-  const live = insight(hub, "livelihood");
-  const agri = insight(hub, "agriculture");
-  const water = insight(hub, "water");
-  const edu = insight(hub, "education");
-  const health = insight(hub, "health");
-  const lead = insight(hub, "leadership");
-  const comm = insight(hub, "community");
-  const placeNames = catchments.map((c) => c.name).filter(Boolean);
-  const placeLine = placeNames.length
-    ? placeNames.length > 1
-      ? `${placeNames.slice(0, -1).join(", ")}, and ${placeNames.at(-1)}`
-      : placeNames[0]
-    : "neighbouring communities";
+  const slug = hub.country?.slug || "";
 
-  const aboutTeaser = hub.overview || hub.description || `Pastor-led work is underway in ${name}.`;
-  const aboutMore = [
-    hub.description && hub.description !== aboutTeaser ? hub.description : "",
-    `The work is grouped simply: the country, then a small cluster of nearby communities, then one community. ${formatNumber(communities)} communities and ${formatNumber(pastors)} pastors are on this journey${growth != null ? `, with ${growth}% growth year on year` : ""}.`,
-  ]
-    .filter(Boolean)
-    .join(" ");
+  const cards = catchments.length
+    ? catchments
+        .map(
+          (c) => `
+        <a class="cp-where__card" href="#/catchment/${slug}/${c.slug}" data-link data-cp-reveal>
+          <strong>${c.name}</strong>
+          <span>${c.region || "Nearby community group"}</span>
+          <span class="cp-where__go">Open group →</span>
+        </a>`
+        )
+        .join("")
+    : `<p class="cp-empty" data-cp-reveal>Nearby groups will appear as the work grows in ${hub.countryName}.</p>`;
 
-  return [
-    { id: "about", label: "About", teaser: aboutTeaser, more: aboutMore },
-    {
-      id: "livelihood",
-      label: "Livelihood",
-      teaser:
-        live?.summary ||
-        agri?.summary ||
-        `Households in ${name} grow income through farming groups, skills, and local enterprise — usually after pastors and faith groups are in place.`,
-      more: [agri?.summary, water?.summary, live?.metric ? `Field tracking notes ${live.metric}.` : ""]
-        .filter(Boolean)
-        .join(" "),
-    },
-    {
-      id: "development",
-      label: "Development",
-      teaser:
-        comm?.summary ||
-        `Daily life in ${name} is changing through water, farming, health, and schools — led by local churches, not by a list of projects dropped in from outside.`,
-      more: [water?.summary, edu?.summary, health?.summary, insight(hub, "climate")?.summary]
-        .filter(Boolean)
-        .join(" "),
-    },
-    {
-      id: "partnership",
-      label: "Partnership",
-      teaser:
-        lead?.summary ||
-        `Possibilities Africa walks with local pastors in ${name} for two years so faith, families, and daily life grow together.`,
-      more: `Pastors coordinate the work in ${placeLine}. Nearby groups of 3–5 communities share training and support, then each community keeps its own story and figures.`,
-    },
-    {
-      id: "results",
-      label: "Results",
-      teaser: `${name} currently reports ${formatNumber(communities)} communities and ${formatNumber(pastors)} pastors${growth != null ? `, with ${growth}% growth` : ""}. These figures sit beside the stories on this page — they do not replace visiting a community.`,
-      more: `${kpiVal(hub, "ppp") != null ? `${kpiVal(hub, "ppp")} partnership projects and ` : ""}${kpiVal(hub, "chips") != null ? `${kpiVal(hub, "chips")} household income groups are tracked. ` : ""}Open a nearby group below to see the people behind the totals.`,
-    },
-    {
-      id: "dashboard",
-      label: "Dashboard",
-      teaser: `A short view of ${name}: ${formatNumber(communities)} communities, ${catchments.length || kpiVal(hub, "catchments") || 0} nearby groups, ${formatNumber(pastors)} pastors.`,
-      more: `For charts across all seven countries, open Our results under What we do. For one place, open a nearby group or a community on this country page.`,
-    },
-  ];
+  return `
+    <section class="cp-where" id="cp-where" data-cp-section="where" aria-labelledby="cp-where-title">
+      <div class="container">
+        <header class="cp-sec-head" data-cp-reveal>
+          <p class="cp-kicker">Where PA is working</p>
+          <h2 id="cp-where-title" class="cp-sec-title">Nearby groups in ${hub.countryName}</h2>
+          <p class="cp-sec-lead">Each group brings 3–5 neighbouring communities together under coordinated pastor leadership.</p>
+        </header>
+        <div class="cp-where__grid">${cards}</div>
+      </div>
+    </section>`;
 }
 
-/** Spotlight story reel — full-bleed active story + peek strips (no cards). */
-export function renderCountryStoryHero(hub, stories = []) {
+/* 5 — Programmes and activities */
+export function renderCountryProgrammes(hub, data) {
+  const programmes = resolvePaProgrammes(data?.home?.ourWork?.programs);
+  const activities = hub.activities || [];
+
+  const progHtml = programmes
+    .map(
+      (p) => `
+      <article class="cp-prog__item cp-prog__item--${p.tone || "maroon"}" data-cp-reveal>
+        <h3>${p.title}</h3>
+        <p>${p.description || p.text}</p>
+        <a href="${p.href || "#/work"}" data-link>Learn more →</a>
+      </article>`
+    )
+    .join("");
+
+  const actHtml = activities.length
+    ? `<ul class="cp-prog__feed">${activities
+        .slice(0, 6)
+        .map(
+          (a) => `<li data-cp-reveal>
+            <time datetime="${a.date || ""}">${formatDate(a.date)}</time>
+            <strong>${a.project}</strong>
+            <span>${a.community}${a.status ? ` · ${a.status}` : ""}</span>
+          </li>`
+        )
+        .join("")}</ul>`
+    : `<p class="cp-empty">Field activities for this country will appear here.</p>`;
+
+  return `
+    <section class="cp-prog" data-cp-section="programmes" aria-labelledby="cp-prog-title">
+      <div class="container">
+        <header class="cp-sec-head" data-cp-reveal>
+          <p class="cp-kicker">Programmes and activities</p>
+          <h2 id="cp-prog-title" class="cp-sec-title">How the work runs in ${hub.countryName}</h2>
+          <p class="cp-sec-lead">The five Possibilities Africa programmes, with recent field activity from this country.</p>
+        </header>
+        <div class="cp-prog__grid">${progHtml}</div>
+        <div class="cp-prog__activities">
+          <h3 class="cp-prog__sub">Recent field activity</h3>
+          ${actHtml}
+        </div>
+      </div>
+    </section>`;
+}
+
+/* 6 — Growth / progress trends */
+export function renderCountryTrends(hub) {
+  const charts = hub.charts || {};
+  const keys = ["growthOverTime", "communitiesAdded", "leadershipDev", "householdsReached"].filter((k) => charts[k]);
+  if (!keys.length) return "";
+
+  const cards = keys
+    .slice(0, 3)
+    .map(
+      (key) => `
+      <article class="cp-trends__card" data-chart="${key}" data-cp-reveal>
+        <h3>${charts[key].title}</h3>
+        <div class="cp-trends__canvas"><canvas aria-label="${charts[key].title}"></canvas></div>
+      </article>`
+    )
+    .join("");
+
+  return `
+    <section class="cp-trends" data-cp-section="trends" aria-labelledby="cp-trends-title">
+      <div class="container">
+        <header class="cp-sec-head" data-cp-reveal>
+          <p class="cp-kicker">Growth and progress</p>
+          <h2 id="cp-trends-title" class="cp-sec-title">Trends in ${hub.countryName}</h2>
+          <p class="cp-sec-lead">How reach and leadership have moved over time — figures that sit beside the stories below.</p>
+        </header>
+        <div class="cp-trends__grid">${cards}</div>
+      </div>
+    </section>`;
+}
+
+/* 7 — Featured transformation stories */
+export function renderCountryFeaturedStories(hub, stories = []) {
   const list = (stories.length ? stories : hub.stories || []).slice(0, 4);
   const allHref = `#/country/${hub.country?.slug || ""}/stories`;
 
   if (!list.length) {
     return `
-      <section class="cp-mast" data-cp-section="mast" aria-label="${hub.countryName}">
-        <div class="container cp-mast__inner" data-cp-reveal>
-          <p class="cp-kicker">${hub.heroTagline || "Where we work"}</p>
-          <h1 class="cp-mast__name">${hub.countryName}</h1>
-          <p class="cp-mast__intro">${hub.description || hub.overview || ""}</p>
+      <section class="cp-stories" data-cp-section="stories" aria-labelledby="cp-stories-title">
+        <div class="container">
+          <header class="cp-sec-head" data-cp-reveal>
+            <p class="cp-kicker">Featured stories</p>
+            <h2 id="cp-stories-title" class="cp-sec-title">Transformation stories from ${hub.countryName}</h2>
+            <p class="cp-sec-lead">Stories from this country will appear here as they are published.</p>
+          </header>
         </div>
       </section>`;
   }
@@ -148,13 +275,16 @@ export function renderCountryStoryHero(hub, stories = []) {
     .join("");
 
   return `
-    <section class="cp-mast" data-cp-section="mast" aria-label="Stories from ${hub.countryName}">
-      <div class="container cp-mast__bar" data-cp-reveal>
-        <div>
-          <p class="cp-kicker">${hub.heroTagline || "PA Network"}</p>
-          <h1 class="cp-mast__name">${hub.countryName}</h1>
-        </div>
-        <a class="cp-text-link" href="${allHref}" data-link>All stories →</a>
+    <section class="cp-stories" data-cp-section="stories" aria-labelledby="cp-stories-title">
+      <div class="container">
+        <header class="cp-sec-head cp-sec-head--row" data-cp-reveal>
+          <div>
+            <p class="cp-kicker">Featured transformation stories</p>
+            <h2 id="cp-stories-title" class="cp-sec-title">Stories from ${hub.countryName}</h2>
+            <p class="cp-sec-lead">People and places where faith, families, and daily life are changing together.</p>
+          </div>
+          <a class="cp-text-link" href="${allHref}" data-link>All stories →</a>
+        </header>
       </div>
       <div class="cp-reel" data-cp-reel>
         <div class="cp-reel__stage">${panels}</div>
@@ -163,198 +293,125 @@ export function renderCountryStoryHero(hub, stories = []) {
     </section>`;
 }
 
-/** Metric ribbon — continuous strip, not chart cards. */
-export function renderByTheNumbers(hub) {
-  const cards = numberCardsFromHub(hub);
-  if (!cards.length) return "";
+/* 8 — Country reports and resources */
+export function renderCountryReports(hub) {
+  const reports = hub.reports || [];
+  const slug = hub.country?.slug || "";
 
-  const items = cards
-    .map(
-      (c, i) => `
-      <article class="cp-ribbon__item" data-cp-ribbon-item style="--i:${i}">
-        <div class="cp-ribbon__meta">
-          <a href="${c.titleHref || "#/scorecard"}" class="cp-ribbon__label" data-link>${c.title}</a>
-          <p class="cp-ribbon__sub">${c.subtitle || ""}</p>
-        </div>
-        <div class="cp-ribbon__chart">
-          <canvas data-wb-num="${c.key}" aria-hidden="true"></canvas>
-          ${c.center ? `<span class="cp-ribbon__center">${c.center}</span>` : ""}
-        </div>
-      </article>`
-    )
-    .join("");
+  const list = reports.length
+    ? `<ul class="cp-reports__list">${reports
+        .map(
+          (r) => `<li data-cp-reveal>
+            <a href="#/field-reports" class="cp-reports__row" data-link>
+              <strong>${r.title}</strong>
+              <span>${r.summary || r.period || ""}</span>
+            </a>
+          </li>`
+        )
+        .join("")}</ul>`
+    : `<p class="cp-empty" data-cp-reveal>Reports for this country will appear here.</p>`;
 
   return `
-    <section class="cp-ribbon" data-cp-section="numbers" data-wb-numbers aria-labelledby="cp-numbers-title">
-      <div class="container">
-        <header class="cp-sec-head" data-cp-reveal>
-          <p class="cp-kicker">By the numbers</p>
-          <h2 id="cp-numbers-title" class="cp-sec-title">${hub.countryName} in figures</h2>
-          <a href="#/scorecard" class="cp-text-link" data-link>Explore Impact &amp; Data →</a>
-        </header>
-        <div class="cp-ribbon__row">
-          <div class="cp-ribbon__track" data-num-track>${items}</div>
-          <div class="cp-ribbon__arrows">
-            <button type="button" class="cp-arrow" data-num-prev aria-label="Previous">‹</button>
-            <button type="button" class="cp-arrow" data-num-next aria-label="Next">›</button>
-          </div>
-        </div>
-      </div>
-    </section>`;
-}
-
-/** Overview — vertical index rail + wash panel (hover/click). */
-export function renderCountryOverview(hub) {
-  const tabs = overviewTabs(hub);
-  return `
-    <section class="cp-index" id="overview" data-cp-section="overview" aria-labelledby="cp-overview-title">
-      <div class="container cp-index__wrap">
-        <header class="cp-sec-head" data-cp-reveal>
-          <p class="cp-kicker">Overview</p>
-          <h2 id="cp-overview-title" class="cp-sec-title">Inside ${hub.countryName}</h2>
-        </header>
-        <div class="cp-index__body" data-cp-index>
-          <div class="cp-index__rail" role="tablist" aria-label="Overview of ${hub.countryName}">
-            ${tabs
-              .map(
-                (t, i) => `<button
-                  type="button"
-                  class="cp-index__tab${i === 0 ? " is-active" : ""}"
-                  role="tab"
-                  id="ov-tab-${t.id}"
-                  aria-selected="${i === 0 ? "true" : "false"}"
-                  aria-controls="tab-${t.id}"
-                  data-ov-tab="${t.id}"
-                ><span>${t.label}</span></button>`
-              )
-              .join("")}
-          </div>
-          <div class="cp-index__panels">
-            ${tabs
-              .map((t, i) => {
-                const more = (t.more || "").trim();
-                const extraHtml =
-                  t.id === "dashboard"
-                    ? `<p>${more.replace(
-                        "open Our results",
-                        `<a href="#/scorecard" data-link>open Impact &amp; Data</a>`
-                      )}</p>`
-                    : `<p>${more}</p>`;
-                return `
-                <div
-                  class="cp-index__panel${i === 0 ? " is-active" : ""}"
-                  id="tab-${t.id}"
-                  role="tabpanel"
-                  data-ov-panel="${t.id}"
-                  ${i === 0 ? "" : "hidden"}
-                >
-                  <p class="cp-index__teaser">${t.teaser}</p>
-                  ${more ? `<div class="cp-index__extra" data-ov-extra hidden>${extraHtml}</div>` : ""}
-                  ${
-                    more
-                      ? `<button type="button" class="cp-index__more" data-ov-more aria-expanded="false">
-                          <span data-ov-more-label>Read more</span>
-                        </button>`
-                      : ""
-                  }
-                </div>`;
-              })
-              .join("")}
-          </div>
-        </div>
-      </div>
-    </section>`;
-}
-
-/** Latest stories — alternating river bands. */
-export function renderCountryLatest(hub, stories) {
-  const all = stories || hub.stories || [];
-  if (all.length <= 3) return "";
-  const list = all.slice(3, 6);
-  if (!list.length) return "";
-  const allHref = `#/country/${hub.country.slug}/stories`;
-
-  const bands = list
-    .map((s, i) => {
-      const src = storyHeroImage(s, hub) || s.image;
-      return `
-        <a class="cp-river__band${i % 2 ? " cp-river__band--flip" : ""}" href="${storyHref(s)}" data-link data-cp-river-band>
-          <span class="cp-river__shot" aria-hidden="true">${src ? `<img src="${src}" alt="" loading="lazy" decoding="async">` : ""}</span>
-          <span class="cp-river__copy">
-            <span class="cp-kicker">${s.program || "Story"}</span>
-            <strong class="cp-river__title">${s.title}</strong>
-            <span class="cp-river__go">Read the story →</span>
-          </span>
-        </a>`;
-    })
-    .join("");
-
-  return `
-    <section class="cp-river" data-cp-section="latest" aria-labelledby="cp-latest-title">
+    <section class="cp-reports" data-cp-section="reports" aria-labelledby="cp-reports-title">
       <div class="container">
         <header class="cp-sec-head cp-sec-head--row" data-cp-reveal>
           <div>
-            <p class="cp-kicker">More from the field</p>
-            <h2 id="cp-latest-title" class="cp-sec-title">The latest from ${hub.countryName}</h2>
-            <p class="cp-sec-lead">Stories from pastors and communities in this country.</p>
+            <p class="cp-kicker">Reports and resources</p>
+            <h2 id="cp-reports-title" class="cp-sec-title">${hub.countryName} field evidence</h2>
+            <p class="cp-sec-lead">Ministry updates and resources tied to this country.</p>
           </div>
-          <a href="${allHref}" class="cp-text-link" data-link>See all stories →</a>
+          <a class="cp-text-link" href="#/field-reports" data-link>Open Field Reports →</a>
         </header>
-        <div class="cp-river__list">${bands}</div>
+        ${list}
+        <div class="cp-reports__more" data-cp-reveal>
+          <a href="#/resources" data-link>Knowledge Hub</a>
+          <a href="#/country/${slug}/data" data-link>Country data page</a>
+          <a href="#/scorecard" data-link>Our results</a>
+        </div>
       </div>
     </section>`;
 }
 
-/** Projects — dual ledger lists. */
-export function renderCountryProjects(hub) {
-  const reports = hub.reports || [];
-  const catchments = hub.catchments || [];
+/* 9 — Recent updates */
+export function renderCountryUpdates(hub, data) {
+  const slug = hub.country?.slug || "";
+  const news = (data?.newsUpdates?.countryUpdates || []).filter((u) => u.slug === slug);
+  const activities = (hub.activities || []).slice(0, 4);
+
+  const newsHtml = news.length
+    ? news
+        .map(
+          (u) => `
+        <article class="cp-updates__item" data-cp-reveal>
+          <span class="cp-updates__when">${u.dateLabel || "Update"}</span>
+          <h3>${u.title}</h3>
+          ${u.href ? `<a href="${u.href}" data-link>Read update →</a>` : ""}
+        </article>`
+        )
+        .join("")
+    : "";
+
+  const actHtml = activities.length
+    ? activities
+        .map(
+          (a) => `
+        <article class="cp-updates__item" data-cp-reveal>
+          <span class="cp-updates__when">${formatDate(a.date)}</span>
+          <h3>${a.project}</h3>
+          <p>${a.community}${a.status ? ` · ${a.status}` : ""}</p>
+        </article>`
+        )
+        .join("")
+    : "";
+
+  const body = newsHtml || actHtml
+    ? `<div class="cp-updates__grid">${newsHtml || actHtml}</div>`
+    : `<p class="cp-empty" data-cp-reveal>Recent updates for ${hub.countryName} will appear here.</p>`;
+
   return `
-    <section class="cp-ledger" data-cp-section="projects" aria-labelledby="cp-projects-title">
+    <section class="cp-updates" data-cp-section="updates" aria-labelledby="cp-updates-title">
+      <div class="container">
+        <header class="cp-sec-head cp-sec-head--row" data-cp-reveal>
+          <div>
+            <p class="cp-kicker">Recent updates</p>
+            <h2 id="cp-updates-title" class="cp-sec-title">What is happening now</h2>
+            <p class="cp-sec-lead">Short notes from the field in ${hub.countryName}.</p>
+          </div>
+          <a class="cp-text-link" href="#/news" data-link>All news →</a>
+        </header>
+        ${body}
+      </div>
+    </section>`;
+}
+
+/* 10 — Contact / engagement */
+export function renderCountryEngage(hub) {
+  const slug = hub.country?.slug || "";
+  const name = hub.countryName;
+  const bridge = BRIDGE.country(slug, name);
+
+  return `
+    <section class="cp-engage" data-cp-section="engage" aria-labelledby="cp-engage-title">
       <div class="container">
         <header class="cp-sec-head" data-cp-reveal>
-          <p class="cp-kicker">Projects &amp; results</p>
-          <h2 id="cp-projects-title" class="cp-sec-title">Nearby groups and reports</h2>
-          <p class="cp-sec-lead">Clusters of communities, and reports from this country.</p>
+          <p class="cp-kicker">Contact and engagement</p>
+          <h2 id="cp-engage-title" class="cp-sec-title">Walk with the work in ${name}</h2>
+          <p class="cp-sec-lead">Partner with Possibilities Africa, open a nearby group, or follow the wider network story.</p>
         </header>
-        <div class="cp-ledger__grid">
-          <div class="cp-ledger__col" data-cp-reveal>
-            <h3 class="cp-ledger__heading">Nearby groups</h3>
-            ${
-              catchments.length
-                ? `<ul class="cp-ledger__list">${catchments
-                    .map(
-                      (c) => `<li>
-                        <a href="#/catchment/${hub.country.slug}/${c.slug}" class="cp-ledger__row" data-link>
-                          <strong>${c.name}</strong>
-                          <span>${c.region || "Open communities"}</span>
-                        </a>
-                      </li>`
-                    )
-                    .join("")}</ul>`
-                : `<p class="cp-ledger__empty">Groups will appear as the work grows.</p>`
-            }
+        <div class="cp-engage__panel" data-cp-reveal>
+          <div>
+            <p>Reach the team about partnership, visits, or prayer for ${name}.</p>
+            <button type="button" class="cp-btn cp-btn--solid" data-partner-contact>Get in touch</button>
           </div>
-          <div class="cp-ledger__col" data-cp-reveal>
-            <h3 class="cp-ledger__heading">Reports</h3>
-            ${
-              reports.length
-                ? `<ul class="cp-ledger__list">${reports
-                    .map(
-                      (r) => `<li>
-                        <a href="#/field-reports" class="cp-ledger__row" data-link>
-                          <strong>${r.title}</strong>
-                          <span>${r.summary || r.period || ""}</span>
-                        </a>
-                      </li>`
-                    )
-                    .join("")}</ul>`
-                : `<p class="cp-ledger__empty">Reports for this country will appear here.</p>`
-            }
+          <div class="cp-engage__links">
+            <a href="#/africa" data-link>Where we work</a>
+            <a href="#/work" data-link>What we do</a>
+            <a href="#/scorecard" data-link>Our results</a>
           </div>
         </div>
       </div>
-    </section>`;
+    </section>
+    ${renderExploreBridge(bridge)}`;
 }
 
 export function bindCountryStoryHero(root) {
@@ -385,63 +442,15 @@ export function bindCountryStoryHero(root) {
   });
 }
 
-export function bindNumbersCarousel(root) {
-  const track = root.querySelector("[data-num-track]");
-  if (!track) return;
-  const prev = root.querySelector("[data-num-prev]");
-  const next = root.querySelector("[data-num-next]");
-  const step = () => Math.min(track.clientWidth * 0.7, 320);
-  prev?.addEventListener("click", () => track.scrollBy({ left: -step(), behavior: "smooth" }));
-  next?.addEventListener("click", () => track.scrollBy({ left: step(), behavior: "smooth" }));
+export function bindCountryMap(root, countrySlug) {
+  bindHubGeoMap(root, { countrySlug });
 }
 
-export function bindOverviewTabs(root) {
-  const tabs = [...root.querySelectorAll("[data-ov-tab]")];
-  const panels = [...root.querySelectorAll("[data-ov-panel]")];
-  if (!tabs.length) return;
-
-  const show = (id) => {
-    tabs.forEach((tab) => {
-      const on = tab.dataset.ovTab === id;
-      tab.classList.toggle("is-active", on);
-      tab.setAttribute("aria-selected", on ? "true" : "false");
-    });
-    panels.forEach((panel) => {
-      const on = panel.dataset.ovPanel === id;
-      panel.classList.toggle("is-active", on);
-      panel.hidden = !on;
-    });
-  };
-
-  tabs.forEach((tab) => {
-    const id = tab.dataset.ovTab;
-    tab.addEventListener("mouseenter", () => show(id));
-    tab.addEventListener("focus", () => show(id));
-    tab.addEventListener("click", () => show(id));
-  });
-
-  root.querySelectorAll("[data-ov-more]").forEach((btn) => {
-    btn.addEventListener("click", () => {
-      const panel = btn.closest("[data-ov-panel]");
-      const extra = panel?.querySelector("[data-ov-extra]");
-      const label = btn.querySelector("[data-ov-more-label]");
-      if (!extra) return;
-      const open = extra.hidden;
-      extra.hidden = !open;
-      btn.classList.toggle("is-open", open);
-      btn.setAttribute("aria-expanded", open ? "true" : "false");
-      if (label) label.textContent = open ? "Read less" : "Read more";
-    });
-  });
-
-  const hash = location.hash.split("#").filter(Boolean).pop();
-  if (hash?.startsWith("tab-")) {
-    const id = hash.slice(4);
-    if (tabs.some((t) => t.dataset.ovTab === id)) show(id);
-  }
+export function bindCountryEngage(root) {
+  return bindPartnerContact(root);
 }
 
-/** Country-page-only motion language (curtain / wipe / ribbon). */
+/** Country-page-only motion language. */
 export function initCountryPageAnimations(root = document) {
   const page = root.querySelector?.("[data-country-hub]") || document.querySelector("[data-country-hub]");
   if (!page || typeof gsap === "undefined") return;
@@ -499,45 +508,24 @@ export function initCountryPageAnimations(root = document) {
     }
   }
 
-  const ribbonItems = page.querySelectorAll("[data-cp-ribbon-item]");
-  if (ribbonItems.length) {
-    gsap.fromTo(
-      ribbonItems,
-      { opacity: 0, y: 30, rotateX: 8 },
-      {
-        opacity: 1,
-        y: 0,
-        rotateX: 0,
-        duration: 0.55,
-        stagger: 0.09,
-        ease: "power3.out",
-        clearProps: "transform",
-        scrollTrigger: {
-          trigger: page.querySelector("[data-cp-section='numbers']"),
-          start: "top 82%",
-          once: true,
-        },
-      }
-    );
-  }
-
-  const riverBands = page.querySelectorAll("[data-cp-river-band]");
-  if (riverBands.length) {
-    riverBands.forEach((band) => {
-      gsap.fromTo(
-        band,
-        { opacity: 0, x: band.classList.contains("cp-river__band--flip") ? 40 : -40 },
-        {
-          opacity: 1,
-          x: 0,
-          duration: 0.7,
-          ease: "power3.out",
-          clearProps: "transform",
-          scrollTrigger: { trigger: band, start: "top 86%", once: true },
-        }
-      );
-    });
-  }
-
   if (typeof ScrollTrigger !== "undefined") ScrollTrigger.refresh();
 }
+
+/* Legacy exports kept so older imports do not break mid-refactor */
+export function renderCountryStoryHero(hub, stories) {
+  return renderCountryFeaturedStories(hub, stories);
+}
+export function renderByTheNumbers(hub) {
+  return renderCountryStats(hub);
+}
+export function renderCountryOverview() {
+  return "";
+}
+export function renderCountryLatest() {
+  return "";
+}
+export function renderCountryProjects(hub) {
+  return renderCountryWhere(hub) + renderCountryReports(hub);
+}
+export function bindNumbersCarousel() {}
+export function bindOverviewTabs() {}

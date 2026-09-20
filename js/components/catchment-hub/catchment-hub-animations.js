@@ -41,7 +41,7 @@ export function mountCatchmentHubAnimations(root) {
     });
   }
 
-  root.querySelectorAll(".cth-academy__tail .wb-out__score, .cth-academy__tail .wb-priorities-band, .cth-academy__tail .wb-out__featured, .cth-academy__tail .wb-out__resources").forEach((section) => {
+  root.querySelectorAll(".cth-academy__tail .wb-out__score, .cth-academy__tail .wb-out__featured, .cth-academy__tail .wb-out__resources").forEach((section) => {
     const items = section.querySelectorAll(".wb-out-metric, .wb-priority-panel, .wb-out-feat, .wb-out-resource");
     if (!items.length) return;
 
@@ -58,6 +58,32 @@ export function mountCatchmentHubAnimations(root) {
             stagger: 0.07,
             ease: "power3.out",
           });
+        },
+      })
+    );
+  });
+
+  root.querySelectorAll("[data-cth-intro]").forEach((block) => {
+    const rises = block.querySelectorAll("[data-cth-rise]");
+    if (!rises.length) return;
+    scrollTriggers.push(
+      ScrollTrigger.create({
+        trigger: block,
+        start: "top 82%",
+        once: true,
+        onEnter: () => {
+          gsap.from(rises, {
+            opacity: 0,
+            y: 32,
+            duration: 0.65,
+            stagger: 0.09,
+            ease: "power3.out",
+            clearProps: "transform",
+          });
+          const mark = block.querySelector(".cth-intro__title-mark");
+          if (mark) {
+            gsap.fromTo(mark, { scaleX: 0 }, { scaleX: 1, duration: 0.55, ease: "power2.out", delay: 0.12 });
+          }
         },
       })
     );

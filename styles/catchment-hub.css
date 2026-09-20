@@ -282,48 +282,187 @@
   padding-top: clamp(1.65rem, 3.2vw, 2.5rem);
 }
 
-.cth-scroll-panel .wb-out__snapshot-head h2,
-.cth-scroll-panel .wb-out__places-head h2,
-.cth-scroll-panel .wb-out__why-grid h2 {
-  color: var(--pa-maroon);
-}
-
-.cth-scroll-panel .wb-out__snapshot-head p,
-.cth-scroll-panel .wb-out__places-head p,
-.cth-scroll-panel .wb-out__why-grid p {
-  color: #5c3a3d;
-}
-
-.cth-scroll-panel .wb-out__eyebrow {
+.cth-scroll-panel .wb-out__eyebrow,
+.cth-intro__eyebrow {
   color: var(--pa-gold);
 }
 
-.cth-scroll-panel .wb-out__snapshot-tile {
-  background: #fff9ef;
-  border-color: rgba(232, 169, 26, 0.32);
-}
-
-.cth-scroll-panel .wb-out__snapshot-tile dt {
-  color: rgba(92, 36, 40, 0.62);
-}
-
-.cth-scroll-panel .wb-out__snapshot-tile dd {
+.cth-scroll-panel .wb-out__places-head h2 {
   color: var(--pa-maroon);
 }
 
-.cth-scroll-panel .wb-out__quote {
-  background: #fff9ef;
-  border-left-color: var(--pa-gold);
-}
-
-.cth-scroll-panel .wb-out__quote cite {
-  color: var(--pa-maroon);
-  font-weight: 700;
+.cth-scroll-panel .wb-out__places-head p {
+  color: #5c3a3d;
 }
 
 .cth-scroll-panel .hub-geo-map {
   border-color: rgba(232, 169, 26, 0.28);
   background: #fff9ef;
+}
+
+/* —— Catchment intro: Region profile · Places · Why —— */
+.cth-intro {
+  --cth-intro-ink: #3a1c1f;
+  --cth-intro-muted: #5c3a3d;
+  position: relative;
+}
+
+.cth-intro__head {
+  max-width: 42rem;
+  margin-bottom: 1.5rem;
+}
+
+.cth-intro__eyebrow {
+  margin: 0 0 0.55rem;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--pa-gold);
+}
+
+.cth-intro__title {
+  position: relative;
+  margin: 0 0 0.85rem;
+  font-size: clamp(1.55rem, 2.6vw, 2.15rem);
+  font-weight: 800;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  color: var(--pa-maroon);
+}
+
+.cth-intro__title-mark {
+  display: block;
+  width: 3.25rem;
+  height: 4px;
+  margin-bottom: 0.75rem;
+  border-radius: 2px;
+  background: linear-gradient(90deg, var(--pa-gold) 0%, var(--pa-maroon) 100%);
+  transform-origin: left center;
+}
+
+.cth-intro__lead {
+  margin: 0;
+  font-size: 1.05rem;
+  line-height: 1.55;
+  color: var(--cth-intro-muted);
+}
+
+.cth-intro__body {
+  margin: 0.85rem 0 0;
+  font-size: 0.98rem;
+  line-height: 1.55;
+  color: var(--cth-intro-muted);
+}
+
+.cth-intro__stats {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.85rem;
+  margin: 0;
+}
+
+.cth-intro__stat {
+  position: relative;
+  margin: 0;
+  padding: 1rem 1.05rem 1.05rem;
+  background: linear-gradient(165deg, #fffef9 0%, #fff5e3 100%);
+  border: 1px solid rgba(232, 169, 26, 0.35);
+  border-radius: 4px;
+  overflow: hidden;
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+}
+
+.cth-intro__stat::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  background: var(--pa-maroon);
+}
+
+.cth-intro__stat--gold::before { background: var(--pa-gold); }
+.cth-intro__stat--green::before { background: var(--pa-green, #2f6b4f); }
+.cth-intro__stat--maroon::before { background: var(--pa-maroon); }
+
+.cth-intro__stat:hover {
+  transform: translateY(-3px);
+  border-color: rgba(232, 169, 26, 0.55);
+  box-shadow: 0 10px 24px rgba(92, 36, 40, 0.08);
+}
+
+.cth-intro__stat dt {
+  margin: 0 0 0.35rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(92, 36, 40, 0.62);
+}
+
+.cth-intro__stat dd {
+  margin: 0;
+  font-size: clamp(1.55rem, 2.4vw, 1.95rem);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  color: var(--pa-maroon);
+  line-height: 1;
+}
+
+.cth-intro__why-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.8fr);
+  gap: 1.75rem 2.25rem;
+  align-items: stretch;
+}
+
+.cth-intro__quote {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 1.5rem 1.4rem 1.4rem 1.55rem;
+  background: linear-gradient(145deg, #fff9ef 0%, #ffe9c2 100%);
+  border: 1px solid rgba(232, 169, 26, 0.4);
+  border-left: 4px solid var(--pa-gold);
+  border-radius: 4px;
+}
+
+.cth-intro__quote blockquote {
+  margin: 0;
+  font-size: 1.05rem;
+  font-weight: 650;
+  line-height: 1.5;
+  color: var(--cth-intro-ink);
+}
+
+.cth-intro__quote cite {
+  display: block;
+  margin-top: 1rem;
+  font-size: 0.78rem;
+  font-style: normal;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--pa-maroon);
+}
+
+@media (max-width: 900px) {
+  .cth-intro__stats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .cth-intro__why-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 580px) {
+  .cth-intro__stats {
+    grid-template-columns: 1fr 1fr;
+  }
 }
 
 .cth-scroll-section--hero {

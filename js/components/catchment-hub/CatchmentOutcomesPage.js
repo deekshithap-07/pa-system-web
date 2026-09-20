@@ -2,10 +2,6 @@ import { formatNumber } from "../../utils/format.js";
 import { renderHubGeoMap, bindHubGeoMap } from "../../map/components/HubGeoMap.js";
 import { highlightCatchmentOnMap } from "../../utils/hub-geo-maps.js";
 import { renderCatchmentScrollShell, wrapScrollStack } from "./catchment-academy-hero.js";
-import { paPriorityTopics } from "../shared/pa-programmes.js";
-import { renderDevelopmentTopics, bindDevelopmentTopics } from "../home-development-topics.js";
-
-let prioritiesBinding = null;
 
 function kpiValue(k) {
   if (k?.text) return k.text;
@@ -22,29 +18,32 @@ function scoreExpected(value) {
 function regionSnapshotHtml(hub) {
   const summary = hub.catchment?.summary || {};
   const tiles = [
-    { label: "Communities", value: summary.communities ?? hub.communities?.length ?? 0 },
-    { label: "Pastors", value: summary.pastors ?? 0 },
-    { label: "Shalom groups", value: summary.shalomGroups ?? 0 },
-    { label: "Households", value: summary.households ?? 0 },
+    { label: "Communities", value: summary.communities ?? hub.communities?.length ?? 0, tone: "maroon" },
+    { label: "Pastors", value: summary.pastors ?? 0, tone: "gold" },
+    { label: "Shalom groups", value: summary.shalomGroups ?? 0, tone: "green" },
+    { label: "Households", value: summary.households ?? 0, tone: "maroon" },
   ];
 
-  return `<div class="wb-out__snapshot-head">
-          <div>
-            <p class="wb-out__eyebrow">Region profile</p>
-            <h2>${hub.catchmentName}${hub.catchment?.region ? ` · ${hub.catchment.region}` : ""}</h2>
-            <p>${hub.overview || hub.description || `Pastor-led work across ${tiles[0].value} communities in this nearby group.`}</p>
-          </div>
-        </div>
-        <dl class="wb-out__snapshot-grid">
-          ${tiles
-            .map(
-              (t) => `<div class="wb-out__snapshot-tile">
-              <dt>${t.label}</dt>
-              <dd>${formatNumber(t.value)}</dd>
-            </div>`
-            )
-            .join("")}
-        </dl>`;
+  return `<div class="cth-intro cth-intro--profile" data-cth-intro="profile">
+          <header class="cth-intro__head" data-cth-rise>
+            <p class="wb-out__eyebrow cth-intro__eyebrow">Region profile</p>
+            <h2 class="cth-intro__title">
+              <span class="cth-intro__title-mark" aria-hidden="true"></span>
+              ${hub.catchmentName}${hub.catchment?.region ? ` · ${hub.catchment.region}` : ""}
+            </h2>
+            <p class="cth-intro__lead">${hub.overview || hub.description || `Pastor-led work across ${tiles[0].value} communities in this nearby group.`}</p>
+          </header>
+          <dl class="cth-intro__stats">
+            ${tiles
+              .map(
+                (t, i) => `<div class="cth-intro__stat cth-intro__stat--${t.tone}" data-cth-rise style="--i:${i}">
+                <dt>${t.label}</dt>
+                <dd>${formatNumber(t.value)}</dd>
+              </div>`
+              )
+              .join("")}
+          </dl>
+        </div>`;
 }
 
 function placesSectionHtml(hub) {
@@ -83,18 +82,23 @@ function placesSectionHtml(hub) {
 }
 
 function whyMatterHtml(hub) {
-  return `<div class="wb-out__why-grid">
-        <div>
-          <p class="wb-out__eyebrow">Why it matters</p>
-          <h2>Why outcomes matter here</h2>
-          <p>${hub.overview || hub.description || `This nearby group brings pastors from neighbouring communities together so training and projects are shared — then each community keeps its own story.`}</p>
-          <p>Figures and field notes help the group see what is working, what needs support, and where to walk next on the two-year journey.</p>
-        </div>
-        <aside class="wb-out__quote">
-          <blockquote>A catchment is how Possibilities Africa groups 3–5 communities under coordinated pastor leadership — country strategy becomes community action here.</blockquote>
-          <cite>Nearby group · ${hub.countryName}</cite>
-        </aside>
-      </div>`;
+  return `<div class="cth-intro cth-intro--why" data-cth-intro="why">
+          <div class="cth-intro__why-grid">
+            <div data-cth-rise>
+              <p class="wb-out__eyebrow cth-intro__eyebrow">Why it matters</p>
+              <h2 class="cth-intro__title">
+                <span class="cth-intro__title-mark" aria-hidden="true"></span>
+                Why outcomes matter here
+              </h2>
+              <p class="cth-intro__lead">${hub.overview || hub.description || `This nearby group brings pastors from neighbouring communities together so training and projects are shared — then each community keeps its own story.`}</p>
+              <p class="cth-intro__body">Figures and field notes help the group see what is working, what needs support, and where to walk next on the two-year journey.</p>
+            </div>
+            <aside class="cth-intro__quote" data-cth-rise>
+              <blockquote>A catchment is how Possibilities Africa groups 3–5 communities under coordinated pastor leadership — country strategy becomes community action here.</blockquote>
+              <cite>Nearby group · ${hub.countryName}</cite>
+            </aside>
+          </div>
+        </div>`;
 }
 
 function renderIntroStack(hub) {
@@ -167,17 +171,6 @@ function renderCommunityBriefs(hub) {
         <div class="wb-out-briefs">${items}</div>
       </div>
     </section>`;
-}
-
-function renderInsightTopics(hub) {
-  return renderDevelopmentTopics({
-    sectionId: "cth-priorities",
-    idPrefix: "cth-",
-    bandClass: "wb-priorities-band--outcomes",
-    titleHtml: `<span class="wb-priorities-band__lead">WHAT IS</span> <strong>CHANGING</strong>`,
-    description: `Five programmes across ${hub.catchmentName} — click + to expand each priority.`,
-    topics: paPriorityTopics(hub.programmes),
-  });
 }
 
 function renderFeaturedStories(hub) {
@@ -289,7 +282,6 @@ export function renderCatchmentOutcomes(hub) {
       ${renderCatchmentScrollShell(hub, scrollSections)}
       <div class="cth-academy__tail">
         ${renderScorecard(hub)}
-        ${renderInsightTopics(hub)}
         ${renderFeaturedStories(hub)}
         ${renderResources(hub)}
       </div>
@@ -306,12 +298,8 @@ export function mountCatchmentOutcomes(root, hub) {
 
   bindHubGeoMap(page, { countrySlug, catchmentSlug });
   highlightCatchmentOnMap(page, catchmentId);
-
-  prioritiesBinding?.destroy?.();
-  prioritiesBinding = bindDevelopmentTopics(page);
 }
 
 export function destroyCatchmentOutcomes() {
-  prioritiesBinding?.destroy?.();
-  prioritiesBinding = null;
+  /* map/bindings cleaned with page teardown */
 }

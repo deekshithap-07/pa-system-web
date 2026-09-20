@@ -61,6 +61,44 @@ function enrichCatchments(catchments, communities, geoLocations) {
   });
 }
 
+function polygonAround(x, y, radius, sides = 6) {
+  const pts = [];
+  for (let i = 0; i < sides; i++) {
+    const a = (Math.PI * 2 * i) / sides - Math.PI / 2;
+    pts.push(`${(x + Math.cos(a) * radius).toFixed(1)},${(y + Math.sin(a) * radius).toFixed(1)}`);
+  }
+  return `M${pts.join(" L")} Z`;
+}
+
+/** Build internal community region borders when schematic paths are missing. */
+export function buildCommunityZonesFromPoints(communities = [], viewBoxString = "") {
+  const pts = (communities || []).filter((c) => c.x != null && c.y != null);
+  if (!pts.length) return [];
+
+  let minDist = Infinity;
+  for (let i = 0; i < pts.length; i++) {
+    for (let j = i + 1; j < pts.length; j++) {
+      const dx = pts[i].x - pts[j].x;
+      const dy = pts[i].y - pts[j].y;
+      minDist = Math.min(minDist, Math.hypot(dx, dy));
+    }
+  }
+
+  const parts = String(viewBoxString).split(/\s+/).map(Number);
+  const span = Math.max(parts[2] || 100, parts[3] || 100);
+  const radius = Number.isFinite(minDist) && minDist > 0
+    ? Math.max(minDist * 0.38, span * 0.035)
+    : span * 0.08;
+
+  return pts.map((c) => ({
+    id: c.id,
+    name: c.name,
+    slug: c.slug || c.id,
+    status: c.status || "active",
+    d: polygonAround(c.x, c.y, radius, 6),
+  }));
+}
+
 export function buildCountryGeoMapModel({ country, catchments, communities, catchmentMap, mapPaths, geoLocations }) {
   const iso = country.isoCode;
   const countryPath = mapPaths?.paths?.[iso] || "";
@@ -140,6 +178,18 @@ export function buildCatchmentGeoMapModel({
         d: entry.path,
       }));
 
+    // Fallback: invent internal borders from community points if paths missing
+    const zones =
+      communityZones.length >= geoCommunities.length
+        ? communityZones
+        : [
+            ...communityZones,
+            ...buildCommunityZonesFromPoints(
+              geoCommunities.filter((c) => !communityZones.some((z) => z.id === c.id || z.slug === c.slug)),
+              viewBox.string
+            ),
+          ];
+
     let bgPath = "";
     const countryPathRaw = mapPaths?.paths?.[country.isoCode] || "";
     if (countryPathRaw) {
@@ -163,7 +213,7 @@ export function buildCatchmentGeoMapModel({
       catchmentBoundary: communityMap.catchmentPath || "",
       viewBox: viewBox.string,
       communities: geoCommunities,
-      communityZones,
+      communityZones: zones,
       catchmentZones: [],
       catchments: [],
     };
@@ -181,6 +231,7 @@ export function buildCatchmentGeoMapModel({
 
   const catchLoc = geoLocations?.catchments?.[catchment.id];
   const catchmentPoint = catchLoc ? attachGeoPoint({ ...catchment }, catchLoc) : null;
+  const communityZones = buildCommunityZonesFromPoints(geoCommunities, viewBox.string);
 
   return {
     mode: "catchment",
@@ -193,6 +244,7 @@ export function buildCatchmentGeoMapModel({
     catchmentPoint,
     viewBox: viewBox.string,
     communities: geoCommunities,
+    communityZones,
     catchmentZones: [],
     catchments: catchmentPoint ? [catchmentPoint] : [],
   };

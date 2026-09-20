@@ -28,6 +28,7 @@ import { renderStoriesHub, mountStoriesHub, destroyStoriesHub } from "./views/st
 import { renderNewsUpdates, mountNewsUpdates, destroyNewsUpdates } from "./views/news-updates.js";
 import { cleanupPageEntry } from "./components/shared/page-entry.js";
 import { syncSiteHeader } from "./utils/header.js";
+import { applyPageSeo } from "./utils/seo.js";
 
 let currentView = null;
 let appData = null;
@@ -292,6 +293,7 @@ function handleRoute() {
   }
 
   currentView = view;
+  applyPageSeo(view, parts, appData, hub);
 
   app.innerHTML = html;
   syncSiteHeader();

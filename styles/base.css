@@ -73,3 +73,42 @@ img { max-width: 100%; display: block; }
   visibility: visible;
   pointer-events: all;
 }
+
+/* Public data freshness — Vision Framework §10 / §13 */
+.pa-freshness {
+  margin: 0.75rem 0 1.25rem;
+  padding: 0.85rem 1rem;
+  background: rgba(92, 36, 40, 0.04);
+  border-left: 3px solid var(--pa-gold);
+}
+
+.pa-freshness__line {
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem 1rem;
+  font-size: 0.78rem;
+  color: var(--pa-muted);
+}
+
+.pa-freshness__label {
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--pa-maroon);
+}
+
+.pa-freshness__warn {
+  display: block;
+  margin-top: 0.45rem;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #9a3412;
+}
+
+.pa-freshness__note {
+  margin: 0.45rem 0 0;
+  font-size: 0.82rem;
+  line-height: 1.5;
+  color: var(--pa-muted);
+}

@@ -9,6 +9,7 @@
 import { formatNumber } from "../../utils/format.js";
 import { formatPaTitle } from "../../utils/pa-title.js";
 import { renderChart, destroyCharts } from "../charts.js";
+import { renderDataFreshness } from "../../utils/public-api.js";
 
 const COUNTRY_METRICS = [
   { key: "communities", label: "Communities" },
@@ -474,6 +475,7 @@ export function renderImpactDataPage(data, section = "overview") {
   return `
     <div class="id-page" data-impact-data data-scroll-target="${SECTION_BY_ROUTE[section] || ""}">
       ${renderHero(sc)}
+      <div class="container">${renderDataFreshness(data, { datasetId: "scorecard" })}</div>
       ${renderIndicators(sc)}
       ${renderGrowth(sc)}
       ${renderProgress(sc)}

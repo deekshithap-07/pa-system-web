@@ -1,0 +1,123 @@
+{
+  "architecture": {
+    "stack": [
+      "PA internal tracking / community system (operational source of truth)",
+      "Data / database layer",
+      "API / data services (approved public payloads only)",
+      "Public PA website (this frontend)"
+    ],
+    "principle": "The website consumes only data intentionally approved for public display. Operational systems remain separate from editorial content."
+  },
+  "roles": {
+    "contentOwner": "Communications / Knowledge Hub",
+    "publisher": "Website editors (CMS when connected)",
+    "approver": "PA leadership — public indicators & community detail level",
+    "dataSteward": "Monitoring & Evaluation / field systems"
+  },
+  "editorialSources": [
+    "stories",
+    "reports",
+    "newsUpdates",
+    "knowledgeHub",
+    "aboutPa",
+    "ourWork",
+    "whereWeWork",
+    "ministryModel",
+    "home"
+  ],
+  "operationalSources": [
+    "countries",
+    "catchments",
+    "communities",
+    "charts",
+    "countryHubs",
+    "catchmentHubs",
+    "scorecard",
+    "insightsAnalytics",
+    "mapMetrics",
+    "geoLocations"
+  ],
+  "datasets": [
+    {
+      "id": "scorecard",
+      "label": "Impact & Data indicators",
+      "updateFrequency": "Quarterly",
+      "lastPublished": "2024-09-15",
+      "lastPublishedLabel": "15 September 2024",
+      "public": true
+    },
+    {
+      "id": "country-hubs",
+      "label": "Country public hubs",
+      "updateFrequency": "Monthly",
+      "lastPublished": "2024-09-15",
+      "lastPublishedLabel": "15 September 2024",
+      "public": true
+    },
+    {
+      "id": "communities",
+      "label": "Community public profiles",
+      "updateFrequency": "Monthly",
+      "lastPublished": "2024-09-15",
+      "lastPublishedLabel": "15 September 2024",
+      "public": true,
+      "notes": "Only fields marked for publicDisplay are shown on community pages."
+    },
+    {
+      "id": "stories",
+      "label": "Transformation stories",
+      "updateFrequency": "As published",
+      "lastPublished": "2024-09-15",
+      "lastPublishedLabel": "15 September 2024",
+      "public": true,
+      "editorial": true
+    },
+    {
+      "id": "reports",
+      "label": "Field reports",
+      "updateFrequency": "Monthly",
+      "lastPublished": "2024-09-15",
+      "lastPublishedLabel": "15 September 2024",
+      "public": true,
+      "editorial": true
+    },
+    {
+      "id": "news",
+      "label": "News & updates",
+      "updateFrequency": "Weekly",
+      "lastPublished": "2024-09-15",
+      "lastPublishedLabel": "15 September 2024",
+      "public": true,
+      "editorial": true
+    }
+  ],
+  "deniedPublicFields": [
+    "participationRate",
+    "income",
+    "financials",
+    "budget",
+    "householdList",
+    "personalContacts",
+    "internalNotes",
+    "operationalIds",
+    "shalomLeaders",
+    "leadershipScore"
+  ],
+  "cms": {
+    "status": "planned",
+    "scope": "Editorial website content — stories, news, pages, reports, and resources",
+    "note": "Operational tracking data stays in PA internal systems; CMS publishes approved editorial content only."
+  },
+  "adminAccess": {
+    "status": "planned",
+    "model": "Role-based access (contentOwner, publisher, approver, dataSteward)",
+    "note": "Any future editorial/admin area must require authenticated roles; the public site remains read-only."
+  },
+  "frontendPrinciples": [
+    "Mobile-first layouts",
+    "Low-data usage (lazy images, deferred maps/charts)",
+    "Reusable components for country pages, community profiles, indicators, charts, and stories",
+    "SEO foundations (title/description/OG/JSON-LD, robots, sitemap)",
+    "Log public data load times and failures — never silently show broken or incomplete sources"
+  ]
+}
