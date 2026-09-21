@@ -1,7 +1,7 @@
 /**
- * News & Updates — stream of PA activity.
+ * News & Updates — living editorial stream of PA activity.
+ * Content/data/routes preserved; presentation only.
  * Sections: News · Country updates · Events · Announcements · Milestones
- * Layout: timeline / ribbon / pulse — not card grids.
  */
 
 import { formatPaTitle } from "../../utils/pa-title.js";
@@ -22,76 +22,112 @@ function linkAttrs(href = "#") {
   return `href="${href}"`;
 }
 
+function parseDateParts(item = {}) {
+  const label = item.dateLabel || "";
+  const iso = item.date || "";
+  let year = "";
+  let day = "";
+  let month = "";
+
+  if (iso && /^\d{4}-\d{2}-\d{2}/.test(iso)) {
+    const d = new Date(`${iso}T12:00:00`);
+    if (!Number.isNaN(d.getTime())) {
+      year = String(d.getFullYear());
+      day = String(d.getDate());
+      month = d.toLocaleString("en-GB", { month: "short" });
+    }
+  }
+
+  if (!year && label) {
+    const yMatch = label.match(/\b(20\d{2})\b/);
+    if (yMatch) year = yMatch[1];
+  }
+
+  return { year, day, month, label };
+}
+
 function renderHero(hero = {}) {
   const image = hero.image || "assets/field-reports/hero.jpg";
   return `
     <header class="nu-hero" data-nu-section="hero">
       <div class="nu-hero__media" aria-hidden="true">
-        <img src="${image}" alt="" fetchpriority="high">
+        <img src="${image}" alt="" fetchpriority="high" data-nu-hero-img>
         <span class="nu-hero__veil"></span>
         <span class="nu-hero__grain"></span>
       </div>
+      <span class="nu-hero__watermark" aria-hidden="true">Now</span>
       <div class="container nu-hero__layout">
-        <div class="nu-hero__inner" data-nu-reveal>
-          <p class="nu-eyebrow nu-eyebrow--on-dark">${hero.eyebrow || "News & Updates"}</p>
-          <h1 class="pa-title nu-hero__title">${formatPaTitle(
+        <div class="nu-hero__inner">
+          <p class="nu-eyebrow nu-eyebrow--on-dark" data-nu-hero-line>${hero.eyebrow || "News & Updates"}</p>
+          <h1 class="pa-title nu-hero__title" data-nu-hero-line>${formatPaTitle(
             {
               titleHtml: hero.titleHtml || "<span>A current stream</span> <em>of PA activity.</em>",
               title: hero.title,
             },
             "A current stream of PA activity."
           )}</h1>
-          <p class="nu-hero__lead">${
+          <p class="nu-hero__lead" data-nu-hero-line>${
             hero.lead ||
             "News, country notes, events, announcements, and milestones across the network."
           }</p>
-          <nav class="nu-hero__jump" aria-label="Update types">
-            ${JUMP.map((j) => `<a href="#${j.id}">${j.label}</a>`).join("")}
-          </nav>
         </div>
       </div>
     </header>`;
 }
 
-function renderRail() {
+function renderNav() {
   return `
-    <div class="nu-rail" data-nu-rail aria-label="Jump to section">
-      <div class="container nu-rail__inner">
-        ${JUMP.map(
-          (j, i) =>
-            `<a class="nu-rail__chip${i === 0 ? " is-active" : ""}" href="#${j.id}" data-nu-chip="${j.id}">${j.label}</a>`
-        ).join("")}
+    <nav class="nu-nav" data-nu-rail aria-label="Update categories">
+      <div class="container nu-nav__inner">
+        <p class="nu-nav__label">Explore</p>
+        <div class="nu-nav__index" role="tablist" aria-label="News categories">
+          ${JUMP.map(
+            (j, i) =>
+              `<a class="nu-nav__item${i === 0 ? " is-active" : ""}" href="#${j.id}" data-nu-chip="${j.id}" style="--i:${i}">
+                <span class="nu-nav__n">${String(i + 1).padStart(2, "0")}</span>
+                <span class="nu-nav__text">${j.label}</span>
+              </a>`
+          ).join("")}
+        </div>
       </div>
-    </div>`;
+    </nav>`;
 }
 
 function renderNews(items = []) {
   const rows = items.length
     ? items
-        .map(
-          (item, i) => `
-      <a class="nu-stream__row" ${linkAttrs(item.href || "#/news")} data-nu-stagger-item style="--i:${i}">
-        <time class="nu-stream__date" datetime="${item.date || ""}">${item.dateLabel || ""}</time>
-        <span class="nu-stream__pulse" aria-hidden="true"></span>
-        <span class="nu-stream__body">
-          <strong>${item.title}</strong>
-          ${item.summary ? `<span class="nu-stream__sum">${item.summary}</span>` : ""}
+        .map((item, i) => {
+          const parts = parseDateParts(item);
+          const flip = i % 2 === 1 ? " nu-entry--flip" : "";
+          return `
+      <a class="nu-entry${flip}" ${linkAttrs(item.href || "#/news")} data-nu-stagger-item data-nu-entry style="--i:${i}">
+        <span class="nu-entry__date" aria-hidden="true">
+          ${parts.year ? `<span class="nu-entry__year">${parts.year}</span>` : ""}
+          <time datetime="${item.date || ""}">${parts.label || item.dateLabel || ""}</time>
         </span>
-        <span class="nu-stream__go" aria-hidden="true">→</span>
-      </a>`
-        )
+        <span class="nu-entry__spine" aria-hidden="true">
+          <span class="nu-entry__mark"></span>
+        </span>
+        <span class="nu-entry__body">
+          <span class="nu-entry__cat">News</span>
+          <strong class="nu-entry__title">${item.title}</strong>
+          ${item.summary ? `<span class="nu-entry__sum">${item.summary}</span>` : ""}
+        </span>
+        <span class="nu-entry__go" aria-hidden="true">→</span>
+      </a>`;
+        })
         .join("")
     : `<p class="nu-empty">No news yet — check back soon.</p>`;
 
   return `
-    <section class="nu-band nu-band--skin-maroon" id="nu-news" data-nu-section="news" aria-labelledby="nu-news-title">
+    <section class="nu-band nu-band--stream" id="nu-news" data-nu-section="news" aria-labelledby="nu-news-title">
       <div class="container">
-        <header class="nu-band__head" data-nu-reveal>
+        <header class="nu-sec-head" data-nu-reveal>
           <p class="nu-eyebrow">News</p>
           <h2 id="nu-news-title" class="pa-title">${formatPaTitle({
             titleHtml: "<span>What just</span> <em>moved.</em>",
           })}</h2>
-          <p class="nu-band__lead">A simple stream of recent PA activity — skim the spine, open what matters.</p>
+          <p class="nu-sec-lead">A simple stream of recent PA activity — skim the spine, open what matters.</p>
         </header>
         <div class="nu-stream" data-nu-stagger>${rows}</div>
       </div>
@@ -102,8 +138,10 @@ function renderCountryUpdates(items = []) {
   const chips = items
     .map(
       (item, i) => `
-    <button type="button" class="nu-country__chip${i === 0 ? " is-active" : ""}" data-nu-country="${item.id}" style="--i:${i}">
-      <span class="nu-country__dot" aria-hidden="true"></span>
+    <button type="button" class="nu-geo__chip${i === 0 ? " is-active" : ""}" data-nu-country="${item.id}" role="tab" aria-selected="${
+      i === 0 ? "true" : "false"
+    }" aria-controls="nu-panel-${item.id}" id="nu-tab-${item.id}" style="--i:${i}">
+      <span class="nu-geo__pin" aria-hidden="true"></span>
       ${item.country}
     </button>`
     )
@@ -112,64 +150,70 @@ function renderCountryUpdates(items = []) {
   const panels = items
     .map(
       (item, i) => `
-    <div class="nu-country__panel${i === 0 ? " is-active" : ""}" data-nu-panel="${item.id}" ${i === 0 ? "" : "hidden"}>
-      <p class="nu-country__when">${item.dateLabel || ""}</p>
-      <p class="nu-country__title">${item.title}</p>
-      <a class="nu-country__link" ${linkAttrs(item.href || `#/country/${item.slug}`)}>Open ${item.country} →</a>
-    </div>`
+    <article class="nu-geo__panel${i === 0 ? " is-active" : ""}" data-nu-panel="${item.id}" id="nu-panel-${item.id}" role="tabpanel" aria-labelledby="nu-tab-${item.id}" ${
+      i === 0 ? "" : "hidden"
+    }>
+      <p class="nu-geo__place">${item.country}</p>
+      <p class="nu-geo__when">${item.dateLabel || ""}</p>
+      <h3 class="nu-geo__title">${item.title}</h3>
+      <a class="nu-geo__link" ${linkAttrs(item.href || `#/country/${item.slug}`)}>Open ${item.country} <span aria-hidden="true">→</span></a>
+    </article>`
     )
     .join("");
 
   return `
-    <section class="nu-band nu-band--skin-green" id="nu-countries" data-nu-section="countries" aria-labelledby="nu-countries-title">
+    <section class="nu-band nu-band--geo" id="nu-countries" data-nu-section="countries" aria-labelledby="nu-countries-title">
       <div class="container">
-        <header class="nu-band__head" data-nu-reveal>
+        <header class="nu-sec-head" data-nu-reveal>
           <p class="nu-eyebrow">Country updates</p>
           <h2 id="nu-countries-title" class="pa-title">${formatPaTitle({
             titleHtml: "<span>Notes from</span> <em>each place.</em>",
           })}</h2>
-          <p class="nu-band__lead">Tap a country. One update at a time — no stacked cards.</p>
+          <p class="nu-sec-lead">Tap a country. One update at a time — no stacked cards.</p>
         </header>
-        <div class="nu-country" data-nu-reveal>
-          <div class="nu-country__chips" role="tablist" aria-label="Countries">${chips}</div>
-          <div class="nu-country__stage" data-nu-stagger>${panels}</div>
+        <div class="nu-geo" data-nu-reveal>
+          <div class="nu-geo__chips" role="tablist" aria-label="Countries">${chips}</div>
+          <div class="nu-geo__stage">${panels}</div>
         </div>
       </div>
     </section>`;
 }
 
 function renderEvents(items = []) {
-  const ribbon = items.length
+  const timeline = items.length
     ? items
         .map(
           (ev, i) => `
-      <a class="nu-event" ${linkAttrs(ev.href || "#/news")} data-nu-stagger-item style="--i:${i}">
+      <a class="nu-event" ${linkAttrs(ev.href || "#/news")} data-nu-stagger-item data-nu-event style="--i:${i}">
         <span class="nu-event__cal" aria-hidden="true">
           <span class="nu-event__month">${ev.month}</span>
           <span class="nu-event__day">${ev.day}</span>
           <span class="nu-event__year">${ev.year}</span>
         </span>
+        <span class="nu-event__rail" aria-hidden="true"><span class="nu-event__dot"></span></span>
         <span class="nu-event__copy">
-          <strong>${ev.title}</strong>
-          <span class="nu-event__place">${ev.place || ""}</span>
+          <span class="nu-event__cat">Event</span>
+          <strong class="nu-event__title">${ev.title}</strong>
+          ${ev.place ? `<span class="nu-event__place">${ev.place}</span>` : ""}
           ${ev.summary ? `<span class="nu-event__sum">${ev.summary}</span>` : ""}
         </span>
+        <span class="nu-event__go" aria-hidden="true">→</span>
       </a>`
         )
         .join("")
     : `<p class="nu-empty">No upcoming events listed yet.</p>`;
 
   return `
-    <section class="nu-band nu-band--skin-gold" id="nu-events" data-nu-section="events" aria-labelledby="nu-events-title">
+    <section class="nu-band nu-band--events" id="nu-events" data-nu-section="events" aria-labelledby="nu-events-title">
       <div class="container">
-        <header class="nu-band__head" data-nu-reveal>
+        <header class="nu-sec-head" data-nu-reveal>
           <p class="nu-eyebrow">Events</p>
           <h2 id="nu-events-title" class="pa-title">${formatPaTitle({
             titleHtml: "<span>Dates on the</span> <em>horizon.</em>",
           })}</h2>
-          <p class="nu-band__lead">A sliding ribbon of gatherings and briefings — swipe or scroll sideways.</p>
+          <p class="nu-sec-lead">A sliding ribbon of gatherings and briefings — swipe or scroll sideways.</p>
         </header>
-        <div class="nu-events-ribbon" data-nu-stagger tabindex="0">${ribbon}</div>
+        <div class="nu-events" data-nu-stagger>${timeline}</div>
       </div>
     </section>`;
 }
@@ -179,26 +223,28 @@ function renderAnnouncements(items = []) {
     ? items
         .map(
           (a, i) => `
-      <a class="nu-tape nu-tape--${a.tone || "maroon"}" ${linkAttrs(a.href || "#/news")} data-nu-stagger-item style="--i:${i}">
-        <span class="nu-tape__label">${a.label || "Note"}</span>
-        <span class="nu-tape__title">${a.title}</span>
-        <span class="nu-tape__go" aria-hidden="true">→</span>
+      <a class="nu-announce nu-announce--${a.tone || "maroon"}" ${linkAttrs(
+            a.href || "#/news"
+          )} data-nu-stagger-item style="--i:${i}">
+        <span class="nu-announce__label">${a.label || "Note"}</span>
+        <span class="nu-announce__title">${a.title}</span>
+        <span class="nu-announce__go" aria-hidden="true">→</span>
       </a>`
         )
         .join("")
     : `<p class="nu-empty">No announcements right now.</p>`;
 
   return `
-    <section class="nu-band nu-band--skin-maroon" id="nu-announce" data-nu-section="announce" aria-labelledby="nu-announce-title">
+    <section class="nu-band nu-band--announce" id="nu-announce" data-nu-section="announce" aria-labelledby="nu-announce-title">
       <div class="container">
-        <header class="nu-band__head" data-nu-reveal>
+        <header class="nu-sec-head" data-nu-reveal>
           <p class="nu-eyebrow">Announcements</p>
           <h2 id="nu-announce-title" class="pa-title">${formatPaTitle({
             titleHtml: "<span>Short notes,</span> <em>front and centre.</em>",
           })}</h2>
-          <p class="nu-band__lead">Banner-style notices — one line, one action.</p>
+          <p class="nu-sec-lead">Banner-style notices — one line, one action.</p>
         </header>
-        <div class="nu-tapes" data-nu-stagger>${tapes}</div>
+        <div class="nu-announces" data-nu-stagger>${tapes}</div>
       </div>
     </section>`;
 }
@@ -208,12 +254,14 @@ function renderMilestones(items = []) {
     ? items
         .map(
           (m, i) => `
-      <li class="nu-mile" data-nu-stagger-item style="--i:${i}">
+      <li class="nu-mile" data-nu-stagger-item data-nu-mile style="--i:${i}">
         <span class="nu-mile__year">${m.year}</span>
-        <span class="nu-mile__node" aria-hidden="true"></span>
+        <span class="nu-mile__track" aria-hidden="true">
+          <span class="nu-mile__node"></span>
+        </span>
         <span class="nu-mile__body">
-          <strong>${m.title}</strong>
-          ${m.summary ? `<span>${m.summary}</span>` : ""}
+          <strong class="nu-mile__title">${m.title}</strong>
+          ${m.summary ? `<span class="nu-mile__sum">${m.summary}</span>` : ""}
         </span>
       </li>`
         )
@@ -221,16 +269,36 @@ function renderMilestones(items = []) {
     : `<li class="nu-empty">Milestones will appear here.</li>`;
 
   return `
-    <section class="nu-band nu-band--skin-green" id="nu-milestones" data-nu-section="milestones" aria-labelledby="nu-milestones-title">
+    <section class="nu-band nu-band--miles" id="nu-milestones" data-nu-section="milestones" aria-labelledby="nu-milestones-title">
       <div class="container">
-        <header class="nu-band__head" data-nu-reveal>
-          <p class="nu-eyebrow">Milestones</p>
+        <header class="nu-sec-head nu-sec-head--on-dark" data-nu-reveal>
+          <p class="nu-eyebrow nu-eyebrow--on-dark">Milestones</p>
           <h2 id="nu-milestones-title" class="pa-title">${formatPaTitle({
             titleHtml: "<span>Markers on the</span> <em>journey.</em>",
           })}</h2>
-          <p class="nu-band__lead">A pulse line through key moments — not a scorecard.</p>
+          <p class="nu-sec-lead nu-sec-lead--on-dark">A pulse line through key moments — not a scorecard.</p>
         </header>
         <ol class="nu-miles" data-nu-stagger>${nodes}</ol>
+      </div>
+    </section>`;
+}
+
+function renderClosing(hero = {}) {
+  return `
+    <section class="nu-close" data-nu-section="close" aria-labelledby="nu-close-title">
+      <div class="container nu-close__inner" data-nu-reveal>
+        <p class="nu-eyebrow">${hero.eyebrow || "News & Updates"}</p>
+        <h2 id="nu-close-title" class="pa-title">${formatPaTitle(
+          {
+            titleHtml: hero.titleHtml || "<span>A current stream</span> <em>of PA activity.</em>",
+            title: hero.title,
+          },
+          "A current stream of PA activity."
+        )}</h2>
+        <p class="nu-close__lead">${
+          hero.lead ||
+          "News, country notes, events, announcements, and milestones across the network."
+        }</p>
       </div>
     </section>`;
 }
@@ -240,12 +308,13 @@ export function renderNewsUpdatesPage(data) {
   return `
     <div class="nu-page" data-news-page>
       ${renderHero(nu.hero)}
-      ${renderRail()}
+      ${renderNav()}
       ${renderNews(nu.news)}
       ${renderCountryUpdates(nu.countryUpdates)}
       ${renderEvents(nu.events)}
       ${renderAnnouncements(nu.announcements)}
       ${renderMilestones(nu.milestones)}
+      ${renderClosing(nu.hero)}
     </div>`;
 }
 
@@ -286,14 +355,15 @@ export function destroyNewsUpdatesPage() {
 }
 
 function initCountrySwitcher(page) {
-  const root = page.querySelector(".nu-country");
+  const root = page.querySelector(".nu-geo");
   if (!root) return () => {};
 
-  const onClick = (e) => {
-    const btn = e.target.closest("[data-nu-country]");
-    if (!btn || !root.contains(btn)) return;
-    const id = btn.dataset.nuCountry;
-    root.querySelectorAll("[data-nu-country]").forEach((b) => b.classList.toggle("is-active", b === btn));
+  const activate = (id) => {
+    root.querySelectorAll("[data-nu-country]").forEach((b) => {
+      const on = b.dataset.nuCountry === id;
+      b.classList.toggle("is-active", on);
+      b.setAttribute("aria-selected", on ? "true" : "false");
+    });
     root.querySelectorAll("[data-nu-panel]").forEach((p) => {
       const on = p.dataset.nuPanel === id;
       p.classList.toggle("is-active", on);
@@ -301,8 +371,36 @@ function initCountrySwitcher(page) {
     });
   };
 
+  const onClick = (e) => {
+    const btn = e.target.closest("[data-nu-country]");
+    if (!btn || !root.contains(btn)) return;
+    activate(btn.dataset.nuCountry);
+  };
+
+  const onKey = (e) => {
+    const btn = e.target.closest("[data-nu-country]");
+    if (!btn || !root.contains(btn)) return;
+    const chips = [...root.querySelectorAll("[data-nu-country]")];
+    const i = chips.indexOf(btn);
+    if (e.key === "ArrowRight" || e.key === "ArrowDown") {
+      e.preventDefault();
+      const next = chips[(i + 1) % chips.length];
+      next.focus();
+      activate(next.dataset.nuCountry);
+    } else if (e.key === "ArrowLeft" || e.key === "ArrowUp") {
+      e.preventDefault();
+      const prev = chips[(i - 1 + chips.length) % chips.length];
+      prev.focus();
+      activate(prev.dataset.nuCountry);
+    }
+  };
+
   root.addEventListener("click", onClick);
-  return () => root.removeEventListener("click", onClick);
+  root.addEventListener("keydown", onKey);
+  return () => {
+    root.removeEventListener("click", onClick);
+    root.removeEventListener("keydown", onKey);
+  };
 }
 
 function initRailSpy(page) {
@@ -331,19 +429,58 @@ function initRailSpy(page) {
 function initNewsMotion(page) {
   if (typeof gsap === "undefined") return;
   if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-    page.querySelectorAll("[data-nu-reveal], [data-nu-stagger-item]").forEach((el) => {
-      el.style.opacity = "1";
-      el.style.transform = "none";
-    });
+    page
+      .querySelectorAll(
+        "[data-nu-reveal], [data-nu-stagger-item], [data-nu-hero-line], [data-nu-entry], [data-nu-event], [data-nu-mile]"
+      )
+      .forEach((el) => {
+        el.style.opacity = "1";
+        el.style.transform = "none";
+        el.style.clipPath = "none";
+      });
     return;
   }
 
-  const heroKids = page.querySelectorAll(".nu-hero__inner > *");
-  if (heroKids.length) {
+  const heroLines = page.querySelectorAll("[data-nu-hero-line]");
+  if (heroLines.length) {
     gsap.fromTo(
-      heroKids,
-      { autoAlpha: 0, y: 20 },
-      { autoAlpha: 1, y: 0, duration: 0.65, stagger: 0.08, ease: "power3.out", clearProps: "transform" }
+      heroLines,
+      { autoAlpha: 0, y: 28 },
+      {
+        autoAlpha: 1,
+        y: 0,
+        duration: 0.7,
+        stagger: 0.1,
+        ease: "power3.out",
+        clearProps: "transform",
+      }
+    );
+  }
+
+  const watermark = page.querySelector(".nu-hero__watermark");
+  if (watermark) {
+    gsap.fromTo(
+      watermark,
+      { autoAlpha: 0, x: -36 },
+      { autoAlpha: 0.1, x: 0, duration: 1, ease: "power2.out", delay: 0.15 }
+    );
+  }
+
+  const heroImg = page.querySelector("[data-nu-hero-img]");
+  if (heroImg && typeof ScrollTrigger !== "undefined") {
+    gsap.fromTo(
+      heroImg,
+      { scale: 1.1 },
+      {
+        scale: 1,
+        ease: "none",
+        scrollTrigger: {
+          trigger: ".nu-hero",
+          start: "top top",
+          end: "bottom top",
+          scrub: 0.65,
+        },
+      }
     );
   }
 
@@ -356,8 +493,8 @@ function initNewsMotion(page) {
         y: 0,
         duration: 0.55,
         ease: "power3.out",
-        scrollTrigger: { trigger: el, start: "top 88%", once: true },
         clearProps: "transform",
+        scrollTrigger: { trigger: el, start: "top 88%", once: true },
       }
     );
   });
@@ -365,16 +502,40 @@ function initNewsMotion(page) {
   page.querySelectorAll("[data-nu-stagger]").forEach((group) => {
     const kids = group.querySelectorAll("[data-nu-stagger-item]");
     if (!kids.length) return;
+
+    const isMiles = group.classList.contains("nu-miles");
+    const isEvents = group.classList.contains("nu-events");
+
     gsap.fromTo(
       kids,
-      { autoAlpha: 0, x: -16 },
+      isMiles
+        ? { autoAlpha: 0, x: -20 }
+        : isEvents
+          ? { autoAlpha: 0, y: 24 }
+          : { autoAlpha: 0, x: -16 },
       {
         autoAlpha: 1,
         x: 0,
-        duration: 0.45,
+        y: 0,
+        duration: 0.55,
         stagger: 0.07,
         ease: "power2.out",
+        clearProps: "transform",
         scrollTrigger: { trigger: group, start: "top 85%", once: true },
+      }
+    );
+  });
+
+  page.querySelectorAll("[data-nu-entry] .nu-entry__year").forEach((el) => {
+    gsap.fromTo(
+      el,
+      { autoAlpha: 0, y: 12 },
+      {
+        autoAlpha: 1,
+        y: 0,
+        duration: 0.5,
+        ease: "power3.out",
+        scrollTrigger: { trigger: el.closest(".nu-entry"), start: "top 88%", once: true },
         clearProps: "transform",
       }
     );
@@ -383,16 +544,33 @@ function initNewsMotion(page) {
   page.querySelectorAll(".nu-mile__node").forEach((node) => {
     gsap.fromTo(
       node,
-      { scale: 0.4, backgroundColor: "rgba(63,154,74,0.2)" },
+      { scale: 0.35 },
       {
         scale: 1,
-        backgroundColor: "var(--pa-green)",
-        duration: 0.5,
-        ease: "back.out(2)",
-        scrollTrigger: { trigger: node, start: "top 80%", once: true },
+        duration: 0.55,
+        ease: "back.out(1.8)",
+        scrollTrigger: { trigger: node, start: "top 82%", once: true },
       }
     );
   });
+
+  const mileTrack = page.querySelector(".nu-miles");
+  if (mileTrack && typeof ScrollTrigger !== "undefined") {
+    gsap.fromTo(
+      mileTrack,
+      { "--nu-mile-draw": 0 },
+      {
+        "--nu-mile-draw": 1,
+        ease: "none",
+        scrollTrigger: {
+          trigger: mileTrack,
+          start: "top 75%",
+          end: "bottom 40%",
+          scrub: 0.5,
+        },
+      }
+    );
+  }
 
   if (typeof ScrollTrigger !== "undefined") ScrollTrigger.refresh();
 }

@@ -92,8 +92,23 @@ async function navigate(path, options = {}) {
     else handleRoute();
   };
 
-  if (useTransition && currentView && currentView !== "landing" && currentView !== "africa") {
-    await transitionTo(apply, { scrollToTop: !isBack && !routeAnchor });
+  if (useTransition && currentView && currentView !== "landing") {
+    const goingToCountry = /^country\//.test(routePath);
+    const goingToCatchment = /^catchment\//.test(routePath);
+    const goingToCommunity = /^community\//.test(routePath);
+    const fromAfrica = currentView === "africa";
+    const fromCountry = currentView === "country";
+    const fromCatchment = currentView === "catchment";
+    const geographic =
+      (goingToCountry && (fromAfrica || fromCountry)) ||
+      (goingToCatchment && (fromCountry || fromCatchment)) ||
+      (goingToCommunity && (fromCatchment || fromCountry));
+    const variant = geographic ? "country" : "default";
+    if (currentView === "africa" && !goingToCountry) {
+      apply();
+    } else {
+      await transitionTo(apply, { scrollToTop: !isBack && !routeAnchor, variant });
+    }
   } else {
     apply();
   }

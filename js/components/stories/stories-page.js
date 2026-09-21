@@ -1,12 +1,10 @@
 /**
- * Stories hub — PA-branded page.
- * Sections only: Hero → Transformation → Community → Leadership → Country → Photo/video
+ * Stories hub — cinematic editorial storytelling (PA brand).
+ * Content/data/routes preserved; presentation only.
  */
 
 import { formatPaTitle } from "../../utils/pa-title.js";
 import { getPaCountries } from "../../utils/work-locations.js";
-
-const SKINS = ["gold", "green", "maroon"];
 
 /** Primary category when story.categories is missing — keeps sections distinct. */
 const CATEGORY_BY_ID = {
@@ -30,6 +28,33 @@ const CATEGORY_BY_ID = {
   "story-ntchisi-health": "leadership",
   "story-mzimba-cooperative": "community",
 };
+
+const CHAPTERS = [
+  {
+    id: "st-transformation",
+    key: "transformation",
+    eyebrow: "Transformation stories",
+    titleHtml: "<span>Lives and places</span> <em>changed.</em>",
+    lead: "Longer arcs of change — what shifted for people, churches, and villages.",
+    label: "Transformation",
+  },
+  {
+    id: "st-community",
+    key: "community",
+    eyebrow: "Community stories",
+    titleHtml: "<span>What villages</span> <em>are doing together.</em>",
+    lead: "Group work, Shalom savings, schools, water, and shared projects.",
+    label: "Community",
+  },
+  {
+    id: "st-leadership",
+    key: "leadership",
+    eyebrow: "Leadership stories",
+    titleHtml: "<span>Pastors and</span> <em>local leaders.</em>",
+    lead: "How trained leaders carry the work into homes and congregations.",
+    label: "Leadership",
+  },
+];
 
 function linkAttrs(href = "#") {
   if (!href) return `href="#"`;
@@ -65,85 +90,33 @@ function filterStories(stories, countryFilter) {
   return stories.filter((s) => s.countryId === countryFilter.id);
 }
 
-function renderCard(story, countries) {
-  const place = countryName(countries, story.countryId);
-  const href = storyHref(story, countries);
-  const img = story.image
-    ? `<img src="${story.image}" alt="" loading="lazy">`
-    : `<span class="st-card__ph" aria-hidden="true"></span>`;
-
-  return `<a class="st-card" ${linkAttrs(href)} data-st-stagger-item>
-    <span class="st-card__media">${img}</span>
-    <span class="st-card__body">
-      <span class="st-card__meta">${place}${story.program ? ` · ${story.program}` : ""}</span>
-      <strong class="st-card__title">${story.title}</strong>
-      <span class="st-card__excerpt">${story.excerpt || ""}</span>
-      <span class="st-card__cta">Read story →</span>
-    </span>
-  </a>`;
+function escapeAttr(s = "") {
+  return String(s).replace(/"/g, "&quot;");
 }
 
-function renderEmpty(label) {
-  return `<p class="st-empty">No ${label.toLowerCase()} yet — check back soon.</p>`;
-}
-
-function renderSection({
-  id,
-  skin,
-  eyebrow,
-  titleHtml,
-  lead,
-  stories,
-  countries,
-  emptyLabel,
-}) {
-  const cards = stories.length
-    ? `<div class="st-grid" data-st-stagger>${stories.map((s) => renderCard(s, countries)).join("")}</div>`
-    : renderEmpty(emptyLabel || eyebrow);
-
-  return `
-    <section class="st-band st-band--skin-${skin}" id="${id}" data-st-section="${id}" aria-labelledby="${id}-title">
-      <div class="container">
-        <header class="st-band__head" data-st-reveal>
-          <p class="st-eyebrow">${eyebrow}</p>
-          <h2 id="${id}-title" class="pa-title">${formatPaTitle({ titleHtml })}</h2>
-          ${lead ? `<p class="st-band__lead">${lead}</p>` : ""}
-        </header>
-        ${cards}
-      </div>
-    </section>`;
-}
-
-function renderHero(countryFilter) {
+function renderHero(countryFilter, heroImage) {
   const titleHtml = countryFilter
     ? `<span>${countryFilter.name}</span> <em>stories.</em>`
     : `<span>Stories</span> <em>that explain the data.</em>`;
   const lead = countryFilter
     ? `Human stories from ${countryFilter.name} that explain the meaning behind the data.`
     : "Human stories that explain the meaning behind the data.";
-  const image = "assets/country-heroes/kenya-hero-farmers.jpg";
+  const image = heroImage || "assets/country-heroes/kenya-hero-farmers.jpg";
 
   return `
     <header class="st-hero" data-st-section="hero">
-      <div class="st-hero__media" aria-hidden="true">
-        <img src="${image}" alt="" fetchpriority="high">
+      <div class="st-hero__media" aria-hidden="true" data-st-parallax>
+        <img src="${image}" alt="" fetchpriority="high" data-st-hero-img>
         <span class="st-hero__veil"></span>
       </div>
       <div class="container st-hero__layout">
-        <div class="st-hero__inner" data-st-reveal>
-          <p class="st-eyebrow st-eyebrow--on-dark">Stories</p>
-          <h1 class="pa-title st-hero__title">${formatPaTitle({ titleHtml }, "Stories.")}</h1>
-          <p class="st-hero__lead">${lead}</p>
-          <nav class="st-hero__jump" aria-label="Story types">
-            <a href="#st-transformation">Transformation</a>
-            <a href="#st-community">Community</a>
-            <a href="#st-leadership">Leadership</a>
-            <a href="#st-country">Country</a>
-            <a href="#st-media">Photo / video</a>
-          </nav>
+        <div class="st-hero__inner">
+          <p class="st-eyebrow st-eyebrow--on-dark" data-st-hero-line>Stories</p>
+          <h1 class="pa-title st-hero__title" data-st-hero-line>${formatPaTitle({ titleHtml }, "Stories.")}</h1>
+          <p class="st-hero__lead" data-st-hero-line>${lead}</p>
           ${
             countryFilter
-              ? `<p class="st-hero__filter"><a ${linkAttrs("#/stories")}>← All stories</a></p>`
+              ? `<p class="st-hero__filter" data-st-hero-line><a ${linkAttrs("#/stories")}>← All stories</a></p>`
               : ""
           }
         </div>
@@ -151,8 +124,133 @@ function renderHero(countryFilter) {
     </header>`;
 }
 
+function renderExplore(chapters, byCat) {
+  const items = chapters
+    .map((ch, i) => {
+      const list = byCat(ch.key);
+      const preview = list.find((s) => s.image)?.image || "";
+      return `<a class="st-explore__item" href="#${ch.id}" data-st-explore="${ch.key}" style="--i:${i}">
+        <span class="st-explore__n">${String(i + 1).padStart(2, "0")}</span>
+        <span class="st-explore__copy">
+          <span class="st-explore__label">${ch.label}</span>
+          <span class="st-explore__count">${list.length} ${list.length === 1 ? "story" : "stories"}</span>
+        </span>
+        <span class="st-explore__go" aria-hidden="true">→</span>
+        ${preview ? `<span class="st-explore__shot" aria-hidden="true"><img src="${preview}" alt="" loading="lazy"></span>` : ""}
+      </a>`;
+    })
+    .join("");
+
+  return `
+    <section class="st-explore" data-st-section="explore" aria-labelledby="st-explore-title">
+      <div class="container">
+        <header class="st-sec-head" data-st-reveal>
+          <p class="st-eyebrow">Story exploration</p>
+          <h2 id="st-explore-title" class="pa-title">${formatPaTitle({
+            titleHtml: "<span>Choose how you</span> <em>enter the story.</em>",
+          })}</h2>
+          <p class="st-sec-lead">Transformation, community, leadership, country, and field media — each path uses the same human stories that explain the meaning behind the data.</p>
+        </header>
+        <nav class="st-explore__index" aria-label="Story types" data-st-stagger>${items}
+          <a class="st-explore__item st-explore__item--place" href="#st-country" data-st-explore="country" style="--i:${chapters.length}">
+            <span class="st-explore__n">${String(chapters.length + 1).padStart(2, "0")}</span>
+            <span class="st-explore__copy">
+              <span class="st-explore__label">Country</span>
+              <span class="st-explore__count">Stories by place</span>
+            </span>
+            <span class="st-explore__go" aria-hidden="true">→</span>
+          </a>
+          <a class="st-explore__item st-explore__item--media" href="#st-media" data-st-explore="media" style="--i:${chapters.length + 1}">
+            <span class="st-explore__n">${String(chapters.length + 2).padStart(2, "0")}</span>
+            <span class="st-explore__copy">
+              <span class="st-explore__label">Photo / video</span>
+              <span class="st-explore__count">From the field</span>
+            </span>
+            <span class="st-explore__go" aria-hidden="true">→</span>
+          </a>
+        </nav>
+      </div>
+    </section>`;
+}
+
+function renderFeatured(stories, countries) {
+  if (!stories.length) return "";
+
+  const features = stories
+    .map((story, i) => {
+      const place = countryName(countries, story.countryId);
+      const href = storyHref(story, countries);
+      const flip = i % 2 === 1 ? " st-feature--flip" : "";
+      const img = story.image
+        ? `<img src="${story.image}" alt="" loading="${i === 0 ? "eager" : "lazy"}" data-st-img>`
+        : `<span class="st-feature__ph" aria-hidden="true"></span>`;
+
+      return `<article class="st-feature${flip}" data-st-feature data-st-reveal>
+        <a class="st-feature__media" ${linkAttrs(href)} tabindex="-1" aria-hidden="true">
+          <span class="st-feature__frame">${img}</span>
+        </a>
+        <div class="st-feature__copy">
+          <p class="st-feature__meta">${place}${story.program ? ` · ${story.program}` : ""}</p>
+          <h3 class="st-feature__title"><a ${linkAttrs(href)}>${story.title}</a></h3>
+          <p class="st-feature__excerpt">${story.excerpt || ""}</p>
+          <a class="st-feature__cta" ${linkAttrs(href)}>Read story <span aria-hidden="true">→</span></a>
+        </div>
+      </article>`;
+    })
+    .join("");
+
+  return `
+    <section class="st-featured" data-st-section="featured" aria-labelledby="st-featured-title">
+      <div class="container">
+        <header class="st-sec-head" data-st-reveal>
+          <p class="st-eyebrow">Featured stories</p>
+          <h2 id="st-featured-title" class="pa-title">${formatPaTitle({
+            titleHtml: "<span>Where the numbers</span> <em>become people.</em>",
+          })}</h2>
+        </header>
+        <div class="st-featured__stage">${features}</div>
+      </div>
+    </section>`;
+}
+
+function renderStoryRow(story, countries, index) {
+  const place = countryName(countries, story.countryId);
+  const href = storyHref(story, countries);
+  const thumb = story.image
+    ? `<img src="${story.image}" alt="" loading="lazy">`
+    : `<span class="st-row__ph" aria-hidden="true"></span>`;
+
+  return `<a class="st-row" ${linkAttrs(href)} data-st-stagger-item style="--i:${index}">
+    <span class="st-row__n">${String(index + 1).padStart(2, "0")}</span>
+    <span class="st-row__shot">${thumb}</span>
+    <span class="st-row__body">
+      <span class="st-row__meta">${place}${story.program ? ` · ${story.program}` : ""}</span>
+      <strong class="st-row__title">${story.title}</strong>
+      <span class="st-row__excerpt">${story.excerpt || ""}</span>
+    </span>
+    <span class="st-row__go" aria-hidden="true">→</span>
+  </a>`;
+}
+
+function renderChapter(cfg, stories, countries) {
+  const rows = stories.length
+    ? `<div class="st-archive" data-st-stagger>${stories.map((s, i) => renderStoryRow(s, countries, i)).join("")}</div>`
+    : `<p class="st-empty">No ${cfg.eyebrow.toLowerCase()} yet — check back soon.</p>`;
+
+  return `
+    <section class="st-chapter st-chapter--${cfg.key}" id="${cfg.id}" data-st-section="${cfg.id}" aria-labelledby="${cfg.id}-title">
+      <div class="container">
+        <header class="st-sec-head" data-st-reveal>
+          <p class="st-eyebrow">${cfg.eyebrow}</p>
+          <h2 id="${cfg.id}-title" class="pa-title">${formatPaTitle({ titleHtml: cfg.titleHtml })}</h2>
+          ${cfg.lead ? `<p class="st-sec-lead">${cfg.lead}</p>` : ""}
+        </header>
+        ${rows}
+      </div>
+    </section>`;
+}
+
 function renderCountrySection(stories, countries, allStories) {
-  /* Prefer stories tagged/mapped as country; else one featured story per country. */
   let countryStories = stories.filter((s) => storyCategory(s) === "country");
 
   if (!countryStories.length) {
@@ -170,76 +268,108 @@ function renderCountrySection(stories, countries, allStories) {
   }
 
   const cards = countries
-    .map((c) => {
+    .map((c, i) => {
       const featured =
         countryStories.find((s) => s.countryId === c.id) ||
         allStories.find((s) => s.countryId === c.id);
       const count = allStories.filter((s) => s.countryId === c.id).length;
       if (!featured && !count) {
-        return `<article class="st-country" data-st-stagger-item>
-          <p class="st-country__name">${c.name}</p>
-          <p class="st-country__meta">Stories coming soon</p>
+        return `<article class="st-place" data-st-stagger-item style="--i:${i}">
+          <span class="st-place__n">${String(i + 1).padStart(2, "0")}</span>
+          <span class="st-place__body">
+            <p class="st-place__name">${c.name}</p>
+            <p class="st-place__meta">Stories coming soon</p>
+          </span>
         </article>`;
       }
-      return `<a class="st-country" ${linkAttrs(`#/stories/${c.slug}`)} data-st-stagger-item>
-        <p class="st-country__name">${c.name}</p>
-        <p class="st-country__meta">${count} ${count === 1 ? "story" : "stories"}</p>
-        ${featured ? `<strong class="st-country__feature">${featured.title}</strong>` : ""}
-        <span class="st-country__cta">Explore →</span>
+      const shot = featured?.image
+        ? `<span class="st-place__shot" aria-hidden="true"><img src="${featured.image}" alt="" loading="lazy"></span>`
+        : "";
+      return `<a class="st-place" ${linkAttrs(`#/stories/${c.slug}`)} data-st-stagger-item style="--i:${i}">
+        <span class="st-place__n">${String(i + 1).padStart(2, "0")}</span>
+        ${shot}
+        <span class="st-place__body">
+          <p class="st-place__name">${c.name}</p>
+          <p class="st-place__meta">${count} ${count === 1 ? "story" : "stories"}</p>
+          ${featured ? `<strong class="st-place__feature">${featured.title}</strong>` : ""}
+        </span>
+        <span class="st-place__go" aria-hidden="true">→</span>
       </a>`;
     })
     .join("");
 
   return `
-    <section class="st-band st-band--skin-gold" id="st-country" data-st-section="country" aria-labelledby="st-country-title">
+    <section class="st-places" id="st-country" data-st-section="country" aria-labelledby="st-country-title">
       <div class="container">
-        <header class="st-band__head" data-st-reveal>
+        <header class="st-sec-head" data-st-reveal>
           <p class="st-eyebrow">Country stories</p>
           <h2 id="st-country-title" class="pa-title">${formatPaTitle({
             titleHtml: "<span>Stories by</span> <em>place.</em>",
           })}</h2>
-          <p class="st-band__lead">Open a country to read field stories from that part of the network.</p>
+          <p class="st-sec-lead">Open a country to read field stories from that part of the network.</p>
         </header>
-        <div class="st-country-grid" data-st-stagger>${cards}</div>
+        <div class="st-places__index" data-st-stagger>${cards}</div>
       </div>
     </section>`;
 }
 
 function renderMediaSection(media = []) {
   const items = (media || [])
-    .map(
-      (m) => `<figure class="st-media" data-st-stagger-item>
+    .map((m, i) => {
+      const wide = i % 5 === 0 || i % 5 === 3 ? " st-media--wide" : "";
+      return `<figure class="st-media${wide}" data-st-stagger-item style="--i:${i}">
         ${
           m.type === "video" && m.src
-            ? `<video src="${m.src}" controls poster="${m.poster || ""}"></video>`
+            ? `<video src="${escapeAttr(m.src)}" controls playsinline preload="metadata" poster="${escapeAttr(m.poster || "")}"></video>`
             : m.src
-              ? `<img src="${m.src}" alt="${m.alt || ""}" loading="lazy">`
+              ? `<img src="${escapeAttr(m.src)}" alt="${escapeAttr(m.alt || "")}" loading="lazy" data-st-img>`
               : `<span class="st-media__blank" aria-hidden="true"></span>`
         }
         ${m.caption ? `<figcaption>${m.caption}</figcaption>` : ""}
-      </figure>`
-    )
+      </figure>`;
+    })
     .join("");
 
   return `
-    <section class="st-band st-band--skin-maroon" id="st-media" data-st-section="media" aria-labelledby="st-media-title">
+    <section class="st-media-band" id="st-media" data-st-section="media" aria-labelledby="st-media-title">
       <div class="container">
-        <header class="st-band__head" data-st-reveal>
-          <p class="st-eyebrow">Photo / video</p>
+        <header class="st-sec-head st-sec-head--on-dark" data-st-reveal>
+          <p class="st-eyebrow st-eyebrow--on-dark">Photo / video</p>
           <h2 id="st-media-title" class="pa-title">${formatPaTitle({
             titleHtml: "<span>From the</span> <em>field.</em>",
           })}</h2>
-          <p class="st-band__lead">Photos and video from communities across the network.</p>
+          <p class="st-sec-lead st-sec-lead--on-dark">Photos and video from communities across the network.</p>
         </header>
         ${
           items
-            ? `<div class="st-media-grid" data-st-stagger>${items}</div>`
+            ? `<div class="st-media-mosaic" data-st-stagger>${items}</div>`
             : `<div class="st-media-blank" data-st-reveal>
                 <p>Photo and video content will appear here soon.</p>
               </div>`
         }
       </div>
     </section>`;
+}
+
+function pickFeatured(stories) {
+  const picks = [];
+  const seen = new Set();
+  for (const key of ["transformation", "community", "leadership"]) {
+    const hit = stories.find((s) => storyCategory(s) === key && s.image && !seen.has(s.id));
+    if (hit) {
+      seen.add(hit.id);
+      picks.push(hit);
+    }
+  }
+  if (picks.length < 2) {
+    for (const s of stories) {
+      if (seen.has(s.id) || !s.image) continue;
+      picks.push(s);
+      seen.add(s.id);
+      if (picks.length >= 3) break;
+    }
+  }
+  return picks.slice(0, 3);
 }
 
 export function renderStoriesPage(data, countrySlug = null) {
@@ -250,50 +380,16 @@ export function renderStoriesPage(data, countrySlug = null) {
   const allStories = data.stories?.stories || [];
   const stories = filterStories(allStories, countryFilter);
   const media = data.stories?.media || [];
-
   const byCat = (cat) => stories.filter((s) => storyCategory(s) === cat);
-
-  const sections = [
-    {
-      id: "st-transformation",
-      skin: SKINS[0],
-      eyebrow: "Transformation stories",
-      titleHtml: "<span>Lives and places</span> <em>changed.</em>",
-      lead: "Longer arcs of change — what shifted for people, churches, and villages.",
-      stories: byCat("transformation"),
-      emptyLabel: "transformation stories",
-    },
-    {
-      id: "st-community",
-      skin: SKINS[1],
-      eyebrow: "Community stories",
-      titleHtml: "<span>What villages</span> <em>are doing together.</em>",
-      lead: "Group work, Shalom savings, schools, water, and shared projects.",
-      stories: byCat("community"),
-      emptyLabel: "community stories",
-    },
-    {
-      id: "st-leadership",
-      skin: SKINS[2],
-      eyebrow: "Leadership stories",
-      titleHtml: "<span>Pastors and</span> <em>local leaders.</em>",
-      lead: "How trained leaders carry the work into homes and congregations.",
-      stories: byCat("leadership"),
-      emptyLabel: "leadership stories",
-    },
-  ];
+  const featured = pickFeatured(stories);
+  const heroImage = featured[0]?.image || stories.find((s) => s.image)?.image;
 
   return `
     <div class="st-page" data-stories-page>
-      ${renderHero(countryFilter)}
-      ${sections
-        .map((cfg) =>
-          renderSection({
-            ...cfg,
-            countries,
-          })
-        )
-        .join("")}
+      ${renderHero(countryFilter, heroImage)}
+      ${renderExplore(CHAPTERS, byCat)}
+      ${renderFeatured(featured, countries)}
+      ${CHAPTERS.map((cfg) => renderChapter(cfg, byCat(cfg.key), countries)).join("")}
       ${renderCountrySection(stories, countryFilter ? [countryFilter] : countries, allStories)}
       ${renderMediaSection(media)}
     </div>`;
@@ -317,35 +413,68 @@ export function mountStoriesPage() {
 function initStoriesMotion(page) {
   if (typeof gsap === "undefined") return;
   if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-    page.querySelectorAll("[data-st-reveal], [data-st-stagger] > *").forEach((el) => {
+    page.querySelectorAll("[data-st-reveal], [data-st-stagger] > *, [data-st-hero-line], [data-st-feature]").forEach((el) => {
       el.style.opacity = "1";
       el.style.transform = "none";
+      el.style.clipPath = "none";
     });
     return;
   }
 
-  const heroKids = page.querySelectorAll(".st-hero__inner > *");
-  if (heroKids.length) {
+  const heroLines = page.querySelectorAll("[data-st-hero-line]");
+  if (heroLines.length) {
     gsap.fromTo(
-      heroKids,
-      { autoAlpha: 0, y: 18 },
-      { autoAlpha: 1, y: 0, duration: 0.6, stagger: 0.07, ease: "power3.out", clearProps: "transform" }
+      heroLines,
+      { autoAlpha: 0, y: 28 },
+      { autoAlpha: 1, y: 0, duration: 0.7, stagger: 0.1, ease: "power3.out", clearProps: "transform" }
+    );
+  }
+
+  const heroImg = page.querySelector("[data-st-hero-img]");
+  if (heroImg && typeof ScrollTrigger !== "undefined") {
+    gsap.fromTo(
+      heroImg,
+      { scale: 1.12 },
+      {
+        scale: 1,
+        ease: "none",
+        scrollTrigger: { trigger: ".st-hero", start: "top top", end: "bottom top", scrub: 0.6 },
+      }
     );
   }
 
   page.querySelectorAll("[data-st-reveal]").forEach((el) => {
+    const isFeature = el.hasAttribute("data-st-feature");
     gsap.fromTo(
       el,
-      { autoAlpha: 0, y: 20 },
+      isFeature
+        ? { autoAlpha: 0, y: 36 }
+        : { autoAlpha: 0, y: 22 },
       {
         autoAlpha: 1,
         y: 0,
-        duration: 0.55,
+        duration: isFeature ? 0.75 : 0.55,
         ease: "power3.out",
         clearProps: "transform",
-        scrollTrigger: { trigger: el, start: "top 88%", once: true },
+        scrollTrigger: { trigger: el, start: "top 86%", once: true },
       }
     );
+
+    if (isFeature) {
+      const frame = el.querySelector(".st-feature__frame");
+      if (frame) {
+        gsap.fromTo(
+          frame,
+          { clipPath: "inset(12% 8% 12% 8%)" },
+          {
+            clipPath: "inset(0% 0% 0% 0%)",
+            duration: 0.9,
+            ease: "power3.out",
+            scrollTrigger: { trigger: el, start: "top 82%", once: true },
+          }
+        );
+      }
+    }
   });
 
   page.querySelectorAll("[data-st-stagger]").forEach((group) => {
@@ -353,15 +482,33 @@ function initStoriesMotion(page) {
     if (!kids.length) return;
     gsap.fromTo(
       kids,
-      { autoAlpha: 0, y: 16 },
+      { autoAlpha: 0, x: -14 },
       {
         autoAlpha: 1,
-        y: 0,
-        duration: 0.45,
+        x: 0,
+        duration: 0.5,
         stagger: 0.06,
         ease: "power2.out",
         clearProps: "transform",
         scrollTrigger: { trigger: group, start: "top 88%", once: true },
+      }
+    );
+  });
+
+  page.querySelectorAll("[data-st-img]").forEach((img) => {
+    if (typeof ScrollTrigger === "undefined") return;
+    gsap.fromTo(
+      img,
+      { scale: 1.06 },
+      {
+        scale: 1,
+        ease: "none",
+        scrollTrigger: {
+          trigger: img.closest("figure, .st-feature__media, .st-row__shot") || img,
+          start: "top bottom",
+          end: "bottom top",
+          scrub: 0.8,
+        },
       }
     );
   });

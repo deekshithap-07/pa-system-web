@@ -7,6 +7,7 @@ import {
   bindOurWorkPrograms,
   renderImpactDataBand,
   renderStoriesBand,
+  bindStoriesBand,
   renderKnowledgeNewsSplit,
   renderPartnerBanner,
 } from "../components/home-design.js";
@@ -60,6 +61,7 @@ export function mountHome(data) {
     try {
       bindAfricaCountrySelect(document, data);
       bindOurWorkPrograms(document, data.home?.ourWork || {});
+      bindStoriesBand(document);
     } catch (err) {
       console.error("[mountHome] country select bind failed:", err);
     }

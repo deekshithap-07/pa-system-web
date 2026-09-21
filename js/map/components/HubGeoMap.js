@@ -6,11 +6,12 @@ function catchmentIdToSlug(id) {
   return id?.replace(/_/g, "-") || "";
 }
 
-/** Compact label size — plain text beside dots. */
+/** Label size in SVG user units — readable on hub / community maps. */
 function labelFontSize(viewBox, { variant = "country" } = {}) {
   const parts = String(viewBox || "0 0 100 100").split(/\s+/).map(Number);
   const span = Math.max(parts[2] || 100, parts[3] || 100);
-  if (variant === "schematic") return Math.max(7, Math.min(8, span * 0.03));
+  if (variant === "schematic") return Math.max(11, Math.min(15, span * 0.048));
+  if (variant === "catchment") return Math.max(11, Math.min(15, span * 0.045));
   return Math.max(7.5, Math.min(9, span * 0.032));
 }
 
@@ -82,7 +83,7 @@ export function renderHubGeoMap(model, { variant = "full", mapId = "hub-geo-map"
   const communityMarkers = communitiesFocus
     ? (model.communities || [])
         .filter((c) => c.x != null)
-        .map((c) => renderMarker(c.x, c.y, "hub-geo-map__community-anchor", c.id, c.slug, 3.5))
+        .map((c) => renderMarker(c.x, c.y, "hub-geo-map__community-anchor", c.id, c.slug, 5.5))
         .join("")
     : "";
 
@@ -97,6 +98,7 @@ export function renderHubGeoMap(model, { variant = "full", mapId = "hub-geo-map"
 
   const svg = `
     <svg class="hub-geo-map__svg" viewBox="${model.viewBox}" role="img"
+      preserveAspectRatio="xMidYMid meet"
       aria-label="${model.mode === "catchment" ? `Map of ${model.catchmentName} communities` : `Map of ${model.countryName} catchments`}">
       ${model.countryPath ? `<path class="hub-geo-map__country" d="${model.countryPath}" />` : ""}
       <g class="hub-geo-map__zones">${zones}</g>

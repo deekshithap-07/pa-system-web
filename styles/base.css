@@ -74,6 +74,12 @@ img { max-width: 100%; display: block; }
   pointer-events: all;
 }
 
+#transition-overlay.is-country-enter {
+  background:
+    radial-gradient(ellipse at 50% 40%, rgba(232, 169, 26, 0.28), transparent 55%),
+    linear-gradient(160deg, #1a0a0c 0%, #5c2428 60%, #3d181c 100%);
+}
+
 /* Public data freshness — Vision Framework §10 / §13 */
 .pa-freshness {
   margin: 0.75rem 0 1.25rem;

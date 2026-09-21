@@ -5,7 +5,7 @@ export function initLandingAnimations() {
 
   const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   if (reduce) {
-    document.querySelectorAll(".home-page [data-reveal], .home-page [data-stagger] > *").forEach((el) => {
+    document.querySelectorAll(".home-page [data-reveal], .home-page [data-stagger] > *, .home-page [data-pa-africa-rise]").forEach((el) => {
       el.style.opacity = "1";
       el.style.transform = "none";
     });
@@ -16,6 +16,8 @@ export function initLandingAnimations() {
   initHomeScrollStack();
   initHomeSectionMotion();
   initImpactCounters();
+  initAfricaEditorialMotion();
+  initKnowNewsMotion();
   initNetworkFlowAnimations();
 }
 
@@ -333,6 +335,149 @@ function initImpactCounters() {
       },
     });
   });
+}
+
+function initAfricaEditorialMotion() {
+  const section = document.querySelector(".pa-africa");
+  if (!section || typeof ScrollTrigger === "undefined") return;
+
+  const rises = section.querySelectorAll("[data-pa-africa-rise]");
+  if (rises.length) {
+    gsap.fromTo(
+      rises,
+      { autoAlpha: 0, y: 28 },
+      {
+        autoAlpha: 1,
+        y: 0,
+        duration: 0.7,
+        stagger: 0.11,
+        ease: "power3.out",
+        clearProps: "transform",
+        scrollTrigger: { trigger: section.querySelector(".pa-africa__top") || section, start: "top 78%", once: true },
+      }
+    );
+  }
+
+  const ring = section.querySelector(".pa-africa__geo-ring circle");
+  const dots = section.querySelectorAll(".pa-africa__geo-dot");
+  if (ring) {
+    gsap.set(ring, { strokeDasharray: 1, strokeDashoffset: 1 });
+    if (dots.length) gsap.set(dots, { autoAlpha: 0 });
+
+    ScrollTrigger.create({
+      trigger: section.querySelector(".pa-africa__top") || section,
+      start: "top 78%",
+      once: true,
+      onEnter: () => {
+        gsap.to(ring, {
+          strokeDashoffset: 0,
+          duration: 1.35,
+          ease: "power2.out",
+        });
+        if (dots.length) {
+          gsap.to(dots, {
+            autoAlpha: 1,
+            duration: 0.45,
+            stagger: 0.12,
+            delay: 0.35,
+            ease: "power2.out",
+            onComplete: () => {
+              gsap.set(dots, { clearProps: "opacity,visibility" });
+              section.classList.add("is-geo-ready");
+            },
+          });
+        } else {
+          section.classList.add("is-geo-ready");
+        }
+      },
+    });
+  }
+
+  const stats = section.querySelectorAll("[data-pa-count]");
+  stats.forEach((el) => {
+    const target = Number(el.dataset.paCount);
+    if (!Number.isFinite(target)) return;
+    const prefix = el.dataset.paCountPrefix || "";
+    const suffix = el.dataset.paCountSuffix || "";
+    const obj = { val: 0 };
+    el.textContent = `${prefix}0${suffix}`;
+
+    ScrollTrigger.create({
+      trigger: el,
+      start: "top 88%",
+      once: true,
+      onEnter: () => {
+        gsap.to(obj, {
+          val: target,
+          duration: 1.8,
+          ease: "power2.out",
+          onUpdate: () => {
+            const n = Math.round(obj.val);
+            el.textContent = `${prefix}${target >= 1000 ? formatNumber(n) : n}${suffix}`;
+          },
+        });
+      },
+    });
+  });
+
+  const countries = section.querySelectorAll(".pa-africa__country");
+  if (countries.length) {
+    gsap.fromTo(
+      countries,
+      { autoAlpha: 0, y: 12 },
+      {
+        autoAlpha: 1,
+        y: 0,
+        duration: 0.45,
+        stagger: 0.05,
+        delay: 0.15,
+        ease: "power2.out",
+        clearProps: "transform",
+        scrollTrigger: { trigger: section.querySelector(".pa-africa__nav") || section, start: "top 82%", once: true },
+      }
+    );
+  }
+}
+
+function initKnowNewsMotion() {
+  if (typeof ScrollTrigger === "undefined") return;
+
+  const cover = document.querySelector(".pa-know__cover img");
+  if (cover) {
+    gsap.fromTo(
+      cover,
+      { y: 24, scale: 1.04 },
+      {
+        y: -12,
+        scale: 1,
+        ease: "none",
+        scrollTrigger: {
+          trigger: ".pa-know",
+          start: "top bottom",
+          end: "bottom top",
+          scrub: 0.8,
+        },
+      }
+    );
+  }
+
+  const rail = document.querySelector(".pa-news__rail");
+  if (rail) {
+    gsap.fromTo(
+      rail,
+      { scaleY: 0 },
+      {
+        scaleY: 1,
+        ease: "none",
+        scrollTrigger: {
+          trigger: ".pa-news__stream",
+          start: "top 80%",
+          end: "bottom 55%",
+          scrub: 0.5,
+        },
+      }
+    );
+  }
 }
 
 export function destroyHomeAnimations() {

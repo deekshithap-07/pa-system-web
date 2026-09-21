@@ -9,6 +9,14 @@
   --pa-green: #3f9a4a;
   --pa-green-dark: #2f7a38;
 
+  /* Warm burgundy / ivory story environment */
+  --pa-burgundy: #4a2523;
+  --pa-burgundy-deep: #3f2422;
+  --pa-burgundy-warm: #542c29;
+  --pa-warm-brown: #5a3a32;
+  --pa-ivory: #f8f1e7;
+  --pa-gold-ochre: #d7a62a;
+
   /* Semantic aliases used across the site */
   --pa-navy: var(--pa-maroon);
   --pa-blue: var(--pa-gold);

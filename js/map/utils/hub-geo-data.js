@@ -195,10 +195,10 @@ export function buildCatchmentGeoMapModel({
     if (countryPathRaw) {
       const cb = pathBBox(countryPathRaw);
       bgPath = projectPathD(countryPathRaw, `${cb.x} ${cb.y} ${cb.width} ${cb.height}`, {
-        x: base.x + base.width * 0.06,
-        y: base.y + base.height * 0.06,
-        width: base.width * 0.88,
-        height: base.height * 0.88,
+        x: base.x + base.width * 0.02,
+        y: base.y + base.height * 0.02,
+        width: base.width * 0.96,
+        height: base.height * 0.96,
       });
     }
 
@@ -227,7 +227,7 @@ export function buildCatchmentGeoMapModel({
     ? { x: points[0].x - 20, y: points[0].y - 20, width: 40, height: 40 }
     : { x: 0, y: 0, width: 100, height: 100 };
 
-  const viewBox = expandViewBox(baseBbox, points, points.length ? 0.22 : 0.28);
+  const viewBox = expandViewBox(baseBbox, points, points.length ? 0.1 : 0.12);
 
   const catchLoc = geoLocations?.catchments?.[catchment.id];
   const catchmentPoint = catchLoc ? attachGeoPoint({ ...catchment }, catchLoc) : null;

@@ -8,24 +8,26 @@ export function initTransitions() {
   overlay = document.getElementById("transition-overlay");
 }
 
-export function transitionTo(callback, { scrollToTop = true } = {}) {
+export function transitionTo(callback, { scrollToTop = true, variant = "default" } = {}) {
   return new Promise((resolve) => {
     const tl = gsap.timeline({
       onComplete: () => {
-        overlay.classList.remove("is-active");
+        overlay.classList.remove("is-active", "is-country-enter");
         if (scrollToTop) window.scrollTo(0, 0);
         resolve();
       },
     });
 
     overlay.classList.add("is-active");
-    tl.to(overlay, { opacity: 1, duration: 0.45, ease: "power2.inOut" })
-      .to("#app", { opacity: 0, y: -20, duration: 0.3 }, "<0.1")
+    if (variant === "country") overlay.classList.add("is-country-enter");
+
+    tl.to(overlay, { opacity: 1, duration: variant === "country" ? 0.35 : 0.45, ease: "power2.inOut" })
+      .to("#app", { opacity: 0, y: variant === "country" ? -12 : -20, duration: 0.28 }, "<0.08")
       .call(() => {
         gsap.set("#app", { opacity: 1, y: 0, clearProps: "transform" });
         callback();
       })
-      .to(overlay, { opacity: 0, duration: 0.5, ease: "power2.inOut" });
+      .to(overlay, { opacity: 0, duration: variant === "country" ? 0.4 : 0.5, ease: "power2.inOut" });
   });
 }
 

@@ -1,20 +1,17 @@
 import { buildCountryHubPayload } from "../utils/country-hub-data.js";
 import { attachCountryHubGeoMap } from "../utils/hub-geo-maps.js";
-import { renderDataFreshness } from "../utils/public-api.js";
 import {
   renderCountryIntro,
-  renderCountryStats,
-  renderCountryMapSection,
-  renderCountryWhere,
+  renderCountryMapPresence,
   renderCountryProgrammes,
   renderCountryTrends,
   renderCountryFeaturedStories,
   renderCountryReports,
   renderCountryUpdates,
-  renderCountryEngage,
-  bindCountryStoryHero,
+  renderCountryNetwork,
   bindCountryMap,
   bindCountryEngage,
+  bindCountryProgrammes,
   featuredStories,
   initCountryPageAnimations,
 } from "../components/work/CountryWbPage.js";
@@ -30,18 +27,15 @@ export function renderCountryHub(slug, data) {
   const stories = featuredStories(data, hub);
 
   const html = `
-    <div class="wb-country" data-country-hub data-country-slug="${slug}">
-      ${renderCountryIntro(hub)}
-      <div class="container">${renderDataFreshness(data, { datasetId: "country-hubs" })}</div>
-      ${renderCountryStats(hub)}
-      ${renderCountryMapSection(hub)}
-      ${renderCountryWhere(hub)}
+    <div class="wb-country cp-portal-page" data-country-hub data-country-slug="${slug}">
+      ${renderCountryIntro(hub, data)}
+      ${renderCountryMapPresence(hub)}
       ${renderCountryProgrammes(hub, data)}
-      ${renderCountryTrends(hub)}
+      ${renderCountryTrends(hub, data)}
       ${renderCountryFeaturedStories(hub, stories)}
       ${renderCountryReports(hub)}
       ${renderCountryUpdates(hub, data)}
-      ${renderCountryEngage(hub)}
+      ${renderCountryNetwork(hub, data)}
     </div>`;
 
   return { html, hub };
@@ -51,13 +45,12 @@ export function mountCountryHub(root, hub) {
   const hubEl = root.querySelector("[data-country-hub]");
   if (!hubEl) return;
 
-  bindCountryStoryHero(hubEl);
+  bindCountryProgrammes(hubEl);
   bindCountryMap(hubEl, hub?.country?.slug || hubEl.dataset.countrySlug);
   bindCountryEngage(hubEl);
   initCountryPageAnimations(hubEl);
 
-  if (hub?.charts) {
-    // Brand colours on trend charts (override legacy blues in JSON)
+  if (hub?.charts && hubEl.querySelector("[data-chart]")) {
     const branded = Object.fromEntries(
       Object.entries(hub.charts).map(([key, cfg]) => [
         key,

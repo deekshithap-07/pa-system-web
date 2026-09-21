@@ -29,13 +29,29 @@ export { formatPaTitle } from "../utils/pa-title.js";
 
 /** PA Across Africa band chrome around the existing interactive map root. */
 export function renderAfricaExploreBand(band = {}, mapSection = {}, countries = []) {
+  const parseStat = (raw) => {
+    const s = String(raw ?? "");
+    const m = s.match(/^([^\d]*)([\d,]+)(.*)$/);
+    if (!m) return { display: s, num: NaN, prefix: "", suffix: "" };
+    return {
+      display: s,
+      num: parseInt(m[2].replace(/,/g, ""), 10),
+      prefix: m[1] || "",
+      suffix: m[3] || "",
+    };
+  };
+
   const stats = (band.stats || [])
-    .map(
-      (s) => `<div class="pa-africa__stat">
-        <span class="pa-africa__stat-value">${s.value}</span>
+    .map((s, i) => {
+      const parsed = parseStat(s.value);
+      const countAttrs = Number.isFinite(parsed.num)
+        ? ` data-pa-count="${parsed.num}" data-pa-count-prefix="${parsed.prefix}" data-pa-count-suffix="${parsed.suffix}"`
+        : "";
+      return `<div class="pa-africa__stat" data-pa-africa-stat style="--i:${i}">
+        <span class="pa-africa__stat-value"${countAttrs}>${s.value}</span>
         <span class="pa-africa__stat-label">${s.label}</span>
-      </div>`
-    )
+      </div>`;
+    })
     .join("");
 
   const explore = band.exploreCta || mapSection.countriesCta || { label: "Explore Africa", href: "#/africa" };
@@ -43,38 +59,64 @@ export function renderAfricaExploreBand(band = {}, mapSection = {}, countries = 
   const panelCta = band.panelCta || { label: "View interactive map", href: "#home-africa-map-root" };
 
   const paCountries = (countries || []).filter((c) => c.isPaNetwork);
-  const options = paCountries.length
+  const countryList = paCountries.length
     ? paCountries
-        .map((c) => `<option value="${c.slug}">${c.name}</option>`)
-        .join("")
-    : `<option value="kenya">Kenya</option>
-            <option value="ethiopia">Ethiopia</option>
-            <option value="malawi">Malawi</option>
-            <option value="zambia">Zambia</option>
-            <option value="tanzania">Tanzania</option>
-            <option value="rwanda">Rwanda</option>
-            <option value="burundi">Burundi</option>`;
+    : [
+        { slug: "kenya", name: "Kenya" },
+        { slug: "ethiopia", name: "Ethiopia" },
+        { slug: "malawi", name: "Malawi" },
+        { slug: "zambia", name: "Zambia" },
+        { slug: "tanzania", name: "Tanzania" },
+        { slug: "rwanda", name: "Rwanda" },
+        { slug: "burundi", name: "Burundi" },
+      ];
+
+  const countryPicks = countryList
+    .map(
+      (c, i) => `<button type="button" class="pa-africa__country" data-pa-country-pick="${c.slug}" style="--i:${i}">
+        <span class="pa-africa__country-name">${c.name}</span>
+        <span class="pa-africa__country-mark" aria-hidden="true"></span>
+      </button>`
+    )
+    .join("");
 
   return `
     <section class="pa-africa" id="pa-across-africa" aria-labelledby="pa-africa-title" data-home-section="africa">
-      <div class="container pa-africa__top" data-reveal data-anim="slide-left">
+      <div class="pa-africa__geo" aria-hidden="true">
+        <span class="pa-africa__geo-arc">
+          <svg class="pa-africa__geo-ring" viewBox="0 0 100 100" focusable="false">
+            <circle cx="50" cy="50" r="49.2" pathLength="1"></circle>
+          </svg>
+          <span class="pa-africa__geo-dot pa-africa__geo-dot--a"></span>
+          <span class="pa-africa__geo-dot pa-africa__geo-dot--b"></span>
+          <span class="pa-africa__geo-dot pa-africa__geo-dot--c"></span>
+          <span class="pa-africa__geo-dot pa-africa__geo-dot--d"></span>
+          <span class="pa-africa__geo-dot pa-africa__geo-dot--e"></span>
+        </span>
+      </div>
+      <div class="container pa-africa__top">
         <div class="pa-africa__intro">
-          <p class="pa-africa__eyebrow">${band.eyebrow || mapSection.eyebrow || "PA Across Africa"}</p>
-          <h2 class="pa-africa__title pa-title" id="pa-africa-title">${formatPaTitle(band, mapSection.title || "A growing movement of transformation")}</h2>
-          <p class="pa-africa__lead">${band.lead || mapSection.description || ""}</p>
-          ${stats ? `<div class="pa-africa__stats" data-stagger="stats">${stats}</div>` : ""}
-          <a class="pa-africa__link" ${linkAttrs(exploreHref)}>${explore.label || "Explore Africa"} →</a>
+          <p class="pa-africa__eyebrow" data-pa-africa-rise>${band.eyebrow || mapSection.eyebrow || "PA Across Africa"}</p>
+          <h2 class="pa-africa__title pa-title" id="pa-africa-title" data-pa-africa-rise>${formatPaTitle(band, mapSection.title || "A growing movement of transformation")}</h2>
+          <p class="pa-africa__lead" data-pa-africa-rise>${band.lead || mapSection.description || ""}</p>
+          <a class="pa-africa__link" data-pa-africa-rise ${linkAttrs(exploreHref)}>${explore.label || "Explore Africa"} →</a>
         </div>
-        <aside class="pa-africa__panel" data-anim="pop">
-          <h3>${band.panelTitle || "Explore our work across Africa"}</h3>
-          <p>${band.panelText || "Click on a country to see live data, programmes, stories and more."}</p>
-          <label class="pa-africa__select-label" for="pa-africa-country">Select a country</label>
-          <select id="pa-africa-country" class="pa-africa__select" data-pa-country-select>
-            <option value="">Choose a country</option>
-            ${options}
-          </select>
+        ${stats ? `<div class="pa-africa__stats" data-pa-africa-stats>${stats}</div>` : ""}
+        <div class="pa-africa__nav" data-pa-africa-rise>
+          <p class="pa-africa__nav-label">${band.panelTitle || "Explore our work across Africa"}</p>
+          <p class="pa-africa__nav-text">${band.panelText || "Click on a country to see live data, programmes, stories and more."}</p>
+          <div class="pa-africa__countries" role="listbox" aria-label="Select a country">
+            ${countryPicks}
+          </div>
           <a class="pa-africa__panel-link" ${linkAttrs(panelCta.href || "#home-africa-map-root")}>${panelCta.label || "View interactive map"} →</a>
-        </aside>
+        </div>
+      </div>
+      <div class="pa-africa__bridge" aria-hidden="true">
+        <span class="pa-africa__bridge-line"></span>
+        <span class="pa-africa__bridge-dot"></span>
+        <span class="pa-africa__bridge-dot"></span>
+        <span class="pa-africa__bridge-dot"></span>
+        <span class="pa-africa__bridge-label">Geographic exploration</span>
       </div>
       <div class="pa-africa__map-stage" data-reveal data-anim="fade-up">
         <div class="pa-africa__map-host l1-map__host africa-map-host" id="home-africa-map-root" aria-label="Interactive Africa map"></div>
@@ -251,32 +293,47 @@ function bindCountryDrawerChrome(data) {
 }
 
 export function bindAfricaCountrySelect(root = document, data = null) {
-  const select = root.querySelector("[data-pa-country-select]");
-  if (!select || select.dataset.bound) return;
-  select.dataset.bound = "true";
-
   if (data) bindCountryDrawerChrome(data);
 
-  select.addEventListener("change", () => {
-    const slug = select.value;
+  const openSlug = (slug) => {
     if (!slug) {
       closeCountryDrawer();
       return;
     }
-
     if (!data) {
       location.hash = `#/country/${slug}`;
       return;
     }
-
     const payload = countryDrawerPayload(data, slug);
     if (!payload) {
       location.hash = `#/country/${slug}`;
       return;
     }
-
     openCountryDrawer(payload);
-  });
+  };
+
+  const select = root.querySelector("[data-pa-country-select]");
+  if (select && !select.dataset.bound) {
+    select.dataset.bound = "true";
+    select.addEventListener("change", () => openSlug(select.value));
+  }
+
+  const picks = root.querySelectorAll("[data-pa-country-pick]");
+  if (picks.length) {
+    const nav = root.querySelector(".pa-africa__nav") || root;
+    if (!nav.dataset.countryPicksBound) {
+      nav.dataset.countryPicksBound = "true";
+      picks.forEach((btn) => {
+        btn.addEventListener("click", () => {
+          picks.forEach((b) => {
+            b.classList.toggle("is-active", b === btn);
+            b.setAttribute("aria-selected", b === btn ? "true" : "false");
+          });
+          openSlug(btn.getAttribute("data-pa-country-pick"));
+        });
+      });
+    }
+  }
 }
 
 export function destroyAfricaCountryDrawer() {
@@ -525,12 +582,34 @@ export function renderImpactDataBand(section = {}) {
 export function renderStoriesBand(section = {}) {
   if (!section.title) return "";
   const cta = section.cta || { label: "View all stories", href: "#/stories" };
-  const cards = (section.cards || [])
+  const cards = section.cards || [];
+  if (!cards.length) return "";
+
+  const first = cards[0];
+  const index = cards
     .map(
-      (c, i) => `<a class="pa-stories__strip${i === 0 ? " is-lead" : ""}" ${linkAttrs(c.href || "#/stories")}>
-        <span class="pa-stories__shot" aria-hidden="true">${c.image ? `<img src="${c.image}" alt="" loading="lazy" decoding="async">` : ""}</span>
-        <span class="pa-stories__veil" aria-hidden="true"></span>
-        <span class="pa-stories__copy">
+      (c, i) => `<button type="button" class="pa-stories__nav-item${i === 0 ? " is-active" : ""}" data-pa-story-nav="${i}"
+        data-story-title="${String(c.title || "").replace(/"/g, "&quot;")}"
+        data-story-country="${String(c.country || "").replace(/"/g, "&quot;")}"
+        data-story-program="${String(c.program || "").replace(/"/g, "&quot;")}"
+        data-story-href="${String(c.href || "#/stories").replace(/"/g, "&quot;")}"
+        data-story-image="${String(c.image || "").replace(/"/g, "&quot;")}"
+        data-story-alt="${String(c.imageAlt || "").replace(/"/g, "&quot;")}"
+        aria-pressed="${i === 0 ? "true" : "false"}">
+        <span class="pa-stories__nav-n">${String(i + 1).padStart(2, "0")}</span>
+        <span class="pa-stories__nav-copy">
+          <span class="pa-stories__nav-meta">${c.country || ""} · ${c.program || ""}</span>
+          <strong>${c.title}</strong>
+        </span>
+      </button>`
+    )
+    .join("");
+
+  const mobileCards = cards
+    .map(
+      (c, i) => `<a class="pa-stories__mobile-card" ${linkAttrs(c.href || "#/stories")} style="--i:${i}">
+        <span class="pa-stories__mobile-shot">${c.image ? `<img src="${c.image}" alt="" loading="lazy" decoding="async">` : ""}</span>
+        <span class="pa-stories__mobile-copy">
           <span class="pa-stories__meta">${c.country || ""} · ${c.program || ""}</span>
           <strong class="pa-stories__title">${c.title}</strong>
           <span class="pa-stories__go">Read story →</span>
@@ -540,7 +619,7 @@ export function renderStoriesBand(section = {}) {
     .join("");
 
   return `
-    <section class="pa-stories" id="stories-of-transformation" aria-labelledby="stories-band-title" data-home-section="stories">
+    <section class="pa-stories" id="stories-of-transformation" aria-labelledby="stories-band-title" data-home-section="stories" data-pa-stories>
       <div class="container">
         <header class="pa-stories__head" data-reveal data-anim="fade-up">
           <div>
@@ -550,9 +629,115 @@ export function renderStoriesBand(section = {}) {
           </div>
           <a class="pa-stories__all" ${linkAttrs(cta.href)}>${cta.label} →</a>
         </header>
-        <div class="pa-stories__mosaic" data-reveal data-stagger="slide-left">${cards}</div>
+
+        <div class="pa-stories__cinema" data-reveal data-anim="fade-up">
+          <article class="pa-stories__feature">
+            <div class="pa-stories__feature-media">
+              ${first.image ? `<img src="${first.image}" alt="${first.imageAlt || ""}" data-pa-story-img decoding="async">` : ""}
+              <span class="pa-stories__feature-veil" aria-hidden="true"></span>
+            </div>
+            <div class="pa-stories__feature-copy">
+              <p class="pa-stories__meta" data-pa-story-meta>${first.country || ""} · ${first.program || ""}</p>
+              <h3 class="pa-stories__feature-title" data-pa-story-title>${first.title}</h3>
+              <a class="pa-stories__go" data-pa-story-cta ${linkAttrs(first.href || "#/stories")}>Read story →</a>
+            </div>
+          </article>
+          <nav class="pa-stories__index" aria-label="Story chapters">
+            <p class="pa-stories__index-label">Chapters</p>
+            ${index}
+          </nav>
+        </div>
+
+        <div class="pa-stories__mobile" data-reveal data-stagger="slide-up">${mobileCards}</div>
       </div>
     </section>`;
+}
+
+export function bindStoriesBand(root = document) {
+  const section = root.querySelector?.("[data-pa-stories]") || document.querySelector("[data-pa-stories]");
+  if (!section || section.dataset.bound) return;
+  section.dataset.bound = "true";
+
+  const navs = [...section.querySelectorAll("[data-pa-story-nav]")];
+  if (!navs.length) return;
+
+  const img = section.querySelector("[data-pa-story-img]");
+  const meta = section.querySelector("[data-pa-story-meta]");
+  const title = section.querySelector("[data-pa-story-title]");
+  const cta = section.querySelector("[data-pa-story-cta]");
+  let active = 0;
+  let busy = false;
+
+  const cardFrom = (btn) => ({
+    title: btn.dataset.storyTitle || "",
+    country: btn.dataset.storyCountry || "",
+    program: btn.dataset.storyProgram || "",
+    href: btn.dataset.storyHref || "#/stories",
+    image: btn.dataset.storyImage || "",
+    imageAlt: btn.dataset.storyAlt || "",
+  });
+
+  const apply = (i) => {
+    const btn = navs[i];
+    if (!btn || busy || i === active) return;
+    busy = true;
+    active = i;
+    const card = cardFrom(btn);
+
+    navs.forEach((el, n) => {
+      const on = n === i;
+      el.classList.toggle("is-active", on);
+      el.setAttribute("aria-pressed", on ? "true" : "false");
+    });
+
+    const swap = () => {
+      if (img && card.image) {
+        img.src = card.image;
+        img.alt = card.imageAlt || "";
+      }
+      if (meta) meta.textContent = `${card.country}${card.country && card.program ? " · " : ""}${card.program}`;
+      if (title) title.textContent = card.title || "";
+      if (cta) {
+        cta.setAttribute("href", card.href || "#/stories");
+        if ((card.href || "").startsWith("#/")) cta.setAttribute("data-link", "");
+      }
+    };
+
+    const feature = section.querySelector(".pa-stories__feature");
+    if (typeof gsap !== "undefined" && feature && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      gsap.to(feature, {
+        autoAlpha: 0.35,
+        y: 10,
+        duration: 0.28,
+        ease: "power1.in",
+        onComplete: () => {
+          swap();
+          gsap.to(feature, {
+            autoAlpha: 1,
+            y: 0,
+            duration: 0.5,
+            ease: "power2.out",
+            clearProps: "transform",
+            onComplete: () => {
+              busy = false;
+            },
+          });
+        },
+      });
+    } else {
+      swap();
+      busy = false;
+    }
+  };
+
+  navs.forEach((btn) => {
+    const i = Number(btn.dataset.paStoryNav);
+    btn.addEventListener("mouseenter", () => {
+      if (window.matchMedia("(hover: hover)").matches) apply(i);
+    });
+    btn.addEventListener("focus", () => apply(i));
+    btn.addEventListener("click", () => apply(i));
+  });
 }
 
 export function renderKnowledgeNewsSplit(section = {}) {
@@ -564,43 +749,59 @@ export function renderKnowledgeNewsSplit(section = {}) {
   const nCta = news.cta || { label: "View all news", href: "#/news" };
   const items = (news.items || [])
     .map(
-      (item, i) => `<a class="pa-split__news-item" ${linkAttrs(item.href || "#/news")} style="--i:${i}">
-        <span class="pa-split__news-tag">${item.tag || "News"}</span>
-        <span class="pa-split__news-date">${item.date || ""}</span>
-        <strong>${item.title}</strong>
+      (item, i) => `<a class="pa-news__item" ${linkAttrs(item.href || "#/news")} style="--i:${i}" data-pa-news-item>
+        <span class="pa-news__meta">
+          <span class="pa-news__tag">${item.tag || "News"}</span>
+          <time class="pa-news__date">${item.date || ""}</time>
+        </span>
+        <strong class="pa-news__headline">${item.title}</strong>
+        <span class="pa-news__arrow" aria-hidden="true">→</span>
       </a>`
     )
     .join("");
 
-  return `
-    <section class="pa-split" id="knowledge-news" aria-label="Knowledge and news" data-home-section="knowledge">
-      <div class="container pa-split__grid">
-        <article class="pa-split__knowledge" data-reveal data-anim="fade-up">
-          <div class="pa-split__copy">
-            ${knowledge.eyebrow ? `<p class="pa-split__eyebrow">${knowledge.eyebrow}</p>` : ""}
-            <h2 class="pa-title">${formatPaTitle(knowledge, "Knowledge Centre")}</h2>
-            ${knowledge.lead ? `<p>${knowledge.lead}</p>` : ""}
-            <a class="pa-split__cta" ${linkAttrs(kCta.href)}>${kCta.label} →</a>
+  const knowHtml = knowledge.title
+    ? `<section class="pa-know" id="knowledge-centre" aria-labelledby="knowledge-centre-title" data-home-section="knowledge">
+        <span class="pa-know__bg-word" aria-hidden="true">Knowledge</span>
+        <div class="container pa-know__layout">
+          <div class="pa-know__copy" data-reveal data-anim="slide-left">
+            ${knowledge.eyebrow ? `<p class="pa-know__eyebrow">${knowledge.eyebrow}</p>` : ""}
+            <h2 id="knowledge-centre-title" class="pa-title">${formatPaTitle(knowledge, "Knowledge Centre")}</h2>
+            ${knowledge.lead ? `<p class="pa-know__lead">${knowledge.lead}</p>` : ""}
+            <a class="pa-know__cta" ${linkAttrs(kCta.href)}>${kCta.label} →</a>
           </div>
-          <figure class="pa-split__report" data-reveal data-anim="pop">
+          <figure class="pa-know__pub" data-reveal data-anim="pop">
             ${
               knowledge.image
-                ? `<a href="#/field-reports" data-link aria-label="Open field reports"><img src="${knowledge.image}" alt="${knowledge.imageAlt || "Field Reports"}" loading="lazy" decoding="async"></a>`
+                ? `<a class="pa-know__cover" href="#/field-reports" data-link aria-label="Open field reports">
+                    <img src="${knowledge.image}" alt="${knowledge.imageAlt || "Field Reports"}" loading="lazy" decoding="async">
+                    <span class="pa-know__cover-label">Report</span>
+                  </a>`
                 : ""
             }
           </figure>
-        </article>
-        <article class="pa-split__news" data-reveal data-anim="slide-up">
-          <div class="pa-split__copy">
-            ${news.eyebrow ? `<p class="pa-split__eyebrow">${news.eyebrow}</p>` : ""}
-            <h2 class="pa-title">${formatPaTitle(news, "Latest from PA")}</h2>
-            ${news.lead ? `<p>${news.lead}</p>` : ""}
-            <a class="pa-split__cta" ${linkAttrs(nCta.href)}>${nCta.label} →</a>
+        </div>
+      </section>`
+    : "";
+
+  const newsHtml = news.title
+    ? `<section class="pa-news" id="news-updates" aria-labelledby="news-updates-title" data-home-section="news">
+        <div class="container pa-news__layout">
+          <header class="pa-news__head" data-reveal data-anim="fade-up">
+            ${news.eyebrow ? `<p class="pa-news__eyebrow">${news.eyebrow}</p>` : ""}
+            <h2 id="news-updates-title" class="pa-title">${formatPaTitle(news, "Latest from PA")}</h2>
+            ${news.lead ? `<p class="pa-news__lead">${news.lead}</p>` : ""}
+            <a class="pa-news__cta" ${linkAttrs(nCta.href)}>${nCta.label} →</a>
+          </header>
+          <div class="pa-news__stream" data-reveal>
+            <span class="pa-news__rail" aria-hidden="true"></span>
+            <div class="pa-news__list" data-stagger="slide-up">${items}</div>
           </div>
-          <div class="pa-split__news-list" data-stagger="slide-up">${items}</div>
-        </article>
-      </div>
-    </section>`;
+        </div>
+      </section>`
+    : "";
+
+  return `${knowHtml}${newsHtml}`;
 }
 
 export function renderPartnerBanner(section = {}) {

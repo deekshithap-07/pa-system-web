@@ -1,29 +1,176 @@
-/* ==========================================================================
+﻿/* ==========================================================================
    Home — PA Website Designs mockup layout (brand maroon / gold / green)
    ========================================================================== */
 
 /* ---- PA Across Africa ---- */
 .pa-africa {
-  padding: 4.5rem 0 3rem;
+  position: relative;
+  padding: 4.5rem 0 0;
   background:
-    radial-gradient(ellipse at 8% 0%, rgba(232, 169, 26, 0.08), transparent 40%),
-    linear-gradient(180deg, #fff 0%, #faf7f2 100%);
+    radial-gradient(ellipse at 12% 8%, rgba(232, 169, 26, 0.1), transparent 42%),
+    radial-gradient(ellipse at 88% 18%, rgba(92, 36, 40, 0.05), transparent 40%),
+    linear-gradient(180deg, #fffef9 0%, #f7f1e8 55%, #f0e8dc 100%);
   border-top: 1px solid rgba(92, 36, 40, 0.06);
+  overflow: hidden;
+}
+
+/* Decorative layer only — never in document flow */
+.pa-africa__geo {
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  height: min(34rem, 78%);
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.pa-africa__geo-arc {
+  --pa-ring-size: clamp(26.25rem, 42vw, 43.75rem);
+  --pa-ring-r: calc(var(--pa-ring-size) / 2);
+  position: absolute;
+  top: 8%;
+  right: -18%;
+  width: var(--pa-ring-size);
+  height: var(--pa-ring-size);
+  border: none;
+  border-radius: 50%;
+}
+
+.pa-africa__geo-ring {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.pa-africa__geo-ring circle {
+  fill: none;
+  stroke: rgba(232, 169, 26, 0.3);
+  stroke-width: 0.55;
+  vector-effect: non-scaling-stroke;
+  stroke-linecap: round;
+}
+
+.pa-africa__geo-dot {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 0.5rem;
+  height: 0.5rem;
+  margin: -0.25rem 0 0 -0.25rem;
+  border-radius: 50%;
+  background: var(--pa-gold);
+  box-shadow: 0 0 0 5px rgba(232, 169, 26, 0.1);
+  opacity: 0.9;
+  transform: var(--pa-dot-t);
+}
+
+/* Nodes on the visible left crescent of a right-cropped ring */
+.pa-africa__geo-dot--a {
+  --pa-dot-t: rotate(-42deg) translateY(calc(-1 * var(--pa-ring-r))) rotate(42deg);
+}
+
+.pa-africa__geo-dot--b {
+  --pa-dot-t: rotate(-78deg) translateY(calc(-1 * var(--pa-ring-r))) rotate(78deg);
+  width: 0.38rem;
+  height: 0.38rem;
+  margin: -0.19rem 0 0 -0.19rem;
+}
+
+.pa-africa__geo-dot--c {
+  --pa-dot-t: rotate(-118deg) translateY(calc(-1 * var(--pa-ring-r))) rotate(118deg);
+  width: 0.45rem;
+  height: 0.45rem;
+  margin: -0.225rem 0 0 -0.225rem;
+  background: var(--pa-gold-ochre, var(--pa-gold));
+  box-shadow: 0 0 0 5px rgba(215, 166, 42, 0.1);
+}
+
+.pa-africa__geo-dot--d {
+  --pa-dot-t: rotate(-158deg) translateY(calc(-1 * var(--pa-ring-r))) rotate(158deg);
+  width: 0.34rem;
+  height: 0.34rem;
+  margin: -0.17rem 0 0 -0.17rem;
+  opacity: 0.75;
+}
+
+.pa-africa__geo-dot--e {
+  --pa-dot-t: rotate(-18deg) translateY(calc(-1 * var(--pa-ring-r))) rotate(18deg);
+  width: 0.42rem;
+  height: 0.42rem;
+  margin: -0.21rem 0 0 -0.21rem;
+  background: var(--pa-maroon);
+  box-shadow: 0 0 0 4px rgba(92, 36, 40, 0.08);
+}
+
+@keyframes pa-africa-dot-pulse {
+  0%,
+  100% {
+    opacity: 0.72;
+    transform: var(--pa-dot-t) scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: var(--pa-dot-t) scale(1.12);
+  }
+}
+
+.pa-africa.is-geo-ready .pa-africa__geo-dot {
+  animation: pa-africa-dot-pulse 5.5s ease-in-out infinite;
+}
+
+.pa-africa.is-geo-ready .pa-africa__geo-dot--b {
+  animation-delay: 0.7s;
+  animation-duration: 6.2s;
+}
+
+.pa-africa.is-geo-ready .pa-africa__geo-dot--c {
+  animation-delay: 1.4s;
+  animation-duration: 5.8s;
+}
+
+.pa-africa.is-geo-ready .pa-africa__geo-dot--d {
+  animation-delay: 2.1s;
+  animation-duration: 6.5s;
+}
+
+.pa-africa.is-geo-ready .pa-africa__geo-dot--e {
+  animation-delay: 0.35s;
+  animation-duration: 5.2s;
 }
 
 .pa-africa__top {
+  position: relative;
+  z-index: 2;
   display: grid;
-  grid-template-columns: minmax(0, 1.2fr) minmax(16rem, 0.8fr);
-  gap: 2rem 2.5rem;
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+  grid-template-areas:
+    "intro stats"
+    "nav stats";
+  gap: 1.75rem 3rem;
   align-items: start;
-  margin-bottom: 2rem;
+  margin-bottom: 1.5rem;
 }
+
+.pa-africa__intro,
+.pa-africa__nav {
+  position: relative;
+  z-index: 2;
+}
+
+.pa-africa__intro { grid-area: intro; }
+.pa-africa__stats { grid-area: stats; }
+.pa-africa__nav { grid-area: nav; }
 
 .pa-africa__eyebrow,
 .pa-work__eyebrow,
 .pa-impact__eyebrow,
 .pa-stories__eyebrow,
-.pa-split__eyebrow,
+.pa-know__eyebrow,
+.pa-news__eyebrow,
 .pa-partner__eyebrow {
   margin: 0 0 0.65rem;
   font-size: 0.72rem;
@@ -38,8 +185,8 @@
 .pa-title,
 .pa-impact__head h2,
 .pa-stories__head h2,
-.pa-split__knowledge h2,
-.pa-split__news h2,
+.pa-know .pa-title,
+.pa-news .pa-title,
 .pa-partner__copy h2 {
   margin: 0;
   font-size: clamp(1.7rem, 3.2vw, 2.45rem);
@@ -54,8 +201,8 @@
 .pa-work__title em,
 .pa-impact__head h2 em,
 .pa-stories__head h2 em,
-.pa-split__knowledge h2 em,
-.pa-split__news h2 em,
+.pa-know .pa-title em,
+.pa-news .pa-title em,
 .pa-partner__copy h2 em {
   display: block;
   font-style: italic;
@@ -65,7 +212,8 @@
 
 .pa-africa__lead,
 .pa-stories__lead,
-.pa-split__copy > p,
+.pa-know__lead,
+.pa-news__lead,
 .pa-partner__copy p {
   margin: 0.85rem 0 0;
   max-width: 38rem;
@@ -75,36 +223,52 @@
 }
 
 .pa-africa__stats {
+  position: relative;
+  z-index: 3;
+  isolation: isolate;
   display: flex;
-  flex-wrap: wrap;
-  gap: 1.25rem 2rem;
-  margin: 1.75rem 0 1.25rem;
+  flex-direction: column;
+  gap: 1.35rem;
+  padding: 0.35rem 0.75rem 0.35rem 1.5rem;
+  border-left: 2px solid rgba(232, 169, 26, 0.55);
+  background: linear-gradient(90deg, rgba(255, 254, 249, 0.97) 0%, rgba(247, 241, 232, 0.94) 100%);
 }
 
 .pa-africa__stat-value {
   display: block;
-  font-size: clamp(1.6rem, 3vw, 2.1rem);
+  font-size: clamp(2.6rem, 5.5vw, 4rem);
   font-weight: 800;
   color: var(--pa-maroon);
-  letter-spacing: -0.03em;
-  line-height: 1;
+  letter-spacing: -0.045em;
+  line-height: 0.95;
+}
+
+.pa-africa__stat:nth-child(2) .pa-africa__stat-value {
+  font-size: clamp(2.2rem, 4.5vw, 3.35rem);
+  color: var(--pa-maroon);
+}
+
+.pa-africa__stat:nth-child(3) .pa-africa__stat-value {
+  font-size: clamp(1.85rem, 3.8vw, 2.75rem);
+  color: var(--pa-gold);
 }
 
 .pa-africa__stat-label {
   display: block;
-  margin-top: 0.35rem;
-  font-size: 0.78rem;
-  font-weight: 600;
-  color: var(--pa-muted);
+  margin-top: 0.4rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: rgba(92, 36, 40, 0.62);
   text-transform: uppercase;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.12em;
 }
 
 .pa-africa__link,
 .pa-stories__all,
-.pa-split__cta {
+.pa-know__cta,
+.pa-news__cta {
   display: inline-flex;
-  margin-top: 1rem;
+  margin-top: 1.15rem;
   font-size: 0.92rem;
   font-weight: 700;
   color: var(--pa-maroon);
@@ -113,50 +277,72 @@
 
 .pa-africa__link:hover,
 .pa-stories__all:hover,
-.pa-split__cta:hover {
+.pa-know__cta:hover,
+.pa-news__cta:hover {
   color: var(--pa-gold);
   text-decoration: none;
 }
 
-.pa-africa__panel {
-  background: #fff;
-  border: 1px solid rgba(92, 36, 40, 0.1);
-  border-radius: 1rem;
-  padding: 1.5rem 1.35rem;
-  box-shadow: 0 12px 36px rgba(92, 36, 40, 0.06);
+.pa-africa__nav {
+  max-width: 36rem;
+  padding-top: 0.25rem;
 }
 
-.pa-africa__panel h3 {
-  margin: 0;
-  font-size: 1.15rem;
+.pa-africa__nav-label {
+  margin: 0 0 0.35rem;
+  font-size: 0.95rem;
+  font-weight: 800;
   color: var(--pa-maroon);
 }
 
-.pa-africa__panel p {
-  margin: 0.65rem 0 1rem;
-  font-size: 0.92rem;
+.pa-africa__nav-text {
+  margin: 0 0 1rem;
+  font-size: 0.9rem;
   line-height: 1.55;
   color: var(--pa-slate);
 }
 
-.pa-africa__select-label {
-  display: block;
-  margin-bottom: 0.4rem;
-  font-size: 0.72rem;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--pa-muted);
+.pa-africa__countries {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem 0.55rem;
 }
 
-.pa-africa__select {
-  width: 100%;
-  padding: 0.7rem 0.85rem;
-  border: 1px solid rgba(92, 36, 40, 0.18);
-  border-radius: 0.5rem;
-  background: #fff;
-  color: var(--pa-maroon);
+.pa-africa__country {
+  position: relative;
+  appearance: none;
+  border: none;
+  background: transparent;
+  padding: 0.45rem 0.15rem 0.55rem;
   font: inherit;
+  font-size: 0.92rem;
+  font-weight: 650;
+  color: rgba(92, 36, 40, 0.72);
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.pa-africa__country-mark {
+  position: absolute;
+  left: 0.15rem;
+  right: 0.15rem;
+  bottom: 0.15rem;
+  height: 2px;
+  background: transparent;
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 0.28s ease, background 0.2s ease;
+}
+
+.pa-africa__country:hover,
+.pa-africa__country.is-active {
+  color: var(--pa-maroon);
+}
+
+.pa-africa__country:hover .pa-africa__country-mark,
+.pa-africa__country.is-active .pa-africa__country-mark {
+  background: var(--pa-gold);
+  transform: scaleX(1);
 }
 
 .pa-africa__panel-link {
@@ -168,7 +354,43 @@
   text-decoration: none;
 }
 
-/* Country select → slide drawer */
+.pa-africa__bridge {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.65rem;
+  margin: 0.5rem auto 0;
+  max-width: var(--max-w, 1120px);
+  padding: 0.85rem clamp(1.25rem, 4vw, 2rem) 1.25rem;
+}
+
+.pa-africa__bridge-line {
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(232, 169, 26, 0.55), rgba(92, 36, 40, 0.25), transparent);
+}
+
+.pa-africa__bridge-dot {
+  width: 0.4rem;
+  height: 0.4rem;
+  border-radius: 50%;
+  background: var(--pa-gold);
+  opacity: 0.85;
+}
+
+.pa-africa__bridge-label {
+  position: absolute;
+  top: -0.15rem;
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(92, 36, 40, 0.45);
+}
+
+/* Country select â†’ slide drawer */
 .pa-drawer-root {
   position: fixed;
   inset: 0;
@@ -469,7 +691,7 @@ body.pa-drawer-open {
   color: var(--pa-muted);
 }
 
-/* ---- Our Work — interactive programme selector (ref UI) ---- */
+/* ---- Our Work â€” interactive programme selector (ref UI) ---- */
 .pa-work {
   padding: 4.5rem 0;
   background:
@@ -692,15 +914,11 @@ body.pa-drawer-open {
 }
 
 .pa-impact__grid,
-.pa-stories__mosaic,
-.pa-split__news-list,
 .pa-work__stage {
   min-height: 1px;
 }
 
 .pa-impact__card,
-.pa-stories__strip,
-.pa-split__news-item,
 .pa-africa__stat {
   will-change: transform, opacity;
 }
@@ -852,40 +1070,60 @@ a.pa-impact__delta {
 .pa-impact__card--green .pa-impact__delta { color: var(--pa-green); }
 .pa-impact__card--maroon .pa-impact__delta { color: var(--pa-maroon); }
 
-/* ---- Stories — rich mid band between Impact maroon and Knowledge cream ---- */
+/* ---- Stories — deep burgundy bridge: Impact maroon → Stories → Knowledge cream ---- */
 .pa-stories {
+  --pa-stories-ink: var(--pa-ivory);
+  --pa-stories-ink-soft: rgba(248, 241, 231, 0.78);
+  --pa-stories-gold: var(--pa-gold-ochre);
   position: relative;
   isolation: isolate;
   padding: clamp(4rem, 9vh, 5.5rem) 0;
-  background:
-    radial-gradient(ellipse 90% 70% at 8% 0%, rgba(232, 169, 26, 0.32), transparent 48%),
-    radial-gradient(ellipse 75% 65% at 95% 15%, rgba(92, 36, 40, 0.55), transparent 52%),
-    radial-gradient(ellipse 70% 55% at 70% 100%, rgba(63, 154, 74, 0.35), transparent 55%),
-    radial-gradient(ellipse 50% 40% at 20% 85%, rgba(232, 169, 26, 0.12), transparent 50%),
-    linear-gradient(
-      148deg,
-      #2a1014 0%,
-      #3d221c 22%,
-      #2a3828 48%,
-      #1e3a2c 72%,
-      #16241c 100%
-    );
-  color: #fff;
-  border-top: 3px solid var(--pa-gold);
-  border-bottom: 3px solid rgba(232, 169, 26, 0.55);
+  background-color: var(--pa-burgundy);
+  background-image:
+    radial-gradient(ellipse 55% 45% at 18% 22%, rgba(84, 44, 41, 0.42), transparent 68%),
+    radial-gradient(ellipse 48% 42% at 82% 48%, rgba(58, 52, 36, 0.16), transparent 62%),
+    radial-gradient(ellipse 70% 55% at 50% 108%, rgba(42, 16, 20, 0.28), transparent 58%);
+  color: var(--pa-stories-ink);
+  border-top: none;
+  border-bottom: none;
   overflow: hidden;
 }
 
+/* Soft top edge: Impact maroon-deep → burgundy (continues the dark band) */
 .pa-stories::before {
   content: "";
   position: absolute;
-  inset: 0;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 96px;
   z-index: 0;
   pointer-events: none;
-  background:
-    linear-gradient(180deg, rgba(42, 16, 20, 0.35) 0%, transparent 28%),
-    linear-gradient(0deg, rgba(247, 241, 232, 0.08) 0%, transparent 22%);
-  opacity: 0.9;
+  background: linear-gradient(
+    180deg,
+    var(--pa-maroon-deep) 0%,
+    rgba(63, 36, 34, 0.55) 42%,
+    transparent 100%
+  );
+}
+
+/* Soft bottom edge: burgundy → Knowledge cream */
+.pa-stories::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 108px;
+  z-index: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    180deg,
+    transparent 0%,
+    rgba(90, 55, 48, 0.35) 28%,
+    rgba(210, 190, 170, 0.28) 68%,
+    var(--pa-bg) 100%
+  );
 }
 
 .pa-stories > .container {
@@ -894,30 +1132,30 @@ a.pa-impact__delta {
 }
 
 .pa-stories__eyebrow {
-  color: var(--pa-gold-soft);
+  color: var(--pa-stories-gold);
 }
 
 .pa-stories__head h2,
 .pa-stories .pa-title {
-  color: #fff;
+  color: var(--pa-stories-ink);
 }
 
 .pa-stories .pa-title em {
-  color: var(--pa-gold);
+  color: var(--pa-stories-gold);
 }
 
 .pa-stories__lead {
-  color: rgba(255, 255, 255, 0.85);
+  color: var(--pa-stories-ink-soft);
 }
 
 .pa-stories__all {
-  color: var(--pa-gold-soft);
-  border-bottom-color: rgba(245, 215, 138, 0.45);
+  color: var(--pa-stories-gold);
+  border-bottom: 1px solid rgba(215, 166, 42, 0.4);
 }
 
 .pa-stories__all:hover {
-  color: #fff;
-  border-bottom-color: #fff;
+  color: var(--pa-stories-ink);
+  border-bottom-color: var(--pa-stories-ink);
 }
 
 .pa-stories__head {
@@ -929,267 +1167,378 @@ a.pa-impact__delta {
   margin-bottom: 2rem;
 }
 
-.pa-stories__mosaic {
+.pa-stories__cinema {
   display: grid;
-  grid-template-columns: 1.35fr 1fr 1fr;
-  grid-template-rows: minmax(16rem, 42vh);
-  gap: 0.75rem;
+  grid-template-columns: minmax(0, 1.45fr) minmax(14rem, 0.7fr);
+  gap: 1.25rem 1.75rem;
+  align-items: stretch;
+  min-height: min(62vh, 32rem);
 }
 
-.pa-stories__strip {
+.pa-stories__feature {
   position: relative;
-  display: block;
   overflow: hidden;
-  min-height: 16rem;
-  text-decoration: none;
-  color: #fff;
-  isolation: isolate;
+  min-height: min(58vh, 30rem);
+  background: var(--pa-burgundy-deep);
 }
 
-.pa-stories__strip.is-lead {
-  min-height: 100%;
-}
-
-.pa-stories__strip:hover {
-  text-decoration: none;
-}
-
-.pa-stories__shot {
+.pa-stories__feature-media {
   position: absolute;
   inset: 0;
-  overflow: hidden;
-  background: linear-gradient(135deg, #5c2428, #e8a91a);
-  transform: scale(1.06);
-  transition: transform 0.7s var(--ease-out);
 }
 
-.pa-stories__shot img {
-  display: block;
+.pa-stories__feature-media img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  object-position: center;
+  transform: scale(1.04);
+  transition: transform 0.8s ease;
 }
 
-.pa-stories__strip:hover .pa-stories__shot {
+.pa-stories__feature:hover .pa-stories__feature-media img {
   transform: scale(1);
 }
 
-.pa-stories__veil {
+.pa-stories__feature-veil {
   position: absolute;
   inset: 0;
   background:
-    linear-gradient(180deg, rgba(42, 16, 20, 0.15) 0%, rgba(42, 16, 20, 0.82) 100%);
-  z-index: 1;
+    linear-gradient(90deg, rgba(42, 20, 18, 0.72) 0%, rgba(42, 20, 18, 0.22) 52%, rgba(42, 20, 18, 0.08) 100%),
+    linear-gradient(180deg, transparent 38%, rgba(42, 20, 18, 0.82) 100%);
 }
 
-.pa-stories__copy {
-  position: relative;
+.pa-stories__feature-copy {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
   z-index: 2;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-  gap: 0.4rem;
-  height: 100%;
-  padding: 1.25rem 1.15rem;
-  box-sizing: border-box;
+  padding: clamp(1.35rem, 3vw, 2.25rem);
+  max-width: 34rem;
 }
 
 .pa-stories__meta {
-  font-size: 0.68rem;
+  margin: 0 0 0.55rem;
+  font-size: 0.7rem;
   font-weight: 700;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: var(--pa-gold-soft);
+  color: var(--pa-stories-gold);
 }
 
-.pa-stories__title {
-  font-size: clamp(1.05rem, 1.8vw, 1.35rem);
+.pa-stories__feature-title {
+  margin: 0 0 0.85rem;
+  font-size: clamp(1.55rem, 3.2vw, 2.35rem);
   font-weight: 800;
-  line-height: 1.25;
+  line-height: 1.15;
   letter-spacing: -0.02em;
-}
-
-.pa-stories__strip.is-lead .pa-stories__title {
-  font-size: clamp(1.35rem, 2.6vw, 1.85rem);
+  color: var(--pa-stories-ink);
 }
 
 .pa-stories__go {
+  display: inline-flex;
   font-weight: 700;
-  color: var(--pa-gold);
-  opacity: 0.9;
+  color: var(--pa-stories-gold);
+  text-decoration: none;
 }
 
-/* ---- Knowledge / News — two minimal cards ---- */
-.pa-split {
-  position: relative;
-  isolation: isolate;
-  padding: clamp(4rem, 9vh, 5.5rem) 0;
-  background:
-    radial-gradient(ellipse at 90% 0%, rgba(232, 169, 26, 0.1), transparent 45%),
-    linear-gradient(180deg, #f7f1e8 0%, #f3ebe0 100%);
-  border-top: 3px solid var(--pa-gold);
+.pa-stories__go:hover {
+  color: var(--pa-stories-ink);
+  text-decoration: none;
 }
 
-.pa-split__grid {
-  position: relative;
-  z-index: 1;
-  display: grid;
-  grid-template-columns: 1.1fr 0.9fr;
-  gap: clamp(1.25rem, 2.5vw, 1.75rem);
-  align-items: stretch;
-}
-
-.pa-split__knowledge,
-.pa-split__news {
+.pa-stories__index {
   display: flex;
   flex-direction: column;
-  gap: 1.15rem;
-  padding: clamp(1.35rem, 2.5vw, 1.75rem);
-  background: #fff;
-  border: 1px solid rgba(92, 36, 40, 0.08);
-  border-radius: 1rem;
-  box-shadow: 0 14px 36px rgba(92, 36, 40, 0.06);
+  gap: 0.35rem;
+  padding: 0.85rem 0.75rem;
+  background: rgba(255, 244, 230, 0.06);
+  border: 1px solid rgba(255, 244, 230, 0.1);
 }
 
-.pa-split__knowledge {
-  border-top: 3px solid var(--pa-green);
+.pa-stories__index-label {
+  margin: 0 0 0.65rem;
+  padding: 0 0.15rem;
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(215, 166, 42, 0.72);
 }
 
-.pa-split__news {
-  border-top: 3px solid var(--pa-gold);
-}
-
-.pa-split__copy {
-  max-width: none;
-}
-
-.pa-split__knowledge .pa-split__copy,
-.pa-split__news .pa-split__copy {
-  padding-bottom: 0;
-  border-bottom: 0;
-  margin-bottom: 0;
-}
-
-.pa-split__cta {
-  display: inline-flex;
-  margin-top: 0.85rem;
-  font-weight: 700;
-  color: var(--pa-maroon);
-  text-decoration: none;
-  border-bottom: 2px solid rgba(232, 169, 26, 0.4);
-  transition: color 0.25s ease, border-color 0.25s ease, transform 0.25s var(--ease-out);
-}
-
-.pa-split__cta:hover {
-  color: var(--pa-gold);
-  border-bottom-color: var(--pa-gold);
-  transform: translateX(3px);
-  text-decoration: none;
-}
-
-/* Book cover — crop baked-in white side margins from cover.jpg */
-.pa-split__report {
-  margin: 0;
-  margin-top: auto;
-  border-radius: 0.65rem;
-  overflow: hidden;
-  background: #0b1a2e;
-  border: 0;
-  width: 100%;
-  max-width: 18.5rem;
-  aspect-ratio: 3 / 4;
-  box-shadow:
-    0 12px 28px rgba(11, 26, 46, 0.28),
-    0 1px 0 rgba(255, 255, 255, 0.06) inset;
-}
-
-.pa-split__report a {
-  display: block;
-  width: 100%;
-  height: 100%;
-  text-decoration: none;
-  position: relative;
-  overflow: hidden;
-}
-
-.pa-split__report a::after {
-  content: none;
-}
-
-.pa-split__report img {
-  display: block;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: center center;
-  transform: none;
-  background: #0b1a2e;
-}
-
-.pa-split__report:hover img {
-  transform: scale(1.03);
-  transition: transform 0.55s var(--ease-out);
-}
-
-.pa-split__news-list {
-  display: grid;
-  gap: 0;
-  margin-top: 0.15rem;
-}
-
-.pa-split__news-item {
+.pa-stories__nav-item {
   display: grid;
   grid-template-columns: auto 1fr;
-  gap: 0.2rem 0.85rem;
-  padding: 0.95rem 0.35rem 0.95rem 0;
-  border-top: 1px solid rgba(92, 36, 40, 0.1);
-  border-left: 3px solid transparent;
-  text-decoration: none;
-  color: inherit;
-  transition:
-    padding-left 0.28s var(--ease-out),
-    border-color 0.28s ease,
-    background 0.28s ease;
+  gap: 0.75rem;
+  align-items: start;
+  width: 100%;
+  padding: 0.85rem 0.65rem;
+  border: none;
+  border-left: 2px solid rgba(255, 244, 230, 0.14);
+  background: transparent;
+  text-align: left;
+  color: var(--pa-stories-ink-soft);
+  cursor: pointer;
+  font: inherit;
+  transition: border-color 0.25s ease, color 0.25s ease, background 0.25s ease, transform 0.25s ease;
 }
 
-.pa-split__news-item:last-child {
-  border-bottom: 1px solid rgba(92, 36, 40, 0.1);
+.pa-stories__nav-item:hover {
+  color: var(--pa-stories-ink);
+  border-left-color: rgba(215, 166, 42, 0.55);
+  background: rgba(255, 244, 230, 0.05);
+  transform: translateX(4px);
 }
 
-.pa-split__news-item:hover {
-  text-decoration: none;
-  padding-left: 0.5rem;
-  border-left-color: var(--pa-gold);
-  background: rgba(247, 241, 232, 0.65);
+.pa-stories__nav-item.is-active {
+  color: var(--pa-stories-ink);
+  border-left-color: var(--pa-stories-gold);
+  background: rgba(215, 166, 42, 0.12);
+  transform: translateX(4px);
 }
 
-.pa-split__news-tag {
-  grid-row: 1 / span 2;
-  align-self: start;
-  margin-top: 0.15rem;
-  padding: 0.28rem 0.5rem;
-  border-radius: 0.35rem;
-  background: rgba(92, 36, 40, 0.92);
-  color: #fff;
+.pa-stories__nav-n {
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  color: var(--pa-stories-gold);
+}
+
+.pa-stories__nav-meta {
+  display: block;
+  margin-bottom: 0.25rem;
   font-size: 0.65rem;
   font-weight: 700;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
+  color: rgba(215, 166, 42, 0.72);
 }
 
-.pa-split__news-date {
-  font-size: 0.75rem;
-  color: var(--pa-muted);
-}
-
-.pa-split__news-item strong {
-  color: var(--pa-maroon);
-  font-size: 0.98rem;
+.pa-stories__nav-copy strong {
+  display: block;
+  font-size: 0.95rem;
+  font-weight: 700;
   line-height: 1.35;
 }
 
-.pa-split__news-item:hover strong {
+.pa-stories__mobile {
+  display: none;
+}
+
+.pa-stories__title {
+  display: block;
+  font-size: 1.2rem;
+  font-weight: 800;
+  line-height: 1.25;
+  color: var(--pa-stories-ink);
+}
+
+/* ---- Knowledge Centre â€” editorial publication ---- */
+.pa-know {
+  position: relative;
+  isolation: isolate;
+  padding: clamp(4.25rem, 9vh, 6rem) 0;
+  background:
+    radial-gradient(ellipse at 8% 20%, rgba(63, 154, 74, 0.08), transparent 42%),
+    linear-gradient(180deg, #faf7f2 0%, #fff 48%, #f7f1e8 100%);
+  overflow: hidden;
+  border-top: 1px solid rgba(232, 169, 26, 0.35);
+}
+
+.pa-know__bg-word {
+  position: absolute;
+  left: -2%;
+  top: 12%;
+  z-index: 0;
+  font-size: clamp(4.5rem, 14vw, 11rem);
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  line-height: 0.85;
+  color: rgba(92, 36, 40, 0.045);
+  pointer-events: none;
+  user-select: none;
+  text-transform: uppercase;
+}
+
+.pa-know__layout {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(12rem, 0.75fr);
+  gap: 2.5rem 3.5rem;
+  align-items: center;
+}
+
+.pa-know__cta {
+  border-bottom: 2px solid rgba(232, 169, 26, 0.4);
+  padding-bottom: 0.15rem;
+}
+
+.pa-know__pub {
+  margin: 0;
+  justify-self: end;
+  width: min(100%, 18rem);
+}
+
+.pa-know__cover {
+  position: relative;
+  display: block;
+  aspect-ratio: 3 / 4;
+  overflow: hidden;
+  background: #1a0c0e;
+  box-shadow:
+    0 22px 48px rgba(92, 36, 40, 0.22),
+    0 2px 0 rgba(255, 255, 255, 0.08) inset;
+  transform: rotate(-2.5deg);
+  transition: transform 0.45s ease, box-shadow 0.45s ease;
+  text-decoration: none;
+}
+
+.pa-know__cover:hover {
+  transform: rotate(0deg) translateY(-6px);
+  box-shadow: 0 28px 56px rgba(92, 36, 40, 0.28);
+  text-decoration: none;
+}
+
+.pa-know__cover img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.55s ease;
+}
+
+.pa-know__cover:hover img {
+  transform: scale(1.04);
+}
+
+.pa-know__cover-label {
+  position: absolute;
+  left: 0.85rem;
+  bottom: 0.85rem;
+  padding: 0.3rem 0.55rem;
+  background: rgba(92, 36, 40, 0.92);
+  color: #fff;
+  font-size: 0.65rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+/* ---- News & Updates â€” editorial stream ---- */
+.pa-news {
+  padding: clamp(4rem, 8vh, 5.5rem) 0;
+  background: linear-gradient(180deg, #fff 0%, #faf7f2 100%);
+  border-top: 1px solid rgba(92, 36, 40, 0.08);
+}
+
+.pa-news__layout {
+  display: grid;
+  grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+  gap: 2.5rem 3.5rem;
+  align-items: start;
+}
+
+.pa-news__stream {
+  position: relative;
+  padding-left: 1.35rem;
+}
+
+.pa-news__rail {
+  position: absolute;
+  left: 0.2rem;
+  top: 0.35rem;
+  bottom: 0.35rem;
+  width: 1px;
+  background: linear-gradient(180deg, var(--pa-gold), rgba(92, 36, 40, 0.2));
+  transform-origin: top center;
+}
+
+.pa-news__list {
+  display: flex;
+  flex-direction: column;
+}
+
+.pa-news__item {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 0.35rem 1rem;
+  padding: 1.15rem 0.35rem 1.15rem 0.85rem;
+  border-bottom: 1px solid rgba(92, 36, 40, 0.12);
+  text-decoration: none;
+  color: inherit;
+  transition: transform 0.28s ease, background 0.28s ease;
+}
+
+.pa-news__item::before {
+  content: "";
+  position: absolute;
+  left: -1.2rem;
+  top: 1.45rem;
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 50%;
+  background: #fff;
+  border: 2px solid var(--pa-gold);
+  transition: background 0.25s ease, transform 0.25s ease;
+}
+
+.pa-news__item:first-child {
+  border-top: 1px solid rgba(92, 36, 40, 0.12);
+}
+
+.pa-news__item:hover {
+  transform: translateX(6px);
+  background: rgba(247, 241, 232, 0.55);
+  text-decoration: none;
+}
+
+.pa-news__item:hover::before {
+  background: var(--pa-gold);
+  transform: scale(1.15);
+}
+
+.pa-news__meta {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem 1rem;
+  align-items: baseline;
+}
+
+.pa-news__tag {
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--pa-maroon);
+}
+
+.pa-news__date {
+  font-size: 0.78rem;
+  color: var(--pa-muted);
+}
+
+.pa-news__headline {
+  font-size: clamp(1.05rem, 1.8vw, 1.25rem);
+  font-weight: 800;
+  line-height: 1.3;
+  letter-spacing: -0.015em;
+  color: var(--pa-maroon);
+}
+
+.pa-news__arrow {
+  align-self: end;
+  font-size: 1.15rem;
+  color: var(--pa-gold);
+  transition: transform 0.28s ease;
+}
+
+.pa-news__item:hover .pa-news__arrow {
+  transform: translateX(5px);
+}
+
+.pa-news__item:hover .pa-news__headline {
   color: #3d181c;
 }
 
@@ -1287,9 +1636,18 @@ body:has(.home-page) .site-footer {
   background: var(--pa-maroon-deep);
 }
 
+@media (max-width: 1200px) and (min-width: 981px) {
+  .pa-africa__geo-arc {
+    --pa-ring-size: clamp(22rem, 40vw, 32rem);
+    right: -22%;
+    top: 4%;
+  }
+}
+
 @media (max-width: 980px) {
-  .pa-africa__top,
-  .pa-split__grid,
+   .pa-africa__top,
+  .pa-know__layout,
+  .pa-news__layout,
   .pa-impact__grid {
     grid-template-columns: 1fr;
   }
@@ -1312,32 +1670,124 @@ body:has(.home-page) .site-footer {
     min-height: 16rem;
   }
 
-  .pa-stories__mosaic {
-    grid-template-columns: 1fr 1fr;
-    grid-template-rows: auto;
-  }
-
-  .pa-stories__strip.is-lead {
-    grid-column: 1 / -1;
-    min-height: 18rem;
-  }
-
-  .pa-split__grid {
+   .pa-stories__cinema {
     grid-template-columns: 1fr;
+    min-height: 0;
+  }
+
+  .pa-stories__feature {
+    min-height: 22rem;
+  }
+
+  .pa-stories__index {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+
+  .pa-know__pub {
+    justify-self: start;
+  }
+
+  .pa-africa__top {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "intro"
+      "stats"
+      "nav";
+  }
+
+  .pa-africa__geo {
+    height: min(28rem, 70%);
+  }
+
+  .pa-africa__geo-arc {
+    --pa-ring-size: clamp(18rem, 52vw, 26rem);
+    right: -28%;
+    top: auto;
+    bottom: 4%;
+  }
+
+  .pa-africa__stats {
+    flex-direction: row;
+    flex-wrap: wrap;
+    border-left: none;
+    padding-left: 0;
+    gap: 1.5rem 2.25rem;
+    border-top: 2px solid rgba(232, 169, 26, 0.45);
+    padding-top: 1.25rem;
   }
 }
 
 @media (max-width: 640px) {
-  .pa-stories__mosaic {
-    grid-template-columns: 1fr;
+  .pa-stories__cinema {
+    display: none;
+  }
+
+  .pa-stories__mobile {
+    display: grid;
+    gap: 0.85rem;
+  }
+
+  .pa-stories__mobile-card {
+    position: relative;
+    display: block;
+    min-height: 16rem;
+    overflow: hidden;
+    text-decoration: none;
+    color: var(--pa-ivory);
+  }
+
+  .pa-stories__mobile-shot {
+    position: absolute;
+    inset: 0;
+  }
+
+  .pa-stories__mobile-shot img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .pa-stories__mobile-copy {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    gap: 0.4rem;
+    min-height: 16rem;
+    padding: 1.25rem 1.1rem;
+    background: linear-gradient(180deg, transparent 20%, rgba(42, 20, 18, 0.9) 100%);
   }
 
   .pa-africa,
   .pa-work,
   .pa-impact,
   .pa-stories,
-  .pa-split {
+  .pa-know,
+  .pa-news {
     padding: 3.25rem 0;
+  }
+
+  .pa-africa__geo {
+    height: min(22rem, 58%);
+  }
+
+  .pa-africa__geo-arc {
+    --pa-ring-size: min(70vw, 18rem);
+    right: -34%;
+    top: auto;
+    bottom: -6%;
+  }
+
+  .pa-africa__geo-dot--d,
+  .pa-africa__geo-dot--e {
+    opacity: 0.55;
+  }
+
+  .pa-know__cover {
+    transform: none;
+    max-width: 14rem;
   }
 
   .pa-work__tab {
@@ -1350,17 +1800,13 @@ body:has(.home-page) .site-footer {
 }
 
 /* ---- Motion / hover polish ---- */
-.pa-africa__panel,
 .pa-impact__card,
-.pa-stories__strip,
-.pa-split__knowledge,
-.pa-split__news,
-.pa-split__news-item,
 .pa-partner__btn,
 .pa-africa__link,
 .pa-work__panel-cta,
 .pa-stories__all,
-.pa-split__cta,
+.pa-know__cta,
+.pa-news__cta,
 .pa-impact__cta {
   transition:
     transform 0.28s var(--ease-out),
@@ -1369,12 +1815,6 @@ body:has(.home-page) .site-footer {
     background 0.28s ease,
     color 0.28s ease,
     opacity 0.28s ease;
-}
-
-.pa-africa__panel:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 18px 44px rgba(92, 36, 40, 0.12);
-  border-color: rgba(232, 169, 26, 0.45);
 }
 
 .pa-africa__stat {
@@ -1410,28 +1850,6 @@ body:has(.home-page) .site-footer {
   transition: opacity 0.3s ease;
 }
 
-.pa-stories__strip:hover {
-  transform: translateY(-2px);
-}
-
-.pa-split__knowledge:hover,
-.pa-split__news:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 18px 44px rgba(92, 36, 40, 0.1);
-}
-
-.pa-split__news-item:hover {
-  transform: none;
-}
-
-.pa-split__report img {
-  transition: transform 0.45s var(--ease-out);
-}
-
-.pa-split__knowledge:hover .pa-split__report img {
-  transform: scale(1.03);
-}
-
 .pa-partner__btn:hover {
   transform: translateY(-3px);
 }
@@ -1439,7 +1857,8 @@ body:has(.home-page) .site-footer {
 .pa-africa__link:hover,
 .pa-work__panel-cta:hover,
 .pa-stories__all:hover,
-.pa-split__cta:hover {
+.pa-know__cta:hover,
+.pa-news__cta:hover {
   transform: translateX(4px);
 }
 
@@ -1457,17 +1876,19 @@ body:has(.home-page) .site-footer {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .pa-africa__panel,
   .pa-impact__card,
-  .pa-stories__strip,
-  .pa-stories__shot,
-  .pa-split__knowledge,
-  .pa-split__news,
-  .pa-split__news-item,
   .pa-partner__btn,
-  .pa-split__report img,
+  .pa-know__cover,
+  .pa-know__cover img,
+  .pa-news__item,
+  .pa-stories__feature-media img,
   .pa-impact__viz,
   .home-photo-hero__watch {
     transition: none !important;
   }
+
+  .pa-africa.is-geo-ready .pa-africa__geo-dot {
+    animation: none !important;
+  }
 }
+
