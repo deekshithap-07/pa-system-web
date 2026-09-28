@@ -36,6 +36,7 @@
   height: var(--pa-ring-size);
   border: none;
   border-radius: 50%;
+  transform-origin: 50% 50%;
 }
 
 .pa-africa__geo-ring {
@@ -44,6 +45,7 @@
   width: 100%;
   height: 100%;
   overflow: visible;
+  transform-origin: 50% 50%;
 }
 
 .pa-africa__geo-ring circle {
@@ -54,105 +56,126 @@
   stroke-linecap: round;
 }
 
+/*
+ * Gold dots travel ON the ring via offset-path (circle = exact ring circumference).
+ * Different durations + negative delays keep them spaced and slow.
+ */
 .pa-africa__geo-dot {
+  --pa-dot-period: 20s;
+  --pa-dot-glow: 5.5s;
   position: absolute;
-  left: 50%;
-  top: 50%;
+  left: 0;
+  top: 0;
   width: 0.5rem;
   height: 0.5rem;
-  margin: -0.25rem 0 0 -0.25rem;
+  margin: 0;
   border-radius: 50%;
   background: var(--pa-gold);
-  box-shadow: 0 0 0 5px rgba(232, 169, 26, 0.1);
+  box-shadow: 0 0 0 5px rgba(232, 169, 26, 0.12);
   opacity: 0.9;
-  transform: var(--pa-dot-t);
+  offset-path: circle(50% at 50% 50%);
+  offset-distance: 0%;
+  offset-rotate: 0deg;
+  offset-anchor: center;
+  animation:
+    pa-africa-dot-orbit var(--pa-dot-period) linear infinite,
+    pa-africa-dot-glow var(--pa-dot-glow) ease-in-out infinite;
+  animation-play-state: paused;
+  will-change: offset-distance, opacity, transform;
 }
 
-/* Nodes on the visible left crescent of a right-cropped ring */
 .pa-africa__geo-dot--a {
-  --pa-dot-t: rotate(-42deg) translateY(calc(-1 * var(--pa-ring-r))) rotate(42deg);
+  --pa-dot-period: 18s;
+  --pa-dot-glow: 5.2s;
+  animation-delay: -3s, 0s;
 }
 
 .pa-africa__geo-dot--b {
-  --pa-dot-t: rotate(-78deg) translateY(calc(-1 * var(--pa-ring-r))) rotate(78deg);
+  --pa-dot-period: 24s;
+  --pa-dot-glow: 6.2s;
   width: 0.38rem;
   height: 0.38rem;
-  margin: -0.19rem 0 0 -0.19rem;
+  animation-delay: -7s, 0.7s;
 }
 
 .pa-africa__geo-dot--c {
-  --pa-dot-t: rotate(-118deg) translateY(calc(-1 * var(--pa-ring-r))) rotate(118deg);
+  --pa-dot-period: 20s;
+  --pa-dot-glow: 5.8s;
   width: 0.45rem;
   height: 0.45rem;
-  margin: -0.225rem 0 0 -0.225rem;
   background: var(--pa-gold-ochre, var(--pa-gold));
-  box-shadow: 0 0 0 5px rgba(215, 166, 42, 0.1);
+  box-shadow: 0 0 0 5px rgba(215, 166, 42, 0.12);
+  animation-delay: -11s, 1.4s;
+  animation-direction: reverse, normal;
 }
 
 .pa-africa__geo-dot--d {
-  --pa-dot-t: rotate(-158deg) translateY(calc(-1 * var(--pa-ring-r))) rotate(158deg);
+  --pa-dot-period: 28s;
+  --pa-dot-glow: 6.5s;
   width: 0.34rem;
   height: 0.34rem;
-  margin: -0.17rem 0 0 -0.17rem;
-  opacity: 0.75;
+  opacity: 0.78;
+  animation-delay: -16s, 2.1s;
 }
 
 .pa-africa__geo-dot--e {
-  --pa-dot-t: rotate(-18deg) translateY(calc(-1 * var(--pa-ring-r))) rotate(18deg);
+  --pa-dot-period: 22s;
+  --pa-dot-glow: 5.4s;
   width: 0.42rem;
   height: 0.42rem;
-  margin: -0.21rem 0 0 -0.21rem;
   background: var(--pa-maroon);
-  box-shadow: 0 0 0 4px rgba(92, 36, 40, 0.08);
+  box-shadow: 0 0 0 4px rgba(92, 36, 40, 0.1);
+  animation-delay: -5s, 0.35s;
 }
 
-@keyframes pa-africa-dot-pulse {
+@keyframes pa-africa-dot-orbit {
+  to {
+    offset-distance: 100%;
+  }
+}
+
+@keyframes pa-africa-dot-glow {
   0%,
   100% {
-    opacity: 0.72;
-    transform: var(--pa-dot-t) scale(1);
+    opacity: 0.65;
+    transform: scale(1);
   }
   50% {
     opacity: 1;
-    transform: var(--pa-dot-t) scale(1.12);
+    transform: scale(1.15);
   }
 }
 
-.pa-africa.is-geo-ready .pa-africa__geo-dot {
-  animation: pa-africa-dot-pulse 5.5s ease-in-out infinite;
+@keyframes pa-africa-ring-breathe {
+  0%,
+  100% {
+    opacity: 0.8;
+    transform: scale(1) rotate(0deg);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.02) rotate(1.2deg);
+  }
 }
 
-.pa-africa.is-geo-ready .pa-africa__geo-dot--b {
-  animation-delay: 0.7s;
-  animation-duration: 6.2s;
+/* Orbit / breathe run only while section is on-screen (ambient layer) */
+.pa-africa.is-geo-ready.is-ambient .pa-africa__geo-dot {
+  animation-play-state: running;
 }
 
-.pa-africa.is-geo-ready .pa-africa__geo-dot--c {
-  animation-delay: 1.4s;
-  animation-duration: 5.8s;
-}
-
-.pa-africa.is-geo-ready .pa-africa__geo-dot--d {
-  animation-delay: 2.1s;
-  animation-duration: 6.5s;
-}
-
-.pa-africa.is-geo-ready .pa-africa__geo-dot--e {
-  animation-delay: 0.35s;
-  animation-duration: 5.2s;
+.pa-africa.is-geo-ready.is-ambient .pa-africa__geo-ring {
+  animation: pa-africa-ring-breathe 16s ease-in-out infinite;
 }
 
 .pa-africa__top {
   position: relative;
   z-index: 2;
   display: grid;
-  grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
-  grid-template-areas:
-    "intro stats"
-    "nav stats";
+  grid-template-columns: minmax(0, 44rem);
+  grid-template-areas: "intro";
   gap: 1.75rem 3rem;
-  align-items: start;
-  margin-bottom: 1.5rem;
+  align-items: center;
+  margin-bottom: 2.25rem;
 }
 
 .pa-africa__intro,
@@ -162,7 +185,6 @@
 }
 
 .pa-africa__intro { grid-area: intro; }
-.pa-africa__stats { grid-area: stats; }
 .pa-africa__nav { grid-area: nav; }
 
 .pa-africa__eyebrow,
@@ -222,45 +244,202 @@
   color: var(--pa-slate);
 }
 
-.pa-africa__stats {
+/* Full-width running stats ticker */
+.pa-africa__ticker {
   position: relative;
   z-index: 3;
-  isolation: isolate;
+  overflow: hidden;
+  margin: 0 0 1.5rem;
+  padding: 1.1rem 0;
+  border-top: 1px solid rgba(232, 169, 26, 0.45);
+  border-bottom: 1px solid rgba(232, 169, 26, 0.45);
+  background: rgba(255, 254, 249, 0.85);
+  -webkit-mask-image: linear-gradient(90deg, transparent 0%, #000 6%, #000 94%, transparent 100%);
+  mask-image: linear-gradient(90deg, transparent 0%, #000 6%, #000 94%, transparent 100%);
+}
+
+.pa-africa__ticker-track {
   display: flex;
-  flex-direction: column;
-  gap: 1.35rem;
-  padding: 0.35rem 0.75rem 0.35rem 1.5rem;
-  border-left: 2px solid rgba(232, 169, 26, 0.55);
-  background: linear-gradient(90deg, rgba(255, 254, 249, 0.97) 0%, rgba(247, 241, 232, 0.94) 100%);
+  width: max-content;
+  animation: pa-africa-ticker 38s linear infinite;
+  will-change: transform;
+}
+
+.pa-africa__ticker:hover .pa-africa__ticker-track {
+  animation-play-state: paused;
+}
+
+html.pa-ambient-ready .pa-africa:not(.is-ambient) .pa-africa__ticker-track {
+  animation-play-state: paused;
+}
+
+.pa-africa__ticker-group {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+@keyframes pa-africa-ticker {
+  to {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+.pa-africa__stat {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.65rem;
+  padding: 0 2.25rem;
+  white-space: nowrap;
 }
 
 .pa-africa__stat-value {
-  display: block;
-  font-size: clamp(2.6rem, 5.5vw, 4rem);
+  font-size: clamp(1.9rem, 3.6vw, 2.75rem);
   font-weight: 800;
   color: var(--pa-maroon);
-  letter-spacing: -0.045em;
-  line-height: 0.95;
+  letter-spacing: -0.035em;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
 }
 
-.pa-africa__stat:nth-child(2) .pa-africa__stat-value {
-  font-size: clamp(2.2rem, 4.5vw, 3.35rem);
-  color: var(--pa-maroon);
-}
-
-.pa-africa__stat:nth-child(3) .pa-africa__stat-value {
-  font-size: clamp(1.85rem, 3.8vw, 2.75rem);
+.pa-africa__stat:nth-child(4n + 3) .pa-africa__stat-value {
   color: var(--pa-gold);
 }
 
 .pa-africa__stat-label {
-  display: block;
-  margin-top: 0.4rem;
-  font-size: 0.72rem;
+  font-size: 0.78rem;
   font-weight: 700;
-  color: rgba(92, 36, 40, 0.62);
+  color: rgba(92, 36, 40, 0.68);
   text-transform: uppercase;
   letter-spacing: 0.12em;
+}
+
+/* Static stats row — numbers count up in place, no sideways motion */
+.pa-africa__ticker--static {
+  -webkit-mask-image: none;
+  mask-image: none;
+}
+
+.pa-africa__ticker--static .pa-africa__ticker-group {
+  flex-wrap: wrap;
+  justify-content: center;
+  row-gap: 1rem;
+  width: 100%;
+}
+
+.pa-africa__stat-value {
+  display: inline-grid;
+  justify-items: end;
+}
+
+.pa-africa__stat-ghost,
+.pa-africa__stat-num {
+  grid-area: 1 / 1;
+}
+
+.pa-africa__stat-ghost {
+  visibility: hidden;
+}
+
+/* "Numbers that hold a generation" — static impact numbers (hosted Impact section) */
+.pa-africa__numbers {
+  position: relative;
+  z-index: 3;
+  margin: 0 0 1.5rem;
+  padding: clamp(2.25rem, 5vh, 3.25rem) 0;
+  background:
+    radial-gradient(ellipse at 0% 50%, rgba(245, 215, 138, 0.22), transparent 45%),
+    rgba(255, 254, 249, 0.92);
+  border-top: 1px solid rgba(232, 169, 26, 0.4);
+  border-bottom: 1px solid rgba(232, 169, 26, 0.4);
+}
+
+.pa-africa__numbers-inner {
+  display: grid;
+  grid-template-columns: minmax(14rem, 0.8fr) minmax(0, 2.2fr);
+  gap: 1.75rem clamp(2rem, 4vw, 3.5rem);
+  align-items: center;
+}
+
+.pa-africa__numbers-head .pa-title {
+  margin: 0;
+  font-size: clamp(1.45rem, 2.4vw, 1.95rem);
+  line-height: 1.12;
+}
+
+.pa-africa__numbers-head p {
+  margin: 0.6rem 0 0;
+  font-size: 0.92rem;
+  line-height: 1.55;
+  color: var(--pa-slate);
+}
+
+.pa-africa__numbers-grid {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.pa-africa__numbers .pa-africa__stat {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.55rem;
+  padding: 0.35rem clamp(0.9rem, 1.8vw, 1.5rem);
+  border-left: 1px solid rgba(92, 36, 40, 0.12);
+  white-space: normal;
+}
+
+.pa-africa__numbers .pa-africa__stat-value {
+  justify-items: start;
+  font-size: clamp(2.1rem, 3.8vw, 3rem);
+}
+
+.pa-africa__numbers .pa-africa__stat-value::after {
+  content: "";
+  grid-area: 2 / 1;
+  width: 2rem;
+  height: 3px;
+  margin-top: 0.55rem;
+  border-radius: 3px;
+  background: var(--pa-gold);
+}
+
+.pa-africa__numbers .pa-africa__stat:nth-child(2) .pa-africa__stat-value::after { background: var(--pa-green); }
+.pa-africa__numbers .pa-africa__stat:nth-child(3) .pa-africa__stat-value::after { background: var(--pa-maroon); }
+
+.pa-africa__numbers .pa-africa__stat-label {
+  font-size: 0.72rem;
+  line-height: 1.35;
+}
+
+@media (max-width: 980px) {
+  .pa-africa__numbers-inner {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  .pa-africa__numbers-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    row-gap: 1.5rem;
+  }
+
+  .pa-africa__numbers .pa-africa__stat:nth-child(odd) {
+    border-left: 0;
+    padding-left: 0;
+  }
+}
+
+.pa-africa__ticker-sep {
+  flex-shrink: 0;
+  width: 0.45rem;
+  height: 0.45rem;
+  border-radius: 50%;
+  background: var(--pa-gold);
+  opacity: 0.75;
 }
 
 .pa-africa__link,
@@ -284,14 +463,21 @@
 }
 
 .pa-africa__nav {
-  max-width: 36rem;
-  padding-top: 0.25rem;
+  justify-self: end;
+  width: 100%;
+  max-width: 26rem;
+  padding: 1.6rem 1.6rem 1.4rem;
+  border-radius: 0.9rem;
+  background: rgba(247, 241, 232, 0.92);
+  border: 1px solid rgba(92, 36, 40, 0.08);
+  box-shadow: 0 18px 40px -28px rgba(42, 16, 20, 0.35);
 }
 
 .pa-africa__nav-label {
-  margin: 0 0 0.35rem;
-  font-size: 0.95rem;
+  margin: 0 0 0.45rem;
+  font-size: 1.15rem;
   font-weight: 800;
+  line-height: 1.25;
   color: var(--pa-maroon);
 }
 
@@ -305,15 +491,16 @@
 .pa-africa__countries {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.45rem 0.55rem;
+  gap: 0.45rem;
 }
 
 .pa-africa__country {
   position: relative;
   appearance: none;
-  border: none;
-  background: transparent;
-  padding: 0.45rem 0.15rem 0.55rem;
+  border: 1px solid rgba(92, 36, 40, 0.14);
+  border-radius: 999px;
+  background: #fff;
+  padding: 0.42rem 0.85rem 0.5rem;
   font: inherit;
   font-size: 0.92rem;
   font-weight: 650;
@@ -324,9 +511,9 @@
 
 .pa-africa__country-mark {
   position: absolute;
-  left: 0.15rem;
-  right: 0.15rem;
-  bottom: 0.15rem;
+  left: 0.85rem;
+  right: 0.85rem;
+  bottom: 0.2rem;
   height: 2px;
   background: transparent;
   transform: scaleX(0);
@@ -420,7 +607,7 @@
   right: 0.75rem;
   bottom: 0.75rem;
   height: auto;
-  width: min(17rem, calc(100vw - 1.5rem));
+  width: min(20rem, calc(100vw - 1.5rem));
   background: #fff;
   border-radius: 0.9rem;
   box-shadow: -8px 12px 40px rgba(42, 16, 20, 0.2);
@@ -633,18 +820,64 @@ a.pa-drawer__metric:hover {
   color: var(--pa-slate);
 }
 
-.pa-drawer__country {
-  display: inline-flex;
-  margin-top: 0.2rem;
-  font-size: 0.84rem;
-  font-weight: 700;
-  color: var(--pa-maroon);
-  text-decoration: none;
-  border-bottom: 1px solid rgba(232, 169, 26, 0.55);
+.pa-drawer__intro {
+  margin: 0 0 0.95rem;
 }
 
-.pa-drawer__country:hover {
-  color: var(--pa-gold);
+.pa-drawer__tagline {
+  margin: 0 0 0.4rem;
+  font-size: 0.86rem;
+  font-weight: 700;
+  line-height: 1.4;
+  color: var(--pa-maroon);
+}
+
+.pa-drawer__story {
+  margin: 0;
+  font-size: 0.8rem;
+  line-height: 1.55;
+  color: var(--pa-slate);
+  display: -webkit-box;
+  -webkit-line-clamp: 5;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.pa-drawer--compact {
+  bottom: auto;
+  max-height: calc(100vh - var(--header-h) - 1.5rem);
+}
+
+.pa-drawer--compact .pa-drawer__story {
+  display: block;
+  -webkit-line-clamp: unset;
+  overflow: visible;
+}
+
+.pa-drawer__country {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  width: 100%;
+  margin-top: 0.6rem;
+  padding: 0.7rem 1rem;
+  border-radius: 999px;
+  background: var(--pa-maroon);
+  font-size: 0.86rem;
+  font-weight: 800;
+  color: #fff;
+  text-decoration: none;
+  box-shadow: 0 10px 22px rgba(92, 36, 40, 0.22);
+  transition: background 0.25s ease, color 0.25s ease, transform 0.25s ease;
+}
+
+.pa-drawer__country:hover,
+.pa-drawer__country:focus-visible {
+  background: var(--pa-gold);
+  color: var(--pa-maroon-deep, #2a1014);
+  transform: translateY(-1px);
+  text-decoration: none;
 }
 
 body.pa-drawer-open {
@@ -774,12 +1007,30 @@ body.pa-drawer-open {
   font: inherit;
   text-align: left;
   cursor: pointer;
-  transition: background 0.22s ease, color 0.22s ease;
   position: relative;
+  transition:
+    background 0.38s cubic-bezier(0.22, 1, 0.36, 1),
+    color 0.38s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.38s cubic-bezier(0.22, 1, 0.36, 1),
+    padding-left 0.38s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .pa-work__tab:last-child {
   border-bottom: 0;
+}
+
+.pa-work__tab::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 18%;
+  bottom: 18%;
+  width: 3px;
+  background: var(--pa-gold);
+  border-radius: 0 2px 2px 0;
+  transform: scaleY(0);
+  transform-origin: center;
+  transition: transform 0.42s cubic-bezier(0.22, 1, 0.36, 1), top 0.42s ease, bottom 0.42s ease;
 }
 
 .pa-work__tab-n {
@@ -787,47 +1038,77 @@ body.pa-drawer-open {
   font-weight: 800;
   letter-spacing: 0.06em;
   color: rgba(92, 36, 40, 0.35);
+  transition: color 0.38s cubic-bezier(0.22, 1, 0.36, 1), transform 0.38s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .pa-work__tab-label {
   font-size: 1.02rem;
   font-weight: 700;
   line-height: 1.3;
+  transition: transform 0.38s cubic-bezier(0.22, 1, 0.36, 1), color 0.38s ease;
 }
 
 .pa-work__tab-go {
   color: rgba(92, 36, 40, 0.28);
   font-weight: 700;
-  transition: transform 0.22s ease, color 0.22s ease;
+  transition: transform 0.38s cubic-bezier(0.22, 1, 0.36, 1), color 0.38s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .pa-work__tab:hover,
 .pa-work__tab:focus-visible {
   background: #faf7f2;
   outline: none;
+  transform: translateX(3px);
+  padding-left: 1.3rem;
+}
+
+.pa-work__tab:hover::before,
+.pa-work__tab:focus-visible::before {
+  transform: scaleY(0.72);
+}
+
+.pa-work__tab:hover .pa-work__tab-n,
+.pa-work__tab:focus-visible .pa-work__tab-n {
+  color: var(--pa-gold);
+  transform: translateY(-1px);
+}
+
+.pa-work__tab:hover .pa-work__tab-label,
+.pa-work__tab:focus-visible .pa-work__tab-label {
+  transform: translateX(2px);
+}
+
+.pa-work__tab:hover .pa-work__tab-go,
+.pa-work__tab:focus-visible .pa-work__tab-go {
+  color: var(--pa-gold);
+  transform: translateX(5px);
 }
 
 .pa-work__tab.is-active {
-  background: #faf7f2;
+  background: linear-gradient(90deg, rgba(232, 169, 26, 0.1) 0%, #faf7f2 55%);
+  transform: translateX(4px);
+  padding-left: 1.35rem;
 }
 
 .pa-work__tab.is-active::before {
-  content: "";
-  position: absolute;
-  left: 0;
   top: 0;
   bottom: 0;
-  width: 4px;
-  background: var(--pa-gold);
+  transform: scaleY(1);
 }
 
 .pa-work__tab.is-active .pa-work__tab-n {
   color: var(--pa-gold);
+  transform: translateY(-1px);
+}
+
+.pa-work__tab.is-active .pa-work__tab-label {
+  color: var(--pa-maroon);
+  transform: translateX(3px);
 }
 
 .pa-work__tab.is-active .pa-work__tab-go {
   color: var(--pa-gold);
-  transform: translateX(3px);
+  transform: translateX(6px);
 }
 
 .pa-work__panel {
@@ -841,6 +1122,7 @@ body.pa-drawer-open {
   color: #fff;
   overflow: hidden;
   min-height: 100%;
+  transition: background 0.55s cubic-bezier(0.22, 1, 0.36, 1), filter 0.4s ease;
 }
 
 .pa-work__panel--maroon { background: linear-gradient(160deg, #4a1c20 0%, #5c2428 55%, #3d181c 100%); }
@@ -858,6 +1140,7 @@ body.pa-drawer-open {
   color: rgba(255, 255, 255, 0.07);
   pointer-events: none;
   user-select: none;
+  will-change: transform, opacity;
 }
 
 .pa-work__panel-icon {
@@ -868,11 +1151,18 @@ body.pa-drawer-open {
   color: var(--pa-gold);
   position: relative;
   z-index: 1;
+  overflow: hidden;
+  will-change: transform, opacity, clip-path;
 }
 
 .pa-work__panel-icon svg {
   width: 2rem;
   height: 2rem;
+  transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.pa-work__panel:hover .pa-work__panel-icon svg {
+  transform: scale(1.06);
 }
 
 .pa-work__panel h3 {
@@ -885,6 +1175,7 @@ body.pa-drawer-open {
   position: relative;
   z-index: 1;
   max-width: 16rem;
+  will-change: transform, opacity;
 }
 
 .pa-work__panel p {
@@ -895,6 +1186,7 @@ body.pa-drawer-open {
   max-width: 26rem;
   position: relative;
   z-index: 1;
+  will-change: transform, opacity;
 }
 
 .pa-work__panel-cta {
@@ -906,11 +1198,50 @@ body.pa-drawer-open {
   position: relative;
   z-index: 1;
   width: fit-content;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  border-bottom: 1px solid transparent;
+  transition:
+    color 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+    border-color 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: transform, opacity;
+}
+
+.pa-work__panel-cta-arrow {
+  display: inline-block;
+  transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .pa-work__panel-cta:hover {
   color: #fff;
-  text-decoration: underline;
+  text-decoration: none;
+  border-bottom-color: rgba(255, 255, 255, 0.55);
+}
+
+.pa-work__panel-cta:hover .pa-work__panel-cta-arrow {
+  transform: translateX(5px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pa-work__tab,
+  .pa-work__tab::before,
+  .pa-work__tab-n,
+  .pa-work__tab-label,
+  .pa-work__tab-go,
+  .pa-work__panel,
+  .pa-work__panel-cta,
+  .pa-work__panel-cta-arrow,
+  .pa-work__panel-icon svg {
+    transition: none !important;
+  }
+
+  .pa-work__tab:hover,
+  .pa-work__tab.is-active,
+  .pa-work__tab:focus-visible {
+    transform: none;
+  }
 }
 
 .pa-impact__grid,
@@ -948,7 +1279,8 @@ body.pa-drawer-open {
   position: absolute;
   inset: 0;
   background:
-    linear-gradient(120deg, rgba(42, 16, 20, 0.92) 0%, rgba(92, 36, 40, 0.78) 55%, rgba(61, 24, 28, 0.7) 100%);
+    radial-gradient(ellipse at 90% 10%, rgba(232, 169, 26, 0.16), transparent 45%),
+    linear-gradient(120deg, rgba(20, 54, 28, 0.94) 0%, rgba(47, 122, 56, 0.84) 55%, rgba(31, 88, 41, 0.8) 100%);
 }
 
 .pa-impact__inner {
@@ -1084,7 +1416,7 @@ a.pa-impact__delta {
     radial-gradient(ellipse 48% 42% at 82% 48%, rgba(58, 52, 36, 0.16), transparent 62%),
     radial-gradient(ellipse 70% 55% at 50% 108%, rgba(42, 16, 20, 0.28), transparent 58%);
   color: var(--pa-stories-ink);
-  border-top: none;
+  border-top: 3px solid var(--pa-gold);
   border-bottom: none;
   overflow: hidden;
 }
@@ -1203,8 +1535,8 @@ a.pa-impact__delta {
   position: absolute;
   inset: 0;
   background:
-    linear-gradient(90deg, rgba(42, 20, 18, 0.72) 0%, rgba(42, 20, 18, 0.22) 52%, rgba(42, 20, 18, 0.08) 100%),
-    linear-gradient(180deg, transparent 38%, rgba(42, 20, 18, 0.82) 100%);
+    linear-gradient(90deg, rgba(0, 0, 0, 0.55) 0%, rgba(0, 0, 0, 0.14) 50%, transparent 100%),
+    linear-gradient(180deg, transparent 45%, rgba(0, 0, 0, 0.72) 100%);
 }
 
 .pa-stories__feature-copy {
@@ -1333,7 +1665,7 @@ a.pa-impact__delta {
   color: var(--pa-stories-ink);
 }
 
-/* ---- Knowledge Centre â€” editorial publication ---- */
+/* ---- Knowledge Centre — editorial publication (full cover visible) ---- */
 .pa-know {
   position: relative;
   isolation: isolate;
@@ -1341,7 +1673,8 @@ a.pa-impact__delta {
   background:
     radial-gradient(ellipse at 8% 20%, rgba(63, 154, 74, 0.08), transparent 42%),
     linear-gradient(180deg, #faf7f2 0%, #fff 48%, #f7f1e8 100%);
-  overflow: hidden;
+  /* Never clip the tilted / entering notebook */
+  overflow: visible;
   border-top: 1px solid rgba(232, 169, 26, 0.35);
 }
 
@@ -1358,14 +1691,16 @@ a.pa-impact__delta {
   pointer-events: none;
   user-select: none;
   text-transform: uppercase;
+  overflow: hidden;
+  max-width: 100%;
 }
 
 .pa-know__layout {
   position: relative;
   z-index: 1;
   display: grid;
-  grid-template-columns: minmax(0, 1.1fr) minmax(12rem, 0.75fr);
-  gap: 2.5rem 3.5rem;
+  grid-template-columns: minmax(0, 1.1fr) minmax(14rem, 0.85fr);
+  gap: 2.5rem 3rem;
   align-items: center;
 }
 
@@ -1375,54 +1710,210 @@ a.pa-impact__delta {
 }
 
 .pa-know__pub {
+  --pa-know-tilt: -2.5deg;
+  --pa-know-ease: cubic-bezier(0.22, 1, 0.36, 1);
   margin: 0;
   justify-self: end;
-  width: min(100%, 18rem);
+  width: auto;
+  max-width: min(100%, 17.5rem);
+  padding: 1.75rem 2.5rem 2.75rem 1.5rem;
+  overflow: visible;
+  perspective: 1400px;
 }
 
+/* Tall notebook silhouette — artwork fills the face, no matte behind it */
 .pa-know__cover {
   position: relative;
   display: block;
-  aspect-ratio: 3 / 4;
-  overflow: hidden;
-  background: #1a0c0e;
-  box-shadow:
-    0 22px 48px rgba(92, 36, 40, 0.22),
-    0 2px 0 rgba(255, 255, 255, 0.08) inset;
-  transform: rotate(-2.5deg);
-  transition: transform 0.45s ease, box-shadow 0.45s ease;
+  width: clamp(13.75rem, 22vw, 17rem);
+  aspect-ratio: 0.68;
   text-decoration: none;
+  color: inherit;
+  background: transparent;
+  border: 0;
+  overflow: visible;
+  transform-origin: left center;
+  transform-style: preserve-3d;
+  transform: rotate(var(--pa-know-tilt));
+  filter: drop-shadow(0 22px 36px rgba(42, 16, 20, 0.3));
+  transition:
+    transform 0.7s var(--pa-know-ease),
+    filter 0.7s var(--pa-know-ease);
+  /* Continuous float: pa-ambient.css (.pa-know.is-ambient) */
+  will-change: transform;
 }
 
-.pa-know__cover:hover {
-  transform: rotate(0deg) translateY(-6px);
-  box-shadow: 0 28px 56px rgba(92, 36, 40, 0.28);
+.pa-know__cover:hover,
+.pa-know__cover:focus-visible {
   text-decoration: none;
+  outline: none;
 }
 
-.pa-know__cover img {
+.pa-know__cover::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 0.2rem;
+  z-index: 2;
+  pointer-events: none;
+  background: linear-gradient(
+    180deg,
+    rgba(245, 215, 138, 0.5),
+    rgba(232, 169, 26, 0.85),
+    rgba(245, 215, 138, 0.4)
+  );
+  opacity: 0.65;
+  mix-blend-mode: soft-light;
+}
+
+.pa-know__cover-img {
+  display: block;
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform 0.55s ease;
+  object-position: 15% center;
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+  transform-origin: left center;
+  transition: transform 0.7s var(--pa-know-ease);
 }
 
-.pa-know__cover:hover img {
-  transform: scale(1.04);
+@keyframes pa-know-float {
+  0%,
+  100% {
+    transform: rotate(var(--pa-know-tilt, -2.5deg)) translateY(0);
+  }
+  50% {
+    transform: rotate(calc(var(--pa-know-tilt, -2.5deg) + 0.4deg)) translateY(-5px);
+  }
 }
 
 .pa-know__cover-label {
   position: absolute;
-  left: 0.85rem;
-  bottom: 0.85rem;
-  padding: 0.3rem 0.55rem;
-  background: rgba(92, 36, 40, 0.92);
+  left: 0.65rem;
+  bottom: 0.75rem;
+  z-index: 3;
+  padding: 0.26rem 0.48rem;
+  background: rgba(92, 36, 40, 0.88);
   color: #fff;
-  font-size: 0.65rem;
+  font-size: 0.6rem;
   font-weight: 800;
   letter-spacing: 0.12em;
   text-transform: uppercase;
+  pointer-events: none;
+  transition: transform 0.4s var(--pa-know-ease);
 }
+
+.pa-know__cover:hover,
+.pa-know__cover:focus-visible,
+.pa-know__cover.is-open {
+  animation: none;
+  transform:
+    translateY(-6px)
+    scale(1.03)
+    rotate(-1deg)
+    perspective(1100px)
+    rotateY(-20deg);
+  filter: drop-shadow(0 32px 46px rgba(42, 16, 20, 0.4));
+}
+
+.pa-know__cover:hover .pa-know__cover-img,
+.pa-know__cover:focus-visible .pa-know__cover-img,
+.pa-know__cover.is-open .pa-know__cover-img {
+  transform: scale(1.02);
+}
+
+.pa-know__cover:hover .pa-know__cover-label,
+.pa-know__cover:focus-visible .pa-know__cover-label,
+.pa-know__cover.is-open .pa-know__cover-label {
+  transform: translateY(-3px);
+}
+
+.pa-know__cover:hover::before,
+.pa-know__cover:focus-visible::before,
+.pa-know__cover.is-open::before {
+  opacity: 1;
+  width: 0.28rem;
+}
+
+.pa-know__cover:active {
+  animation: none;
+  transform:
+    translateY(-4px)
+    scale(1.02)
+    rotate(-1deg)
+    perspective(1100px)
+    rotateY(-14deg);
+}
+
+@media (max-width: 980px) {
+  .pa-know__pub {
+    justify-self: start;
+    max-width: min(100%, 15.5rem);
+    padding: 1.4rem 2rem 2.2rem 1.1rem;
+  }
+
+  .pa-know__cover {
+    --pa-know-tilt: -2deg;
+    width: clamp(12.75rem, 28vw, 15.5rem);
+  }
+}
+
+@media (max-width: 640px) {
+  .pa-know__pub {
+    max-width: min(100%, 13.75rem);
+    padding: 1.15rem 1.6rem 1.9rem 0.9rem;
+    margin-inline: auto;
+    justify-self: center;
+  }
+
+  .pa-know__cover {
+    --pa-know-tilt: -1deg;
+    width: clamp(11.5rem, 52vw, 13.75rem);
+    transform: rotate(var(--pa-know-tilt));
+  }
+
+  .pa-know__cover:hover,
+  .pa-know__cover:focus-visible,
+  .pa-know__cover.is-open {
+    transform:
+      translateY(-4px)
+      scale(1.02)
+      rotate(0deg)
+      perspective(900px)
+      rotateY(-12deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pa-know__cover {
+    animation: none !important;
+    transition: filter 0.3s ease;
+  }
+
+  .pa-know__cover-img,
+  .pa-know__cover-label {
+    transition: none !important;
+  }
+
+  .pa-know__cover:hover,
+  .pa-know__cover:focus-visible,
+  .pa-know__cover.is-open,
+  .pa-know__cover:active {
+    transform: rotate(var(--pa-know-tilt, -2.5deg));
+    filter: drop-shadow(0 18px 28px rgba(42, 16, 20, 0.28));
+  }
+
+  .pa-know__cover:hover .pa-know__cover-img,
+  .pa-know__cover:focus-visible .pa-know__cover-img {
+    transform: none !important;
+  }
+}
+
 
 /* ---- News & Updates â€” editorial stream ---- */
 .pa-news {
@@ -1692,8 +2183,17 @@ body:has(.home-page) .site-footer {
     grid-template-columns: 1fr;
     grid-template-areas:
       "intro"
-      "stats"
       "nav";
+    align-items: start;
+  }
+
+  .pa-africa__nav {
+    justify-self: stretch;
+    max-width: none;
+  }
+
+  .pa-africa__stat {
+    padding: 0 1.5rem;
   }
 
   .pa-africa__geo {
@@ -1707,15 +2207,6 @@ body:has(.home-page) .site-footer {
     bottom: 4%;
   }
 
-  .pa-africa__stats {
-    flex-direction: row;
-    flex-wrap: wrap;
-    border-left: none;
-    padding-left: 0;
-    gap: 1.5rem 2.25rem;
-    border-top: 2px solid rgba(232, 169, 26, 0.45);
-    padding-top: 1.25rem;
-  }
 }
 
 @media (max-width: 640px) {
@@ -1785,11 +2276,6 @@ body:has(.home-page) .site-footer {
     opacity: 0.55;
   }
 
-  .pa-know__cover {
-    transform: none;
-    max-width: 14rem;
-  }
-
   .pa-work__tab {
     padding: 0.9rem 1rem;
   }
@@ -1809,24 +2295,68 @@ body:has(.home-page) .site-footer {
 .pa-news__cta,
 .pa-impact__cta {
   transition:
-    transform 0.28s var(--ease-out),
-    box-shadow 0.28s ease,
-    border-color 0.28s ease,
-    background 0.28s ease,
-    color 0.28s ease,
-    opacity 0.28s ease;
+    transform 0.32s var(--ease-out, ease),
+    box-shadow 0.32s ease,
+    border-color 0.32s ease,
+    background 0.32s ease,
+    color 0.32s ease,
+    opacity 0.32s ease;
 }
 
 .pa-africa__stat {
-  transition: transform 0.25s var(--ease-out);
+  transition: transform 0.35s var(--ease-out, ease);
+  cursor: default;
+}
+
+.pa-africa__stat-value {
+  transition: color 0.4s ease, transform 0.35s var(--ease-out, ease);
+  display: inline-grid;
+}
+
+.pa-africa__stat-label {
+  transition: transform 0.35s var(--ease-out, ease), color 0.35s ease;
 }
 
 .pa-africa__stat:hover {
-  transform: translateY(-3px);
+  transform: translateY(-4px);
 }
 
 .pa-africa__stat:hover .pa-africa__stat-value {
   color: var(--pa-gold);
+  transform: translateY(-2px);
+}
+
+.pa-africa__stat:hover .pa-africa__stat-label {
+  transform: translateY(1px);
+  color: var(--pa-maroon);
+}
+
+.pa-africa__country {
+  transition: color 0.35s ease, transform 0.35s var(--ease-out, ease);
+}
+
+.pa-africa__country:hover,
+.pa-africa__country.is-active {
+  color: var(--pa-maroon);
+  border-color: var(--pa-gold);
+  background: rgba(232, 169, 26, 0.12);
+  transform: translateY(-2px);
+}
+
+.pa-stories__feature-media,
+.pa-work__panel-media,
+.home-photo-hero__media {
+  overflow: hidden;
+}
+
+.pa-stories__feature-media img,
+.pa-work__panel-media img {
+  transition: transform 0.55s var(--ease-out, ease);
+}
+
+.pa-stories__feature-media:hover img,
+.pa-work__panel-media:hover img {
+  transform: scale(1.04);
 }
 
 .pa-impact__card:hover {
@@ -1839,7 +2369,7 @@ body:has(.home-page) .site-footer {
 }
 
 .pa-impact__viz {
-  transition: transform 0.35s var(--ease-out);
+  transition: transform 0.35s var(--ease-out, ease);
 }
 
 .pa-impact__card:hover .pa-impact__bar {
@@ -1859,7 +2389,7 @@ body:has(.home-page) .site-footer {
 .pa-stories__all:hover,
 .pa-know__cta:hover,
 .pa-news__cta:hover {
-  transform: translateX(4px);
+  transform: translateX(5px);
 }
 
 .home-photo-hero__watch {
@@ -1878,8 +2408,6 @@ body:has(.home-page) .site-footer {
 @media (prefers-reduced-motion: reduce) {
   .pa-impact__card,
   .pa-partner__btn,
-  .pa-know__cover,
-  .pa-know__cover img,
   .pa-news__item,
   .pa-stories__feature-media img,
   .pa-impact__viz,
@@ -1887,8 +2415,173 @@ body:has(.home-page) .site-footer {
     transition: none !important;
   }
 
-  .pa-africa.is-geo-ready .pa-africa__geo-dot {
+  .pa-africa__ticker {
+    -webkit-mask-image: none;
+    mask-image: none;
+  }
+
+  .pa-africa__ticker-track {
+    animation: none;
+    width: auto;
+    justify-content: center;
+  }
+
+  .pa-africa__ticker-group {
+    flex-wrap: wrap;
+    justify-content: center;
+    row-gap: 0.75rem;
+  }
+
+  .pa-africa__ticker-group + .pa-africa__ticker-group,
+  .pa-africa__ticker-group > :nth-child(n + 7) {
+    display: none;
+  }
+
+  .pa-africa__geo-dot,
+  .pa-africa.is-geo-ready.is-ambient .pa-africa__geo-dot,
+  .pa-africa.is-geo-ready.is-ambient .pa-africa__geo-ring {
     animation: none !important;
+  }
+
+  .pa-africa__geo-dot {
+    /* Stay parked on the ring path — no travel */
+    offset-distance: 0%;
+    transform: none;
+  }
+
+  .pa-africa__geo-dot--a { offset-distance: 8%; }
+  .pa-africa__geo-dot--b { offset-distance: 28%; }
+  .pa-africa__geo-dot--c { offset-distance: 48%; }
+  .pa-africa__geo-dot--d { offset-distance: 68%; }
+  .pa-africa__geo-dot--e { offset-distance: 88%; }
+
+  .pa-africa__stat:hover,
+  .pa-impact__card:hover,
+  .pa-africa__link:hover,
+  .pa-work__panel-cta:hover,
+  .pa-stories__all:hover,
+  .pa-know__cta:hover,
+  .pa-news__cta:hover,
+  .pa-africa__country:hover {
+    transform: none !important;
   }
 }
 
+
+/* ---- Knowledge + News — side-by-side band ---- */
+.pa-kn {
+  position: relative;
+  isolation: isolate;
+  padding: clamp(3.75rem, 8vh, 5.25rem) 0;
+  background:
+    radial-gradient(ellipse at 6% 18%, rgba(63, 154, 74, 0.07), transparent 40%),
+    linear-gradient(180deg, #faf7f2 0%, #fff 55%, #f7f1e8 100%);
+  border-top: 1px solid rgba(232, 169, 26, 0.35);
+}
+
+.pa-kn__grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  align-items: stretch;
+}
+
+.pa-kn .pa-know,
+.pa-kn .pa-news {
+  padding: 0;
+  background: none;
+  border-top: 0;
+}
+
+.pa-kn .pa-know {
+  padding-right: clamp(1.75rem, 3vw, 3rem);
+}
+
+.pa-kn .pa-news {
+  padding-left: clamp(1.75rem, 3vw, 3rem);
+  border-left: 1px solid rgba(92, 36, 40, 0.12);
+}
+
+.pa-kn__grid.container {
+  max-width: 68rem;
+}
+
+.pa-kn__grid .container {
+  width: auto;
+  max-width: none;
+  margin-inline: 0;
+  padding-inline: 0;
+}
+
+.pa-kn .pa-know__bg-word {
+  display: none;
+}
+
+/* Each column stacks: heading block on top, cover / news stream below */
+.pa-kn .pa-know__layout,
+.pa-kn .pa-news__layout {
+  grid-template-columns: 1fr;
+  gap: 1.75rem;
+  align-items: start;
+}
+
+.pa-kn .pa-know__pub {
+  justify-self: start;
+}
+
+.pa-kn .pa-know__lead,
+.pa-kn .pa-news__lead {
+  max-width: 28rem;
+}
+
+.pa-kn .pa-title {
+  font-size: clamp(1.7rem, 2.6vw, 2.4rem);
+}
+
+.pa-kn .pa-know__pub {
+  padding: 1rem 1.6rem 1.8rem 0.9rem;
+}
+
+.pa-kn .pa-know__cover {
+  width: clamp(9.5rem, 12vw, 12rem);
+}
+
+.pa-kn .pa-news__item {
+  padding: 0.85rem 0.25rem 0.85rem 0.7rem;
+}
+
+.pa-kn .pa-news__headline {
+  font-size: clamp(0.95rem, 1.2vw, 1.05rem);
+}
+
+@media (max-width: 860px) {
+  .pa-kn__grid {
+    grid-template-columns: 1fr;
+    row-gap: 3rem;
+  }
+
+  .pa-kn .pa-know {
+    padding-right: 0;
+  }
+
+  .pa-kn .pa-news {
+    padding-left: 0;
+    padding-top: 3rem;
+    border-left: 0;
+    border-top: 1px solid rgba(92, 36, 40, 0.12);
+  }
+}
+
+@media (max-width: 640px) {
+  .pa-kn {
+    padding: 3.25rem 0;
+  }
+
+  .pa-kn .pa-know__layout,
+  .pa-kn .pa-news__layout {
+    grid-template-columns: 1fr;
+  }
+
+  .pa-kn .pa-know__pub {
+    justify-self: center;
+  }
+}

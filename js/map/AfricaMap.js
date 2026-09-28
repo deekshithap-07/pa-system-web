@@ -37,6 +37,8 @@ const PA_SLUG_LIST = [...PA_SLUGS];
 const ACTIVE_GOLD = "#C99C37";
 const ACTIVE_GOLD_BRIGHT = "#F0D878";
 const INACTIVE_BORDER = "#2A3A52";
+const NETWORK_GREEN = "#2F8F4E";
+const NETWORK_DOT = "#F2B705";
 
 // Zoom-aware line-width for active (in-network) vs inactive borders
 const COUNTRY_ACTIVE_WIDTH = [
@@ -525,6 +527,91 @@ export class AfricaMap {
       this.fitAfricaView();
       this._initialFitDone = true;
     }
+
+    if (!this.map.getLayer("pa-network-highlight")) {
+      this.map.once("idle", () => this._renderNetworkHighlight());
+    }
+  }
+
+  /**
+   * Display-only highlight of PA countries + community points.
+   * Kept out of the click/hover layer lists so drill-down behaviour is untouched.
+   * Zoom stops are relative to the fitted Africa view.
+   */
+  _renderNetworkHighlight() {
+    const map = this.map;
+    if (!map || this._destroyed || map.getLayer("pa-network-highlight")) return;
+    if (!map.getSource("pa-countries")) return;
+
+    const z0 = map.getZoom();
+    const beforeId = map.getLayer("pa-countries-fill") ? "pa-countries-fill" : undefined;
+
+    map.addLayer(
+      {
+        id: "pa-network-highlight",
+        type: "fill",
+        source: "pa-countries",
+        filter: ["==", ["get", "in_network"], true],
+        paint: {
+          "fill-color": NETWORK_GREEN,
+          "fill-opacity": [
+            "interpolate", ["linear"], ["zoom"],
+            z0, 0.28,
+            z0 + 0.6, 0.5,
+            z0 + 2.2, 0.36,
+            z0 + 3.4, 0,
+          ],
+        },
+      },
+      beforeId
+    );
+
+    const features = [];
+    Object.values(this.drill?.byCountry || {}).forEach((hub) => {
+      (hub.catchments || []).forEach((ct) => {
+        (ct.communities || []).forEach((com) => {
+          if (com.lng == null || com.lat == null) return;
+          features.push({
+            type: "Feature",
+            geometry: { type: "Point", coordinates: [com.lng, com.lat] },
+            properties: { id: com.id },
+          });
+        });
+      });
+    });
+    if (!features.length) return;
+
+    map.addSource("pa-network-communities", {
+      type: "geojson",
+      data: { type: "FeatureCollection", features },
+    });
+
+    const dotOpacity = [
+      "interpolate", ["linear"], ["zoom"],
+      z0 + 0.25, 0,
+      z0 + 0.8, 1,
+      z0 + 3.6, 1,
+      z0 + 4.4, 0,
+    ];
+
+    map.addLayer({
+      id: "pa-network-communities",
+      type: "circle",
+      source: "pa-network-communities",
+      paint: {
+        "circle-color": NETWORK_DOT,
+        "circle-radius": [
+          "interpolate", ["linear"], ["zoom"],
+          z0, 2.5,
+          z0 + 1.5, 4,
+          z0 + 3.5, 5.5,
+        ],
+        "circle-stroke-color": "#ffffff",
+        "circle-stroke-width": 1.2,
+        "circle-opacity": dotOpacity,
+        "circle-stroke-opacity": dotOpacity,
+      },
+    });
   }
 
   _bindCountryHandlers() {
@@ -1217,9 +1304,9 @@ export class AfricaMap {
     el.className = "tk-legend";
     el.innerHTML = `
       <span class="tk-legend__level" data-level-badge>Global view</span>
-      <span><i class="tk-legend__swatch" style="background:${PA_FILL};border-color:${PA_BORDER}"></i>PA network</span>
+      <span><i class="tk-legend__swatch" style="background:${NETWORK_GREEN};border-color:${PA_BORDER}"></i>Countries where we work</span>
       <span><i class="tk-legend__dot" style="background:#C99C37"></i>Catchment</span>
-      <span><i class="tk-legend__dot" style="background:#D6B352"></i>Community</span>`;
+      <span><i class="tk-legend__dot" style="background:${NETWORK_DOT}"></i>Communities</span>`;
     this.root.appendChild(el);
     this.els.levelBadge = el.querySelector("[data-level-badge]");
   }

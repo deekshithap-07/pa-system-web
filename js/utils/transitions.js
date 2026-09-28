@@ -1,5 +1,5 @@
 /**
- * Cinematic page transitions via GSAP.
+ * Cinematic page transitions via GSAP — burgundy/cream, 400–700ms.
  */
 
 let overlay;
@@ -10,6 +10,21 @@ export function initTransitions() {
 
 export function transitionTo(callback, { scrollToTop = true, variant = "default" } = {}) {
   return new Promise((resolve) => {
+    if (!overlay || typeof gsap === "undefined") {
+      callback();
+      if (scrollToTop) window.scrollTo(0, 0);
+      resolve();
+      return;
+    }
+
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      callback();
+      if (scrollToTop) window.scrollTo(0, 0);
+      resolve();
+      return;
+    }
+
+    const isCountry = variant === "country";
     const tl = gsap.timeline({
       onComplete: () => {
         overlay.classList.remove("is-active", "is-country-enter");
@@ -19,15 +34,41 @@ export function transitionTo(callback, { scrollToTop = true, variant = "default"
     });
 
     overlay.classList.add("is-active");
-    if (variant === "country") overlay.classList.add("is-country-enter");
+    if (isCountry) overlay.classList.add("is-country-enter");
 
-    tl.to(overlay, { opacity: 1, duration: variant === "country" ? 0.35 : 0.45, ease: "power2.inOut" })
-      .to("#app", { opacity: 0, y: variant === "country" ? -12 : -20, duration: 0.28 }, "<0.08")
+    tl.to(overlay, {
+      opacity: 1,
+      duration: isCountry ? 0.32 : 0.4,
+      ease: "power2.inOut",
+    })
+      .to(
+        "#app",
+        {
+          opacity: 0,
+          y: isCountry ? -10 : -16,
+          duration: 0.28,
+          ease: "power2.in",
+        },
+        "<0.06"
+      )
       .call(() => {
         gsap.set("#app", { opacity: 1, y: 0, clearProps: "transform" });
         callback();
       })
-      .to(overlay, { opacity: 0, duration: variant === "country" ? 0.4 : 0.5, ease: "power2.inOut" });
+      .fromTo(
+        "#app",
+        { opacity: 0, y: 14 },
+        { opacity: 1, y: 0, duration: 0.45, ease: "power3.out" }
+      )
+      .to(
+        overlay,
+        {
+          opacity: 0,
+          duration: isCountry ? 0.38 : 0.45,
+          ease: "power2.inOut",
+        },
+        "-=0.2"
+      );
   });
 }
 
@@ -40,7 +81,10 @@ export function animateKPIs(root) {
       duration: 1.2,
       ease: "power2.out",
       onUpdate: () => {
-        el.textContent = target >= 1000 ? Math.round(obj.val).toLocaleString() : Math.round(obj.val * 10) / 10;
+        el.textContent =
+          target >= 1000
+            ? Math.round(obj.val).toLocaleString()
+            : Math.round(obj.val * 10) / 10;
       },
     });
   });

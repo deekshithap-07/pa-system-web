@@ -38,60 +38,138 @@ function renderHero(hero = {}) {
     </header>`;
 }
 
-function renderProgrammeIndex(model = {}) {
-  const steps = model.steps || [];
+const TRANSFORM_ICONS = {
+  leadership: `<circle cx="12" cy="6.8" r="2.6"/><circle cx="5.6" cy="9" r="2"/><circle cx="18.4" cy="9" r="2"/><path d="M8.2 19.5v-2.2a3.8 3.8 0 0 1 7.6 0v2.2"/><path d="M2.8 18.5v-1.2a2.8 2.8 0 0 1 4-2.5M21.2 18.5v-1.2a2.8 2.8 0 0 0-4-2.5"/>`,
+  shalom: `<circle cx="8" cy="8" r="2.5"/><circle cx="16" cy="8" r="2.5"/><circle cx="12" cy="13" r="2.3"/><path d="M4 18.5v-.8a3.5 3.5 0 0 1 3.5-3.5M20 18.5v-.8a3.5 3.5 0 0 0-3.5-3.5M8.4 20.5v-.6a3.6 3.6 0 0 1 7.2 0v.6"/>`,
+  community: `<path d="M12 21v-9"/><path d="M12 12c0-4 2.8-6.5 7-6.5 0 4-2.8 6.5-7 6.5Z"/><path d="M12 14.5c0-3.2-2.3-5.3-5.8-5.3 0 3.2 2.3 5.3 5.8 5.3Z"/><path d="M7 21h10"/>`,
+  projects: `<path d="M2.5 11.5 6 8l3.2 1.2L12 7.5l3 1.8L18 8l3.5 3.5"/><path d="M6 8v5.2l4.3 4.1a1.5 1.5 0 0 0 2.1 0l.3-.3"/><path d="M18 8v5.2l-3.6 3.6"/><path d="M9.5 12.5l3 3M11.5 11l3 3"/>`,
+  journey: `<path d="M20 12a8 8 0 1 1-2.35-5.66"/><path d="M20 4.5v4h-4"/><path d="M12 8v4.2l2.8 1.8"/>`,
+};
+
+/** How we transform — icon cards with animated arrows. Copy lives in our-work.json → transform. */
+function renderTransform(section = {}) {
+  const steps = section.steps || [];
   if (!steps.length) return "";
-  const items = [
-    ...steps.map((s, i) => ({
-      n: String(i + 1).padStart(2, "0"),
-      title: s.title,
-      href: s.href || `#work-${s.id}`,
-    })),
-    { n: String(steps.length + 1).padStart(2, "0"), title: "Local ownership", href: "#work-resources" },
-  ]
-    .map(
-      (item) => `<a class="ow-index__item" ${linkAttrs(item.href)}>
-        <span class="ow-index__n">${item.n}</span>
-        <span class="ow-index__title">${item.title}</span>
-        <span class="ow-index__go" aria-hidden="true">→</span>
-      </a>`
-    )
+  const cta = section.cta || {};
+
+  const cards = steps
+    .map((s, i) => {
+      const arrow =
+        i < steps.length - 1
+          ? `<li class="ow-tf__arrow" aria-hidden="true" style="--i:${i}">
+              <span class="ow-tf__arrow-line"></span>
+              <svg viewBox="0 0 24 24"><path d="M5 12h13M13 6l6 6-6 6"/></svg>
+            </li>`
+          : "";
+      return `<li class="ow-tf__step ow-tf__step--${s.tone || "gold"}" style="--i:${i}">
+          <a class="ow-tf__card" ${linkAttrs(s.href || "#work-model")}>
+            <span class="ow-tf__icon">
+              <span class="ow-tf__halo" aria-hidden="true"></span>
+              <svg viewBox="0 0 24 24" aria-hidden="true">${TRANSFORM_ICONS[s.id] || TRANSFORM_ICONS.leadership}</svg>
+            </span>
+            <strong class="ow-tf__name">${s.keyword}</strong>
+            ${s.text ? `<span class="ow-tf__sub">${s.text}</span>` : ""}
+          </a>
+        </li>${arrow}`;
+    })
     .join("");
 
   return `
-    <nav class="ow-index" aria-label="Programme sections" data-ow-reveal>
-      <div class="container ow-index__inner">${items}</div>
-    </nav>`;
+    <section class="ow-tf" id="work-transform" data-ow-section="transform" aria-labelledby="ow-tf-title" data-ow-tf>
+      <div class="container ow-tf__grid">
+        <header class="ow-tf__head" data-ow-reveal>
+          ${section.eyebrow ? `<p class="ow-eyebrow ow-tf__eyebrow">${section.eyebrow}</p>` : ""}
+          <h2 id="ow-tf-title" class="ow-sec-title ow-tf__title">${section.title || "How We Transform"}</h2>
+          ${section.lead ? `<p class="ow-sec-lead">${section.lead}</p>` : ""}
+          ${cta.href ? `<a class="ow-tf__cta" ${linkAttrs(cta.href)}>${cta.label} <span aria-hidden="true">→</span></a>` : ""}
+        </header>
+        <ol class="ow-tf__flow">${cards}</ol>
+      </div>
+    </section>`;
 }
 
-/** Section 1 — How PA works (ivory). */
+let transformCleanup = null;
+
+function bindTransformFlow(page) {
+  destroyTransformFlow();
+  const root = page.querySelector("[data-ow-tf]");
+  if (!root) return;
+
+  const io = new IntersectionObserver(
+    ([entry]) => {
+      if (entry.isIntersecting) root.classList.add("is-in", "is-ambient");
+      else root.classList.remove("is-ambient");
+    },
+    { threshold: 0.2 }
+  );
+  io.observe(root);
+  transformCleanup = () => io.disconnect();
+}
+
+export function destroyTransformFlow() {
+  transformCleanup?.();
+  transformCleanup = null;
+}
+const MODEL_ICONS = {
+  africa: `<circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.6 2.6 3.8 5.6 3.8 9s-1.2 6.4-3.8 9c-2.6-2.6-3.8-5.6-3.8-9S9.4 5.6 12 3Z"/>`,
+  country: `<path d="M5 21V4"/><path d="M5 4.5c4-2 7 2 14 0v8.5c-7 2-10-2-14 0"/>`,
+  catchment: `<circle cx="12" cy="6" r="2.4"/><circle cx="6" cy="16" r="2.4"/><circle cx="18" cy="16" r="2.4"/><path d="M10.8 8.1 7.2 13.9M13.2 8.1l3.6 5.8M8.4 16h7.2"/>`,
+  community: `<path d="M4 11.5 12 5l8 6.5"/><path d="M6 10v10h12V10"/><path d="M10 20v-5h4v5"/>`,
+  shalom: `<circle cx="9" cy="8" r="2.8"/><circle cx="16.5" cy="9" r="2.3"/><path d="M3.5 19.5v-1.2A4.3 4.3 0 0 1 7.8 14h2.4a4.3 4.3 0 0 1 4.3 4.3v1.2"/><path d="M15.5 14h1.2a3.8 3.8 0 0 1 3.8 3.8v1.7"/>`,
+};
+
+/** Section 1 — How PA works. */
 function renderHowPaWorks(section = {}, hierarchy = {}) {
   if (!section.title) return "";
   const cta = section.cta || {};
-  const levels = (hierarchy.levels || [])
+  const levelList = hierarchy.levels || [];
+  const levels = levelList
     .map(
-      (l, i) => `<li class="ow-flow__node" style="--i:${i}" data-ow-flow-node>
-        <span class="ow-flow__label">${l.label}</span>
-        <span class="ow-flow__desc">${l.description || ""}</span>
+      (l, i) => `<li class="ow-flow__node ow-flow__node--${l.id || i}" style="--i:${i};--scale:${Math.round(100 - (i * 80) / Math.max(levelList.length - 1, 1))}%" data-ow-flow-node>
+        <span class="ow-flow__badge" aria-hidden="true">
+          <svg viewBox="0 0 24 24">${MODEL_ICONS[l.id] || MODEL_ICONS.africa}</svg>
+        </span>
+        <span class="ow-flow__body">
+          <span class="ow-flow__n">${String(i + 1).padStart(2, "0")}</span>
+          <span class="ow-flow__label">${l.label}</span>
+          <span class="ow-flow__desc">${l.description || ""}</span>
+          <span class="ow-flow__scale" aria-hidden="true"><span></span></span>
+        </span>
       </li>`
     )
     .join("");
-  const sidePoints = (section.sidePoints || []).map((p) => `<li data-ow-line>${p}</li>`).join("");
+  const sidePoints = (section.sidePoints || [])
+    .map(
+      (p) => `<li data-ow-line>
+        <span class="ow-lines__tick" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12.5l4.2 4.2L19 7"/></svg></span>
+        <span>${p}</span>
+      </li>`
+    )
+    .join("");
 
   return `
-    <section class="ow-band ow-band--ivory" id="work-model" data-ow-section="model" aria-labelledby="ow-model-title">
+    <section class="ow-band ow-band--model" id="work-model" data-ow-section="model" aria-labelledby="ow-model-title">
+      <span class="ow-model__blob ow-model__blob--a" aria-hidden="true"></span>
+      <span class="ow-model__blob ow-model__blob--b" aria-hidden="true"></span>
+      <span class="ow-model__blob ow-model__blob--c" aria-hidden="true"></span>
       <span class="ow-band__bg-word" aria-hidden="true">How PA works</span>
       <div class="container ow-intro">
         <header class="ow-intro__head" data-ow-reveal>
-          ${section.eyebrow ? `<p class="ow-eyebrow">${section.eyebrow}</p>` : ""}
+          ${section.eyebrow ? `<p class="ow-eyebrow ow-model__eyebrow">${section.eyebrow}</p>` : ""}
           <h2 id="ow-model-title" class="ow-sec-title pa-title">${formatPaTitle(section)}</h2>
           ${section.sideLead ? `<p class="ow-sec-lead">${section.sideLead}</p>` : ""}
           ${sidePoints ? `<ul class="ow-lines">${sidePoints}</ul>` : ""}
-          ${cta.href ? `<a class="ow-text-link" ${linkAttrs(cta.href)}>${cta.label} →</a>` : ""}
+          ${cta.href ? `<a class="ow-model__cta" ${linkAttrs(cta.href)}>${cta.label} <span aria-hidden="true">→</span></a>` : ""}
         </header>
         ${
           levels
-            ? `<ol class="ow-flow" data-ow-flow aria-label="How the work is organised">${levels}</ol>`
+            ? `<div class="ow-model__panel" data-ow-reveal>
+                ${hierarchy.title ? `<p class="ow-model__panel-title">${hierarchy.title}</p>` : ""}
+                ${hierarchy.description ? `<p class="ow-model__panel-lead">${hierarchy.description}</p>` : ""}
+                <ol class="ow-flow" data-ow-flow aria-label="${hierarchy.title || "How the work is organised"}">
+                  ${levels}
+                </ol>
+              </div>`
             : ""
         }
       </div>
@@ -127,9 +205,10 @@ function renderLeadership(section = {}, tripleA = {}) {
   if (!section.title) return "";
   const dims = (tripleA.dimensions || [])
     .map(
-      (d, i) => `<li class="ow-lead-flow__item" data-ow-spine-col style="--i:${i}">
+      (d, i) => `<li class="ow-lead-flow__item ow-lead-flow__item--${i % 3}" data-ow-spine-col style="--i:${i}">
         <span class="ow-lead-flow__letter" aria-hidden="true">${(d.label || "?").charAt(0)}</span>
         <div>
+          <span class="ow-lead-flow__n">${String(i + 1).padStart(2, "0")}</span>
           <h3>${d.label}</h3>
           <p>${d.description || ""}</p>
         </div>
@@ -152,10 +231,10 @@ function renderLeadership(section = {}, tripleA = {}) {
         </figure>
         ${
           dims
-            ? `<ol class="ow-lead-flow" data-ow-spine aria-label="${tripleA.title || "Triple-A leadership"}">
-                <span class="ow-lead-flow__rule" aria-hidden="true" data-ow-spine-rule></span>
-                ${dims}
-              </ol>`
+            ? `<div class="ow-lead-wrap">
+                ${tripleA.title ? `<p class="ow-lead-wrap__title">${tripleA.title}</p>` : ""}
+                <ol class="ow-lead-flow" data-ow-spine aria-label="${tripleA.title || "Triple-A leadership"}">${dims}</ol>
+              </div>`
             : ""
         }
       </div>
@@ -344,7 +423,7 @@ export function renderOurWorkPage(page = {}, ministryModel = {}) {
   return `
     <div class="ow-page" data-what-we-do data-work-section="overview" data-our-work-page>
       ${renderHero(page.hero)}
-      ${renderProgrammeIndex(page.model)}
+      ${renderTransform(page.transform)}
       ${renderHowPaWorks(page.model, ministryModel.hierarchy)}
       ${renderCommunity(communityStep, page)}
       ${renderLeadership(page.leadership, ministryModel.tripleA)}
@@ -358,7 +437,9 @@ export function renderOurWorkPage(page = {}, ministryModel = {}) {
 
 export function initOurWorkAnimations(root = document) {
   const page = root.querySelector?.("[data-our-work-page]") || document.querySelector("[data-our-work-page]");
-  if (!page || typeof gsap === "undefined") return;
+  if (!page) return;
+  bindTransformFlow(page);
+  if (typeof gsap === "undefined") return;
 
   if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
     page.classList.add("ow-page--reduced");
@@ -406,6 +487,7 @@ export function initOurWorkAnimations(root = document) {
         stagger: 0.1,
         ease: "power2.out",
         clearProps: "transform",
+        onStart: () => page.querySelector("[data-ow-flow]")?.classList.add("is-in"),
         scrollTrigger: { trigger: page.querySelector("[data-ow-flow]"), start: "top 80%", once: true },
       }
     );

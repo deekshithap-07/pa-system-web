@@ -721,13 +721,14 @@ function animateCount(el) {
     return;
   }
 
+  const suffix = display.endsWith("%") ? "%" : "";
   const obj = { v: 0 };
   gsap.to(obj, {
     v: target,
-    duration: 0.9,
+    duration: 1.8,
     ease: "power2.out",
     onUpdate: () => {
-      el.textContent = fmtVal(Math.round(obj.v));
+      el.textContent = `${fmtVal(Math.round(obj.v))}${suffix}`;
     },
     onComplete: () => {
       el.textContent = display;
@@ -738,6 +739,14 @@ function animateCount(el) {
 function initCountUps(page) {
   const nodes = page.querySelectorAll("[data-count-to]");
   if (!nodes.length) return;
+
+  /* Lock each number's final width so the count runs in place */
+  nodes.forEach((el) => {
+    if (parseNumeric(el.dataset.countTo) == null) return;
+    el.style.display = "inline-block";
+    el.style.minWidth = `${Math.ceil(el.getBoundingClientRect().width)}px`;
+    el.textContent = el.dataset.countDisplay?.endsWith("%") ? "0%" : "0";
+  });
 
   if (typeof ScrollTrigger === "undefined") {
     nodes.forEach(animateCount);

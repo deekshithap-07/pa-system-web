@@ -8,6 +8,8 @@ import { formatPaTitle } from "../../utils/pa-title.js";
 import { getPaCountries, getCountryCover } from "../../utils/work-locations.js";
 import { mountAfricaMapSection } from "../home-level1.js";
 import { destroyAfricaMap } from "../../map/africa-map.js";
+import { destroyAfricaCountryDrawer } from "../home-design.js";
+import { getCatchmentsByCountry, getCommunitiesByCatchment } from "../../utils/data.js";
 
 const MAP_ROOT_ID = "where-africa-map-root";
 
@@ -61,7 +63,7 @@ function countryStats(data, slug) {
     slug,
     name: country?.name || slug,
     image: cover.image || hub?.heroImage || "assets/country-heroes/kenya-hero-farmers.jpg",
-    title: `${country?.name || "Country"} — Stronger communities. Brighter futures.`,
+    title: hub?.description || country?.description || country?.name || "Country",
     text:
       hub?.overview ||
       hub?.description ||
@@ -131,14 +133,20 @@ function renderMapStage(page = {}, data) {
     .join("");
 
   const countries = getPaCountries(data);
-  const rows = countries
-    .map(
-      (c, i) => `<a class="www-dest" href="#/country/${c.slug}" data-link data-www-country="${c.slug}" style="--i:${i}">
-        <span class="www-dest__n">${String(i + 1).padStart(2, "0")}</span>
-        <span class="www-dest__name">${c.name}</span>
-        <span class="www-dest__go" aria-hidden="true">→</span>
-      </a>`
-    )
+  const featuredSlug = countries.find((c) => c.slug === "kenya")?.slug || countries[0]?.slug;
+  const tabs = countries
+    .map((c, i) => {
+      const s = countryStats(data, c.slug);
+      const on = c.slug === featuredSlug;
+      return `<button type="button" class="www-ctab${on ? " is-active" : ""}" data-www-country="${c.slug}" aria-pressed="${on}" style="--i:${i}">
+        <span class="www-ctab__img"><img src="${s.image}" alt="" loading="lazy" decoding="async"></span>
+        <span class="www-ctab__body">
+          <strong>${c.name}</strong>
+          <span>${formatNumber(s.communities)} communities <i aria-hidden="true">|</i> ${formatNumber(s.households)} households</span>
+        </span>
+        <span class="www-ctab__go" aria-hidden="true">›</span>
+      </button>`;
+    })
     .join("");
 
   return `
@@ -148,7 +156,7 @@ function renderMapStage(page = {}, data) {
           <p class="www-eyebrow">Map explorer</p>
           <h2 id="www-explorer-title" class="pa-title">${formatPaTitle(explorer, "Explore our work across Africa")}</h2>
           ${explorer.lead ? `<p class="www-map-stage__lead">${explorer.lead}</p>` : ""}
-          <p class="www-map-stage__hint">Choose a country beside the map to open its story.</p>
+          <p class="www-map-stage__hint">Choose a country below the map to see its work.</p>
         </header>
         <div class="www-map-stage__body">
           <div class="www-map-shell">
@@ -160,10 +168,15 @@ function renderMapStage(page = {}, data) {
             </div>
             ${legend ? `<ul class="www-legend">${legend}</ul>` : ""}
           </div>
-          <nav class="www-dest-list www-dest-list--beside" id="where-other-countries" aria-label="Country exploration" data-www-stagger>
-            <p class="www-dest-list__label">Country exploration</p>
-            ${rows}
-          </nav>
+          <aside class="www-side" aria-live="polite" data-www-side>
+            ${featuredSlug ? renderSideCard(countryStats(data, featuredSlug)) : ""}
+          </aside>
+        </div>
+        <div class="www-ctabs" id="where-other-countries">
+          <div class="www-ctabs__head">
+            <p class="www-ctabs__label">Other countries</p>
+          </div>
+          <div class="www-ctabs__row" role="group" aria-label="Choose a country">${tabs}</div>
         </div>
       </div>
       <div class="www-bridge" aria-hidden="true">
@@ -173,6 +186,28 @@ function renderMapStage(page = {}, data) {
         <span class="www-bridge__dot"></span>
       </div>
     </section>`;
+}
+
+function renderSideCard(s) {
+  return `
+    <div class="www-side__media">
+      <img src="${s.image}" alt="" decoding="async">
+      <span class="www-side__chip">Featured country</span>
+      <div class="www-side__title">
+        <h3>${s.name}</h3>
+        ${s.title && s.title !== s.name ? `<p>${s.title}</p>` : ""}
+      </div>
+    </div>
+    <div class="www-side__body">
+      <p class="www-side__text">${s.text}</p>
+      <a class="www-side__cta" href="#/country/${s.slug}" data-link>View ${s.name} profile <span aria-hidden="true">→</span></a>
+      <dl class="www-side__stats">
+        <div><dd>${formatNumber(s.communities)}</dd><dt>Communities</dt></div>
+        <div><dd>${formatNumber(s.households)}</dd><dt>Households</dt></div>
+        <div><dd>${formatNumber(s.shalom)}</dd><dt>Shalom groups</dt></div>
+        <div><dd>${s.programs}</dd><dt>Programs</dt></div>
+      </dl>
+    </div>`;
 }
 
 function renderScale(data) {
@@ -234,23 +269,84 @@ function renderFeatured(featured) {
   return `
     <div class="www-presence__media">
       <img src="${featured.image}" alt="" loading="eager" decoding="async" data-www-presence-img>
+      <span class="www-presence__shade" aria-hidden="true"></span>
+      <span class="www-presence__name" aria-hidden="true">${featured.name}</span>
     </div>
     <div class="www-presence__copy">
       <p class="www-presence__meta">Featured country</p>
       <h3 data-www-presence-title>${featured.title}</h3>
       <p data-www-presence-text>${featured.text}</p>
-      <div class="www-presence__stats" aria-label="Public figures">
-        <div><span>Communities</span><strong>${formatNumber(featured.communities)}</strong></div>
-        <div><span>Households</span><strong>${formatNumber(featured.households)}</strong></div>
-        <div><span>Shalom groups</span><strong>${formatNumber(featured.shalom)}</strong></div>
-        <div><span>Programs</span><strong>${featured.programs}</strong></div>
+      <dl class="www-presence__stats" aria-label="Public figures">
+        <div><dt>Communities</dt><dd>${formatNumber(featured.communities)}</dd></div>
+        <div><dt>Households</dt><dd>${formatNumber(featured.households)}</dd></div>
+        <div><dt>Shalom groups</dt><dd>${formatNumber(featured.shalom)}</dd></div>
+        <div><dt>Programs</dt><dd>${featured.programs}</dd></div>
+      </dl>
+      <a class="www-presence__cta" href="#/country/${featured.slug}" data-link data-www-presence-cta>Explore ${featured.name} <span aria-hidden="true">→</span></a>
+    </div>`;
+}
+
+function flowCountries(data) {
+  return getPaCountries(data).filter((c) => getCatchmentsByCountry(data.catchments, c.id).length);
+}
+
+function renderFlowTree(data, slug) {
+  const country = getPaCountries(data).find((c) => c.slug === slug);
+  if (!country) return "";
+  const catchments = getCatchmentsByCountry(data.catchments, country.id);
+  const totalComms = catchments.reduce(
+    (sum, ct) => sum + getCommunitiesByCatchment(data.communities, ct.id).length,
+    0
+  );
+
+  const branches = catchments
+    .map((ct, i) => {
+      const comms = getCommunitiesByCatchment(data.communities, ct.id);
+      const chips = comms.length
+        ? comms
+            .map(
+              (com, j) =>
+                `<a class="www-flow__comm" href="#/community/${country.slug}/${ct.slug}/${com.slug}" data-link style="--j:${j}">${com.name}</a>`
+            )
+            .join("")
+        : `<span class="www-flow__comm www-flow__comm--empty">Communities coming soon</span>`;
+      return `<li class="www-flow__branch" style="--i:${i}">
+        <a class="www-flow__catch" href="#/catchment/${country.slug}/${ct.slug}" data-link>
+          <strong>${ct.name}</strong>
+          <span>${formatNumber(comms.length)} ${comms.length === 1 ? "community" : "communities"}</span>
+        </a>
+        <div class="www-flow__comms">${chips}</div>
+      </li>`;
+    })
+    .join("");
+
+  return `
+    <div class="www-flow__tree">
+      <div class="www-flow__root">
+        <span class="www-flow__root-label">Country</span>
+        <strong>${country.name}</strong>
+        <a class="www-flow__root-meta" href="#/country/${country.slug}/catchments" data-link>${formatNumber(catchments.length)} catchments · ${formatNumber(totalComms)} communities</a>
+        <a class="www-flow__root-cta" href="#/country/${country.slug}" data-link>Explore ${country.name} →</a>
       </div>
-      <a class="www-presence__cta" href="#/country/${featured.slug}" data-link data-www-presence-cta>Explore ${featured.name} →</a>
+      <div class="www-flow__levels" aria-hidden="true">
+        <span>Catchments</span>
+        <span>Communities</span>
+      </div>
+      <ol class="www-flow__branches">${branches}</ol>
     </div>`;
 }
 
 function renderCommunityLink(data, featuredSlug) {
-  const featured = countryStats(data, featuredSlug);
+  const countries = flowCountries(data);
+  if (!countries.length) return "";
+  const start = countries.find((c) => c.slug === featuredSlug)?.slug || countries[0].slug;
+  const tabs = countries
+    .map(
+      (c) => `<button type="button" class="www-flow__tab${c.slug === start ? " is-active" : ""}"
+        data-www-flow-tab="${c.slug}" aria-pressed="${c.slug === start ? "true" : "false"}">${c.name}</button>`
+    )
+    .join("");
+
   return `
     <section class="www-linkpath" data-www-section="community" aria-labelledby="www-linkpath-title">
       <div class="container">
@@ -258,20 +354,10 @@ function renderCommunityLink(data, featuredSlug) {
           <p class="www-eyebrow">Community connection</p>
           <h2 id="www-linkpath-title" class="pa-title"><span>Country–catchment–</span><em>community.</em></h2>
         </header>
-        <ol class="www-linkpath__steps" data-www-stagger>
-          <li class="www-linkpath__step" data-www-reveal>
-            <span class="www-linkpath__label">Country</span>
-            <strong class="www-linkpath__value" data-www-path-country>${featured.name}</strong>
-          </li>
-          <li class="www-linkpath__step" data-www-reveal>
-            <span class="www-linkpath__label">Catchment</span>
-            <strong class="www-linkpath__value" data-www-path-catchment>${featured.catchments ? `${formatNumber(featured.catchments)} groups` : "Nearby group"}</strong>
-          </li>
-          <li class="www-linkpath__step" data-www-reveal>
-            <span class="www-linkpath__label">Community</span>
-            <strong class="www-linkpath__value" data-www-path-community>${featured.communities ? `${formatNumber(featured.communities)} places` : "Local place"}</strong>
-          </li>
-        </ol>
+        <div class="www-flow" data-www-reveal>
+          <div class="www-flow__tabs" role="group" aria-label="Choose a country">${tabs}</div>
+          <div class="www-flow__stage" data-www-flow-stage data-slug="${start}">${renderFlowTree(data, start)}</div>
+        </div>
       </div>
     </section>`;
 }
@@ -363,27 +449,39 @@ export function mountWhereWeWorkPage(data) {
   if (!page) return;
 
   const featuredEl = page.querySelector("[data-www-featured]");
-  const destLinks = [...page.querySelectorAll(".www-dest[data-www-country]")];
+  const destLinks = [...page.querySelectorAll(".www-ctab[data-www-country]")];
   const presenceTabs = [...page.querySelectorAll("[data-www-presence-tab]")];
 
+  const flowStage = page.querySelector("[data-www-flow-stage]");
+  const flowTabs = [...page.querySelectorAll("[data-www-flow-tab]")];
+  const flowSlugs = new Set(flowTabs.map((b) => b.dataset.wwwFlowTab));
+
   const updatePath = (slug) => {
-    const stats = countryStats(data, slug);
-    const countryEl = page.querySelector("[data-www-path-country]");
-    const catchEl = page.querySelector("[data-www-path-catchment]");
-    const commEl = page.querySelector("[data-www-path-community]");
-    if (countryEl) countryEl.textContent = stats.name;
-    if (catchEl) catchEl.textContent = stats.catchments ? `${formatNumber(stats.catchments)} groups` : "Nearby group";
-    if (commEl) commEl.textContent = stats.communities ? `${formatNumber(stats.communities)} places` : "Local place";
+    if (!flowStage || !flowSlugs.has(slug) || flowStage.dataset.slug === slug) return;
+    flowStage.dataset.slug = slug;
+    flowStage.innerHTML = renderFlowTree(data, slug);
+    flowTabs.forEach((b) => {
+      const on = b.dataset.wwwFlowTab === slug;
+      b.classList.toggle("is-active", on);
+      b.setAttribute("aria-pressed", on ? "true" : "false");
+    });
   };
 
+  flowTabs.forEach((btn) => btn.addEventListener("click", () => updatePath(btn.dataset.wwwFlowTab)));
+
   const setPresence = (slug) => {
+    if (page.dataset.featuredSlug === slug) return;
     presenceTabs.forEach((btn) => {
       const on = btn.dataset.wwwPresenceTab === slug;
       btn.classList.toggle("is-active", on);
       btn.setAttribute("aria-pressed", on ? "true" : "false");
     });
-    destLinks.forEach((a) => a.classList.toggle("is-active", a.dataset.wwwCountry === slug));
-    if (featuredEl) featuredEl.innerHTML = renderFeatured(countryStats(data, slug));
+    if (featuredEl) {
+      featuredEl.innerHTML = renderFeatured(countryStats(data, slug));
+      featuredEl.classList.remove("is-swap");
+      void featuredEl.offsetWidth;
+      featuredEl.classList.add("is-swap");
+    }
     updatePath(slug);
     page.dataset.featuredSlug = slug;
   };
@@ -395,15 +493,21 @@ export function mountWhereWeWorkPage(data) {
     });
   });
 
+  const sideEl = page.querySelector("[data-www-side]");
   destLinks.forEach((a) => {
-    a.addEventListener("mouseenter", () => {
-      if (!window.matchMedia("(hover: hover)").matches) return;
-      destLinks.forEach((el) => el.classList.toggle("is-active", el === a));
-      updatePath(a.dataset.wwwCountry);
-    });
-    a.addEventListener("focus", () => {
-      destLinks.forEach((el) => el.classList.toggle("is-active", el === a));
-      updatePath(a.dataset.wwwCountry);
+    a.addEventListener("click", () => {
+      const slug = a.dataset.wwwCountry;
+      destLinks.forEach((el) => {
+        const on = el === a;
+        el.classList.toggle("is-active", on);
+        el.setAttribute("aria-pressed", on ? "true" : "false");
+      });
+      if (sideEl) {
+        sideEl.innerHTML = renderSideCard(countryStats(data, slug));
+        sideEl.classList.remove("is-swap");
+        void sideEl.offsetWidth;
+        sideEl.classList.add("is-swap");
+      }
     });
   });
 
@@ -621,6 +725,7 @@ export function initWhereWeWorkAnimations(root = document) {
 }
 
 export function destroyWhereWeWorkPage() {
+  destroyAfricaCountryDrawer();
   destroyAfricaMap();
   if (typeof ScrollTrigger !== "undefined") {
     ScrollTrigger.getAll().forEach((t) => {

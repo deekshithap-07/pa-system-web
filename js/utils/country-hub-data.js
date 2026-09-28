@@ -50,12 +50,12 @@ function buildDefaultHubPayload(country, catchments, stories, reports, metrics) 
     stories,
     reports,
     countryName: country.name,
-    description: country.isPaNetwork
+    description: country.description || (country.isPaNetwork
       ? `Possibilities Africa network country — transformation data for ${country.name}.`
-      : `Context data for ${country.name}. PA does not currently operate in this region.`,
-    overview: country.isPaNetwork
+      : `Context data for ${country.name}. PA does not currently operate in this region.`),
+    overview: country.overview || (country.isPaNetwork
       ? `Pastor-led holistic transformation is underway in ${country.name}. Detailed hub data will be expanded as the network grows.`
-      : `Regional context data for ${country.name}. Poverty rate: ${country.stats?.povertyRate}%. Population: ${(country.stats?.population / 1e6).toFixed(1)}M.`,
+      : `Regional context data for ${country.name}. Poverty rate: ${country.stats?.povertyRate}%. Population: ${(country.stats?.population / 1e6).toFixed(1)}M.`),
     heroTagline: country.isPaNetwork ? "PA Network" : "Context Country",
     population: country.stats?.population ?? 0,
     isPaNetwork: country.isPaNetwork,

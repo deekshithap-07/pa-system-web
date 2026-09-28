@@ -1,5 +1,5 @@
 import { bindWbPageHero } from "../components/shared/wb-page-hero.js";
-import { renderOurWorkPage, initOurWorkAnimations } from "../components/work/our-work-page.js";
+import { renderOurWorkPage, initOurWorkAnimations, destroyTransformFlow } from "../components/work/our-work-page.js";
 
 /** Legacy child routes redirect to hub anchors on #/work */
 export const WORK_SECTION_REDIRECTS = {
@@ -25,4 +25,6 @@ export function mountWhatWeDo(root) {
   });
 }
 
-export function destroyWhatWeDo() {}
+export function destroyWhatWeDo() {
+  destroyTransformFlow();
+}

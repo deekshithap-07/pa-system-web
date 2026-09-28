@@ -195,8 +195,8 @@
   position: absolute;
   inset: 0;
   background:
-    linear-gradient(105deg, rgba(26, 10, 12, 0.94) 0%, rgba(92, 36, 40, 0.5) 52%, rgba(42, 16, 20, 0.25) 100%),
-    linear-gradient(180deg, transparent 40%, rgba(26, 10, 12, 0.65) 100%);
+    linear-gradient(105deg, rgba(0, 0, 0, 0.68) 0%, rgba(0, 0, 0, 0.32) 50%, rgba(0, 0, 0, 0.06) 80%, transparent 100%),
+    linear-gradient(180deg, transparent 50%, rgba(0, 0, 0, 0.5) 100%);
 }
 
 .cp-entry__sil,
@@ -622,7 +622,7 @@
 .cp-story__veil {
   position: absolute;
   inset: 0;
-  background: linear-gradient(180deg, rgba(42, 16, 20, 0.1) 0%, rgba(42, 16, 20, 0.85) 100%);
+  background: linear-gradient(180deg, transparent 35%, rgba(0, 0, 0, 0.75) 100%);
 }
 
 .cp-story__caption {

@@ -1,14 +1,28 @@
 {
   "hero": {
-    "eyebrow": "What we do",
-    "title": "Holistic transformation for lasting change.",
-    "titleHtml": "<span>Holistic transformation</span> <em>for lasting change.</em>",
-    "lead": "We work with communities to build stronger people, healthier families and more prosperous communities through a unique, integrated model of development.",
-    "quote": "Stronger Communities. Brighter Futures.",
-    "image": "assets/country-heroes/malawi-hero-savings.jpg",
-    "imageAlt": "Women in a community savings circle across rural Africa",
+    "eyebrow": "Our Work",
+    "title": "The whole gospel, in practice.",
+    "titleHtml": "<span>The whole gospel,</span> <em>in practice.</em>",
+    "lead": "The work of PA is not directed at providing one thing or fixing one problem for people. Rather, we seek the holistic transformation of the entire person and community through the whole gospel of Jesus Christ. We challenge people to see the potential that is in and around them and teach them to cultivate and utilize those resources for the betterment of their lives.",
+    "quote": "“…But with God all things are possible…” — Matthew 19:26",
+    "image": "assets/our-work/hero-woman.jpg",
+    "imageAlt": "Smiling woman in a colourful headscarf in front of green rural hills",
     "primaryCta": { "label": "Explore Our Model", "href": "#work-model" },
     "secondaryCta": { "label": "Where we work", "href": "#/africa" }
+  },
+  "transform": {
+    "eyebrow": "Our Approach",
+    "title": "How We Transform",
+    "titleHtml": "How We Transform",
+    "lead": "Our work is based on a proven, community-led model that builds leaders, strengthens communities and creates sustainable change.",
+    "cta": { "label": "Learn More About Our Model", "href": "#work-model" },
+    "steps": [
+      { "id": "leadership", "keyword": "Leadership Development", "text": "Build confident, capable and ethical leaders.", "href": "#work-leadership", "tone": "green" },
+      { "id": "shalom", "keyword": "Shalom Groups", "text": "Small groups. Big change.", "href": "#work-shalom", "tone": "maroon" },
+      { "id": "community", "keyword": "Community-Led Development", "text": "Communities identify and drive their own solutions.", "href": "#work-community", "tone": "gold" },
+      { "id": "projects", "keyword": "PPP & CHIPs", "text": "Partnerships for people and infrastructure.", "href": "#work-projects", "tone": "forest" },
+      { "id": "journey", "keyword": "2-Year Journey", "text": "From engagement to lasting transformation.", "href": "#work-journey", "tone": "wine" }
+    ]
   },
   "model": {
     "eyebrow": "Our Approach",
@@ -63,7 +77,7 @@
     "eyebrow": "Leadership development",
     "title": "Pastors grow in awareness, ability, and action.",
     "titleHtml": "<span>Pastors grow in awareness,</span> <em>ability, and action.</em>",
-    "lead": "Triple-A leadership is how pastor leaders mature through the journey — vision, skill, and practice."
+    "lead": "Our anchor program. We recruit, select, organize and equip pastor leaders to provide the visionary, servant leadership necessary for sustainable holistic transformation. Pastors are both beneficiaries and implementers — PA invests in developing servant, visionary, knowledgeable, godly and united leadership in their communities."
   },
   "shalom": {
     "eyebrow": "Shalom Groups",
@@ -114,9 +128,9 @@
   },
   "ctaBand": {
     "eyebrow": "Next step",
-    "title": "See the work where it happens.",
-    "titleHtml": "<span>See the work</span> <em>where it happens.</em>",
-    "lead": "Open a country, follow a community journey, or read what is changing on the ground.",
+    "title": "Will Africa ever transform?",
+    "titleHtml": "<span>Will Africa</span> <em>ever transform?</em>",
+    "lead": "Everything that seems impossible in our human ability is made possible by God. Applying the whole Gospel to the whole person for the transformation of communities means that Christ is the driver and PA has taken up the mission to facilitate the journey.",
     "primaryCta": { "label": "Where we work", "href": "#/africa" },
     "secondaryCta": { "label": "Read stories", "href": "#/stories" }
   }

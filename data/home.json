@@ -6,15 +6,15 @@
       { "text": "Developing leaders.", "accent": true },
       { "text": "Creating possibilities." }
     ],
-    "description": "We work with communities across Africa to catalyze holistic transformation through leadership development, spiritual discipleship, economic productivity, mentoring the next generation and responsible citizenship.",
+    "description": "Possibilities Africa delivers its programs through organizing, training and networking pastor leaders to develop their communities — starting with their families and churches.",
     "image": "assets/home-hero/woman.jpg",
     "imageAlt": "Smiling woman in a colorful headscarf standing outdoors across rural Africa",
     "primaryCta": { "label": "Explore Our Work", "target": "#/work" },
     "secondaryCta": { "label": "See Our Impact", "target": "#/scorecard" },
     "watchStory": {
-      "label": "Watch Our Story",
-      "duration": "8:27",
-      "title": "Possibilities Africa over the years",
+      "label": "Watch Our Transformational Journey",
+      "duration": "4:12",
+      "title": "Watch Our Transformational Journey",
       "youtubeUrl": "https://www.youtube.com/watch?v=9OiMry-NzAc&t=5s",
       "videoId": "9OiMry-NzAc",
       "start": 5
@@ -26,11 +26,17 @@
     "titleHtml": "<span>A growing movement.</span> <em>Of transformation.</em>",
     "lead": "From urban centres to rural communities, Possibilities Africa is working across countries to catalyze holistic transformation — leadership, discipleship, livelihoods, youth, and citizenship.",
     "stats": [
-      { "value": "7", "label": "Countries" },
-      { "value": "59", "label": "Communities" },
-      { "value": "253,000+", "label": "Households" }
+      { "value": "2K+", "label": "Spiritual Leaders Trained" },
+      { "value": "253K+", "label": "Households Reached" },
+      { "value": "1.3M+", "label": "Lives Impacted" },
+      { "value": "7", "label": "Countries Working Across Africa" }
     ],
     "exploreCta": { "label": "Explore Africa", "href": "#/africa" },
+    "numbers": {
+      "title": "Numbers that hold a generation.",
+      "titleHtml": "<span>Numbers that hold</span> <em>a generation.</em>",
+      "lead": "Over two decades of holistic ministry across rural African villages."
+    },
     "panelTitle": "Explore our work across Africa",
     "panelText": "Click on a country to see live data, programmes, stories and more.",
     "panelCta": { "label": "View interactive map", "href": "#home-africa-map-root" },
@@ -39,17 +45,17 @@
     "mapDescription": "Click a country to explore. Use Ctrl + scroll to zoom the map; scroll the page as usual to keep reading."
   },
   "ourWork": {
-    "eyebrow": "Our Work",
-    "titleHtml": "<span>Five programmes.</span> <em>One whole community.</em>",
-    "title": "Five programmes. One whole community.",
-    "lead": "PA’s programmes work together. Select a programme to see how it contributes to lasting, locally led transformation.",
+    "eyebrow": "Results Areas",
+    "titleHtml": "<span>Five results areas that compound into</span> <em>lasting transformation.</em>",
+    "title": "Five results areas that compound into lasting transformation.",
+    "lead": "Possibilities Africa stands out as a ministry appointed to bring hope and transformation across Africa through five interconnected areas of impact.",
     "cta": { "label": "Explore the programme", "href": "#/work" },
     "programs": [
       {
         "id": "leadership",
-        "title": "Transformational Leadership",
+        "title": "Transformational Leadership Development",
         "text": "Developing leaders at every level.",
-        "description": "Equipping leaders to guide communities with vision, character and purpose.",
+        "description": "We recruit, select, organize and equip pastor leaders to provide visionary, servant leadership for sustainable community-wide transformation.",
         "tone": "maroon",
         "href": "#/work#work-leadership"
       },
@@ -57,7 +63,7 @@
         "id": "discipleship",
         "title": "Spiritual Discipleship",
         "text": "Building strong faith and values.",
-        "description": "Rooting households and churches in faith that shapes daily life, relationships and hope.",
+        "description": "Guiding people in Christian faith and practice to build a solid foundation for true, eternal, and holistic community transformation.",
         "tone": "gold",
         "href": "#/work"
       },
@@ -65,7 +71,7 @@
         "id": "economic",
         "title": "Economic Productivity",
         "text": "Creating sustainable livelihoods.",
-        "description": "Helping families grow sustainable livelihoods through skills, savings and community enterprise.",
+        "description": "Empowering rural communities to discover, develop and sustainably utilize local resources.",
         "tone": "green",
         "href": "#/work"
       },
@@ -73,7 +79,7 @@
         "id": "youth",
         "title": "Mentoring the Next Generation",
         "text": "Equipping young people for a better future.",
-        "description": "Walking with young people so they grow in faith, character and opportunity for the future.",
+        "description": "Supporting children and youth with godly values, character and practical life skills.",
         "tone": "maroon",
         "href": "#/work"
       },
@@ -81,17 +87,17 @@
         "id": "citizenship",
         "title": "Responsible Citizenship",
         "text": "Building peaceful, engaged communities.",
-        "description": "Building peaceful, engaged communities where neighbours take responsibility for shared wellbeing.",
+        "description": "Churches building community programmes addressing education, water, health and infrastructure.",
         "tone": "gold",
         "href": "#/work"
       }
     ]
   },
   "impactData": {
-    "eyebrow": "Impact & Data",
-    "title": "Evidence of real change.",
-    "titleHtml": "<span>Evidence of</span> <em>real change.</em>",
-    "lead": "Explore approved indicators, trends and stories of community transformation — evidence that strengthens the website without turning it into a dashboard.",
+    "eyebrow": "Our Impact",
+    "title": "Numbers that hold a generation.",
+    "titleHtml": "<span>Numbers that hold</span> <em>a generation.</em>",
+    "lead": "Over two decades of holistic ministry across rural African villages.",
     "cta": { "label": "Explore Impact Data", "href": "#/scorecard" },
     "image": "assets/country-heroes/ethiopia-hero-farm.jpg",
     "updatedAt": "August 2025",
@@ -136,35 +142,43 @@
     ]
   },
   "storiesBand": {
-    "eyebrow": "Stories of Transformation",
-    "title": "Real people. Real change.",
-    "titleHtml": "<span>Real people.</span> <em>Real change.</em>",
-    "lead": "Discover inspiring stories from communities across Africa.",
+    "eyebrow": "Field Stories",
+    "title": "Real lives, rewritten.",
+    "titleHtml": "<span>Real lives,</span> <em>rewritten.</em>",
+    "lead": "Every transformed life begins with one local church choosing to love, serve and disciple its community.",
     "cta": { "label": "View all stories", "href": "#/stories" },
     "cards": [
       {
-        "country": "Kenya",
-        "program": "Economic Productivity",
-        "title": "From small savings to a brighter future.",
-        "href": "#/stories",
-        "image": "assets/country-heroes/malawi-hero-savings.jpg",
-        "imageAlt": "Community savings group supporting local livelihoods"
+        "country": "Ethiopia",
+        "program": "Transformational Leadership",
+        "title": "Pastor Abdisa: A man caught between ongoing rebel conflicts",
+        "href": "#/story/pastor-abdisa-conflict",
+        "image": "assets/stories/story-ethiopia-abdisa.png",
+        "imageAlt": "Pastor Abdisa in Inchini, Ethiopia"
       },
       {
         "country": "Malawi",
-        "program": "Leadership",
-        "title": "A young leader steps up.",
-        "href": "#/stories",
-        "image": "assets/stories/story-ethiopia-abdisa.png",
-        "imageAlt": "Leadership transformation story"
+        "program": "Economic Productivity",
+        "title": "Mary Mvilera's decision to make a living out of selling scones",
+        "href": "#/story/mary-scone-business",
+        "image": "assets/stories/story-malawi-mary.jpg",
+        "imageAlt": "Mary Mvilera with her scones business in Malawi"
       },
       {
-        "country": "Ethiopia",
-        "program": "Community Development",
-        "title": "Stronger together.",
-        "href": "#/stories",
-        "image": "assets/stories/story-bungoma-school.jpg",
-        "imageAlt": "Community development story"
+        "country": "Zambia",
+        "program": "Spiritual Discipleship",
+        "title": "A young man growing his church and crops",
+        "href": "#/story/pastor-chaambwa-crops",
+        "image": "assets/stories/story-zambia-crops.jpg",
+        "imageAlt": "Pastor Chaambwa Siachilwena on church farmland in Zambia"
+      },
+      {
+        "country": "Kenya",
+        "program": "Responsible Citizenship",
+        "title": "Women building trench dams to store water for irrigation",
+        "href": "#/story/women-building-dams",
+        "image": "assets/stories/story-kenya-dams.jpg",
+        "imageAlt": "Women building trench dams in Kwale, Kenya"
       }
     ]
   },
@@ -176,7 +190,7 @@
       "lead": "Research, reports and resources from the field — so PA is also a source of learning and evidence.",
       "cta": { "label": "Visit knowledge centre", "href": "#/resources" },
       "image": "assets/field-reports/cover.jpg",
-      "imageAlt": "Community Transformation Report"
+      "imageAlt": "Field Reports"
     },
     "news": {
       "eyebrow": "News & Updates",
@@ -207,10 +221,10 @@
     }
   },
   "partnerSupport": {
-    "eyebrow": "Partner / Support",
-    "title": "Partner with Possibilities Africa.",
-    "titleHtml": "<span>Partner with</span> <em>Possibilities Africa.</em>",
-    "lead": "See credible evidence of transformation — then take a next step with the ministry.",
+    "eyebrow": "Get Involved",
+    "title": "Be part of the transformation.",
+    "titleHtml": "<span>Be part of</span> <em>the transformation.</em>",
+    "lead": "At PA we believe in giving what we have as a way of partnering with God in spreading the Gospel and impacting lives across Africa.",
     "primaryCta": {
       "label": "Partner With Us"
     },

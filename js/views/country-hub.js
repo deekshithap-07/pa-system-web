@@ -2,6 +2,7 @@ import { buildCountryHubPayload } from "../utils/country-hub-data.js";
 import { attachCountryHubGeoMap } from "../utils/hub-geo-maps.js";
 import {
   renderCountryIntro,
+  renderCountryGlance,
   renderCountryMapPresence,
   renderCountryProgrammes,
   renderCountryTrends,
@@ -29,6 +30,7 @@ export function renderCountryHub(slug, data) {
   const html = `
     <div class="wb-country cp-portal-page" data-country-hub data-country-slug="${slug}">
       ${renderCountryIntro(hub, data)}
+      ${renderCountryGlance(hub)}
       ${renderCountryMapPresence(hub)}
       ${renderCountryProgrammes(hub, data)}
       ${renderCountryTrends(hub, data)}

@@ -1,0 +1,680 @@
+/* Community page — refreshed look. Every section has its own tone, layout and motion.
+   Order: photo hero → sage map → gold-cream journey → white colour tiles → maroon projects →
+   ivory activity → blush progress → green story → warm-white media → linen resources → ivory close. */
+
+.cm-page {
+  background: #fffdf8;
+}
+
+/* 1 — Hero: brighter photo, pill trail, glass meta card */
+.cm-page .cm-entry__media img {
+  opacity: 0.74;
+}
+
+.cm-page .cm-entry__veil {
+  background:
+    linear-gradient(100deg, rgba(42, 16, 20, 0.85) 0%, rgba(42, 16, 20, 0.45) 50%, rgba(42, 16, 20, 0.1) 85%),
+    linear-gradient(180deg, transparent 50%, rgba(42, 16, 20, 0.65) 100%);
+}
+
+.cm-page .cm-entry__zoom {
+  gap: 0.4rem;
+}
+
+.cm-page .cm-entry__zoom a,
+.cm-page .cm-entry__zoom .is-here {
+  padding: 0.3rem 0.75rem;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 999px;
+  background: rgba(42, 16, 20, 0.35);
+  backdrop-filter: blur(6px);
+  color: #fff;
+}
+
+.cm-page .cm-entry__zoom .is-here {
+  background: var(--pa-gold);
+  border-color: var(--pa-gold);
+  color: var(--pa-maroon-deep);
+}
+
+.cm-page .cm-entry__zoom a:hover {
+  border-color: var(--pa-gold);
+  color: var(--pa-gold-soft);
+}
+
+.cm-page .cm-entry__name span::after {
+  content: "";
+  display: block;
+  width: 4.5rem;
+  height: 6px;
+  margin-top: 1rem;
+  border-radius: 6px;
+  background: linear-gradient(90deg, var(--pa-gold), var(--pa-green));
+}
+
+.cm-page .cm-entry__right {
+  padding: 1.35rem 1.4rem;
+  border-radius: 1.1rem;
+  background: rgba(42, 16, 20, 0.5);
+  border: 1px solid rgba(245, 215, 138, 0.22);
+  backdrop-filter: blur(8px);
+}
+
+/* 2 — Location: sage band, map as a floating card */
+.cm-page .cm-loc {
+  background: linear-gradient(180deg, #f1f6ed 0%, #e5eedf 100%);
+}
+
+.cm-page .cm-loc .cm-kicker {
+  color: var(--pa-green-dark);
+}
+
+.cm-page .cm-loc__map .hub-geo-map {
+  border-radius: 1.4rem;
+  overflow: hidden;
+  background: #fff;
+  box-shadow: 0 22px 50px rgba(47, 122, 56, 0.15);
+}
+
+.cm-page .cm-loc__map .hub-geo-map__canvas {
+  border: 0;
+  background: linear-gradient(180deg, #fbfdf9, #f3f8ef);
+}
+
+.cm-page .cm-loc__map .hub-geo-map__country {
+  fill: rgba(63, 154, 74, 0.14);
+  stroke: rgba(47, 122, 56, 0.55);
+}
+
+.cm-page .cm-loc__map .hub-geo-map__panel {
+  border-top: 1px solid rgba(47, 122, 56, 0.15);
+  background: #fff;
+}
+
+.cm-page .cm-loc__map .hub-geo-map__panel h3 {
+  text-transform: none;
+  letter-spacing: -0.01em;
+  color: var(--pa-green-dark);
+}
+
+.cm-page .cm-loc__map .hub-geo-map__list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.cm-page .cm-loc__map .hub-geo-map__list-btn {
+  padding: 0.4rem 0.85rem;
+  border: 1.5px solid rgba(47, 122, 56, 0.2);
+  border-radius: 999px;
+  background: #f6faf3;
+  transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+}
+
+.cm-page .cm-loc__map .hub-geo-map__list-btn:hover {
+  background: var(--pa-green);
+  border-color: var(--pa-green);
+  color: #fff;
+}
+
+/* 3 — Journey: gold-cream, heading beside a stack of step cards */
+.cm-page .cm-journey {
+  background:
+    radial-gradient(ellipse at 0% 100%, rgba(245, 215, 138, 0.45), transparent 50%),
+    #fbf1dc;
+}
+
+.cm-page .cm-journey > .container {
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+  gap: clamp(1.5rem, 4vw, 3.5rem);
+  align-items: start;
+}
+
+.cm-page .cm-journey .cm-sec-head {
+  position: sticky;
+  top: calc(var(--header-h, 4.5rem) + 1.5rem);
+}
+
+.cm-page .cm-journey__now strong {
+  display: inline-block;
+  padding: 0.2rem 0.75rem;
+  border-radius: 999px;
+  background: var(--pa-maroon);
+  color: #fff;
+}
+
+.cm-page .cm-journey__track {
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+  max-width: none;
+  padding: 0;
+  border-left: 0;
+}
+
+.cm-page .cm-journey__step,
+.cm-page .cm-journey__mark {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  column-gap: 0.9rem;
+  margin: 0;
+  padding: 0.9rem 1.1rem;
+  border-radius: 1rem;
+  background: rgba(255, 255, 255, 0.75);
+  border: 1.5px solid rgba(232, 169, 26, 0.25);
+}
+
+.cm-page .cm-journey__mark {
+  display: flex;
+  gap: 0.6rem;
+  background: transparent;
+  border-style: dashed;
+}
+
+.cm-page .cm-journey__dot {
+  position: static;
+  grid-row: span 2;
+  width: 0.9rem;
+  height: 0.9rem;
+  box-shadow: none;
+  border: 0;
+  background: rgba(92, 36, 40, 0.15);
+}
+
+.cm-page .cm-journey__step strong {
+  grid-column: 2;
+  margin: 0;
+  font-size: 1.1rem;
+}
+
+.cm-page .cm-journey__n {
+  grid-column: 2;
+}
+
+.cm-page .cm-journey__step em {
+  grid-column: 3;
+  grid-row: 1 / span 2;
+  padding: 0.2rem 0.6rem;
+  border-radius: 999px;
+  background: rgba(232, 169, 26, 0.15);
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--pa-maroon);
+}
+
+.cm-page .cm-journey__step.is-past .cm-journey__dot {
+  background: var(--pa-green);
+}
+
+.cm-page .cm-journey__step.is-current {
+  margin: 0;
+  padding: 1.1rem 1.1rem;
+  background: var(--pa-maroon);
+  border-color: var(--pa-maroon);
+  box-shadow: 0 16px 34px rgba(92, 36, 40, 0.25);
+}
+
+.cm-page .cm-journey__step.is-current strong {
+  color: #fff;
+}
+
+.cm-page .cm-journey__step.is-current .cm-journey__n {
+  color: var(--pa-gold-soft);
+}
+
+.cm-page .cm-journey__step.is-current em {
+  background: rgba(255, 255, 255, 0.15);
+  color: #fff;
+}
+
+.cm-page .cm-journey__step.is-current .cm-journey__dot {
+  transform: none;
+  background: var(--pa-gold);
+  box-shadow: 0 0 0 5px rgba(232, 169, 26, 0.3);
+}
+
+.cm-page .cm-journey__step.is-next {
+  opacity: 0.6;
+}
+
+/* 4 — Glance: solid colour tiles that flip up */
+.cm-page .cm-glance {
+  background: #fff;
+}
+
+.cm-page .cm-glance__field {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
+  gap: 1rem;
+  perspective: 900px;
+}
+
+.cm-page .cm-glance__item {
+  position: relative;
+  overflow: hidden;
+  padding: 1.6rem 1.5rem;
+  border-radius: 1.2rem;
+  background: linear-gradient(150deg, var(--pa-maroon), var(--pa-maroon-dark));
+  box-shadow: 0 16px 34px rgba(42, 16, 20, 0.14);
+  transition: transform 0.3s ease;
+}
+
+.cm-page .cm-glance__item:nth-child(2) {
+  background: linear-gradient(150deg, var(--pa-green), var(--pa-green-dark));
+}
+
+.cm-page .cm-glance__item:nth-child(3) {
+  background: linear-gradient(150deg, #f0c24d, var(--pa-gold-ochre));
+}
+
+.cm-page .cm-glance__item::after {
+  content: "";
+  position: absolute;
+  right: -1.5rem;
+  top: -1.5rem;
+  width: 6rem;
+  height: 6rem;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.cm-page .cm-glance__item:hover {
+  transform: translateY(-4px);
+}
+
+.cm-page .cm-glance__item strong {
+  font-size: clamp(2.6rem, 6vw, 3.8rem);
+  color: #fff;
+  font-variant-numeric: tabular-nums;
+}
+
+.cm-page .cm-glance__item span {
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.cm-page .cm-glance__item:nth-child(3) strong,
+.cm-page .cm-glance__item:nth-child(3) span {
+  color: var(--pa-maroon-deep);
+}
+
+/* 5 — Projects: deep maroon, glass rows with gold number badges */
+.cm-page .cm-work__index {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  max-width: 48rem;
+}
+
+.cm-page .cm-work__row,
+.cm-page .cm-work__index > li:last-child .cm-work__row {
+  align-items: center;
+  padding: 1rem 1.2rem;
+  border: 1px solid rgba(245, 215, 138, 0.18);
+  border-radius: 1rem;
+  background: rgba(255, 255, 255, 0.06);
+  transition: background 0.25s ease, border-color 0.25s ease;
+}
+
+.cm-page .cm-work__row.is-open,
+.cm-page .cm-work__row:hover,
+.cm-page .cm-work__row:focus-visible {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(245, 215, 138, 0.55);
+}
+
+.cm-page .cm-work__row.is-open {
+  border-radius: 1rem 1rem 0 0;
+}
+
+.cm-page .cm-work__n {
+  display: grid;
+  place-items: center;
+  width: 2.3rem;
+  height: 2.3rem;
+  border-radius: 50%;
+  background: var(--pa-gold);
+  color: var(--pa-maroon-deep);
+}
+
+.cm-page .cm-work__status {
+  padding: 0.2rem 0.65rem;
+  border-radius: 999px;
+  background: rgba(63, 154, 74, 0.25);
+  color: #d9f0d4;
+}
+
+.cm-page .cm-work__detail {
+  margin-top: -0.6rem;
+  padding: 1rem 1.2rem 1.2rem 4.5rem;
+  border: 1px solid rgba(245, 215, 138, 0.55);
+  border-top: 0;
+  border-radius: 0 0 1rem 1rem;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.cm-page .cm-work__detail img {
+  border-radius: 0.7rem;
+}
+
+/* 6 — Activity: ivory, thick rounded meters in three brand colours */
+.cm-page .cm-activity {
+  background: #fffaf1;
+}
+
+.cm-page .cm-activity__field {
+  gap: 1.1rem;
+}
+
+.cm-page .cm-activity__row {
+  padding: 1.1rem 1.25rem;
+  border-radius: 1rem;
+  background: #fff;
+  box-shadow: 0 10px 26px rgba(92, 36, 40, 0.07);
+}
+
+.cm-page .cm-activity__bar {
+  height: 12px;
+  border-radius: 999px;
+  background: rgba(92, 36, 40, 0.08);
+}
+
+.cm-page .cm-activity__bar span {
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--pa-maroon-dark), var(--pa-maroon));
+}
+
+.cm-page .cm-activity__row:nth-child(2) .cm-activity__bar span {
+  background: linear-gradient(90deg, var(--pa-green-dark), var(--pa-green));
+}
+
+.cm-page .cm-activity__row:nth-child(3) .cm-activity__bar span {
+  background: linear-gradient(90deg, var(--pa-gold-ochre), var(--pa-gold));
+}
+
+.cm-page .cm-activity__meta span {
+  font-weight: 700;
+}
+
+/* 7 — Progress: blush band, big numbered nodes on a line, chart card */
+.cm-page .cm-progress {
+  background: linear-gradient(180deg, #fbf4f1 0%, #f5e8e3 100%);
+}
+
+.cm-page .cm-progress__meta span {
+  padding: 0.3rem 0.8rem;
+  border-radius: 999px;
+  background: #fff;
+}
+
+.cm-page .cm-progress__nodes {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(6.5rem, 1fr));
+  gap: 0.75rem;
+}
+
+.cm-page .cm-progress__node {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  opacity: 0.5;
+}
+
+.cm-page .cm-progress__pip {
+  width: 1.4rem;
+  height: 1.4rem;
+  margin-bottom: 0.55rem;
+  background: #fff;
+  box-shadow: inset 0 0 0 3px rgba(92, 36, 40, 0.2);
+}
+
+.cm-page .cm-progress__node.is-past .cm-progress__pip {
+  background: var(--pa-green);
+  box-shadow: 0 0 0 4px rgba(63, 154, 74, 0.2);
+}
+
+.cm-page .cm-progress__node.is-current .cm-progress__pip {
+  background: var(--pa-maroon);
+  box-shadow: 0 0 0 6px rgba(232, 169, 26, 0.45);
+}
+
+.cm-page .cm-progress__line {
+  top: 2.55rem;
+  height: 4px;
+  border-radius: 4px;
+  background: rgba(92, 36, 40, 0.1);
+}
+
+.cm-page .cm-progress__line span {
+  border-radius: 4px;
+  background: linear-gradient(90deg, var(--pa-green), var(--pa-gold));
+}
+
+.cm-page .cm-progress__chart {
+  border: 0;
+  border-radius: 1.2rem;
+  box-shadow: 0 16px 36px rgba(92, 36, 40, 0.1);
+  border-left: 5px solid var(--pa-maroon);
+}
+
+/* 8 — Story: deep green, split image + text */
+.cm-page .cm-story {
+  padding: clamp(3rem, 7vh, 4.5rem) 0;
+  background:
+    radial-gradient(ellipse at 100% 0%, rgba(245, 215, 138, 0.14), transparent 45%),
+    linear-gradient(155deg, #1c4a26 0%, var(--pa-green-dark) 100%);
+}
+
+.cm-page .cm-story__bleed {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+  gap: clamp(1.5rem, 4vw, 3rem);
+  align-items: center;
+  width: min(100% - 2rem, var(--max-w, 74rem));
+  min-height: 0;
+  margin-inline: auto;
+  overflow: visible;
+}
+
+.cm-page .cm-story__media {
+  position: relative;
+  inset: auto;
+  height: clamp(18rem, 48vh, 26rem);
+  overflow: hidden;
+  border-radius: 1.4rem;
+  box-shadow: 0 26px 56px rgba(0, 0, 0, 0.3);
+}
+
+.cm-page .cm-story__veil {
+  display: none;
+}
+
+.cm-page .cm-story__caption {
+  width: auto;
+  max-width: none;
+  margin: 0;
+  padding: 0;
+}
+
+.cm-page .cm-story__cta {
+  padding: 0.65rem 1.2rem;
+  border: 0;
+  border-radius: 999px;
+  background: var(--pa-gold);
+  color: var(--pa-maroon-deep);
+}
+
+.cm-page .cm-story__cta:hover {
+  background: #fff;
+  color: var(--pa-green-dark);
+}
+
+/* 9 — Media: warm white, tilted polaroids */
+.cm-page .cm-media {
+  background: #fffdf8;
+}
+
+.cm-page .cm-media__strip {
+  gap: 1.4rem;
+  padding: 1rem 0.5rem 1.5rem;
+  align-items: center;
+}
+
+.cm-page .cm-media__item {
+  padding: 0.6rem 0.6rem 0;
+  border: 0;
+  border-radius: 0.5rem;
+  box-shadow: 0 14px 30px rgba(42, 16, 20, 0.14);
+  transform: rotate(-2deg);
+}
+
+.cm-page .cm-media__item:nth-child(even) {
+  transform: rotate(2deg);
+}
+
+.cm-page .cm-media__item:hover,
+.cm-page .cm-media__item:focus-visible {
+  transform: rotate(0) translateY(-6px);
+}
+
+.cm-page .cm-media__item img {
+  border-radius: 0.3rem;
+}
+
+/* 10 — Resources: linen band, cards with coloured top rules */
+.cm-page .cm-know {
+  background: #f7f0e8;
+}
+
+.cm-page .cm-know__list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+  gap: 1rem;
+  max-width: none;
+}
+
+.cm-page .cm-know__item,
+.cm-page .cm-know__item:last-child {
+  padding: 1.25rem;
+  border: 0;
+  border-top: 5px solid var(--pa-maroon);
+  border-radius: 0.9rem;
+  background: #fff;
+  box-shadow: 0 10px 24px rgba(92, 36, 40, 0.08);
+  transition: transform 0.25s ease;
+}
+
+.cm-page .cm-know__item:nth-child(2) {
+  border-top-color: var(--pa-green);
+}
+
+.cm-page .cm-know__item:nth-child(3) {
+  border-top-color: var(--pa-gold);
+}
+
+.cm-page .cm-know__item:hover {
+  transform: translateY(-4px);
+}
+
+/* 11 — Next: light close, direction cards + sibling pills */
+.cm-page .cm-next {
+  padding-bottom: 0;
+  background:
+    radial-gradient(ellipse at 50% 0%, rgba(245, 215, 138, 0.3), transparent 55%),
+    #fffdf8;
+  border-bottom: 4px solid var(--pa-gold);
+}
+
+.cm-page .cm-next__fade {
+  display: none;
+}
+
+.cm-page .cm-next__dirs {
+  gap: 0.55rem;
+}
+
+.cm-page .cm-next__dirs a,
+.cm-page .cm-next__dirs a:last-child {
+  padding: 0.95rem 1.15rem;
+  border: 1.5px solid rgba(92, 36, 40, 0.1);
+  border-radius: 1rem;
+  background: #fff;
+  box-shadow: 0 8px 20px rgba(92, 36, 40, 0.06);
+  transition: transform 0.25s ease, border-color 0.25s ease, color 0.25s ease;
+}
+
+.cm-page .cm-next__dirs a:hover,
+.cm-page .cm-next__dirs a:focus-visible {
+  transform: translateX(5px);
+  border-color: var(--pa-gold);
+  color: var(--pa-maroon);
+}
+
+.cm-page .cm-next__dirs a em {
+  opacity: 1;
+}
+
+.cm-page .cm-next__siblings {
+  align-self: start;
+  padding: 1.4rem;
+  border-radius: 1.2rem;
+  background: #f1f6ed;
+}
+
+.cm-page .cm-next__siblings .cm-kicker {
+  color: var(--pa-green-dark);
+}
+
+.cm-page .cm-next__sib-list {
+  gap: 0.45rem;
+}
+
+.cm-page .cm-next__sib-list a {
+  padding: 0.45rem 0.95rem;
+  border: 1.5px solid rgba(47, 122, 56, 0.2);
+  border-radius: 999px;
+  background: #fff;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.cm-page .cm-next__sib-list a:hover {
+  background: var(--pa-green);
+  border-color: var(--pa-green);
+  color: #fff;
+}
+
+@media (max-width: 980px) {
+  .cm-page .cm-journey > .container,
+  .cm-page .cm-story__bleed {
+    grid-template-columns: 1fr;
+  }
+
+  .cm-page .cm-journey .cm-sec-head {
+    position: static;
+  }
+
+  .cm-page .cm-work__detail {
+    padding-left: 1.2rem;
+  }
+}
+
+@media (max-width: 640px) {
+  .cm-page .cm-journey__step em {
+    display: none;
+  }
+
+  .cm-page .cm-progress__line {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cm-page .cm-glance__item,
+  .cm-page .cm-know__item,
+  .cm-page .cm-next__dirs a,
+  .cm-page .cm-media__item {
+    transition: none !important;
+  }
+}

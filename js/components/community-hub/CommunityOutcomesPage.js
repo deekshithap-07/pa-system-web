@@ -724,20 +724,91 @@ function initCommunityMotion(page) {
     if (meta) tl.fromTo(meta, { opacity: 0, y: 18 }, { opacity: 1, y: 0, duration: 0.55 }, "-=0.35");
   }
 
+  const riseFrom = (section, el) => {
+    if (el.classList.contains("cm-sec-head")) return { opacity: 0, y: 20 };
+    switch (section) {
+      case "location":
+        return { opacity: 0, scale: 0.95 };
+      case "story":
+        return { opacity: 0, x: 40 };
+      case "media":
+        return { opacity: 0, y: 30, scale: 0.9 };
+      case "resources":
+        return { opacity: 0, y: 36 };
+      case "next":
+        return { opacity: 0, x: -24 };
+      default:
+        return { opacity: 0, y: 22 };
+    }
+  };
+
   page.querySelectorAll("[data-cm-rise]").forEach((el) => {
+    const section = el.closest("[data-cm-section]")?.dataset.cmSection;
+    if (section === "glance" && el.classList.contains("cm-glance__field")) return;
+    if (section === "work" && el.matches("[data-cm-work]")) return;
+    gsap.fromTo(el, riseFrom(section, el), {
+      opacity: 1,
+      y: 0,
+      x: 0,
+      scale: 1,
+      duration: 0.65,
+      ease: "power3.out",
+      clearProps: "transform",
+      scrollTrigger: { trigger: el, start: "top 88%", once: true },
+    });
+  });
+
+  const glanceField = page.querySelector(".cm-glance__field");
+  if (glanceField) {
     gsap.fromTo(
-      el,
-      { opacity: 0, y: 22 },
+      glanceField.children,
+      { opacity: 0, rotationX: -70, y: 20, transformOrigin: "50% 100%" },
       {
         opacity: 1,
+        rotationX: 0,
         y: 0,
-        duration: 0.65,
-        ease: "power3.out",
+        duration: 0.75,
+        stagger: 0.12,
+        ease: "back.out(1.5)",
         clearProps: "transform",
-        scrollTrigger: { trigger: el, start: "top 88%", once: true },
+        scrollTrigger: { trigger: glanceField, start: "top 85%", once: true },
       }
     );
-  });
+  }
+
+  const workRows = page.querySelectorAll("[data-cm-work] > li");
+  if (workRows.length) {
+    gsap.fromTo(
+      workRows,
+      { opacity: 0, x: 50 },
+      {
+        opacity: 1,
+        x: 0,
+        duration: 0.55,
+        stagger: 0.08,
+        ease: "power3.out",
+        clearProps: "transform",
+        scrollTrigger: { trigger: page.querySelector("[data-cm-work]"), start: "top 85%", once: true },
+      }
+    );
+  }
+
+  const nodes = page.querySelectorAll("[data-cm-progress-path] .cm-progress__node");
+  if (nodes.length) {
+    gsap.fromTo(
+      nodes,
+      { scale: 0.6, opacity: 0 },
+      {
+        scale: 1,
+        opacity: (i, el) => (el.classList.contains("is-past") || el.classList.contains("is-current") ? 1 : 0.5),
+        duration: 0.5,
+        stagger: 0.1,
+        ease: "back.out(2)",
+        clearProps: "transform",
+        scrollTrigger: { trigger: page.querySelector("[data-cm-progress-path]"), start: "top 82%", once: true },
+      }
+    );
+  }
 
   page.querySelectorAll("[data-cm-count]").forEach((el) => {
     const target = parseFloat(el.dataset.cmCount);
@@ -809,9 +880,9 @@ function initCommunityMotion(page) {
   if (storyMedia) {
     gsap.fromTo(
       storyMedia,
-      { clipPath: "inset(10% 12% 10% 12%)" },
+      { clipPath: "inset(0% 100% 0% 0% round 1.4rem)" },
       {
-        clipPath: "inset(0% 0% 0% 0%)",
+        clipPath: "inset(0% 0% 0% 0% round 1.4rem)",
         duration: 1.1,
         ease: "power3.out",
         scrollTrigger: { trigger: page.querySelector("[data-cm-story]"), start: "top 80%", once: true },

@@ -109,6 +109,38 @@ export function renderCountryIntro(hub, data) {
     </header>`;
 }
 
+/* 01b — At a glance (headline figures, counted in place) */
+const GLANCE_IDS = ["communities", "catchments", "pastors", "shalom", "ppp", "volunteers", "households", "programs"];
+
+export function renderCountryGlance(hub) {
+  const kpis = (hub.kpis || [])
+    .filter((k) => GLANCE_IDS.includes(k.id) && typeof k.value === "number" && k.value > 0)
+    .sort((a, b) => GLANCE_IDS.indexOf(a.id) - GLANCE_IDS.indexOf(b.id))
+    .slice(0, 6);
+  if (!kpis.length) return "";
+
+  const items = kpis
+    .map((k, i) => {
+      const display = `${k.prefix || ""}${k.value.toLocaleString("en-US")}${k.suffix || ""}`;
+      return `<li class="cp-glance__item cp-glance__item--${i % 3}">
+        <span class="cp-glance__value">
+          <span class="cp-glance__ghost" aria-hidden="true">${display}</span>
+          <span class="cp-glance__num" data-cp-count="${k.value}" data-cp-prefix="${k.prefix || ""}" data-cp-suffix="${k.suffix || ""}">${display}</span>
+        </span>
+        <span class="cp-glance__label">${k.label}</span>
+        ${k.trend && k.direction === "up" ? `<span class="cp-glance__trend">${k.trend}</span>` : ""}
+      </li>`;
+    })
+    .join("");
+
+  return `
+    <section class="cp-glance" data-cp-section="glance" aria-label="${hub.countryName} at a glance">
+      <div class="container">
+        <ul class="cp-glance__card" data-cp-glance>${items}</ul>
+      </div>
+    </section>`;
+}
+
 /* 02 — Map + location index (geography only — no aggregate counts) */
 export function renderCountryMapPresence(hub) {
   const catchments = hub.catchments || [];
@@ -132,7 +164,7 @@ export function renderCountryMapPresence(hub) {
 
   const mapBlock = hub.geoMap
     ? `<div class="cp-geo__map" data-cp-reveal data-cp-map-root>
-        ${renderHubGeoMap(hub.geoMap, { variant: "full", mapId: "country-portal" })}
+        ${renderHubGeoMap(hub.geoMap, { variant: "full", mapId: "country-portal", regions: true })}
       </div>`
     : `<p class="cp-empty" data-cp-reveal>Catchment mapping will appear as geographic data expands.</p>`;
 
@@ -143,6 +175,7 @@ export function renderCountryMapPresence(hub) {
           <p class="cp-kicker">Where PA works</p>
           <h2 id="cp-map-title" class="cp-sec-title">Where PA is working in ${hub.countryName}</h2>
           <p class="cp-sec-lead">Open a nearby group to explore its communities.</p>
+          ${catchments.length ? `<a class="cp-geo__all" href="#/country/${slug}/catchments" data-link>See all ${catchments.length} catchments →</a>` : ""}
         </header>
         <div class="cp-geo__stage">
           ${mapBlock}
@@ -172,9 +205,10 @@ export function renderCountryProgrammes(hub, data) {
     .map(
       (c, i) => `
       <article class="cp-do__panel${i === 0 ? " is-active" : ""}" data-cp-chapter-panel="${i}" ${i === 0 ? "" : "hidden"}>
+        <span class="cp-do__big" aria-hidden="true">${String(i + 1).padStart(2, "0")}</span>
         <h3>${c.title}</h3>
         <p>${c.text}</p>
-        <a class="cp-text-link cp-text-link--light" href="${c.href}" data-link>Learn more →</a>
+        <a class="cp-text-link" href="${c.href}" data-link>Learn more →</a>
       </article>`
     )
     .join("");
@@ -182,9 +216,9 @@ export function renderCountryProgrammes(hub, data) {
   return `
     <section class="cp-do" data-cp-section="programmes" aria-labelledby="cp-do-title">
       <div class="container">
-        <header class="cp-sec-head cp-sec-head--light" data-cp-reveal>
-          <p class="cp-kicker cp-kicker--light">What PA is doing</p>
-          <h2 id="cp-do-title" class="cp-sec-title cp-sec-title--light">Work underway in ${hub.countryName}</h2>
+        <header class="cp-sec-head" data-cp-reveal>
+          <p class="cp-kicker">What PA is doing</p>
+          <h2 id="cp-do-title" class="cp-sec-title">Work underway in ${hub.countryName}</h2>
         </header>
         <div class="cp-do__stage" data-cp-chapters>
           <div class="cp-do__rail" role="tablist" aria-label="Programmes">${nav}</div>
@@ -253,11 +287,11 @@ export function renderCountryFeaturedStories(hub, stories = []) {
     return `
       <section class="cp-story" data-cp-section="stories" aria-labelledby="cp-stories-title">
         <div class="container">
-          <header class="cp-sec-head cp-sec-head--light" data-cp-reveal>
-            <p class="cp-kicker cp-kicker--light">Transformation story</p>
-            <h2 id="cp-stories-title" class="cp-sec-title cp-sec-title--light">Stories from ${hub.countryName}</h2>
-            <p class="cp-sec-lead cp-sec-lead--light">Stories from this country will appear here as they are published.</p>
-            <a class="cp-text-link cp-text-link--light" href="${allHref}" data-link>All stories →</a>
+          <header class="cp-sec-head" data-cp-reveal>
+            <p class="cp-kicker">Transformation story</p>
+            <h2 id="cp-stories-title" class="cp-sec-title">Stories from ${hub.countryName}</h2>
+            <p class="cp-sec-lead">Stories from this country will appear here as they are published.</p>
+            <a class="cp-text-link" href="${allHref}" data-link>All stories →</a>
           </header>
         </div>
       </section>`;
@@ -459,9 +493,13 @@ export function bindCountryProgrammes(root) {
       });
       panels.forEach((p, n) => {
         const on = n === i;
+        p.classList.remove("is-enter");
         p.classList.toggle("is-active", on);
-        if (on) p.removeAttribute("hidden");
-        else p.setAttribute("hidden", "");
+        if (on) {
+          p.removeAttribute("hidden");
+          void p.offsetWidth;
+          p.classList.add("is-enter");
+        } else p.setAttribute("hidden", "");
       });
     });
   });
@@ -480,6 +518,13 @@ export function bindCountryMap(root, countrySlug) {
     svg.querySelectorAll(".hub-geo-map__catchment-anchor, .hub-geo-map__catchment-label").forEach((el) => {
       el.classList.toggle("is-selected", id != null && el.dataset.entityId === id);
     });
+    svg.querySelectorAll(".hub-geo-map__zone--region").forEach((el) => {
+      el.classList.toggle("is-highlighted", id != null && el.dataset.catchmentId === id);
+    });
+    svg.querySelectorAll(".hub-geo-map__community-dot").forEach((el) => {
+      el.classList.toggle("is-highlighted", id != null && el.dataset.catchmentId === id);
+    });
+    svg.classList.toggle("has-focus", id != null);
   };
 
   index.querySelectorAll("[data-cp-loc]").forEach((item) => {
@@ -530,23 +575,65 @@ export function initCountryPageAnimations(root = document) {
     if (copy) tl.fromTo(copy, { opacity: 0, y: 18 }, { opacity: 1, y: 0, duration: 0.6 }, "-=0.4");
   }
 
+  /* Each section enters differently */
+  const revealFrom = (section, el) => {
+    const i = Number(el.style.getPropertyValue("--i")) || 0;
+    const isHead = el.classList.contains("cp-sec-head");
+    if (isHead) return { opacity: 0, y: 20 };
+    switch (section) {
+      case "map":
+        return { opacity: 0, x: 28 };
+      case "trends":
+        return el.matches(".cp-progress__miles") ? { opacity: 0, scale: 0.94 } : { opacity: 0, y: 34 };
+      case "reports":
+        return { opacity: 0, y: 40, rotation: i % 2 ? 3 : -3 };
+      case "updates":
+        return { opacity: 0, x: i % 2 ? 16 : -16 };
+      default:
+        return { opacity: 0, y: 20 };
+    }
+  };
+
   page.querySelectorAll("[data-cp-reveal]").forEach((el) => {
     const section = el.closest("[data-cp-section]")?.dataset.cpSection;
-    const fromX = section === "updates" && Number(el.style.getPropertyValue("--i")) % 2 ? 16 : 0;
-    gsap.fromTo(
-      el,
-      { opacity: 0, y: fromX ? 0 : 20, x: fromX },
-      {
-        opacity: 1,
-        y: 0,
-        x: 0,
-        duration: 0.6,
-        ease: "power3.out",
-        clearProps: "transform",
-        scrollTrigger: { trigger: el, start: "top 88%", once: true },
-      }
-    );
+    gsap.fromTo(el, revealFrom(section, el), {
+      opacity: 1,
+      y: 0,
+      x: 0,
+      scale: 1,
+      rotation: 0,
+      duration: section === "reports" ? 0.75 : 0.6,
+      ease: section === "reports" ? "back.out(1.4)" : "power3.out",
+      clearProps: "transform",
+      scrollTrigger: { trigger: el, start: "top 88%", once: true },
+    });
   });
+
+  const glance = page.querySelector("[data-cp-glance]");
+  if (glance) {
+    const nums = [...glance.querySelectorAll("[data-cp-count]")];
+    nums.forEach((el) => {
+      el.textContent = `${el.dataset.cpPrefix || ""}0${el.dataset.cpSuffix || ""}`;
+    });
+    gsap.fromTo(
+      glance.children,
+      { opacity: 0, y: 16 },
+      { opacity: 1, y: 0, duration: 0.5, stagger: 0.08, ease: "power2.out", delay: 0.35, clearProps: "transform" }
+    );
+    nums.forEach((el) => {
+      const target = Number(el.dataset.cpCount) || 0;
+      const obj = { v: 0 };
+      gsap.to(obj, {
+        v: target,
+        duration: 1.8,
+        delay: 0.45,
+        ease: "power2.out",
+        onUpdate: () => {
+          el.textContent = `${el.dataset.cpPrefix || ""}${Math.round(obj.v).toLocaleString("en-US")}${el.dataset.cpSuffix || ""}`;
+        },
+      });
+    });
+  }
 
   const logFill = page.querySelector("[data-cp-log-fill]");
   if (logFill && typeof ScrollTrigger !== "undefined") {

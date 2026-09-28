@@ -1,71 +1,85 @@
 {
   "hero": {
-    "eyebrow": "About PA",
-    "title": "Who we are.",
-    "titleHtml": "<span>Who</span> <em>we are.</em>",
-    "lead": "The institutional foundation of Possibilities Africa — vision, approach, leadership, and how to reach us.",
+    "eyebrow": "Who We Are",
+    "title": "We Are Africa.",
+    "titleHtml": "<span>We Are</span> <em>Africa.</em>",
+    "lead": "Possibilities Africa (PA) is a Christian ministry organization dedicated to equipping pastors in rural African communities with the knowledge, skills, and attitude necessary to conduct holistic transformation ministries.",
     "image": "assets/country-heroes/ethiopia-hero-leaders.jpg",
     "imageAlt": "Local church leader teaching from an open book with community members seated under open sky"
   },
   "whoWeAre": {
-    "eyebrow": "Who we are",
-    "title": "A ministry walking with local churches.",
-    "titleHtml": "<span>A ministry walking with</span> <em>local churches.</em>",
-    "lead": "Possibilities Africa exists so rural communities grow in faith, family life, and daily wellbeing — led by pastors already present in the village.",
+    "eyebrow": "Our Philosophy",
+    "title": "Nehemiah's approach.",
+    "titleHtml": "<span>Nehemiah's</span> <em>approach.</em>",
+    "lead": "Our philosophy of ministry is rooted in the story and work of Nehemiah in the Bible.",
     "points": [
-      "We work as one ministry with churches, partners, and communities across seven countries.",
-      "Local churches lead; PA walks beside them for about two years of training and practice.",
-      "Stories and simple results sit side by side so the work stays clear and accountable."
+      "Our philosophy of ministry is rooted in the story and work of Nehemiah in the Bible.",
+      "Just as Nehemiah worked diligently with his fellow countrymen to rebuild the broken walls of Jerusalem so that they would not live in disgrace (Nehemiah 2:17-18),",
+      "Possibilities Africa works with people in each community to mobilise them to rebuild the broken walls of their society, spiritually, socio-economically, physically/materially, and culturally so that they may live dignified lives."
     ]
   },
   "visionMission": {
-    "eyebrow": "Vision and mission",
-    "title": "Whole gospel. Whole person. Whole community.",
-    "titleHtml": "<span>Whole gospel. Whole person.</span> <em>Whole community.</em>",
+    "eyebrow": "Direction & Goals",
+    "title": "Vision & Mission.",
+    "titleHtml": "<span>Vision &</span> <em>Mission.</em>",
     "vision": {
-      "label": "Vision",
-      "text": "With God all things are possible — rural Africa flourishing through pastor-led transformation."
+      "label": "Our Vision",
+      "text": "To see spiritual, mental, socio-economic, cultural transformation of lives in rural African villages"
     },
     "mission": {
-      "label": "Mission",
-      "text": "The whole gospel transforming the whole person and whole community — faith, families, livelihoods, youth, and responsible citizenship growing together."
+      "label": "Our Mission",
+      "text": "Possibilities Africa (PA) is a Christian ministry organization dedicated to equipping pastors in rural African communities with the knowledge, skills, and attitude necessary to conduct holistic transformation ministries."
     }
   },
   "approach": {
-    "eyebrow": "Our approach",
-    "title": "How the work is carried.",
-    "titleHtml": "<span>How the work</span> <em>is carried.</em>",
-    "lead": "Pastor-led change, community ownership, and a clear two-year journey — not projects dropped in from outside.",
+    "eyebrow": "PA Values",
+    "title": "Our Values.",
+    "titleHtml": "<span>Our</span> <em>Values.</em>",
+    "lead": "",
     "items": [
       {
-        "title": "Whole-gospel discipleship",
-        "text": "Pastors are equipped so spiritual life and daily life grow together — not as separate tracks."
+        "title": "Holistic Faith",
+        "text": "We believe that the Bible is God's word and it provides all that man requires for life and godliness."
       },
       {
-        "title": "Pastor-led change",
-        "text": "Local pastors carry the vision. Possibilities Africa walks with them through training and practice."
+        "title": "Servant Leadership",
+        "text": "We encourage a culture of service to others using one's time, talents and treasures."
       },
       {
-        "title": "Community ownership",
-        "text": "Water, farming, health, and livelihoods are planned and owned by the church and community."
+        "title": "Personal Responsibility",
+        "text": "We inspire people to take personal responsibility for the change they desire to see"
       },
       {
-        "title": "Shalom groups",
-        "text": "Groups of 30–50 leaders in each community deepen discipleship, cohesion, and local initiative."
+        "title": "Vision",
+        "text": "We teach that people without vision perish. African villages should create a vision of what they are building for the future generations."
       },
       {
-        "title": "A clear two-year journey",
-        "text": "Every community moves through awareness, engagement, training, implementation, and multiplication."
+        "title": "Community",
+        "text": "We affirm that when people join hands in unity they are able to achieve a collective Vision that improves their lives."
+      },
+      {
+        "title": "Stewardship",
+        "text": "We teach people that all they are, have and that is around them is God's resources entrusted to them to be managed well for God's glory and man's wellbeing."
+      },
+      {
+        "title": "Productivity",
+        "text": "We challenge people to live industrious lives."
       }
     ],
     "cta": { "label": "See what we do", "href": "#/work" }
   },
   "leadership": {
-    "eyebrow": "Leadership",
-    "title": "People who steward the ministry.",
-    "titleHtml": "<span>People who steward</span> <em>the ministry.</em>",
-    "lead": "Board and team profiles will appear here. For now, the field work is led by pastor networks across seven countries.",
-    "people": []
+    "eyebrow": "A Word From Our Founder",
+    "title": "A word from our founder.",
+    "titleHtml": "<span>A word from</span> <em>our founder.</em>",
+    "lead": "",
+    "people": [
+      {
+        "name": "Martin Simiyu",
+        "role": "Founder & President",
+        "bio": "\"We can change the cycle of dependence to create a new way of life that empowers Africans to build and create the lives they desire.\""
+      }
+    ]
   },
   "countries": {
     "eyebrow": "Countries",
@@ -75,34 +89,34 @@
   },
   "history": {
     "eyebrow": "History",
-    "title": "Two decades of possibility.",
-    "titleHtml": "<span>Two decades of</span> <em>possibility.</em>",
-    "lead": "From a single missionary's burden to a continental movement — the story behind Possibilities Africa.",
-    "roots": "During a mission trip to Kenya with students and faculty from Moody Graduate School, founder Martin Simiyu shared his desire to help rural Africa build a sustainable, self-reliant future. Possibilities Africa embarked on a holistic approach — training pastors to build capacity in their communities.",
+    "title": "PA History.",
+    "titleHtml": "<span>PA</span> <em>History.</em>",
+    "lead": "From a single missionary's burden to a continental movement.",
+    "roots": "During a mission trip to Kenya with a group of students and faculty from Moody Graduate School USA, Martin shared his desire to return to Africa to help poor communities. PA embarked on a major focus to market holistic approach by initiating training programs for pastors to build their capacity to do holistic ministry.",
     "milestones": [
       {
         "phase": "01",
         "year": "2002 – 2008",
-        "title": "Ideation, learning & discovery",
-        "text": "On a mission trip to Kenya with Moody Graduate School USA, Martin shared his desire to return to Africa to serve poor communities."
+        "title": "Ideation, Learning & Discovery Season",
+        "text": "During a mission trip to Kenya with a group of students and faculty from Moody Graduate School USA, Martin shared his desire to return to Africa to help poor communities."
       },
       {
         "phase": "02",
         "year": "2009 – 2016",
-        "title": "Mission acceptance & expansion",
-        "text": "PA initiated training programs for pastors to build capacity for holistic ministry, reaching communities across Kenya, Malawi and Rwanda."
+        "title": "Mission Acceptance & Expansion Season",
+        "text": "PA embarked on a major focus to market holistic approach by initiating training programs for pastors to build their capacity to do holistic ministry. This effort led to PA presence in 13 communities in Kenya, Malawi, and Rwanda."
       },
       {
         "phase": "03",
         "year": "2017 – 2019",
-        "title": "Evaluation & repositioning",
-        "text": "A ‘Know Your Client’ survey reshaped the baseline — focusing on motivated, committed pastor leaders."
+        "title": "Evaluation, Reorganization & Repositioning Season",
+        "text": "PA ministry officers undertook a “Know Your Client” survey which revealed that not everyone in our program was properly motivated and committed. From this survey, a new baseline was established."
       },
       {
         "phase": "04",
         "year": "2020 →",
-        "title": "Vision 2030 initiated",
-        "text": "A new growth agenda to establish 20 new countries of operation in strategic locations across Africa."
+        "title": "Vision 2030 Initiated",
+        "text": "Setting a new growth agenda, PA has undertaken a major holistic programs review with a vision to establish 20 new countries of operation in strategic locations in Africa."
       }
     ]
   },
@@ -114,10 +128,10 @@
     "items": []
   },
   "contact": {
-    "eyebrow": "Contact",
+    "eyebrow": "Get Involved",
     "title": "Get in touch.",
     "titleHtml": "<span>Get in</span> <em>touch.</em>",
-    "lead": "For partnership, media, or general enquiries, reach Possibilities Africa using the details below.",
+    "lead": "Do not ask what Africa can do for you, ask what you can do for Africa.",
     "email": "karibu@possibilitiesafrica.org",
     "phone": "+254 721 238 198",
     "address": "P.O. Box: 55604 - 00200, Nairobi, Kenya"

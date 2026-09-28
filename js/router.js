@@ -14,6 +14,7 @@ import { renderCountryStoriesPage, mountCountryStoriesPage, destroyCountryStorie
 import { renderStoryFeature, mountStoryFeature, destroyStoryFeature } from "./views/story-feature.js";
 import { renderCatchmentHub, mountCatchmentHub, destroyCatchmentHub } from "./views/catchment-hub.js";
 import { renderCommunityHub, mountCommunityHub, destroyCommunityHub } from "./views/community-hub.js";
+import { renderCountryCatchments, mountCountryCatchments } from "./views/country-catchments.js";
 import { teardownDashboard } from "./views/dashboard.js";
 import { renderScorecard, mountScorecard, destroyScorecard } from "./views/scorecard.js";
 import { renderResources, mountResources, destroyResources } from "./views/resources-hub.js";
@@ -29,6 +30,7 @@ import { renderNewsUpdates, mountNewsUpdates, destroyNewsUpdates } from "./views
 import { cleanupPageEntry } from "./components/shared/page-entry.js";
 import { syncSiteHeader } from "./utils/header.js";
 import { applyPageSeo } from "./utils/seo.js";
+import { initPaAmbient, destroyPaAmbient } from "./utils/pa-ambient.js";
 
 let currentView = null;
 let appData = null;
@@ -161,6 +163,7 @@ function handleRoute() {
   closeContactModal();
   cleanupPageEntry();
   document.body.classList.remove("pa-entry-active");
+  destroyPaAmbient();
 
   if (lastRouteKey) saveScrollPosition(lastRouteKey);
   const { restore } = resolveNavigationIntent(routeKey);
@@ -216,6 +219,11 @@ function handleRoute() {
   } else if (parts[0] === "country" && parts[1] && parts[2] === "stories") {
     view = "country-stories";
     html = renderCountryStoriesPage(parts[1], appData);
+  } else if (parts[0] === "country" && parts[1] && parts[2] === "catchments") {
+    view = "country-catchments";
+    const result = renderCountryCatchments(parts[1], appData);
+    html = result.html;
+    hub = result.hub;
   } else if (parts[0] === "country" && parts[1]) {
     view = "country";
     const result = renderCountryHub(parts[1], appData);
@@ -328,6 +336,8 @@ function handleRoute() {
       mountCountryData(app, hub);
     } else if (view === "country" && hub) {
       mountCountryHub(app, hub, appData, navigate);
+    } else if (view === "country-catchments" && hub) {
+      mountCountryCatchments(app, hub);
     } else if (view === "scorecard") {
       mountScorecard(app, appData, hub?.section || "overview");
     } else if (view === "catchment" && hub) {
@@ -362,6 +372,7 @@ function handleRoute() {
   requestAnimationFrame(() => {
     runMount();
     finalizeRouteScroll();
+    requestAnimationFrame(() => initPaAmbient(app));
   });
 
   bindAnchorScroll(app);

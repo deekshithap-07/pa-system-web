@@ -1,0 +1,750 @@
+/* ==========================================================================
+   PA ambient motion — continuous loops while a section stays in view.
+   Gated by .is-ambient (IntersectionObserver). Entry animations stay separate.
+   Only transform / opacity / offset-path / stroke-dash — no layout shifts.
+   ========================================================================== */
+
+html.pa-ambient-ready {
+  --pa-amb-ease: cubic-bezier(0.45, 0.05, 0.55, 0.95);
+}
+
+/* Pause all ambient children when section leaves view */
+:is(
+  .pa-africa,
+  .pa-work,
+  .pa-stories,
+  .pa-know,
+  .pa-news,
+  .pa-impact,
+  .kh-hero,
+  .kh-featured,
+  .kh-explore,
+  .kh-media-band,
+  .www-hero,
+  .www-map-stage,
+  .www-bridge,
+  .ab-journey,
+  .ab-leaders,
+  .ab-statement,
+  .wb-who-history,
+  .wb-who-hero,
+  .ch-hero,
+  .cp-hero,
+  .cp-geo,
+  .cm-hero,
+  .cm-loc,
+  .cm-journey,
+  .cm-entry,
+  .cm-places,
+  .nu-page,
+  .sp-cinema,
+  .ow-organic,
+  .id-page,
+  .id-hero
+):not(.is-ambient) [data-pa-amb],
+:is(
+  .pa-africa,
+  .pa-work,
+  .pa-stories,
+  .pa-know,
+  .pa-news,
+  .pa-impact,
+  .kh-hero,
+  .kh-featured,
+  .kh-explore,
+  .kh-media-band,
+  .www-hero,
+  .www-map-stage,
+  .www-bridge,
+  .ab-journey,
+  .ab-leaders,
+  .ab-statement,
+  .wb-who-history,
+  .wb-who-hero,
+  .ch-hero,
+  .cp-hero,
+  .cp-geo,
+  .cm-hero,
+  .cm-loc,
+  .cm-journey,
+  .cm-entry,
+  .cm-places,
+  .nu-page,
+  .sp-cinema,
+  .ow-organic,
+  .id-page,
+  .id-hero
+):not(.is-ambient) .pa-amb-target {
+  animation-play-state: paused !important;
+}
+
+/* --------------------------------------------------------------------------
+   Shared keyframes (named by motion type — not one global float)
+   -------------------------------------------------------------------------- */
+
+@keyframes pa-amb-kenburns {
+  0%,
+  100% {
+    transform: scale(1) translate3d(0, 0, 0);
+  }
+  50% {
+    transform: scale(1.02) translate3d(-1.2%, 0.8%, 0);
+  }
+}
+
+@keyframes pa-amb-kenburns-soft {
+  0%,
+  100% {
+    transform: scale(1) translate3d(0, 0, 0);
+  }
+  50% {
+    transform: scale(1.015) translate3d(0.9%, -0.6%, 0);
+  }
+}
+
+@keyframes pa-amb-breathe-y {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+  50% {
+    transform: translate3d(0, -4px, 0);
+  }
+}
+
+@keyframes pa-amb-book-settle {
+  0%,
+  100% {
+    transform: rotate(var(--pa-know-tilt, -2.5deg)) translate3d(0, 0, 0);
+    filter: drop-shadow(0 22px 36px rgba(42, 16, 20, 0.3));
+  }
+  50% {
+    transform: rotate(calc(var(--pa-know-tilt, -2.5deg) + 0.55deg)) translate3d(0, -4px, 0);
+    filter: drop-shadow(0 26px 40px rgba(42, 16, 20, 0.34));
+  }
+}
+
+@keyframes pa-amb-opacity-pulse {
+  0%,
+  100% {
+    opacity: 0.55;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+@keyframes pa-amb-num-breathe {
+  0%,
+  100% {
+    opacity: 0.07;
+    transform: translate3d(0, 0, 0);
+  }
+  50% {
+    opacity: 0.12;
+    transform: translate3d(0, -3px, 0);
+  }
+}
+
+@keyframes pa-amb-arrow-nudge {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+  50% {
+    transform: translate3d(4px, 0, 0);
+  }
+}
+
+@keyframes pa-amb-line-draw {
+  0% {
+    transform: scaleX(0.15);
+    opacity: 0.35;
+  }
+  45% {
+    transform: scaleX(1);
+    opacity: 0.95;
+  }
+  100% {
+    transform: scaleX(0.2);
+    opacity: 0.4;
+  }
+}
+
+@keyframes pa-amb-line-travel-x {
+  0% {
+    transform: translate3d(-120%, 0, 0);
+    opacity: 0;
+  }
+  12% {
+    opacity: 1;
+  }
+  88% {
+    opacity: 1;
+  }
+  100% {
+    transform: translate3d(220%, 0, 0);
+    opacity: 0;
+  }
+}
+
+@keyframes pa-amb-rail-progress {
+  0% {
+    transform: scaleY(0.35);
+  }
+  50% {
+    transform: scaleY(1);
+  }
+  100% {
+    transform: scaleY(0.4);
+  }
+}
+
+@keyframes pa-amb-rail-bead {
+  0% {
+    top: 8%;
+    opacity: 0.35;
+  }
+  50% {
+    top: 72%;
+    opacity: 1;
+  }
+  100% {
+    top: 8%;
+    opacity: 0.35;
+  }
+}
+
+@keyframes pa-amb-underline {
+  0%,
+  100% {
+    transform: scaleX(0.35);
+    opacity: 0.4;
+  }
+  50% {
+    transform: scaleX(1);
+    opacity: 0.95;
+  }
+}
+
+@keyframes pa-amb-chapter-pulse {
+  0%,
+  100% {
+    transform: scaleX(1);
+    opacity: 0.55;
+  }
+  50% {
+    transform: scaleX(1.08);
+    opacity: 1;
+  }
+}
+
+@keyframes pa-amb-watermark-drift {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+  50% {
+    transform: translate3d(1.5%, -1.2%, 0);
+  }
+}
+
+@keyframes pa-amb-doc-shift {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) rotate(0deg);
+  }
+  50% {
+    transform: translate3d(2px, -3px, 0) rotate(-0.6deg);
+  }
+}
+
+@keyframes pa-amb-dot-hop {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0);
+    opacity: 0.45;
+  }
+  50% {
+    transform: translate3d(10px, 0, 0);
+    opacity: 1;
+  }
+}
+
+@keyframes pa-amb-marker-pulse {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 0.75;
+  }
+  50% {
+    transform: scale(1.12);
+    opacity: 1;
+  }
+}
+
+@keyframes pa-amb-ring-expand {
+  0% {
+    transform: scale(0.85);
+    opacity: 0.55;
+  }
+  70% {
+    transform: scale(1.35);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(0.85);
+    opacity: 0;
+  }
+}
+
+@keyframes pa-amb-chart-dash {
+  0% {
+    stroke-dashoffset: 48;
+  }
+  50% {
+    stroke-dashoffset: 0;
+  }
+  100% {
+    stroke-dashoffset: 48;
+  }
+}
+
+@keyframes pa-amb-bar-pulse {
+  0%,
+  100% {
+    opacity: 0.45;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+@keyframes pa-amb-bridge-dot {
+  0% {
+    transform: translate3d(0, 0, 0);
+    opacity: 0.35;
+  }
+  50% {
+    transform: translate3d(18px, 0, 0);
+    opacity: 1;
+  }
+  100% {
+    transform: translate3d(36px, 0, 0);
+    opacity: 0.2;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   1. PA Across Africa — geography (orbit already in home-design.css;
+      keep running only while ambient + geo-ready)
+   -------------------------------------------------------------------------- */
+
+.pa-africa.is-ambient .pa-africa__bridge-dot {
+  animation: pa-amb-bridge-dot 7s var(--pa-amb-ease, ease-in-out) infinite;
+}
+
+.pa-africa.is-ambient .pa-africa__bridge-dot:nth-child(2) {
+  animation-delay: 0s;
+}
+
+.pa-africa.is-ambient .pa-africa__bridge-dot:nth-child(3) {
+  animation-delay: -2.3s;
+}
+
+.pa-africa.is-ambient .pa-africa__bridge-dot:nth-child(4) {
+  animation-delay: -4.6s;
+}
+
+.pa-africa.is-ambient .pa-africa__bridge-line {
+  transform-origin: left center;
+  animation: pa-amb-line-draw 9s var(--pa-amb-ease, ease-in-out) infinite;
+}
+
+/* --------------------------------------------------------------------------
+   2. Our Work — active panel presence (no auto programme cycling)
+   -------------------------------------------------------------------------- */
+
+.pa-work.is-ambient .pa-work__panel::after {
+  content: "";
+  position: absolute;
+  left: 1.75rem;
+  right: 1.75rem;
+  bottom: 4.85rem;
+  height: 1px;
+  z-index: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(232, 169, 26, 0.85),
+    transparent
+  );
+  transform-origin: left center;
+  animation: pa-amb-line-travel-x 8.5s var(--pa-amb-ease, ease-in-out) infinite;
+}
+
+.pa-work.is-ambient .pa-work__panel-n {
+  animation: pa-amb-num-breathe 7.5s var(--pa-amb-ease, ease-in-out) infinite;
+}
+
+.pa-work.is-ambient .pa-work__tab.is-active .pa-work__tab-go {
+  animation: pa-amb-arrow-nudge 5.5s var(--pa-amb-ease, ease-in-out) infinite;
+}
+
+.pa-work.is-ambient .pa-work__panel-icon svg {
+  animation: pa-amb-opacity-pulse 6.5s var(--pa-amb-ease, ease-in-out) infinite;
+}
+
+/* Hover / tab change should feel sharper than ambient */
+.pa-work.is-ambient .pa-work__panel:hover::after,
+.pa-work.is-ambient .pa-work__tab:hover .pa-work__tab-go {
+  animation-play-state: paused;
+}
+
+/* --------------------------------------------------------------------------
+   3. Stories — cinematic ambient
+   -------------------------------------------------------------------------- */
+
+.pa-stories.is-ambient .pa-stories__feature-media {
+  animation: pa-amb-kenburns-soft 11s var(--pa-amb-ease, ease-in-out) infinite;
+}
+
+.pa-stories.is-ambient .pa-stories__nav-item.is-active .pa-stories__nav-n {
+  animation: pa-amb-chapter-pulse 6s var(--pa-amb-ease, ease-in-out) infinite;
+}
+
+.pa-stories.is-ambient .pa-stories__feature-copy::before {
+  content: "";
+  display: block;
+  width: 3.5rem;
+  height: 2px;
+  margin-bottom: 0.85rem;
+  background: var(--pa-gold, #e8a91a);
+  transform-origin: left center;
+  animation: pa-amb-line-draw 8s var(--pa-amb-ease, ease-in-out) infinite;
+}
+
+.pa-stories.is-ambient .pa-stories__feature:hover .pa-stories__feature-media {
+  animation-play-state: paused;
+}
+
+/* --------------------------------------------------------------------------
+   4. Knowledge Centre — publication settle (float gated here + hover wins)
+   -------------------------------------------------------------------------- */
+
+.pa-know.is-ambient .pa-know__cover {
+  animation: pa-amb-book-settle 5.2s ease-in-out infinite;
+}
+
+.pa-know.is-ambient .pa-know__cover:hover,
+.pa-know.is-ambient .pa-know__cover:focus-visible,
+.pa-know.is-ambient .pa-know__cover.is-open,
+.pa-know.is-ambient .pa-know__cover:active {
+  animation: none;
+}
+
+.pa-know.is-ambient .pa-know__bg-word {
+  animation: pa-amb-watermark-drift 22s var(--pa-amb-ease, ease-in-out) infinite;
+}
+
+/* --------------------------------------------------------------------------
+   5. News — editorial timeline
+   -------------------------------------------------------------------------- */
+
+.pa-news.is-ambient .pa-news__stream::after {
+  content: "";
+  position: absolute;
+  left: 0.05rem;
+  width: 0.45rem;
+  height: 0.45rem;
+  border-radius: 50%;
+  background: var(--pa-gold, #e8a91a);
+  box-shadow: 0 0 0 3px rgba(232, 169, 26, 0.2);
+  animation: pa-amb-rail-bead 9s var(--pa-amb-ease, ease-in-out) infinite;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.pa-news.is-ambient .pa-news__item:first-child .pa-news__headline::after {
+  content: "";
+  display: block;
+  width: 100%;
+  max-width: 8rem;
+  height: 1px;
+  margin-top: 0.35rem;
+  background: var(--pa-gold, #e8a91a);
+  transform-origin: left center;
+  animation: pa-amb-underline 6.5s var(--pa-amb-ease, ease-in-out) infinite;
+}
+
+/* --------------------------------------------------------------------------
+   6. Impact & Data — living indicators (not count-up)
+   -------------------------------------------------------------------------- */
+
+.pa-impact.is-ambient .pa-impact__chart polyline {
+  stroke-dasharray: 28 20;
+  animation: pa-amb-chart-dash 10s linear infinite;
+}
+
+.pa-impact.is-ambient .pa-impact__chart circle {
+  animation: pa-amb-marker-pulse 5.5s var(--pa-amb-ease, ease-in-out) infinite;
+}
+
+.pa-impact.is-ambient .pa-impact__chart circle:nth-child(2) {
+  animation-delay: -1.2s;
+}
+
+.pa-impact.is-ambient .pa-impact__chart circle:nth-child(3) {
+  animation-delay: -2.4s;
+}
+
+.pa-impact.is-ambient .pa-impact__chart circle:nth-child(4) {
+  animation-delay: -3.6s;
+}
+
+.pa-impact.is-ambient .pa-impact__bar {
+  animation: pa-amb-bar-pulse 6s var(--pa-amb-ease, ease-in-out) infinite;
+}
+
+.pa-impact.is-ambient .pa-impact__bar:nth-child(odd) {
+  animation-delay: -2s;
+}
+
+.pa-impact.is-ambient .pa-impact__bar:nth-child(3n) {
+  animation-delay: -3.5s;
+}
+
+.pa-impact.is-ambient .pa-impact__delta {
+  animation: pa-amb-opacity-pulse 7s var(--pa-amb-ease, ease-in-out) infinite;
+}
+
+/* --------------------------------------------------------------------------
+   7. Knowledge Hub — living library
+   -------------------------------------------------------------------------- */
+
+.kh-hero.is-ambient .kh-hero__watermark {
+  animation: pa-amb-watermark-drift 26s var(--pa-amb-ease, ease-in-out) infinite;
+}
+
+.kh-hero.is-ambient .kh-hero__media img {
+  animation: pa-amb-kenburns-soft 16s var(--pa-amb-ease, ease-in-out) infinite;
+}
+
+.kh-featured.is-ambient .kh-feature__doc {
+  animation: pa-amb-doc-shift 7s var(--pa-amb-ease, ease-in-out) infinite;
+}
+
+.kh-featured.is-ambient .kh-feature:nth-child(2) .kh-feature__doc {
+  animation-delay: -2.5s;
+}
+
+.kh-featured.is-ambient .kh-feature:nth-child(3) .kh-feature__doc {
+  animation-delay: -4.5s;
+}
+
+.kh-explore.is-ambient .kh-index__item::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 2.5rem;
+  height: 2px;
+  background: var(--pa-gold, #e8a91a);
+  transform-origin: left center;
+  animation: pa-amb-line-draw 9s var(--pa-amb-ease, ease-in-out) infinite;
+  pointer-events: none;
+}
+
+.kh-explore.is-ambient .kh-index__item {
+  position: relative;
+}
+
+.kh-explore.is-ambient .kh-index__item:nth-child(2)::after {
+  animation-delay: -3s;
+}
+
+.kh-explore.is-ambient .kh-index__item:nth-child(3)::after {
+  animation-delay: -6s;
+}
+
+.kh-media-band.is-ambient .kh-media__frame {
+  animation: pa-amb-kenburns-soft 12s var(--pa-amb-ease, ease-in-out) infinite;
+}
+
+.kh-media-band.is-ambient .kh-media:nth-child(2) .kh-media__frame {
+  animation-delay: -4s;
+}
+
+/* --------------------------------------------------------------------------
+   8. Where We Work — geographic decoration
+   -------------------------------------------------------------------------- */
+
+.www-hero.is-ambient .www-hero__media img {
+  animation: pa-amb-kenburns-soft 15s var(--pa-amb-ease, ease-in-out) infinite;
+}
+
+.www-map-stage.is-ambient .www-dest__n {
+  animation: pa-amb-opacity-pulse 6.5s var(--pa-amb-ease, ease-in-out) infinite;
+}
+
+.www-map-stage.is-ambient .www-dest:nth-child(2) .www-dest__n {
+  animation-delay: -1.5s;
+}
+
+.www-map-stage.is-ambient .www-dest:nth-child(3) .www-dest__n {
+  animation-delay: -3s;
+}
+
+.www-map-stage.is-ambient .www-dest:nth-child(4) .www-dest__n {
+  animation-delay: -4.5s;
+}
+
+.www-bridge.is-ambient .www-bridge__dot,
+.www-map-stage.is-ambient .www-bridge__dot {
+  animation: pa-amb-bridge-dot 8s var(--pa-amb-ease, ease-in-out) infinite;
+}
+
+.www-bridge.is-ambient .www-bridge__dot:nth-child(2),
+.www-map-stage.is-ambient .www-bridge__dot:nth-child(2) {
+  animation-delay: 0s;
+}
+
+.www-bridge.is-ambient .www-bridge__dot:nth-child(3),
+.www-map-stage.is-ambient .www-bridge__dot:nth-child(3) {
+  animation-delay: -2.6s;
+}
+
+.www-bridge.is-ambient .www-bridge__dot:nth-child(4),
+.www-map-stage.is-ambient .www-bridge__dot:nth-child(4) {
+  animation-delay: -5.2s;
+}
+
+.www-map-stage.is-ambient .www-bridge__line {
+  transform-origin: left center;
+  animation: pa-amb-line-draw 10s var(--pa-amb-ease, ease-in-out) infinite;
+}
+
+/* --------------------------------------------------------------------------
+   9. Who We Are — editorial
+   -------------------------------------------------------------------------- */
+
+.ab-statement.is-ambient [class*="watermark"],
+.ab-statement.is-ambient .ab-statement__bg,
+.wb-who-hero.is-ambient [class*="watermark"] {
+  animation: pa-amb-watermark-drift 28s var(--pa-amb-ease, ease-in-out) infinite;
+}
+
+.ab-journey.is-ambient .ab-journey__line::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  width: 0.5rem;
+  height: 0.5rem;
+  margin-left: -0.25rem;
+  border-radius: 50%;
+  background: var(--pa-gold, #e8a91a);
+  box-shadow: 0 0 0 4px rgba(232, 169, 26, 0.18);
+  animation: pa-amb-rail-bead 10s var(--pa-amb-ease, ease-in-out) infinite;
+  pointer-events: none;
+}
+
+.ab-journey.is-ambient .ab-journey__line {
+  position: absolute;
+}
+
+.ab-leaders.is-ambient .ab-leaders__card img,
+.ab-leaders.is-ambient [class*="portrait"] img {
+  animation: pa-amb-kenburns-soft 13s var(--pa-amb-ease, ease-in-out) infinite;
+}
+
+.ab-leaders.is-ambient .ab-leaders__card:nth-child(2) img {
+  animation-delay: -4s;
+}
+
+.wb-who-history.is-ambient [class*="line"],
+.wb-who-history.is-ambient [class*="rail"] {
+  transform-origin: left center;
+  animation: pa-amb-line-draw 12s var(--pa-amb-ease, ease-in-out) infinite;
+}
+
+/* --------------------------------------------------------------------------
+   10. Country / Community — geographic + human
+   -------------------------------------------------------------------------- */
+
+.ch-hero.is-ambient .ch-hero__visual img,
+.ch-hero.is-ambient .hub-geo-map__country,
+.cp-hero.is-ambient img {
+  animation: pa-amb-kenburns-soft 14s var(--pa-amb-ease, ease-in-out) infinite;
+}
+
+.ch-hero.is-ambient .hub-geo-map__catchment-anchor.is-selected,
+.ch-hero.is-ambient .hub-geo-map__community-anchor.is-selected,
+.cp-geo.is-ambient .hub-geo-map__catchment-anchor.is-selected,
+.cm-loc.is-ambient .hub-geo-map__community-anchor.is-selected {
+  animation: pa-amb-marker-pulse 5s var(--pa-amb-ease, ease-in-out) infinite;
+}
+
+.cm-entry.is-ambient .cm-entry__media img {
+  animation: pa-amb-kenburns-soft 12s var(--pa-amb-ease, ease-in-out) infinite;
+}
+
+.cm-places.is-ambient .cm-places__map-wrap {
+  animation: pa-amb-kenburns-soft 14s var(--pa-amb-ease, ease-in-out) infinite;
+}
+
+.id-hero.is-ambient .id-hero__media img,
+.id-page.is-ambient .id-hero__media img {
+  animation: pa-amb-kenburns-soft 15s var(--pa-amb-ease, ease-in-out) infinite;
+}
+
+.cm-hero.is-ambient img,
+.cm-journey.is-ambient [class*="progress"],
+.cm-journey.is-ambient [class*="line"] {
+  animation: pa-amb-kenburns-soft 12s var(--pa-amb-ease, ease-in-out) infinite;
+}
+
+.cm-journey.is-ambient [class*="line"],
+.cm-journey.is-ambient [class*="progress"] {
+  transform-origin: left center;
+  animation: pa-amb-line-draw 9s var(--pa-amb-ease, ease-in-out) infinite;
+}
+
+/* --------------------------------------------------------------------------
+   Reduced motion — kill continuous ambient entirely
+   -------------------------------------------------------------------------- */
+
+@media (prefers-reduced-motion: reduce) {
+  .is-ambient .pa-work__panel::after,
+  .is-ambient .pa-work__panel-n,
+  .is-ambient .pa-work__tab-go,
+  .is-ambient .pa-work__panel-icon svg,
+  .is-ambient .pa-stories__feature-media,
+  .is-ambient .pa-stories__nav-n,
+  .is-ambient .pa-stories__feature-copy::before,
+  .is-ambient .pa-know__cover,
+  .is-ambient .pa-know__bg-word,
+  .is-ambient .pa-news__stream::after,
+  .is-ambient .pa-news__headline::after,
+  .is-ambient .pa-impact__chart polyline,
+  .is-ambient .pa-impact__chart circle,
+  .is-ambient .pa-impact__bar,
+  .is-ambient .pa-impact__delta,
+  .is-ambient .kh-hero__watermark,
+  .is-ambient .kh-hero__media img,
+  .is-ambient .kh-feature__doc,
+  .is-ambient .kh-index__item::after,
+  .is-ambient .kh-media__frame,
+  .is-ambient .www-hero__media img,
+  .is-ambient .www-dest__n,
+  .is-ambient .www-bridge__dot,
+  .is-ambient .www-bridge__line,
+  .is-ambient .pa-africa__bridge-dot,
+  .is-ambient .pa-africa__bridge-line,
+  .is-ambient .ab-leaders__card img,
+  .is-ambient .hub-geo-map__country,
+  .is-ambient .hub-geo-map__catchment-anchor.is-selected,
+  .is-ambient .hub-geo-map__community-anchor.is-selected {
+    animation: none !important;
+  }
+}

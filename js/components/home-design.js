@@ -31,55 +31,51 @@ export { formatPaTitle } from "../utils/pa-title.js";
 export function renderAfricaExploreBand(band = {}, mapSection = {}, countries = []) {
   const parseStat = (raw) => {
     const s = String(raw ?? "");
-    const m = s.match(/^([^\d]*)([\d,]+)(.*)$/);
-    if (!m) return { display: s, num: NaN, prefix: "", suffix: "" };
+    const m = s.match(/^([^\d]*)([\d,]+)(\.\d+)?(.*)$/);
+    if (!m || m[3]) return { display: s, num: NaN, prefix: "", suffix: "" };
     return {
       display: s,
       num: parseInt(m[2].replace(/,/g, ""), 10),
       prefix: m[1] || "",
-      suffix: m[3] || "",
+      suffix: m[4] || "",
     };
   };
 
-  const stats = (band.stats || [])
-    .map((s, i) => {
+  const statList = band.stats || [];
+  const statItems = statList
+    .map((s) => {
       const parsed = parseStat(s.value);
       const countAttrs = Number.isFinite(parsed.num)
         ? ` data-pa-count="${parsed.num}" data-pa-count-prefix="${parsed.prefix}" data-pa-count-suffix="${parsed.suffix}"`
         : "";
-      return `<div class="pa-africa__stat" data-pa-africa-stat style="--i:${i}">
-        <span class="pa-africa__stat-value"${countAttrs}>${s.value}</span>
+      return `<li class="pa-africa__stat" data-pa-africa-stat>
+        <span class="pa-africa__stat-value">
+          <span class="pa-africa__stat-ghost" aria-hidden="true">${s.value}</span>
+          <span class="pa-africa__stat-num"${countAttrs}>${s.value}</span>
+        </span>
         <span class="pa-africa__stat-label">${s.label}</span>
-      </div>`;
+      </li>`;
     })
     .join("");
+  const numbers = band.numbers || {};
+  const stats = statList.length
+    ? `<div class="pa-africa__numbers" data-pa-africa-stats>
+        <div class="container pa-africa__numbers-inner">
+          ${
+            numbers.title
+              ? `<header class="pa-africa__numbers-head">
+                  <h3 class="pa-title">${formatPaTitle(numbers)}</h3>
+                  ${numbers.lead ? `<p>${numbers.lead}</p>` : ""}
+                </header>`
+              : ""
+          }
+          <ul class="pa-africa__numbers-grid">${statItems}</ul>
+        </div>
+      </div>`
+    : "";
 
   const explore = band.exploreCta || mapSection.countriesCta || { label: "Explore Africa", href: "#/africa" };
   const exploreHref = explore.href || explore.target || "#/africa";
-  const panelCta = band.panelCta || { label: "View interactive map", href: "#home-africa-map-root" };
-
-  const paCountries = (countries || []).filter((c) => c.isPaNetwork);
-  const countryList = paCountries.length
-    ? paCountries
-    : [
-        { slug: "kenya", name: "Kenya" },
-        { slug: "ethiopia", name: "Ethiopia" },
-        { slug: "malawi", name: "Malawi" },
-        { slug: "zambia", name: "Zambia" },
-        { slug: "tanzania", name: "Tanzania" },
-        { slug: "rwanda", name: "Rwanda" },
-        { slug: "burundi", name: "Burundi" },
-      ];
-
-  const countryPicks = countryList
-    .map(
-      (c, i) => `<button type="button" class="pa-africa__country" data-pa-country-pick="${c.slug}" style="--i:${i}">
-        <span class="pa-africa__country-name">${c.name}</span>
-        <span class="pa-africa__country-mark" aria-hidden="true"></span>
-      </button>`
-    )
-    .join("");
-
   return `
     <section class="pa-africa" id="pa-across-africa" aria-labelledby="pa-africa-title" data-home-section="africa">
       <div class="pa-africa__geo" aria-hidden="true">
@@ -101,16 +97,8 @@ export function renderAfricaExploreBand(band = {}, mapSection = {}, countries = 
           <p class="pa-africa__lead" data-pa-africa-rise>${band.lead || mapSection.description || ""}</p>
           <a class="pa-africa__link" data-pa-africa-rise ${linkAttrs(exploreHref)}>${explore.label || "Explore Africa"} →</a>
         </div>
-        ${stats ? `<div class="pa-africa__stats" data-pa-africa-stats>${stats}</div>` : ""}
-        <div class="pa-africa__nav" data-pa-africa-rise>
-          <p class="pa-africa__nav-label">${band.panelTitle || "Explore our work across Africa"}</p>
-          <p class="pa-africa__nav-text">${band.panelText || "Click on a country to see live data, programmes, stories and more."}</p>
-          <div class="pa-africa__countries" role="listbox" aria-label="Select a country">
-            ${countryPicks}
-          </div>
-          <a class="pa-africa__panel-link" ${linkAttrs(panelCta.href || "#home-africa-map-root")}>${panelCta.label || "View interactive map"} →</a>
-        </div>
       </div>
+      ${stats}
       <div class="pa-africa__bridge" aria-hidden="true">
         <span class="pa-africa__bridge-line"></span>
         <span class="pa-africa__bridge-dot"></span>
@@ -144,6 +132,8 @@ function countryDrawerPayload(data, slug) {
   const shalom = summary.shalomGroups ?? country.shalomGroups ?? 0;
   const households = summary.households ?? country.households ?? 0;
 
+  const hub = data.countryHubs?.hubs?.[slug] || {};
+
   return {
     country,
     catchments,
@@ -152,12 +142,30 @@ function countryDrawerPayload(data, slug) {
     catchmentCount,
     shalom,
     households,
+    tagline: hub.description || country.description || "",
+    intro: hub.overview || country.overview || "",
   };
 }
 
 function renderCountryDrawerHtml(payload) {
-  const { country, catchments, communities, communityCount, catchmentCount, shalom, households } = payload;
+  const { country, catchments, communities, communityCount, catchmentCount, shalom, households, tagline, intro } = payload;
   const countryHref = `#/country/${country.slug}`;
+
+  if (payload.compact) {
+    return `
+    <div class="pa-drawer__head">
+      <div>
+        <p class="pa-drawer__eyebrow">Country</p>
+        <h2 id="pa-country-drawer-title">${country.name}</h2>
+      </div>
+      <button type="button" class="pa-drawer__close" data-pa-drawer-close aria-label="Close">×</button>
+    </div>
+    <div class="pa-drawer__intro">
+      ${tagline ? `<p class="pa-drawer__tagline">${tagline}</p>` : ""}
+      ${intro ? `<p class="pa-drawer__story">${intro}</p>` : ""}
+    </div>
+    <a class="pa-drawer__country" href="${countryHref}" data-link>Explore ${country.name} <span aria-hidden="true">→</span></a>`;
+  }
 
   const catchmentRows = catchments.length
     ? catchments
@@ -187,6 +195,15 @@ function renderCountryDrawerHtml(payload) {
       <button type="button" class="pa-drawer__close" data-pa-drawer-close aria-label="Close">×</button>
     </div>
 
+    ${
+      tagline || intro
+        ? `<div class="pa-drawer__intro">
+            ${tagline ? `<p class="pa-drawer__tagline">${tagline}</p>` : ""}
+            ${intro ? `<p class="pa-drawer__story">${intro}</p>` : ""}
+          </div>`
+        : ""
+    }
+
     <div class="pa-drawer__metrics">
       <a class="pa-drawer__metric" href="#pa-drawer-catchments" data-pa-drawer-jump="catchments">
         <span class="pa-drawer__metric-label">Catchments</span>
@@ -215,7 +232,7 @@ function renderCountryDrawerHtml(payload) {
       <div class="pa-drawer__list">${catchmentRows}</div>
     </section>
 
-    <a class="pa-drawer__country" href="${countryHref}" data-link>Open ${country.name} country page →</a>`;
+    <a class="pa-drawer__country" href="${countryHref}" data-link>Explore ${country.name} <span aria-hidden="true">→</span></a>`;
 }
 
 function ensureCountryDrawer() {
@@ -241,6 +258,7 @@ function openCountryDrawer(payload) {
   if (!panel || !body) return;
 
   body.innerHTML = renderCountryDrawerHtml(payload);
+  panel.classList.toggle("pa-drawer--compact", Boolean(payload.compact));
   panel.hidden = false;
   root.classList.add("is-open");
   document.body.classList.add("pa-drawer-open");
@@ -336,6 +354,18 @@ export function bindAfricaCountrySelect(root = document, data = null) {
   }
 }
 
+/** Opens the country side panel; falls back to the country page when no drawer data exists. */
+export function openCountryPreview(data, slug, { compact = false } = {}) {
+  if (!slug) return;
+  bindCountryDrawerChrome(data);
+  const payload = countryDrawerPayload(data, slug);
+  if (!payload) {
+    location.hash = `#/country/${slug}`;
+    return;
+  }
+  openCountryDrawer({ ...payload, compact });
+}
+
 export function destroyAfricaCountryDrawer() {
   closeCountryDrawer();
   const root = document.getElementById("pa-country-drawer-root");
@@ -388,7 +418,7 @@ export function renderOurWorkPrograms(section = {}) {
             <div class="pa-work__panel-icon" data-pa-work-icon aria-hidden="true">${firstIcon}</div>
             <h3 data-pa-work-title>${first.title || ""}</h3>
             <p data-pa-work-desc>${first.description || first.text || ""}</p>
-            <a class="pa-work__panel-cta" data-pa-work-cta ${linkAttrs(firstHref)}>${cta.label || "Explore the programme"} →</a>
+            <a class="pa-work__panel-cta" data-pa-work-cta ${linkAttrs(firstHref)}>${cta.label || "Explore the programme"} <span class="pa-work__panel-cta-arrow" aria-hidden="true">→</span></a>
           </aside>
         </div>
       </div>
@@ -408,54 +438,196 @@ export function bindOurWorkPrograms(root = document, section = {}) {
 
   const ctaLabel = section.cta?.label || "Explore the programme";
   let activeId = tabs.find((t) => t.classList.contains("is-active"))?.dataset.paWorkTab || programs[0]?.id;
+  let shownId = activeId;
   let hoverTimer = null;
+  let transitionTl = null;
+  const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-  const apply = (id, { animate = true, pin = false } = {}) => {
-    const p = byId[id];
-    if (!p) return;
-    if (pin) activeId = id;
-    const index = programs.findIndex((x) => x.id === id);
-    const n = String(Math.max(index, 0) + 1).padStart(2, "0");
-    const icon = PROGRAM_ICONS[p.id] || PROGRAM_ICONS.leadership;
-    const href = p.href || section.cta?.href || "#/work";
+  const ENTRY = [
+    { x: -22, y: 0, clip: "inset(0 55% 0 0)", scale: 1.04 },
+    { x: 22, y: 0, clip: "inset(0 0 0 55%)", scale: 1.035 },
+    { x: 0, y: -18, clip: "inset(50% 0 0 0)", scale: 1.04 },
+    { x: 14, y: -14, clip: "inset(0 0 40% 30%)", scale: 1.03 },
+    { x: -14, y: 12, clip: "inset(0 35% 35% 0)", scale: 1.04 },
+  ];
 
+  const setTabState = (id) => {
     tabs.forEach((tab) => {
       const on = tab.dataset.paWorkTab === id;
       tab.classList.toggle("is-active", on);
       tab.setAttribute("aria-pressed", on ? "true" : "false");
     });
+  };
 
-    const setContent = () => {
-      panel.className = `pa-work__panel pa-work__panel--${p.tone || "maroon"}`;
-      const nEl = panel.querySelector("[data-pa-work-n]");
-      const iconEl = panel.querySelector("[data-pa-work-icon]");
-      const titleEl = panel.querySelector("[data-pa-work-title]");
-      const descEl = panel.querySelector("[data-pa-work-desc]");
-      const ctaEl = panel.querySelector("[data-pa-work-cta]");
-      if (nEl) nEl.textContent = n;
-      if (iconEl) iconEl.innerHTML = icon;
-      if (titleEl) titleEl.textContent = p.title || "";
-      if (descEl) descEl.textContent = p.description || p.text || "";
-      if (ctaEl) {
-        ctaEl.textContent = `${ctaLabel} →`;
-        ctaEl.setAttribute("href", href);
-        if (href.startsWith("#/")) ctaEl.setAttribute("data-link", "");
-      }
-    };
+  const setContent = (p, n) => {
+    panel.className = `pa-work__panel pa-work__panel--${p.tone || "maroon"}`;
+    const nEl = panel.querySelector("[data-pa-work-n]");
+    const iconEl = panel.querySelector("[data-pa-work-icon]");
+    const titleEl = panel.querySelector("[data-pa-work-title]");
+    const descEl = panel.querySelector("[data-pa-work-desc]");
+    const ctaEl = panel.querySelector("[data-pa-work-cta]");
+    const href = p.href || section.cta?.href || "#/work";
+    if (nEl) nEl.textContent = n;
+    if (iconEl) iconEl.innerHTML = PROGRAM_ICONS[p.id] || PROGRAM_ICONS.leadership;
+    if (titleEl) titleEl.textContent = p.title || "";
+    if (descEl) descEl.textContent = p.description || p.text || "";
+    if (ctaEl) {
+      ctaEl.innerHTML = `${ctaLabel} <span class="pa-work__panel-cta-arrow" aria-hidden="true">→</span>`;
+      ctaEl.setAttribute("href", href);
+      if (href.startsWith("#/")) ctaEl.setAttribute("data-link", "");
+    }
+  };
 
-    if (animate && typeof gsap !== "undefined") {
-      gsap.to(panel, {
-        autoAlpha: 0.35,
-        y: 8,
-        duration: 0.15,
+  const apply = (id, { animate = true, pin = false } = {}) => {
+    const p = byId[id];
+    if (!p) return;
+    if (pin) activeId = id;
+
+    setTabState(id);
+
+    if (id === shownId) return;
+    shownId = id;
+
+    const index = programs.findIndex((x) => x.id === id);
+    const n = String(Math.max(index, 0) + 1).padStart(2, "0");
+    const entry = ENTRY[((index % ENTRY.length) + ENTRY.length) % ENTRY.length];
+
+    if (!animate || reduce || typeof gsap === "undefined") {
+      setContent(p, n);
+      return;
+    }
+
+    const nEl = panel.querySelector("[data-pa-work-n]");
+    const iconEl = panel.querySelector("[data-pa-work-icon]");
+    const titleEl = panel.querySelector("[data-pa-work-title]");
+    const descEl = panel.querySelector("[data-pa-work-desc]");
+    const ctaEl = panel.querySelector("[data-pa-work-cta]");
+    const pieces = [nEl, iconEl, titleEl, descEl, ctaEl].filter(Boolean);
+
+    transitionTl?.kill();
+    transitionTl = gsap.timeline({ defaults: { ease: "power2.inOut" } });
+
+    /* Out — old content leaves as one motion */
+    transitionTl.to(
+      pieces,
+      {
+        autoAlpha: 0,
+        y: 12,
+        x: entry.x * -0.35,
+        duration: 0.28,
+        stagger: 0.03,
+        ease: "power2.in",
+      },
+      0
+    );
+    transitionTl.to(
+      panel,
+      {
+        filter: "brightness(0.92)",
+        duration: 0.28,
         ease: "power1.in",
-        onComplete: () => {
-          setContent();
-          gsap.to(panel, { autoAlpha: 1, y: 0, duration: 0.28, ease: "power2.out", clearProps: "transform" });
+      },
+      0
+    );
+
+    /* Swap + prepare enter state only after exit */
+    transitionTl.add(() => {
+      setContent(p, n);
+      if (iconEl) {
+        gsap.set(iconEl, {
+          autoAlpha: 0,
+          x: entry.x,
+          y: entry.y,
+          scale: entry.scale,
+          clipPath: entry.clip,
+        });
+      }
+      if (nEl) gsap.set(nEl, { autoAlpha: 0, scale: 0.92, y: 10 });
+      if (titleEl) gsap.set(titleEl, { autoAlpha: 0, y: 16 });
+      if (descEl) gsap.set(descEl, { autoAlpha: 0, y: 14 });
+      if (ctaEl) gsap.set(ctaEl, { autoAlpha: 0, y: 10, x: -6 });
+    });
+
+    transitionTl.to(
+      panel,
+      {
+        filter: "brightness(1)",
+        duration: 0.45,
+        ease: "power2.out",
+      },
+      "-=0.02"
+    );
+
+    /* In — visual first, then type, then CTA */
+    if (iconEl) {
+      transitionTl.to(
+        iconEl,
+        {
+          autoAlpha: 1,
+          x: 0,
+          y: 0,
+          scale: 1,
+          clipPath: "inset(0% 0% 0% 0%)",
+          duration: 0.55,
+          ease: "power3.out",
+          clearProps: "clipPath,transform",
         },
-      });
-    } else {
-      setContent();
+        "-=0.4"
+      );
+    }
+    if (nEl) {
+      transitionTl.to(
+        nEl,
+        {
+          autoAlpha: 1,
+          scale: 1,
+          y: 0,
+          duration: 0.5,
+          ease: "power3.out",
+          clearProps: "transform",
+        },
+        "-=0.48"
+      );
+    }
+    if (titleEl) {
+      transitionTl.to(
+        titleEl,
+        {
+          autoAlpha: 1,
+          y: 0,
+          duration: 0.45,
+          ease: "power3.out",
+          clearProps: "transform",
+        },
+        "-=0.4"
+      );
+    }
+    if (descEl) {
+      transitionTl.to(
+        descEl,
+        {
+          autoAlpha: 1,
+          y: 0,
+          duration: 0.42,
+          ease: "power3.out",
+          clearProps: "transform",
+        },
+        "-=0.32"
+      );
+    }
+    if (ctaEl) {
+      transitionTl.to(
+        ctaEl,
+        {
+          autoAlpha: 1,
+          y: 0,
+          x: 0,
+          duration: 0.4,
+          ease: "power3.out",
+          clearProps: "transform",
+        },
+        "-=0.28"
+      );
     }
   };
 
@@ -470,7 +642,7 @@ export function bindOurWorkPrograms(root = document, section = {}) {
   });
 
   wrap.querySelector("[data-pa-work-list]")?.addEventListener("mouseleave", () => {
-    hoverTimer = window.setTimeout(() => apply(activeId, { animate: true }), 120);
+    hoverTimer = window.setTimeout(() => apply(activeId, { animate: true }), 140);
   });
 }
 
@@ -764,17 +936,17 @@ export function renderKnowledgeNewsSplit(section = {}) {
     ? `<section class="pa-know" id="knowledge-centre" aria-labelledby="knowledge-centre-title" data-home-section="knowledge">
         <span class="pa-know__bg-word" aria-hidden="true">Knowledge</span>
         <div class="container pa-know__layout">
-          <div class="pa-know__copy" data-reveal data-anim="slide-left">
+          <div class="pa-know__copy">
             ${knowledge.eyebrow ? `<p class="pa-know__eyebrow">${knowledge.eyebrow}</p>` : ""}
             <h2 id="knowledge-centre-title" class="pa-title">${formatPaTitle(knowledge, "Knowledge Centre")}</h2>
             ${knowledge.lead ? `<p class="pa-know__lead">${knowledge.lead}</p>` : ""}
             <a class="pa-know__cta" ${linkAttrs(kCta.href)}>${kCta.label} →</a>
           </div>
-          <figure class="pa-know__pub" data-reveal data-anim="pop">
+          <figure class="pa-know__pub" data-pa-know-book>
             ${
               knowledge.image
                 ? `<a class="pa-know__cover" href="#/field-reports" data-link aria-label="Open field reports">
-                    <img src="${knowledge.image}" alt="${knowledge.imageAlt || "Field Reports"}" loading="lazy" decoding="async">
+                    <img class="pa-know__cover-img" src="${knowledge.image}" alt="${knowledge.imageAlt || "Field Reports"}" loading="lazy" decoding="async" width="272" height="400">
                     <span class="pa-know__cover-label">Report</span>
                   </a>`
                 : ""
@@ -801,7 +973,10 @@ export function renderKnowledgeNewsSplit(section = {}) {
       </section>`
     : "";
 
-  return `${knowHtml}${newsHtml}`;
+  if (!knowHtml || !newsHtml) return `${knowHtml}${newsHtml}`;
+  return `<div class="pa-kn" data-pa-kn>
+      <div class="container pa-kn__grid">${knowHtml}${newsHtml}</div>
+    </div>`;
 }
 
 export function renderPartnerBanner(section = {}) {

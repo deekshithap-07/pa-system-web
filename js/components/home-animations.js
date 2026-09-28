@@ -1,89 +1,52 @@
 import { formatNumber } from "../utils/format.js";
+import { prefersReducedMotion, playReveal, countUpOnce, revealFrom } from "../utils/pa-motion.js";
 
 export function initLandingAnimations() {
   if (typeof gsap === "undefined") return;
 
-  const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  if (reduce) {
-    document.querySelectorAll(".home-page [data-reveal], .home-page [data-stagger] > *, .home-page [data-pa-africa-rise]").forEach((el) => {
-      el.style.opacity = "1";
-      el.style.transform = "none";
-    });
+  if (prefersReducedMotion()) {
+    document
+      .querySelectorAll(
+        ".home-page [data-reveal], .home-page [data-stagger] > *, .home-page [data-pa-africa-rise], .home-page [data-motion-img]"
+      )
+      .forEach((el) => {
+        el.style.opacity = "1";
+        el.style.transform = "none";
+        el.style.clipPath = "none";
+      });
     return;
   }
 
   initHomePhotoHero();
   initHomeScrollStack();
   initHomeSectionMotion();
+  initHomeImageReveals();
   initImpactCounters();
   initAfricaEditorialMotion();
   initKnowNewsMotion();
   initNetworkFlowAnimations();
 }
 
-function animFrom(type) {
-  switch (type) {
-    case "slide-left":
-      return { autoAlpha: 0, x: -36, y: 0, scale: 1 };
-    case "slide-right":
-      return { autoAlpha: 0, x: 36, y: 0, scale: 1 };
-    case "slide-up":
-      return { autoAlpha: 0, y: 32, x: 0, scale: 1 };
-    case "pop":
-      return { autoAlpha: 0, y: 20, scale: 0.92 };
-    case "fade":
-      return { autoAlpha: 0, y: 10, scale: 1 };
-    case "fade-up":
-    default:
-      return { autoAlpha: 0, y: 28, x: 0, scale: 1 };
-  }
-}
-
 function playIn(targets, type, opts = {}) {
-  const els = gsap.utils.toArray(targets).filter(Boolean);
-  if (!els.length) return;
-
-  gsap.fromTo(
-    els,
-    animFrom(type),
-    {
-      autoAlpha: 1,
-      x: 0,
-      y: 0,
-      scale: 1,
-      duration: opts.duration ?? 0.65,
-      stagger: opts.stagger ?? 0,
-      ease: type === "pop" ? "back.out(1.4)" : "power3.out",
-      clearProps: "transform",
-      scrollTrigger: {
-        trigger: opts.trigger || els[0],
-        start: "top 92%",
-        once: true,
-        // If already on screen when mounted, play immediately
-        toggleActions: "play none none none",
-      },
-      ...opts.extra,
-    }
-  );
+  playReveal(targets, type, opts);
 }
 
 function initHomeSectionMotion() {
   const page = document.querySelector(".home-page");
   if (!page || typeof ScrollTrigger === "undefined") return;
 
-  // Never hide whole sections — only animate inner blocks so content can't stay blank
-  page.querySelectorAll("[data-reveal]").forEach((el) => {
-    // Skip if this element is also a stagger parent (children animate instead)
+  page.querySelectorAll("[data-reveal]").forEach((el, i) => {
     if (el.hasAttribute("data-stagger") && el.children.length) return;
-    const type = el.dataset.anim || "fade-up";
-    playIn(el, type, { trigger: el });
+    if (el.matches("img") || el.querySelector(":scope > img")) return;
+    const cycle = ["fade-up", "scale-in", "slide-up", "fade-up"];
+    const type = el.dataset.anim || cycle[i % cycle.length];
+    playIn(el, type, { trigger: el, duration: type === "scale-in" ? 0.7 : 0.65 });
   });
 
   page.querySelectorAll("[data-stagger]").forEach((group) => {
     const type = group.dataset.stagger === "stats" ? "pop" : group.dataset.stagger || "fade-up";
     const kids = [...group.children];
     if (!kids.length) return;
-    // Ensure parent stays visible
     gsap.set(group, { autoAlpha: 1, clearProps: "transform" });
     playIn(kids, type, {
       trigger: group,
@@ -92,12 +55,10 @@ function initHomeSectionMotion() {
     });
   });
 
-  // Safety: after a short delay, force any stuck hidden nodes visible
   window.setTimeout(() => {
     page.querySelectorAll("[data-reveal], [data-stagger] > *").forEach((el) => {
-      const opacity = window.getComputedStyle(el).opacity;
-      if (opacity === "0") {
-        gsap.set(el, { autoAlpha: 1, x: 0, y: 0, scale: 1, clearProps: "transform" });
+      if (window.getComputedStyle(el).opacity === "0") {
+        gsap.set(el, { autoAlpha: 1, x: 0, y: 0, scale: 1, clearProps: "transform,clipPath" });
       }
     });
   }, 1800);
@@ -122,6 +83,43 @@ function initHomeSectionMotion() {
   }
 }
 
+/** Directional clip-path image reveals — varied per section, not identical fades */
+function initHomeImageReveals() {
+  const page = document.querySelector(".home-page");
+  if (!page || typeof ScrollTrigger === "undefined") return;
+
+  const directions = ["clip-left", "clip-right", "clip-up", "clip-down"];
+  const images = page.querySelectorAll(
+    ".pa-work__panel-media img, .pa-stories__feature-media img, [data-motion-img]"
+  );
+
+  images.forEach((img, i) => {
+    if (img.closest(".pa-impact__bg")) return;
+    const type = img.dataset.anim || directions[i % directions.length];
+    const frame = img.closest(".pa-stories__feature-media, .pa-know__cover, .pa-work__panel-media, .home-photo-hero__media") || img;
+
+    gsap.fromTo(
+      img,
+      revealFrom(type),
+      {
+        autoAlpha: 1,
+        x: 0,
+        y: 0,
+        scale: 1,
+        clipPath: "inset(0% 0% 0% 0%)",
+        duration: 0.9,
+        ease: "power3.out",
+        clearProps: "clipPath",
+        scrollTrigger: {
+          trigger: frame,
+          start: "top 88%",
+          once: true,
+        },
+      }
+    );
+  });
+}
+
 function initHomePhotoHero() {
   const hero = document.querySelector("[data-home-photo-hero]");
   if (!hero) return;
@@ -129,12 +127,12 @@ function initHomePhotoHero() {
   const kids = hero.querySelectorAll(".home-photo-hero__copy > *");
   gsap.fromTo(
     kids,
-    { autoAlpha: 0, y: 24 },
+    { autoAlpha: 0, y: 28 },
     {
       autoAlpha: 1,
       y: 0,
-      duration: 0.7,
-      stagger: 0.09,
+      duration: 0.75,
+      stagger: 0.1,
       ease: "power3.out",
       clearProps: "transform",
     }
@@ -316,23 +314,13 @@ function initImpactCounters() {
       el.querySelector(".wb-data-stat__value") ||
       el.querySelector(".wb-impact-stat__value");
     if (!valueEl || Number.isNaN(value)) return;
-    const obj = { val: 0 };
 
-    ScrollTrigger.create({
-      trigger: el,
-      start: "top 88%",
-      once: true,
-      onEnter: () => {
-        gsap.to(obj, {
-          val: value,
-          duration: 1.4,
-          ease: "power2.out",
-          onUpdate: () => {
-            const display = value >= 1000 ? formatNumber(Math.round(obj.val)) : Math.round(obj.val);
-            valueEl.textContent = `${prefix}${display}${suffix}`;
-          },
-        });
-      },
+    countUpOnce(valueEl, {
+      value,
+      prefix,
+      suffix,
+      duration: 1.4,
+      format: (n) => (value >= 1000 ? formatNumber(n) : n),
     });
   });
 }
@@ -353,44 +341,74 @@ function initAfricaEditorialMotion() {
         stagger: 0.11,
         ease: "power3.out",
         clearProps: "transform",
-        scrollTrigger: { trigger: section.querySelector(".pa-africa__top") || section, start: "top 78%", once: true },
+        scrollTrigger: {
+          trigger: section.querySelector(".pa-africa__top") || section,
+          start: "top 78%",
+          once: true,
+        },
       }
     );
   }
 
   const ring = section.querySelector(".pa-africa__geo-ring circle");
   const dots = section.querySelectorAll(".pa-africa__geo-dot");
+  const arc = section.querySelector(".pa-africa__geo-arc");
+
+  const armOrbit = () => {
+    section.classList.add("is-geo-ready");
+  };
+
   if (ring) {
     gsap.set(ring, { strokeDasharray: 1, strokeDashoffset: 1 });
     if (dots.length) gsap.set(dots, { autoAlpha: 0 });
+    if (arc) gsap.set(arc, { autoAlpha: 0.6 });
 
     ScrollTrigger.create({
       trigger: section.querySelector(".pa-africa__top") || section,
       start: "top 78%",
       once: true,
       onEnter: () => {
+        if (arc) {
+          gsap.to(arc, {
+            autoAlpha: 1,
+            duration: 1.05,
+            ease: "power2.out",
+          });
+        }
         gsap.to(ring, {
           strokeDashoffset: 0,
-          duration: 1.35,
+          duration: 1.45,
           ease: "power2.out",
         });
         if (dots.length) {
           gsap.to(dots, {
             autoAlpha: 1,
-            duration: 0.45,
-            stagger: 0.12,
+            duration: 0.55,
+            stagger: 0.1,
             delay: 0.35,
             ease: "power2.out",
             onComplete: () => {
               gsap.set(dots, { clearProps: "opacity,visibility" });
-              section.classList.add("is-geo-ready");
+              armOrbit();
             },
           });
         } else {
-          section.classList.add("is-geo-ready");
+          armOrbit();
         }
       },
     });
+
+    /* Safety: if ScrollTrigger misses (already past), arm orbit soon */
+    window.setTimeout(() => {
+      if (!section.classList.contains("is-geo-ready")) {
+        gsap.set(ring, { strokeDashoffset: 0 });
+        gsap.set(dots, { autoAlpha: 1, clearProps: "opacity,visibility" });
+        if (arc) gsap.set(arc, { autoAlpha: 1 });
+        armOrbit();
+      }
+    }, 2200);
+  } else {
+    armOrbit();
   }
 
   const stats = section.querySelectorAll("[data-pa-count]");
@@ -399,41 +417,62 @@ function initAfricaEditorialMotion() {
     if (!Number.isFinite(target)) return;
     const prefix = el.dataset.paCountPrefix || "";
     const suffix = el.dataset.paCountSuffix || "";
-    const obj = { val: 0 };
     el.textContent = `${prefix}0${suffix}`;
 
-    ScrollTrigger.create({
-      trigger: el,
-      start: "top 88%",
-      once: true,
-      onEnter: () => {
-        gsap.to(obj, {
-          val: target,
-          duration: 1.8,
-          ease: "power2.out",
-          onUpdate: () => {
-            const n = Math.round(obj.val);
-            el.textContent = `${prefix}${target >= 1000 ? formatNumber(n) : n}${suffix}`;
-          },
-        });
-      },
+    countUpOnce(el, {
+      value: target,
+      prefix,
+      suffix,
+      duration: 1.8,
+      format: (n) => (target >= 1000 ? formatNumber(n).replace(/\.0(?=[KMB])/, "") : n),
     });
+
+    gsap.fromTo(
+      el,
+      { y: 14, color: "var(--pa-maroon)" },
+      {
+        y: 0,
+        duration: 0.7,
+        ease: "power3.out",
+        clearProps: "transform",
+        scrollTrigger: { trigger: el, start: "top 88%", once: true },
+      }
+    );
   });
 
   const countries = section.querySelectorAll(".pa-africa__country");
   if (countries.length) {
     gsap.fromTo(
       countries,
-      { autoAlpha: 0, y: 12 },
+      { autoAlpha: 0, x: -12 },
       {
         autoAlpha: 1,
-        y: 0,
+        x: 0,
         duration: 0.45,
         stagger: 0.05,
         delay: 0.15,
         ease: "power2.out",
         clearProps: "transform",
-        scrollTrigger: { trigger: section.querySelector(".pa-africa__nav") || section, start: "top 82%", once: true },
+        scrollTrigger: {
+          trigger: section.querySelector(".pa-africa__nav") || section,
+          start: "top 82%",
+          once: true,
+        },
+      }
+    );
+  }
+
+  const bridge = section.querySelector(".pa-africa__bridge-line");
+  if (bridge) {
+    gsap.fromTo(
+      bridge,
+      { scaleX: 0 },
+      {
+        scaleX: 1,
+        transformOrigin: "left center",
+        duration: 0.9,
+        ease: "power2.out",
+        scrollTrigger: { trigger: bridge, start: "top 90%", once: true },
       }
     );
   }
@@ -442,23 +481,66 @@ function initAfricaEditorialMotion() {
 function initKnowNewsMotion() {
   if (typeof ScrollTrigger === "undefined") return;
 
-  const cover = document.querySelector(".pa-know__cover img");
-  if (cover) {
-    gsap.fromTo(
-      cover,
-      { y: 24, scale: 1.04 },
-      {
-        y: -12,
-        scale: 1,
-        ease: "none",
-        scrollTrigger: {
-          trigger: ".pa-know",
-          start: "top bottom",
-          end: "bottom top",
-          scrub: 0.8,
-        },
-      }
-    );
+  const knowSection = document.querySelector(".pa-know");
+  const cover = document.querySelector("[data-pa-know-book] .pa-know__cover");
+  const knowCopy = document.querySelector(".pa-know__copy");
+
+  if (knowSection && cover) {
+    gsap.set(cover, {
+      autoAlpha: 0,
+      x: 50,
+      scale: 0.94,
+      rotation: -7,
+      filter: "drop-shadow(0 0 0 rgba(42,16,20,0))",
+    });
+    if (knowCopy) {
+      gsap.set(knowCopy.children, { autoAlpha: 0, x: -22, y: 10 });
+    }
+
+    ScrollTrigger.create({
+      trigger: knowSection,
+      start: "top 78%",
+      once: true,
+      onEnter: () => {
+        if (knowCopy) {
+          gsap.to(knowCopy.children, {
+            autoAlpha: 1,
+            x: 0,
+            y: 0,
+            duration: 0.7,
+            stagger: 0.09,
+            ease: "power3.out",
+            clearProps: "transform",
+          });
+        }
+        gsap.to(cover, {
+          autoAlpha: 1,
+          x: 0,
+          scale: 1,
+          rotation: 0,
+          filter: "drop-shadow(0 22px 36px rgba(42,16,20,0.3))",
+          duration: 0.95,
+          delay: 0.08,
+          ease: "power3.out",
+          onComplete: () => {
+            gsap.set(cover, { clearProps: "transform,filter" });
+            /* Restart CSS idle float after entrance */
+            cover.style.animation = "none";
+            void cover.offsetWidth;
+            cover.style.animation = "";
+          },
+        });
+      },
+    });
+  }
+
+  if (cover && window.matchMedia("(hover: none)").matches) {
+    let openTimer = null;
+    cover.addEventListener("pointerdown", () => {
+      cover.classList.add("is-open");
+      window.clearTimeout(openTimer);
+      openTimer = window.setTimeout(() => cover.classList.remove("is-open"), 900);
+    });
   }
 
   const rail = document.querySelector(".pa-news__rail");
@@ -492,7 +574,10 @@ export function destroyHomeAnimations() {
   if (typeof gsap !== "undefined") {
     gsap.killTweensOf(".pa-flow__pulse");
     gsap.killTweensOf(".pa-flow__connector-progress");
+    gsap.killTweensOf(".pa-africa__geo-dot");
+    gsap.killTweensOf(".pa-africa__geo-ring circle");
   }
+  document.querySelector(".pa-africa")?.classList.remove("is-geo-ready");
 }
 
 export const initHeroAnimation = initLandingAnimations;

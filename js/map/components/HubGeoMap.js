@@ -50,7 +50,67 @@ function parseViewBox(viewBox) {
   return { x: p[0] || 0, y: p[1] || 0, width: p[2] || 100, height: p[3] || 100 };
 }
 
-export function renderHubGeoMap(model, { variant = "full", mapId = "hub-geo-map", displayMode = "default" } = {}) {
+const REGION_TONES = ["#3f9a4a", "#2f7a38", "#7dbb72", "#5c9e3f", "#9ccc8a", "#24632d"];
+
+function circlePolygon(x, y, r, sides = 28) {
+  const pts = [];
+  for (let i = 0; i < sides; i++) {
+    const a = (Math.PI * 2 * i) / sides;
+    pts.push([x + Math.cos(a) * r, y + Math.sin(a) * r]);
+  }
+  return pts;
+}
+
+/** Keep the side of the polygon closer to `a` than to `b` (perpendicular bisector clip). */
+function clipByBisector(poly, a, b) {
+  const nx = b[0] - a[0];
+  const ny = b[1] - a[1];
+  const c = (b[0] * b[0] + b[1] * b[1] - a[0] * a[0] - a[1] * a[1]) / 2;
+  const inside = (p) => p[0] * nx + p[1] * ny <= c;
+  const out = [];
+  for (let i = 0; i < poly.length; i++) {
+    const cur = poly[i];
+    const prev = poly[(i + poly.length - 1) % poly.length];
+    const curIn = inside(cur);
+    const prevIn = inside(prev);
+    if (curIn !== prevIn) {
+      const dx = cur[0] - prev[0];
+      const dy = cur[1] - prev[1];
+      const t = (c - prev[0] * nx - prev[1] * ny) / (dx * nx + dy * ny);
+      out.push([prev[0] + dx * t, prev[1] + dy * t]);
+    }
+    if (curIn) out.push(cur);
+  }
+  return out;
+}
+
+/** Catchment areas: radius-limited Voronoi cells so neighbours share a border and never overlap. */
+function buildCatchmentRegions(model) {
+  const sites = (model.catchments || []).filter((c) => c.x != null && c.y != null);
+  if (!sites.length) return [];
+  const vb = parseViewBox(model.viewBox);
+  const span = Math.max(vb.width, vb.height);
+
+  return sites.map((site, i) => {
+    const members = (model.communities || []).filter((m) => m.catchmentId === site.id && m.x != null);
+    const reach = members.reduce((mx, m) => Math.max(mx, Math.hypot(m.x - site.x, m.y - site.y)), 0);
+    const r = Math.max(span * 0.12, reach * 1.35);
+    let poly = circlePolygon(site.x, site.y, r);
+    sites.forEach((other) => {
+      if (other === site || !poly.length) return;
+      poly = clipByBisector(poly, [site.x, site.y], [other.x, other.y]);
+    });
+    return {
+      id: site.id,
+      slug: site.slug,
+      name: site.name,
+      tone: REGION_TONES[i % REGION_TONES.length],
+      d: poly.length ? `M${poly.map((p) => `${p[0].toFixed(1)},${p[1].toFixed(1)}`).join(" L")} Z` : "",
+    };
+  });
+}
+
+export function renderHubGeoMap(model, { variant = "full", mapId = "hub-geo-map", displayMode = "default", regions = false } = {}) {
   if (!model) {
     return `<div class="hub-geo-map hub-geo-map--empty"><p>Map data unavailable</p></div>`;
   }
@@ -63,13 +123,30 @@ export function renderHubGeoMap(model, { variant = "full", mapId = "hub-geo-map"
   const fontVariant = isSchematic ? "schematic" : model.mode === "catchment" ? "catchment" : "country";
   const labelFont = labelFontSize(model.viewBox, { variant: fontVariant });
 
-  const zones = "";
+  const showRegions = regions && model.mode === "country" && !communitiesFocus && model.countryPath;
+  const clipId = `${mapId}-clip`;
+  const regionCells = showRegions ? buildCatchmentRegions(model).filter((r) => r.d) : [];
+
+  const zones = regionCells
+    .map(
+      (r, i) => `<path class="hub-geo-map__zone hub-geo-map__zone--region" d="${r.d}" style="--zc:${r.tone};--i:${i}"
+        data-catchment-id="${r.id}" data-catchment-slug="${r.slug}" data-catchment-name="${r.name}"
+        role="button" tabindex="0" aria-label="${r.name} catchment" />`
+    )
+    .join("");
+
+  const communityDots = showRegions
+    ? (model.communities || [])
+        .filter((c) => c.x != null)
+        .map((c) => `<circle class="hub-geo-map__community-dot" cx="${c.x}" cy="${c.y}" r="2.6" data-catchment-id="${c.catchmentId}" aria-hidden="true" />`)
+        .join("")
+    : "";
 
   const catchmentMarkers = communitiesFocus
     ? ""
     : (model.catchments || [])
         .filter((c) => c.x != null)
-        .map((c) => renderMarker(c.x, c.y, "hub-geo-map__catchment-anchor", c.id, c.slug, 5))
+        .map((c) => renderMarker(c.x, c.y, "hub-geo-map__catchment-anchor", c.id, c.slug, showRegions ? 4.2 : 5))
         .join("");
 
   const catchmentLabels =
@@ -100,8 +177,10 @@ export function renderHubGeoMap(model, { variant = "full", mapId = "hub-geo-map"
     <svg class="hub-geo-map__svg" viewBox="${model.viewBox}" role="img"
       preserveAspectRatio="xMidYMid meet"
       aria-label="${model.mode === "catchment" ? `Map of ${model.catchmentName} communities` : `Map of ${model.countryName} catchments`}">
+      ${showRegions ? `<defs><clipPath id="${clipId}"><path d="${model.countryPath}" /></clipPath></defs>` : ""}
       ${model.countryPath ? `<path class="hub-geo-map__country" d="${model.countryPath}" />` : ""}
-      <g class="hub-geo-map__zones">${zones}</g>
+      <g class="hub-geo-map__zones"${showRegions ? ` clip-path="url(#${clipId})"` : ""}>${zones}</g>
+      ${showRegions ? `<g class="hub-geo-map__dots">${communityDots}</g>` : ""}
       <g class="hub-geo-map__anchors">${catchmentMarkers}${communityMarkers}</g>
       <g class="hub-geo-map__labels hub-geo-map__labels--catchments">${catchmentLabels}</g>
       <g class="hub-geo-map__labels hub-geo-map__labels--communities">${communityLabels}</g>
@@ -145,10 +224,19 @@ export function renderHubGeoMap(model, { variant = "full", mapId = "hub-geo-map"
         </aside>`
       : "";
 
+  const legend = showRegions
+    ? `<ul class="hub-geo-map__legend" aria-label="Map key">
+        <li><span class="hub-geo-map__key hub-geo-map__key--region"></span>Catchment area</li>
+        <li><span class="hub-geo-map__key hub-geo-map__key--catchment"></span>Catchment centre</li>
+        <li><span class="hub-geo-map__key hub-geo-map__key--community"></span>Community</li>
+      </ul>`
+    : "";
+
   return `
-    <div class="hub-geo-map hub-geo-map--${variant} hub-geo-map--${model.mode}${model.layout ? ` hub-geo-map--${model.layout}` : ""}${communitiesFocus ? " hub-geo-map--communities-focus" : ""}"
+    <div class="hub-geo-map hub-geo-map--${variant} hub-geo-map--${model.mode}${model.layout ? ` hub-geo-map--${model.layout}` : ""}${communitiesFocus ? " hub-geo-map--communities-focus" : ""}${showRegions ? " hub-geo-map--regions" : ""}"
       data-hub-geo-map data-map-id="${mapId}" data-map-mode="${model.mode}">
       <div class="hub-geo-map__canvas">${svg}</div>
+      ${legend}
       ${panel}
       <div class="hub-geo-map__toast" hidden role="status" aria-live="polite"></div>
     </div>`;
@@ -239,6 +327,10 @@ export function bindHubGeoMap(root, { countrySlug, catchmentSlug, onCatchmentNav
       svg.querySelectorAll(".hub-geo-map__catchment-anchor, .hub-geo-map__catchment-label").forEach((el) => {
         el.classList.toggle("is-selected", el.dataset.entityId === id);
       });
+      svg.querySelectorAll(".hub-geo-map__community-dot").forEach((el) => {
+        el.classList.toggle("is-highlighted", id != null && el.dataset.catchmentId === id);
+      });
+      svg.classList.toggle("has-focus", id != null);
     };
 
     const highlightCommunity = (slug) => {

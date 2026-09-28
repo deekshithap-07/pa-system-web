@@ -5,7 +5,7 @@
 
 const SITE = "Possibilities Africa";
 const DEFAULT_DESCRIPTION =
-  "We work with communities across Africa to catalyze holistic transformation through leadership development, spiritual discipleship, economic productivity, mentoring the next generation and responsible citizenship.";
+  "Across rural Africa, Possibilities Africa walks with pastors and local leaders so churches and communities grow stronger together — in faith, family, livelihoods, and the next generation.";
 
 function ensureMeta(selector, attrs) {
   let el = document.head.querySelector(selector);
@@ -61,6 +61,12 @@ function routeSeo(view, parts, data, hub) {
       return {
         title: `${countryName || "Country"} | Where we work | ${SITE}`,
         description: hub?.overview || hub?.description || `Possibilities Africa in ${countryName}: places, programmes, stories, and public progress.`,
+        path: parts.join("/"),
+      };
+    case "country-catchments":
+      return {
+        title: `Catchments in ${countryName || "this country"} | ${SITE}`,
+        description: `Every Possibilities Africa catchment in ${countryName || "this country"} — open one for its progress or go straight to a community.`,
         path: parts.join("/"),
       };
     case "catchment":

@@ -63,7 +63,9 @@ img { max-width: 100%; display: block; }
 
 #transition-overlay {
   position: fixed; inset: 0; z-index: 9999;
-  background: var(--pa-navy);
+  background:
+    radial-gradient(ellipse at 50% 35%, rgba(232, 169, 26, 0.18), transparent 55%),
+    linear-gradient(155deg, #2a1014 0%, #5c2428 52%, #3d181c 100%);
   pointer-events: none;
   opacity: 0;
   visibility: hidden;
