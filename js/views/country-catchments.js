@@ -8,7 +8,7 @@ import { attachCountryHubGeoMap } from "../utils/hub-geo-maps.js";
 import { getCountryCover } from "../utils/work-locations.js";
 import { renderHubGeoMap, bindHubGeoMap } from "../map/components/HubGeoMap.js";
 
-const TONES = ["maroon", "green", "gold", "ivory"];
+const TONES = ["maroon", "green", "gold", "ivory", "sage"];
 
 function sum(list, key) {
   return list.reduce((n, c) => n + (Number(c.summary?.[key]) || 0), 0);
@@ -177,9 +177,6 @@ export function mountCountryCatchments(root, hub) {
   const highlight = (id) => {
     if (!svg) return;
     svg.querySelectorAll(".hub-geo-map__zone--region").forEach((el) => {
-      el.classList.toggle("is-highlighted", id != null && el.dataset.catchmentId === id);
-    });
-    svg.querySelectorAll(".hub-geo-map__community-dot").forEach((el) => {
       el.classList.toggle("is-highlighted", id != null && el.dataset.catchmentId === id);
     });
     svg.querySelectorAll(".hub-geo-map__catchment-anchor, .hub-geo-map__catchment-label").forEach((el) => {

@@ -1,13 +1,13 @@
 {
   "heroLead": "Pastor-led work across seven countries. Open a country to see what is happening there.",
   "countryCovers": {
-    "kenya": { "image": "assets/stories/story-rachuonyo.jpg", "label": "Rachuonyo, Kenya" },
-    "malawi": { "image": "assets/stories/story-ntchisi-health.jpg", "label": "Ntchisi, Malawi" },
-    "ethiopia": { "image": "assets/stories/story-ethiopia-koka.jpg", "label": "Koka, Ethiopia" },
-    "zambia": { "image": "assets/stories/story-zambia-crops.jpg", "label": "Rural Zambia" },
-    "burundi": { "image": "assets/stories/story-burundi.jpg", "label": "Burundi" },
-    "rwanda": { "image": "assets/stories/story-rwanda.jpeg", "label": "Rwanda" },
-    "tanzania": { "image": "assets/stories/story-tanzania.jpg", "label": "Tanzania" }
+    "kenya": { "image": "assets/country-covers/kenya.jpg", "label": "Kenya" },
+    "malawi": { "image": "assets/country-covers/malawi.jpg", "label": "Malawi" },
+    "ethiopia": { "image": "assets/country-covers/ethiopia.jpg", "label": "Ethiopia" },
+    "zambia": { "image": "assets/country-covers/zambia.jpg", "label": "Zambia" },
+    "burundi": { "image": "assets/country-covers/burundi.jpg", "label": "Burundi" },
+    "rwanda": { "image": "assets/country-covers/rwanda.jpg", "label": "Rwanda" },
+    "tanzania": { "image": "assets/country-covers/tanzania.jpg", "label": "Tanzania" }
   },
   "regions": [
     {

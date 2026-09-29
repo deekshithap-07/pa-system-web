@@ -79,7 +79,7 @@
 .id-hero {
   position: relative;
   isolation: isolate;
-  min-height: min(72vh, 34rem);
+  min-height: min(90vh, 46rem);
   display: flex;
   align-items: stretch;
   color: #fff;
@@ -1058,6 +1058,6 @@
 
 @media (max-width: 640px) {
   .id-hero {
-    min-height: min(62vh, 28rem);
+    min-height: min(76vh, 36rem);
   }
 }

@@ -4,7 +4,7 @@
     "title": "Knowledge Hub",
     "titleHtml": "<span>Knowledge</span> <em>Hub.</em>",
     "lead": "PA as a source of knowledge, learning and evidence.",
-    "image": "assets/field-reports/cover.jpg"
+    "image": "assets/knowledge-hub/hero.jpg"
   },
   "library": {
     "title": "Search and filters",
@@ -25,7 +25,7 @@
       "label": "Reports",
       "title": "Reports",
       "description": "Monthly, quarterly, and annual field reports from across the network.",
-      "href": "#/field-reports"
+      "href": "#kh-reports"
     },
     {
       "id": "research",
@@ -85,7 +85,7 @@
         "summary": "Analysis of how pastor engagement correlates with journey-stage advancement across the network.",
         "year": "2024",
         "countryId": null,
-        "href": "#/scorecard"
+        "href": "#/scorecard#id-progress"
       }
     ],
     "guides": [
@@ -95,7 +95,7 @@
         "summary": "A short facilitator guide for forming groups of 30–50 leaders in a community.",
         "year": "2024",
         "program": "Discipleship",
-        "href": "#/work"
+        "href": "#/work#work-shalom"
       },
       {
         "id": "guide-ppp-planning",
@@ -103,7 +103,7 @@
         "summary": "Steps for churches to design water, farming, or livelihood projects with local ownership.",
         "year": "2023",
         "program": "Responsible Citizenship",
-        "href": "#/work"
+        "href": "#/work#work-projects"
       }
     ],
     "training": [
@@ -160,7 +160,7 @@
       "catchmentId": null,
       "summary": "CHIP groups and savings culture helping households diversify income beyond seasonal farming.",
       "outcomes": ["Shalom savings groups active", "Household enterprises expanding"],
-      "storySlug": "mary-mvileras-decision-to-make-a-living-out-of-selling-scones"
+      "storySlug": "mary-scone-business"
     },
     {
       "id": "cs-ethiopia-leadership",
@@ -172,7 +172,7 @@
       "catchmentId": null,
       "summary": "Pastors continuing holistic ministry training and youth enterprise work despite regional challenges.",
       "outcomes": ["Bible study groups growing", "Youth business training underway"],
-      "storySlug": "pastor-abdisa-a-man-caught-between-ongoing-rebel-conflicts"
+      "storySlug": "pastor-abdisa-conflict"
     }
   ],
   "insightPacks": [

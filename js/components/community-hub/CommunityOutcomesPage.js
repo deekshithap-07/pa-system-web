@@ -49,11 +49,11 @@ function locationLine(payload) {
 function heroImage(payload) {
   return (
     {
-      kenya: "assets/country-heroes/kenya-hero-farmers.jpg",
-      malawi: "assets/country-heroes/malawi-hero-savings.jpg",
-      ethiopia: "assets/country-heroes/ethiopia-hero-farm.jpg",
-      zambia: "assets/country-heroes/zambia-hero-crops.jpg",
-    }[payload.country.slug] || "assets/country-heroes/kenya-hero-farmers.jpg"
+      kenya: "assets/community-heroes/kenya.jpg",
+      malawi: "assets/community-heroes/malawi.jpg",
+      ethiopia: "assets/community-heroes/ethiopia.jpg",
+      zambia: "assets/community-heroes/zambia.jpg",
+    }[payload.country.slug] || "assets/community-heroes/kenya.jpg"
   );
 }
 
@@ -162,11 +162,33 @@ function collectMedia(payload, data) {
   return { photos, videos, reports };
 }
 
-function featuredStory(payload, data) {
-  const stories = (data?.stories?.stories || []).filter(
-    (s) => s.communityId === payload.community.id || s.communityId === payload.community.slug
+/** Community-tagged stories first, then published stories from the same area (verified-content.json). */
+function communityStories(payload, data) {
+  const all = data?.stories?.stories || [];
+  const out = [];
+  const seen = new Set();
+  const add = (story, area, sourceUrl) => {
+    if (!story || seen.has(story.id)) return;
+    seen.add(story.id);
+    out.push({ story, area, sourceUrl: sourceUrl || story.sourceUrl || "" });
+  };
+
+  all
+    .filter((s) => s.communityId === payload.community.id || s.communityId === payload.community.slug)
+    .forEach((s) => add(s, null));
+
+  (data?.verifiedContent?.areaStories || [])
+    .filter((e) => (e.catchmentIds || []).includes(payload.catchment.id))
+    .forEach((e) => add(all.find((s) => s.id === e.storyId), e.area, e.sourceUrl));
+
+  return out;
+}
+
+function verifiedOutcomes(payload, data) {
+  const map = data?.verifiedContent?.communityOutcomes || {};
+  return (map[payload.community.id] || map[payload.community.slug] || []).filter(
+    (o) => o && o.title && o.sourceUrl
   );
-  return stories[0] || null;
 }
 
 /* -------------------------------------------------------------------------- */
@@ -494,11 +516,65 @@ function renderProgress(payload, data) {
 /* 8 — Documentary story                                                      */
 /* -------------------------------------------------------------------------- */
 
-function renderStory(payload, story) {
-  if (!story) return "";
+function renderOutcomes(payload, outcomes) {
+  if (!outcomes.length) return "";
 
+  const items = outcomes
+    .map(
+      (o, i) => `<li class="cm-outcome" data-cm-rise style="--i:${i}">
+        <span class="cm-outcome__n">${String(i + 1).padStart(2, "0")}</span>
+        <div>
+          <strong>${o.title}</strong>
+          ${o.detail ? `<p>${o.detail}</p>` : ""}
+          <span class="cm-outcome__meta">
+            ${o.date ? `<em>${formatPppDate(o.date)}</em>` : ""}
+            <a href="${o.sourceUrl}" target="_blank" rel="noopener">Source →</a>
+          </span>
+        </div>
+      </li>`
+    )
+    .join("");
+
+  return `
+    <section class="cm-outcomes" data-cm-section="outcomes" id="cm-outcomes" aria-labelledby="cm-outcomes-title">
+      <div class="container">
+        <header class="cm-sec-head" data-cm-rise>
+          <p class="cm-kicker">Community outcomes</p>
+          <h2 id="cm-outcomes-title" class="cm-sec-title">What has changed in ${payload.community.name}</h2>
+          <p class="cm-sec-lead">Outcomes confirmed in Possibilities Africa’s published reporting.</p>
+        </header>
+        <ol class="cm-outcomes__list">${items}</ol>
+      </div>
+    </section>`;
+}
+
+function storyKicker(entry, payload) {
+  return entry.area ? `Story from ${entry.area}` : `Story from ${payload.community.name}`;
+}
+
+function renderStory(payload, entries) {
+  if (!entries.length) return "";
+
+  const [lead, ...more] = entries;
+  const story = lead.story;
   const href = story.slug ? `#/story/${story.slug}` : "#/stories";
-  const img = story.image || heroImage(payload);
+  const img = story.image;
+  const areaNote = lead.area
+    ? `<p class="cm-story__note">Published by Possibilities Africa from ${lead.area}, the wider area around ${payload.community.name}.</p>`
+    : "";
+
+  const moreList = more.length
+    ? `<ul class="cm-story__more" data-cm-rise>
+        ${more
+          .map(
+            (e) => `<li><a href="${e.story.slug ? `#/story/${e.story.slug}` : "#/stories"}" data-link>
+              <span>${storyKicker(e, payload)}</span>
+              <strong>${e.story.title}</strong>
+            </a></li>`
+          )
+          .join("")}
+      </ul>`
+    : "";
 
   return `
     <section class="cm-story" data-cm-section="story" id="cm-stories" aria-labelledby="cm-story-title">
@@ -508,12 +584,17 @@ function renderStory(payload, story) {
           <span class="cm-story__veil"></span>
         </figure>
         <div class="container cm-story__caption" data-cm-rise>
-          <p class="cm-kicker cm-kicker--light">Transformation story</p>
+          <p class="cm-kicker cm-kicker--light">${storyKicker(lead, payload)}</p>
           <h2 id="cm-story-title" class="cm-story__title">${story.title}</h2>
           ${story.excerpt ? `<p class="cm-story__excerpt">${story.excerpt}</p>` : ""}
-          <a class="cm-story__cta" href="${href}" data-link>Read story →</a>
+          ${areaNote}
+          <div class="cm-story__actions">
+            <a class="cm-story__cta" href="${href}" data-link>Read story →</a>
+            ${lead.sourceUrl ? `<a class="cm-story__source" href="${lead.sourceUrl}" target="_blank" rel="noopener">Original on possibilitiesafrica.org ↗</a>` : ""}
+          </div>
         </div>
       </div>
+      ${moreList ? `<div class="container">${moreList}</div>` : ""}
     </section>`;
 }
 
@@ -645,7 +726,8 @@ function renderNext(payload) {
 
 export function renderCommunityOutcomes(payload, _legacyStorySection = "", data = null) {
   const media = collectMedia(payload, data);
-  const story = featuredStory(payload, data);
+  const stories = communityStories(payload, data);
+  const outcomes = verifiedOutcomes(payload, data);
 
   return `
     <div class="cm-page" data-community-outcomes data-country-slug="${payload.country.slug}" data-catchment-slug="${payload.catchment.slug}" data-community-slug="${payload.community.slug}">
@@ -654,9 +736,10 @@ export function renderCommunityOutcomes(payload, _legacyStorySection = "", data 
       ${renderJourney(payload)}
       ${renderGlance(payload)}
       ${renderProjects(payload)}
+      ${renderOutcomes(payload, outcomes)}
       ${renderActivity(payload)}
       ${renderProgress(payload, data)}
-      ${renderStory(payload, story)}
+      ${renderStory(payload, stories)}
       ${renderMedia(payload, media)}
       ${renderResources(payload, media)}
       ${renderNext(payload)}

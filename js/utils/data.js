@@ -39,6 +39,8 @@ const FILES = {
   aboutPa: "data/about-pa.json",
   newsUpdates: "data/news-updates.json",
   publicCatalog: "data/public-catalog.json",
+  regionOutlines: "data/region-outlines.json",
+  verifiedContent: "data/verified-content.json",
 };
 
 async function load(key) {
@@ -99,11 +101,17 @@ export async function getAllData() {
   ];
 
   const values = await Promise.all(keys.map((k) => load(k)));
-  const publicCatalog = await loadOptional("publicCatalog");
+  const [publicCatalog, regionOutlines, verifiedContent] = await Promise.all([
+    loadOptional("publicCatalog"),
+    loadOptional("regionOutlines"),
+    loadOptional("verifiedContent"),
+  ]);
   const loadStatus = finishPublicDataLoad();
 
   const data = Object.fromEntries(keys.map((k, i) => [k, values[i]]));
   data.publicCatalog = publicCatalog;
+  data.regionOutlines = regionOutlines;
+  data.verifiedContent = verifiedContent;
   data.publicLoadStatus = loadStatus;
   return data;
 }

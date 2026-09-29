@@ -1083,3 +1083,295 @@
     flex: 0 0 auto;
   }
 }
+
+/* ==========================================================================
+   News & Updates - visual refresh (existing content only)
+   ========================================================================== */
+.nu-page [data-nu-section] {
+  scroll-margin-top: calc(var(--header-h, 4.5rem) + 4.5rem);
+}
+
+/* Hero - same scale as the other page heroes */
+.nu-page .nu-hero {
+  min-height: min(90vh, 46rem);
+}
+
+.nu-page .nu-hero__media img {
+  opacity: 0.8;
+}
+
+.nu-hero__jumps {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+  margin-top: 1.6rem;
+}
+
+.nu-hero__jump {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.45rem 0.55rem 0.45rem 0.95rem;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(245, 215, 138, 0.4);
+  color: #fff;
+  font-size: 0.82rem;
+  font-weight: 700;
+  text-decoration: none;
+  backdrop-filter: blur(6px);
+  transition: background 0.25s, color 0.25s, transform 0.25s;
+}
+
+.nu-hero__jump em {
+  min-width: 1.6rem;
+  padding: 0.1rem 0.45rem;
+  border-radius: 999px;
+  background: var(--pa-gold);
+  color: var(--nu-burgundy-deep);
+  font-style: normal;
+  font-size: 0.72rem;
+  font-weight: 800;
+  text-align: center;
+}
+
+.nu-hero__jump:hover,
+.nu-hero__jump:focus-visible {
+  background: var(--pa-gold);
+  color: var(--nu-burgundy-deep);
+  transform: translateY(-2px);
+  outline: none;
+}
+
+.nu-hero__jump:hover em,
+.nu-hero__jump:focus-visible em {
+  background: var(--nu-burgundy-deep);
+  color: var(--pa-gold);
+}
+
+/* Sticky category rail - pill chips */
+.nu-page .nu-nav__item {
+  border-radius: 999px;
+}
+
+/* News - card grid with a tone per card */
+.nu-page .nu-stream {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(20rem, 1fr));
+  gap: 1.1rem;
+  max-width: none;
+}
+
+.nu-page .nu-entry,
+.nu-page .nu-entry--flip {
+  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-areas:
+    "date go"
+    "body body";
+  gap: 0.85rem;
+  padding: 1.5rem 1.5rem 1.4rem;
+  border: 0;
+  border-top: 5px solid var(--pa-maroon);
+  border-radius: 1.15rem;
+  background: #fff;
+  box-shadow: 0 10px 26px rgba(42, 16, 20, 0.08);
+}
+
+.nu-page .nu-entry:last-child {
+  border-bottom: 0;
+}
+
+.nu-page .nu-entry--t1 { border-top-color: var(--pa-gold); }
+.nu-page .nu-entry--t2 { border-top-color: #2f7a38; }
+
+.nu-page .nu-entry:hover,
+.nu-page .nu-entry:focus-visible {
+  transform: translateY(-4px);
+  background: #fff;
+  box-shadow: 0 18px 38px rgba(42, 16, 20, 0.14);
+}
+
+.nu-page .nu-entry__spine {
+  display: none;
+}
+
+.nu-page .nu-entry__date {
+  grid-area: date;
+  flex-direction: row;
+  align-items: baseline;
+  gap: 0.6rem;
+  text-align: left;
+  padding: 0;
+}
+
+.nu-page .nu-entry__year {
+  font-size: 1.35rem;
+}
+
+.nu-page .nu-entry__body { grid-area: body; }
+
+.nu-page .nu-entry__go {
+  grid-area: go;
+  opacity: 1;
+  transform: none;
+  padding: 0;
+}
+
+.nu-page .nu-entry:hover .nu-entry__go {
+  transform: translateX(4px);
+}
+
+/* Country updates - chip column beside a rounded story card */
+.nu-page .nu-geo {
+  display: grid;
+  grid-template-columns: minmax(11rem, 15rem) minmax(0, 1fr);
+  gap: 1.5rem;
+  max-width: 62rem;
+  align-items: start;
+}
+
+.nu-page .nu-geo__chips {
+  flex-direction: column;
+  margin: 0;
+}
+
+.nu-page .nu-geo__chip {
+  justify-content: flex-start;
+  border-radius: 999px;
+}
+
+.nu-page .nu-geo__stage {
+  min-height: 15rem;
+  padding: 2rem 2.1rem;
+  border: 0;
+  border-left: 6px solid var(--pa-gold);
+  border-radius: 1.35rem;
+  background: #fff;
+  box-shadow: 0 18px 42px rgba(47, 93, 58, 0.14);
+}
+
+.nu-page .nu-geo__link {
+  padding: 0.65rem 1.25rem;
+  border: 0;
+  border-radius: 999px;
+  background: var(--pa-maroon);
+  color: #fff;
+}
+
+.nu-page .nu-geo__link:hover,
+.nu-page .nu-geo__link:focus-visible {
+  background: var(--pa-gold);
+  color: var(--nu-burgundy-deep);
+}
+
+/* Events - side-by-side calendar cards */
+.nu-page .nu-events {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(16.5rem, 1fr));
+  gap: 1.1rem;
+  max-width: none;
+}
+
+.nu-page .nu-event {
+  grid-template-columns: 4.5rem minmax(0, 1fr);
+  grid-template-areas: "cal copy";
+  gap: 1rem;
+  padding: 1.25rem;
+  border: 0;
+  border-radius: 1.15rem;
+  background: rgba(255, 255, 255, 0.92);
+  box-shadow: 0 10px 26px rgba(90, 58, 50, 0.12);
+}
+
+.nu-page .nu-event:last-child {
+  border-bottom: 0;
+}
+
+.nu-page .nu-event:hover,
+.nu-page .nu-event:focus-visible {
+  transform: translateY(-4px);
+  background: #fff;
+}
+
+.nu-page .nu-event__rail,
+.nu-page .nu-event__go {
+  display: none;
+}
+
+.nu-page .nu-event__cal {
+  grid-area: cal;
+  min-height: 4.75rem;
+  border-radius: 0.85rem;
+}
+
+.nu-page .nu-event__copy { grid-area: copy; }
+
+.nu-page .nu-event:nth-child(3n + 2) .nu-event__cal {
+  background: linear-gradient(160deg, #2f5d3a 0%, #1c3a24 100%);
+}
+
+.nu-page .nu-event:nth-child(3n + 3) .nu-event__cal {
+  background: linear-gradient(160deg, #c99212 0%, var(--pa-gold) 100%);
+  color: var(--nu-burgundy-deep);
+}
+
+.nu-page .nu-event:nth-child(3n + 3) .nu-event__month {
+  color: var(--nu-burgundy-deep);
+}
+
+/* Announcements - rounded banners, two up */
+.nu-page .nu-announces {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(19rem, 1fr));
+  gap: 1rem;
+  max-width: none;
+}
+
+.nu-page .nu-announce {
+  padding: 1.35rem 1.5rem;
+  border-radius: 1.15rem;
+  box-shadow: 0 14px 30px rgba(42, 16, 20, 0.16);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.nu-page .nu-announce:hover,
+.nu-page .nu-announce:focus-visible {
+  transform: translateY(-3px);
+  box-shadow: 0 20px 40px rgba(42, 16, 20, 0.22);
+}
+
+/* Milestones - soft cards on the dark band */
+.nu-page .nu-mile__body {
+  padding: 0.95rem 1.15rem;
+  border-radius: 0.9rem;
+  background: rgba(255, 255, 255, 0.06);
+  box-shadow: inset 0 0 0 1px rgba(245, 215, 138, 0.18);
+}
+
+/* Closing band - light, above the maroon footer */
+.nu-page .nu-close {
+  background:
+    radial-gradient(ellipse at 80% 10%, rgba(232, 169, 26, 0.2), transparent 55%),
+    linear-gradient(160deg, #fdf5e2 0%, var(--nu-ivory) 100%);
+  border-top: 4px solid var(--pa-gold);
+}
+
+@media (max-width: 760px) {
+  .nu-page .nu-hero {
+    min-height: min(84vh, 38rem);
+  }
+
+  .nu-page .nu-geo {
+    grid-template-columns: 1fr;
+  }
+
+  .nu-page .nu-geo__chips {
+    flex-direction: row;
+  }
+
+  .nu-page .nu-stream,
+  .nu-page .nu-events,
+  .nu-page .nu-announces {
+    grid-template-columns: 1fr;
+  }
+}

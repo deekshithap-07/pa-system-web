@@ -42,6 +42,10 @@ function countryList(data, ids = []) {
   return ids.map((id) => getCountryName(data.countries, id)).filter(Boolean).join(" · ");
 }
 
+function hasFile(url) {
+  return Boolean(url) && url !== "#";
+}
+
 function pageConfig(data) {
   return { ...DEFAULT_PAGE, ...(data.reports?.page || {}) };
 }
@@ -51,7 +55,8 @@ function renderMainMessage(msg, index) {
     .map((p) => `<li>${p}</li>`)
     .join("");
   return `
-    <article class="wdr-fr-msg" data-fr-reveal>
+    <article class="wdr-fr-msg wdr-fr-msg--${index % 3}" data-fr-reveal>
+      <span class="wdr-fr-msg__n" aria-hidden="true">${String(index + 1).padStart(2, "0")}</span>
       <h3 class="wdr-fr-msg__title">${msg.title || ""}</h3>
       ${msg.intro ? `<p class="wdr-fr-msg__intro">${msg.intro}</p>` : ""}
       ${points ? `<ul class="wdr-fr-msg__list">${points}</ul>` : ""}
@@ -68,7 +73,7 @@ function renderRelatedCard(card, index) {
   return `
     <a href="${href}" class="wdr-fr-carousel__slide"${linkAttr}>
       <span class="${bgClass}"${bgStyle} aria-hidden="true"></span>
-      <span class="wdr-fr-carousel__slide-label">${card.title}</span>
+      <span class="wdr-fr-carousel__slide-label">${card.title}${card.text ? `<small>${card.text}</small>` : ""}</span>
     </a>`;
 }
 
@@ -77,10 +82,12 @@ function renderChapter(report, data, index) {
   const period = formatPeriod(report.period);
   const countries = countryList(data, report.countryIds);
   const open = index === 0 ? " open" : "";
-  const disabled = report.downloadUrl === "#" ? ' aria-disabled="true"' : "";
+  const download = hasFile(report.downloadUrl)
+    ? `<a href="${report.downloadUrl}" class="wdr-fr-btn wdr-fr-btn--chapter" target="_blank" rel="noopener">Download report</a>`
+    : `<span class="wdr-fr-btn wdr-fr-btn--chapter is-disabled" aria-disabled="true">Download coming soon</span>`;
 
   return `
-    <details class="wdr-fr-chapter" data-fr-item data-country-ids="${(report.countryIds || []).join(",")}" data-report-type="${report.type || ""}"${open}>
+    <details class="wdr-fr-chapter wdr-fr-chapter--${report.type || "monthly"}" id="report-${report.id}" data-fr-item data-country-ids="${(report.countryIds || []).join(",")}" data-report-type="${report.type || ""}"${open}>
       <summary class="wdr-fr-chapter__head">
         <span class="wdr-fr-chapter__thumb wdr-fr-chapter__thumb--${report.type || "monthly"}" aria-hidden="true"></span>
         <span class="wdr-fr-chapter__meta">
@@ -94,7 +101,7 @@ function renderChapter(report, data, index) {
         <p class="wdr-fr-chapter__summary">${report.summary}</p>
         ${countries ? `<p class="wdr-fr-chapter__countries">${countries}</p>` : ""}
         <div class="wdr-fr-chapter__actions">
-          <a href="${report.downloadUrl || "#"}" class="wdr-fr-btn wdr-fr-btn--chapter"${disabled}>Download report</a>
+          ${download}
           <a href="#/scorecard" class="wdr-fr-link" data-link>See the numbers →</a>
         </div>
       </div>
@@ -131,21 +138,41 @@ export function renderFieldReports(data) {
 
   const heroImage = page.heroImage || DEFAULT_PAGE.heroImage;
   const aboutCover = page.aboutCover || DEFAULT_PAGE.aboutCover;
+  const reportCountries = [...new Set(reports.flatMap((r) => r.countryIds || []))];
+  const heroFacts = [
+    `${reports.length} report${reports.length === 1 ? "" : "s"}`,
+    types.map((t) => TYPE_LABELS[t] || t).join(" · "),
+    countryList(data, reportCountries),
+  ].filter(Boolean);
+  const primaryDl = hasFile(primaryHref)
+    ? `<a href="${primaryHref}" class="wdr-fr-btn wdr-fr-btn--solid" target="_blank" rel="noopener">${page.primaryDownload?.label || "Download latest report"}</a>`
+    : `<a href="#reports" class="wdr-fr-btn wdr-fr-btn--solid">Browse report summaries ↓</a>`;
+  const tabs = [
+    ["about", "About"],
+    messages ? ["messages", "Main messages"] : null,
+    ["reports", "Reports"],
+    ["related", "Related"],
+  ].filter(Boolean);
 
   return `
     <div class="wdr-fr" data-field-reports>
-      ${renderPageBack({ href: "#/", label: "Home" })}
       <div class="wdr-fr-hero-wrap">
         <header class="wdr-fr-hero" style="--wdr-fr-hero:url('${heroImage}')">
           <div class="wdr-fr-hero__shade" aria-hidden="true"></div>
-          <div class="container wdr-fr-hero__inner">
-            <p class="wdr-fr-hero__series">Possibilities Africa</p>
+          ${renderPageBack({ href: "#/resources", label: "Back", history: true })}
+          <div class="container wdr-fr-hero__inner" data-fr-hero-copy>
+            <p class="wdr-fr-hero__series">Possibilities Africa · Knowledge Hub</p>
             <h1 class="wdr-fr-hero__title">${page.title}</h1>
             <p class="wdr-fr-hero__sub">${page.subtitle}</p>
+            ${heroFacts.length ? `<ul class="wdr-fr-hero__facts">${heroFacts.map((f) => `<li>${f}</li>`).join("")}</ul>` : ""}
           </div>
           <nav class="wdr-fr-hero-tabs" data-fr-nav aria-label="Publication sections">
-            <a href="#about" class="wdr-fr-hero-tabs__link is-active" data-fr-nav-link>About</a>
-            <a href="#related" class="wdr-fr-hero-tabs__link" data-fr-nav-link>Related</a>
+            ${tabs
+              .map(
+                ([id, label], i) =>
+                  `<a href="#${id}" class="wdr-fr-hero-tabs__link${i === 0 ? " is-active" : ""}" data-fr-nav-link data-fr-target="${id}">${label}</a>`
+              )
+              .join("")}
           </nav>
         </header>
 
@@ -163,12 +190,12 @@ export function renderFieldReports(data) {
                   ${page.aboutClosing ? `<p>${page.aboutClosing}</p>` : ""}
                   ${introLinkHtml}
                   <div class="wdr-fr-dl">
-                    <a href="${primaryHref}" class="wdr-fr-btn wdr-fr-btn--solid"${primaryHref === "#" ? ' aria-disabled="true"' : ""}>${page.primaryDownload?.label || "Download latest report"}</a>
+                    ${primaryDl}
                     <a href="${secondaryHref}" class="wdr-fr-btn wdr-fr-btn--outline"${secondaryHref.startsWith("#/") ? " data-link" : ""}>${page.secondaryDownload?.label || "Download overview"}</a>
                   </div>
                   <p class="wdr-fr-about__press">
-                    <span class="wdr-fr-about__press-label">Also on Home</span>
-                    <a href="#/" class="wdr-fr-link" data-link>Open from the home Knowledge section</a>
+                    <span class="wdr-fr-about__press-label">Also in the Knowledge Hub</span>
+                    <a href="#/resources#kh-reports" class="wdr-fr-link" data-link>Browse all reports and resources</a>
                   </p>
                 </div>
               </div>
@@ -198,7 +225,11 @@ export function renderFieldReports(data) {
           ${page.mainMessagesLead ? `<p class="wdr-fr-messages__lead">${page.mainMessagesLead}</p>` : ""}
           <div class="wdr-fr-messages__stack">${messages}</div>
           <p class="wdr-fr-messages__foot">
-            <a href="${primaryHref}" class="wdr-fr-link"${primaryHref === "#" ? ' aria-disabled="true"' : ""}>➜ Download latest report</a>
+            ${
+              hasFile(primaryHref)
+                ? `<a href="${primaryHref}" class="wdr-fr-link" target="_blank" rel="noopener">➜ Download latest report</a>`
+                : `<a href="#reports" class="wdr-fr-link">➜ Read the report summaries</a>`
+            }
           </p>
         </div>
       </section>`
@@ -244,30 +275,52 @@ export function renderFieldReports(data) {
 
 function bindNavSpy(root) {
   const links = [...root.querySelectorAll("[data-fr-nav-link]")];
-  const aboutBlock = root.querySelector("#about");
-  const relatedBlock = root.querySelector("#related");
-  if (!links.length || !aboutBlock) return;
+  const blocks = links.map((l) => root.querySelector(`#${l.dataset.frTarget}`)).filter(Boolean);
+  if (!links.length || !blocks.length || typeof IntersectionObserver === "undefined") return;
 
-  const setActive = (which) => {
-    links.forEach((link) => {
-      const isAbout = link.getAttribute("href") === "#about";
-      link.classList.toggle("is-active", which === "about" ? isAbout : !isAbout);
-    });
+  const setActive = (id) => {
+    links.forEach((link) => link.classList.toggle("is-active", link.dataset.frTarget === id));
   };
-
-  if (typeof IntersectionObserver === "undefined") return;
 
   const observer = new IntersectionObserver(
     (entries) => {
-      const relatedVisible = relatedBlock && entries.some((e) => e.target === relatedBlock && e.isIntersecting);
-      setActive(relatedVisible ? "related" : "about");
+      const hit = entries.filter((e) => e.isIntersecting).sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+      if (hit) setActive(hit.target.id);
     },
-    { root: null, threshold: 0.25, rootMargin: "-35% 0px -45% 0px" }
+    { root: null, threshold: [0, 0.25, 0.5], rootMargin: "-35% 0px -45% 0px" }
   );
 
-  if (relatedBlock) observer.observe(relatedBlock);
-  observer.observe(aboutBlock);
+  blocks.forEach((b) => observer.observe(b));
   root._frNavOff = () => observer.disconnect();
+}
+
+function initFieldReportsMotion(root) {
+  if (typeof gsap === "undefined" || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  const copy = root.querySelector("[data-fr-hero-copy]");
+  if (copy) {
+    gsap.fromTo(copy.children, { autoAlpha: 0, y: 24 }, { autoAlpha: 1, y: 0, duration: 0.7, stagger: 0.09, ease: "power3.out", clearProps: "transform" });
+  }
+  if (typeof ScrollTrigger === "undefined") return;
+  root.querySelectorAll(".wdr-fr-msg").forEach((card, i) => {
+    gsap.fromTo(card, { autoAlpha: 0, y: 36, rotate: i % 2 ? 1.5 : -1.5 }, {
+      autoAlpha: 1, y: 0, rotate: 0, duration: 0.7, ease: "back.out(1.4)", clearProps: "transform",
+      scrollTrigger: { trigger: card, start: "top 88%", once: true },
+    });
+  });
+  const chapters = root.querySelectorAll(".wdr-fr-chapter");
+  if (chapters.length) {
+    gsap.fromTo(chapters, { autoAlpha: 0, x: -28 }, {
+      autoAlpha: 1, x: 0, duration: 0.55, stagger: 0.08, ease: "power2.out", clearProps: "transform",
+      scrollTrigger: { trigger: root.querySelector("[data-fr-list]"), start: "top 85%", once: true },
+    });
+  }
+  const related = root.querySelectorAll(".wdr-fr-related__list li");
+  if (related.length) {
+    gsap.fromTo(related, { autoAlpha: 0, scale: 0.92 }, {
+      autoAlpha: 1, scale: 1, duration: 0.45, stagger: 0.07, ease: "power2.out", clearProps: "transform",
+      scrollTrigger: { trigger: root.querySelector(".wdr-fr-related__list"), start: "top 90%", once: true },
+    });
+  }
 }
 
 function bindCarousel(root) {
@@ -351,6 +404,7 @@ export function mountFieldReports() {
   typeSel?.addEventListener("change", applyFilters);
   bindNavSpy(root);
   bindCarousel(root);
+  initFieldReportsMotion(root);
 }
 
 export function destroyFieldReports() {

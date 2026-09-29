@@ -125,20 +125,24 @@ export function renderHubGeoMap(model, { variant = "full", mapId = "hub-geo-map"
 
   const showRegions = regions && model.mode === "country" && !communitiesFocus && model.countryPath;
   const clipId = `${mapId}-clip`;
-  const regionCells = showRegions ? buildCatchmentRegions(model).filter((r) => r.d) : [];
+  const realAreas = showRegions && model.catchmentAreas?.length;
+  const regionCells = !showRegions
+    ? []
+    : realAreas
+      ? model.catchmentAreas.map((a, i) => ({ ...a, tone: REGION_TONES[i % REGION_TONES.length] }))
+      : buildCatchmentRegions(model).filter((r) => r.d);
 
   const zones = regionCells
     .map(
       (r, i) => `<path class="hub-geo-map__zone hub-geo-map__zone--region" d="${r.d}" style="--zc:${r.tone};--i:${i}"
         data-catchment-id="${r.id}" data-catchment-slug="${r.slug}" data-catchment-name="${r.name}"
-        role="button" tabindex="0" aria-label="${r.name} catchment" />`
+        role="button" tabindex="0" aria-label="${r.name} catchment${r.regionName ? `, ${r.regionName} ${r.regionKind || ""}` : ""}"><title>${r.name}${r.regionName ? ` · ${r.regionName} ${r.regionKind || ""}` : ""}</title></path>`
     )
     .join("");
 
-  const communityDots = showRegions
-    ? (model.communities || [])
-        .filter((c) => c.x != null)
-        .map((c) => `<circle class="hub-geo-map__community-dot" cx="${c.x}" cy="${c.y}" r="2.6" data-catchment-id="${c.catchmentId}" aria-hidden="true" />`)
+  const regionBorders = realAreas
+    ? (model.regionBorders || [])
+        .map((b) => `<path class="hub-geo-map__region-border" d="${b.d}" aria-hidden="true" />`)
         .join("")
     : "";
 
@@ -179,8 +183,7 @@ export function renderHubGeoMap(model, { variant = "full", mapId = "hub-geo-map"
       aria-label="${model.mode === "catchment" ? `Map of ${model.catchmentName} communities` : `Map of ${model.countryName} catchments`}">
       ${showRegions ? `<defs><clipPath id="${clipId}"><path d="${model.countryPath}" /></clipPath></defs>` : ""}
       ${model.countryPath ? `<path class="hub-geo-map__country" d="${model.countryPath}" />` : ""}
-      <g class="hub-geo-map__zones"${showRegions ? ` clip-path="url(#${clipId})"` : ""}>${zones}</g>
-      ${showRegions ? `<g class="hub-geo-map__dots">${communityDots}</g>` : ""}
+      <g class="hub-geo-map__zones"${showRegions ? ` clip-path="url(#${clipId})"` : ""}>${zones}${regionBorders}</g>
       <g class="hub-geo-map__anchors">${catchmentMarkers}${communityMarkers}</g>
       <g class="hub-geo-map__labels hub-geo-map__labels--catchments">${catchmentLabels}</g>
       <g class="hub-geo-map__labels hub-geo-map__labels--communities">${communityLabels}</g>
@@ -228,7 +231,7 @@ export function renderHubGeoMap(model, { variant = "full", mapId = "hub-geo-map"
     ? `<ul class="hub-geo-map__legend" aria-label="Map key">
         <li><span class="hub-geo-map__key hub-geo-map__key--region"></span>Catchment area</li>
         <li><span class="hub-geo-map__key hub-geo-map__key--catchment"></span>Catchment centre</li>
-        <li><span class="hub-geo-map__key hub-geo-map__key--community"></span>Community</li>
+        ${realAreas ? `<li class="hub-geo-map__credit">Boundaries: geoBoundaries</li>` : ""}
       </ul>`
     : "";
 
@@ -326,9 +329,6 @@ export function bindHubGeoMap(root, { countrySlug, catchmentSlug, onCatchmentNav
       });
       svg.querySelectorAll(".hub-geo-map__catchment-anchor, .hub-geo-map__catchment-label").forEach((el) => {
         el.classList.toggle("is-selected", el.dataset.entityId === id);
-      });
-      svg.querySelectorAll(".hub-geo-map__community-dot").forEach((el) => {
-        el.classList.toggle("is-highlighted", id != null && el.dataset.catchmentId === id);
       });
       svg.classList.toggle("has-focus", id != null);
     };

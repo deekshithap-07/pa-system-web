@@ -1,4 +1,4 @@
-import { attachGeoPoint } from "./geo-project.js";
+import { attachGeoPoint, latLngToSvg } from "./geo-project.js";
 import { buildCatchmentZonesFromBbox, projectPathD } from "./catchment-path-project.js";
 import { getCommunitiesByCatchment } from "../../utils/data.js";
 
@@ -99,9 +99,78 @@ export function buildCommunityZonesFromPoints(communities = [], viewBoxString = 
   }));
 }
 
-export function buildCountryGeoMapModel({ country, catchments, communities, catchmentMap, mapPaths, geoLocations }) {
+function projectRing(ring) {
+  return ring.map(([lng, lat]) => {
+    const p = latLngToSvg(lng, lat);
+    return [p.x, p.y];
+  });
+}
+
+function ringsToPath(rings) {
+  return rings
+    .filter((r) => r.length >= 3)
+    .map((r) => `M${r.map((p) => `${p[0].toFixed(2)},${p[1].toFixed(2)}`).join(" L")} Z`)
+    .join(" ");
+}
+
+/** Keep the part of a ring nearer to `a` than to `b` (split a shared region between two catchments). */
+function clipRingToward(ring, a, b) {
+  const nx = b[0] - a[0];
+  const ny = b[1] - a[1];
+  const c = (b[0] * b[0] + b[1] * b[1] - a[0] * a[0] - a[1] * a[1]) / 2;
+  const inside = (p) => p[0] * nx + p[1] * ny <= c;
+  const out = [];
+  for (let i = 0; i < ring.length; i++) {
+    const cur = ring[i];
+    const prev = ring[(i + ring.length - 1) % ring.length];
+    if (inside(cur) !== inside(prev)) {
+      const dx = cur[0] - prev[0];
+      const dy = cur[1] - prev[1];
+      const t = (c - prev[0] * nx - prev[1] * ny) / (dx * nx + dy * ny);
+      out.push([prev[0] + dx * t, prev[1] + dy * t]);
+    }
+    if (inside(cur)) out.push(cur);
+  }
+  return out;
+}
+
+/** Real admin-region outlines (geoBoundaries) for each catchment, split where regions are shared. */
+function buildCatchmentAreas(country, geoCatchments, regionOutlines) {
+  const byCatchment = regionOutlines?.catchments || {};
+  const regions = regionOutlines?.regions || {};
+  const groups = new Map();
+  geoCatchments.forEach((ct) => {
+    const key = byCatchment[ct.id];
+    if (!key || !regions[key] || ct.x == null) return;
+    if (!groups.has(key)) groups.set(key, []);
+    groups.get(key).push(ct);
+  });
+
+  const areas = [];
+  const borders = [];
+  groups.forEach((members, key) => {
+    const region = regions[key];
+    const rings = region.rings.map(projectRing);
+    borders.push({ key, name: region.name, kind: region.kind, d: ringsToPath(rings) });
+    members.forEach((ct) => {
+      let parts = rings;
+      members.forEach((other) => {
+        if (other === ct) return;
+        parts = parts.map((r) => clipRingToward(r, [ct.x, ct.y], [other.x, other.y]));
+      });
+      const d = ringsToPath(parts);
+      if (d) areas.push({ id: ct.id, slug: ct.slug, name: ct.name, regionName: region.name, regionKind: region.kind, d });
+    });
+  });
+  return { areas, borders };
+}
+
+export function buildCountryGeoMapModel({ country, catchments, communities, catchmentMap, mapPaths, geoLocations, regionOutlines }) {
   const iso = country.isoCode;
-  const countryPath = mapPaths?.paths?.[iso] || "";
+  const outlineRings = regionOutlines?.countries?.[country.id];
+  const countryPath = outlineRings?.length
+    ? ringsToPath(outlineRings.map(projectRing))
+    : mapPaths?.paths?.[iso] || "";
   const countryBbox = pathBBox(countryPath);
   const geoCatchments = enrichCatchments(catchments, communities, geoLocations);
 
@@ -126,12 +195,15 @@ export function buildCountryGeoMapModel({ country, catchments, communities, catc
   ];
 
   const viewBox = expandViewBox(countryBbox, points, 0.14);
+  const { areas, borders } = buildCatchmentAreas(country, geoCatchments, regionOutlines);
 
   return {
     mode: "country",
     countryName: country.name,
     countryPath,
     viewBox: viewBox.string,
+    catchmentAreas: areas,
+    regionBorders: borders,
     catchmentZones: zones,
     catchments: geoCatchments,
     communities: allCommunities,

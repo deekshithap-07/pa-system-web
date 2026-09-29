@@ -1,5 +1,5 @@
 /**
- * Knowledge Hub ? premium digital library (PA brand).
+ * Knowledge Hub — premium digital library (PA brand).
  * Content/data/routes/filters preserved; presentation only.
  */
 
@@ -81,7 +81,7 @@ function itemMeta(item, countriesData) {
     if (name) bits.push(name);
   }
   if (item.format) bits.push(item.format);
-  return bits.filter(Boolean).join(" ? ");
+  return bits.filter(Boolean).join(" · ");
 }
 
 function actionLabel(item) {
@@ -104,7 +104,7 @@ function collectItems(data) {
       summary: "Network indicators, country progress, and field evidence in one place.",
       year: "2024",
       dateLabel: "15 Apr 2025",
-      href: "#/scorecard",
+      href: "#/scorecard#id-indicators",
       typeLabel: "Reports",
     },
     {
@@ -113,7 +113,7 @@ function collectItems(data) {
       summary: "Ongoing field reports from Kenya, Ethiopia, Malawi, and Zambia.",
       year: "2025",
       dateLabel: "Ongoing",
-      href: "#/field-reports",
+      href: "#/field-reports#reports",
       typeLabel: "Reports",
     },
     ...reportsRaw.map((r) => ({
@@ -123,7 +123,8 @@ function collectItems(data) {
       year: r.period || r.year,
       dateLabel: r.period || r.year,
       countryId: (r.countryIds || [])[0] || "",
-      href: "#/field-reports",
+      href: `#/field-reports#report-${r.id}`,
+      cta: "Read summary",
       typeLabel: "Reports",
     })),
   ];
@@ -164,8 +165,16 @@ function bagByType(bag) {
   };
 }
 
-function renderHero(hero = {}) {
-  const image = hero.image || "assets/field-reports/cover.jpg";
+function renderHero(hero = {}, collections = [], counts = {}) {
+  const image = hero.image || "assets/knowledge-hub/hero.jpg";
+  const jumps = collections
+    .map(
+      (c) => `<a class="kh-hero__jump" href="#kh-${c.id}">
+        <span>${c.label || c.title}</span>
+        ${counts[c.id] ? `<em>${counts[c.id]}</em>` : ""}
+      </a>`
+    )
+    .join("");
   return `
     <header class="kh-hero" data-kh-section="hero">
       <div class="kh-hero__media" aria-hidden="true">
@@ -187,6 +196,7 @@ function renderHero(hero = {}) {
           <p class="kh-hero__lead" data-kh-hero-line>${
             hero.lead || "PA as a source of knowledge, learning and evidence."
           }</p>
+          ${jumps ? `<nav class="kh-hero__jumps" aria-label="Jump to a collection" data-kh-hero-line>${jumps}</nav>` : ""}
         </div>
       </div>
     </header>`;
@@ -210,7 +220,7 @@ function renderExplore(collections = [], counts = {}) {
           <span class="kh-index__desc">${c.description || ""}</span>
           <span class="kh-index__count">${countLabel}</span>
         </span>
-        <span class="kh-index__go" aria-hidden="true">?</span>
+        <span class="kh-index__go" aria-hidden="true">→</span>
       </a>`;
     })
     .join("");
@@ -253,7 +263,7 @@ function renderSearch(lib = {}, collections = [], countries = [], programs = [])
           <label class="kh-tools__search">
             <span class="sr-only">Search</span>
             <input type="search" id="kh-search-input" placeholder="${
-              lib.searchPlaceholder || "Search reports, guides, videos?"
+              lib.searchPlaceholder || "Search reports, guides, videos…"
             }" autocomplete="off">
           </label>
           <label class="kh-tools__filter">
@@ -288,7 +298,7 @@ function renderFeatured(featured = [], countriesData) {
     .map((item, i) => {
       const flip = i % 2 === 1 ? " kh-feature--flip" : "";
       const dominant = i === 0 ? " kh-feature--dominant" : "";
-      const meta = [item.subtitle, item.theme].filter(Boolean).join(" ? ");
+      const meta = item.subtitle || "";
       return `<article class="kh-feature${flip}${dominant}" data-kh-feature data-kh-reveal>
         <div class="kh-feature__mark" aria-hidden="true">
           <span class="kh-feature__doc"></span>
@@ -302,7 +312,7 @@ function renderFeatured(featured = [], countriesData) {
               ? `<p class="kh-feature__excerpt">${item.description || item.summary}</p>`
               : ""
           }
-          <a class="kh-feature__cta" ${linkAttrs(item)}>${actionLabel(item)} <span aria-hidden="true">?</span></a>
+          <a class="kh-feature__cta" ${linkAttrs(item)}>${actionLabel(item)} <span aria-hidden="true">→</span></a>
         </div>
       </article>`;
     })
@@ -340,7 +350,7 @@ function renderResourceRow(item, countriesData, index, type) {
       }
     </span>
     <span class="kh-row__action">${actionLabel(item)}</span>
-    <span class="kh-row__go" aria-hidden="true">?</span>
+    <span class="kh-row__go" aria-hidden="true">→</span>
   </a>`;
 }
 
@@ -356,7 +366,7 @@ function renderArchiveSection(cfg, collection, items, countriesData) {
     ? `<div class="kh-archive" data-kh-stagger>${items
         .map((item, i) => renderResourceRow(item, countriesData, i, cfg.type))
         .join("")}</div>`
-    : `<p class="kh-empty">No ${eyebrow.toLowerCase()} published here yet ? check back soon.</p>`;
+    : `<p class="kh-empty">No ${eyebrow.toLowerCase()} published here yet — check back soon.</p>`;
 
   return `
     <section class="kh-band kh-band--${cfg.skin}" id="${cfg.id}" data-kh-section="${cfg.type}" aria-labelledby="${cfg.id}-title">
@@ -432,10 +442,10 @@ function renderVideos(videos = [], socialLinks = [], collection = {}) {
           items
             ? `<div class="kh-media-mosaic" data-kh-stagger>${items}</div>`
             : `<div class="kh-media-blank" data-kh-reveal>
-                <p>No videos published here yet ? check back soon.</p>
+                <p>No videos published here yet — check back soon.</p>
                 ${
                   yt
-                    ? `<a class="kh-media-blank__link" href="${yt.href}" target="_blank" rel="noopener noreferrer">${yt.label} ?</a>`
+                    ? `<a class="kh-media-blank__link" href="${yt.href}" target="_blank" rel="noopener noreferrer">Watch on ${yt.label} ↗</a>`
                     : ""
                 }
               </div>`
@@ -449,7 +459,7 @@ function renderClosing(hero = {}, featured = []) {
     .slice(0, 2)
     .map(
       (f) =>
-        `<a class="kh-close__link" ${linkAttrs(f)}>${f.cta || f.title} <span aria-hidden="true">?</span></a>`
+        `<a class="kh-close__link" ${linkAttrs(f)}>${f.cta || f.title} <span aria-hidden="true">→</span></a>`
     )
     .join("");
 
@@ -478,7 +488,7 @@ export function renderKnowledgeHubPage(data) {
     ...(hub.hero || {}),
     titleHtml: hub.hero?.titleHtml || "<span>Knowledge</span> <em>Hub.</em>",
     lead: hub.hero?.lead || "PA as a source of knowledge, learning and evidence.",
-    image: hub.hero?.image || "assets/field-reports/cover.jpg",
+    image: hub.hero?.image || "assets/knowledge-hub/hero.jpg",
   };
   const lib = hub.library || {};
   const collections = hub.collections || [];
@@ -494,7 +504,7 @@ export function renderKnowledgeHubPage(data) {
 
   return `
     <div class="kh-page" data-resources-hub data-knowledge-hub>
-      ${renderHero(hero)}
+      ${renderHero(hero, collections, counts)}
       ${renderExplore(collections, counts)}
       ${renderSearch(lib, collections, countries, programs)}
       ${renderFeatured(featured, data.countries)}

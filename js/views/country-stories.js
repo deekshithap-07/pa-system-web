@@ -1,12 +1,8 @@
 import { buildCountryHubPayload } from "../utils/country-hub-data.js";
 import { storiesForCountry, getPaCountries } from "../utils/work-locations.js";
 
-function storyImage(story, hub) {
-  return hub?.heroStoryImages?.[story.id] || story.image;
-}
-
-function renderStoryCard(story, hub) {
-  const img = storyImage(story, hub);
+function renderStoryCard(story) {
+  const img = story.image || "";
   const media = img
     ? `<span class="cs-card__media"><img class="cs-card__img" src="${img}" alt="" loading="lazy"><span class="cs-card__wash"></span></span>`
     : `<span class="cs-card__media cs-card__media--empty" aria-hidden="true"></span>`;
@@ -31,7 +27,7 @@ export function renderCountryStoriesPage(slug, data) {
   const heroImg = stories[0] ? storyImage(stories[0], hub) : "";
 
   const grid = stories.length
-    ? `<div class="cs-grid">${stories.map((s) => renderStoryCard(s, hub)).join("")}</div>`
+    ? `<div class="cs-grid">${stories.map((s) => renderStoryCard(s)).join("")}</div>`
     : `<p class="cs-empty">Stories from ${country.name} will appear here as they are published.</p>`;
 
   const heroStyle = heroImg ? `style="--cs-hero-image:url('${heroImg}')"` : "";

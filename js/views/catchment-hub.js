@@ -1,31 +1,32 @@
-import { buildCatchmentHubPayload } from "../utils/catchment-hub-data.js";
 import {
-  renderCatchmentOutcomes,
-  mountCatchmentOutcomes,
-  destroyCatchmentOutcomes,
-} from "../components/catchment-hub/CatchmentOutcomesPage.js";
-import {
-  mountCatchmentHubAnimations,
-  destroyCatchmentHubAnimations,
-} from "../components/catchment-hub/catchment-hub-animations.js";
+  renderCatchmentBoard,
+  mountCatchmentBoard,
+  destroyCatchmentBoard,
+} from "../components/catchment-hub/CatchmentBoardPage.js";
 
 export function renderCatchmentHub(countrySlug, catchmentSlug, data) {
-  const hub = buildCatchmentHubPayload(countrySlug, catchmentSlug, data);
-  if (!hub) {
+  const result = renderCatchmentBoard(countrySlug, catchmentSlug, data);
+  if (!result) {
     return {
-      html: `<div class="container static-page"><h1>Nearby group not found</h1><p><a href="#/country/${countrySlug}" data-link>Back to country</a></p></div>`,
+      html: `<div class="container static-page"><h1>Catchment not found</h1><p><a href="#/country/${countrySlug}" data-link>Back to country</a></p></div>`,
     };
   }
 
-  return { html: renderCatchmentOutcomes(hub), hub };
+  return {
+    html: result.html,
+    hub: {
+      model: result.model,
+      selected: result.selected,
+      catchmentName: result.selected.name,
+      countryName: result.model.country.name,
+    },
+  };
 }
 
 export function mountCatchmentHub(root, hub) {
-  mountCatchmentOutcomes(root, hub);
-  mountCatchmentHubAnimations(root);
+  mountCatchmentBoard(root, hub);
 }
 
 export function destroyCatchmentHub() {
-  destroyCatchmentHubAnimations();
-  destroyCatchmentOutcomes();
+  destroyCatchmentBoard();
 }

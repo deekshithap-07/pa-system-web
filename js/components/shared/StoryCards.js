@@ -45,13 +45,9 @@ function renderStoryMetricsPanel(story, variant = "card") {
   </div>`;
 }
 
+/** Original field photo only — story cards never fall back to generated artwork. */
 function storyImageUrl(story) {
-  return (
-    story.image ||
-    story.photo ||
-    story.heroImage ||
-    "assets/country-heroes/kenya-hero-dams.jpg"
-  );
+  return story.image || story.photo || "";
 }
 
 function renderStoryCard(story, communityName) {
@@ -67,7 +63,7 @@ function renderStoryCard(story, communityName) {
     <div class="ch-story-card__layout">
       <div class="ch-story-card__media">
         <div class="ch-story-card__image${story.image ? "" : " ch-story-card__image--fallback"}">
-          <img src="${image}" alt="${alt}" loading="lazy" />
+          ${image ? `<img src="${image}" alt="${alt}" loading="lazy" />` : ""}
         </div>
       </div>
       <div class="ch-story-card__main">

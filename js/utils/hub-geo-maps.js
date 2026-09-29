@@ -18,6 +18,7 @@ export function attachCountryHubGeoMap(hub, data) {
     catchmentMap: hub.catchmentMap,
     mapPaths: data.mapPaths,
     geoLocations: data.geoLocations,
+    regionOutlines: data.regionOutlines,
   });
 
   return hub;
@@ -37,6 +38,7 @@ export function attachCatchmentHubGeoMaps(hub, data) {
     catchmentMap,
     mapPaths: data.mapPaths,
     geoLocations: data.geoLocations,
+    regionOutlines: data.regionOutlines,
   });
 
   hub.geoMap = buildCatchmentGeoMapModel({

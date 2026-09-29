@@ -1,0 +1,19 @@
+{
+  "note": "Only content confirmed against a published Possibilities Africa source belongs here. Every entry needs a sourceUrl.",
+  "checkedOn": "2026-09-29",
+  "areaStories": [
+    {
+      "storyId": "story-kenya-dams",
+      "catchmentIds": ["kwale_south", "kwale_west"],
+      "area": "Kwale County",
+      "sourceUrl": "https://africa.possibilitiesafrica.org/our-transformational-journey-in-kenya/"
+    },
+    {
+      "storyId": "story-liwedi",
+      "catchmentIds": ["mw_kapiri"],
+      "area": "Lilongwe District",
+      "sourceUrl": "https://africa.possibilitiesafrica.org/liwedi-impact-highlights/"
+    }
+  ],
+  "communityOutcomes": {}
+}

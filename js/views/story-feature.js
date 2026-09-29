@@ -1,6 +1,4 @@
 import { getStoryBySlug, getCountryForStory } from "../utils/work-locations.js";
-import { buildCountryHubPayload } from "../utils/country-hub-data.js";
-
 function shorten(text, max = 150) {
   const t = String(text || "").trim();
   if (!t) return "";
@@ -33,8 +31,7 @@ export function renderStoryFeature(slug, data) {
   const story = getStoryBySlug(data, slug);
   if (!story) return `<div class="container static-page"><h1>Story not found</h1></div>`;
   const country = getCountryForStory(data, story);
-  const hub = country ? buildCountryHubPayload(country.slug, data) : null;
-  const heroImg = hub?.heroStoryImages?.[story.id] || story.image;
+  const heroImg = story.image || "";
   const paras = (story.body || [story.excerpt])
     .map((p, i) => `<p class="${i === 0 ? "wb-feature__lead" : ""}">${p}</p>`)
     .join("");

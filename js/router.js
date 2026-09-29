@@ -37,6 +37,8 @@ let appData = null;
 let lastRouteKey = null;
 let linksBound = false;
 let pendingAnchor = null;
+/** In-site routes seen this session; a page-back link only uses history once there is somewhere to return to. */
+let routeDepth = 0;
 
 export function initRouter(data) {
   appData = data;
@@ -139,7 +141,9 @@ function scrollToAnchor(anchor) {
   if (!anchor) return;
   const run = () => {
     const el = document.getElementById(anchor);
-    if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+    if (!el) return;
+    if (el.tagName === "DETAILS") el.open = true;
+    el.scrollIntoView({ behavior: "smooth", block: "start" });
   };
   requestAnimationFrame(() => requestAnimationFrame(() => setTimeout(run, 80)));
 }
@@ -169,6 +173,7 @@ function handleRoute() {
   const { restore } = resolveNavigationIntent(routeKey);
 
   lastRouteKey = routeKey;
+  routeDepth += 1;
 
   const app = document.getElementById("app");
   destroyHome();
@@ -380,6 +385,13 @@ function handleRoute() {
 
 function bindGlobalLinks() {
   document.addEventListener("click", (e) => {
+    const pageBack = e.target.closest("[data-page-back]");
+    if (pageBack) {
+      e.preventDefault();
+      if (routeDepth > 1) history.back();
+      else navigate((pageBack.getAttribute("href") || "#/").replace(/^#\/?/, "") || "/", { isBack: true });
+      return;
+    }
     const link = e.target.closest("[data-link]");
     if (link) {
       e.preventDefault();

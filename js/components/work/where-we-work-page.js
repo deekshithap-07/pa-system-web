@@ -287,7 +287,7 @@ function renderFeatured(featured) {
 }
 
 function flowCountries(data) {
-  return getPaCountries(data).filter((c) => getCatchmentsByCountry(data.catchments, c.id).length);
+  return getPaCountries(data);
 }
 
 function renderFlowTree(data, slug) {
@@ -319,6 +319,24 @@ function renderFlowTree(data, slug) {
       </li>`;
     })
     .join("");
+
+  if (!catchments.length) {
+    const reported = countryStats(data, country.slug).communities;
+    return `
+    <div class="www-flow__tree www-flow__tree--pending">
+      <div class="www-flow__root">
+        <span class="www-flow__root-label">Country</span>
+        <strong>${country.name}</strong>
+        ${reported ? `<span class="www-flow__root-meta">${formatNumber(reported)} ${reported === 1 ? "community" : "communities"} reported</span>` : ""}
+        <a class="www-flow__root-cta" href="#/country/${country.slug}" data-link>Explore ${country.name} →</a>
+      </div>
+      <div class="www-flow__pending">
+        <span class="www-flow__pending-dots" aria-hidden="true"><i></i><i></i><i></i></span>
+        <p>Catchment and community mapping for ${country.name} will appear here as PA's network data grows.</p>
+        <a href="#/country/${country.slug}" data-link>See what PA is doing in ${country.name} →</a>
+      </div>
+    </div>`;
+  }
 
   return `
     <div class="www-flow__tree">
@@ -503,10 +521,12 @@ export function mountWhereWeWorkPage(data) {
         el.setAttribute("aria-pressed", on ? "true" : "false");
       });
       if (sideEl) {
-        sideEl.innerHTML = renderSideCard(countryStats(data, slug));
+        const stats = countryStats(data, slug);
+        sideEl.innerHTML = renderSideCard(stats);
         sideEl.classList.remove("is-swap");
         void sideEl.offsetWidth;
         sideEl.classList.add("is-swap");
+        calloutProfile(sideEl, stats.name);
       }
     });
   });
@@ -538,6 +558,44 @@ export function mountWhereWeWorkPage(data) {
       </div>`;
     }
   });
+}
+
+let calloutTimer = null;
+let calloutHideTimer = null;
+
+/** Bring the side card into view and point at its profile button. */
+function calloutProfile(sideEl, name) {
+  const cta = sideEl.querySelector(".www-side__cta");
+  if (!cta) return;
+  const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const headerH = document.getElementById("site-header")?.offsetHeight || 80;
+  const rect = sideEl.getBoundingClientRect();
+  const needsScroll = rect.top < headerH || rect.bottom > window.innerHeight;
+  if (needsScroll) {
+    window.scrollTo({ top: window.scrollY + rect.top - headerH - 16, behavior: reduced ? "auto" : "smooth" });
+  }
+
+  clearTimeout(calloutTimer);
+  sideEl.querySelector(".www-side__hint")?.remove();
+  const hint = document.createElement("span");
+  hint.className = "www-side__hint";
+  hint.setAttribute("role", "status");
+  hint.textContent = `Click here to see ${name} in detail`;
+  cta.insertAdjacentElement("beforebegin", hint);
+
+  const start = () => {
+    cta.classList.remove("is-callout");
+    void cta.offsetWidth;
+    cta.classList.add("is-callout");
+    hint.classList.add("is-on");
+  };
+  calloutTimer = setTimeout(start, needsScroll && !reduced ? 450 : 60);
+  clearTimeout(calloutHideTimer);
+  calloutHideTimer = setTimeout(() => {
+    hint.classList.remove("is-on");
+    cta.classList.remove("is-callout");
+    setTimeout(() => hint.remove(), 300);
+  }, 4200);
 }
 
 function bindTales(page) {

@@ -46,8 +46,13 @@ function parseDateParts(item = {}) {
   return { year, day, month, label };
 }
 
-function renderHero(hero = {}) {
-  const image = hero.image || "assets/field-reports/hero.jpg";
+function renderHero(hero = {}, counts = {}) {
+  const image = hero.image || "assets/news/hero.jpg";
+  const jumps = JUMP.filter((j) => counts[j.id])
+    .map(
+      (j) => `<a class="nu-hero__jump" href="#${j.id}"><span>${j.label}</span><em>${counts[j.id]}</em></a>`
+    )
+    .join("");
   return `
     <header class="nu-hero" data-nu-section="hero">
       <div class="nu-hero__media" aria-hidden="true">
@@ -70,6 +75,7 @@ function renderHero(hero = {}) {
             hero.lead ||
             "News, country notes, events, announcements, and milestones across the network."
           }</p>
+          ${jumps ? `<nav class="nu-hero__jumps" aria-label="Jump to a section" data-nu-hero-line>${jumps}</nav>` : ""}
         </div>
       </div>
     </header>`;
@@ -98,7 +104,7 @@ function renderNews(items = []) {
     ? items
         .map((item, i) => {
           const parts = parseDateParts(item);
-          const flip = i % 2 === 1 ? " nu-entry--flip" : "";
+          const flip = `${i % 2 === 1 ? " nu-entry--flip" : ""} nu-entry--t${i % 3}`;
           return `
       <a class="nu-entry${flip}" ${linkAttrs(item.href || "#/news")} data-nu-stagger-item data-nu-entry style="--i:${i}">
         <span class="nu-entry__date" aria-hidden="true">
@@ -305,9 +311,16 @@ function renderClosing(hero = {}) {
 
 export function renderNewsUpdatesPage(data) {
   const nu = data.newsUpdates || {};
+  const counts = {
+    "nu-news": (nu.news || []).length,
+    "nu-countries": (nu.countryUpdates || []).length,
+    "nu-events": (nu.events || []).length,
+    "nu-announce": (nu.announcements || []).length,
+    "nu-milestones": (nu.milestones || []).length,
+  };
   return `
     <div class="nu-page" data-news-page>
-      ${renderHero(nu.hero)}
+      ${renderHero(nu.hero, counts)}
       ${renderNav()}
       ${renderNews(nu.news)}
       ${renderCountryUpdates(nu.countryUpdates)}

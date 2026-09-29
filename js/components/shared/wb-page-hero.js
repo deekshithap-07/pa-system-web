@@ -94,12 +94,14 @@ function renderChapterNext(next) {
 }
 
 /** Explicit back to the parent page (not an in-page jump). */
-export function renderPageBack({ href, label } = {}) {
+/** `history: true` returns to the previous in-site page; `href` is used only when there is none. */
+export function renderPageBack({ href, label, history = false } = {}) {
   if (!href || !label) return "";
+  const attr = history ? "data-page-back" : "data-link";
   return `
     <div class="page-back">
       <div class="container">
-        <a href="${href}" class="page-back__link" data-link>← ${label}</a>
+        <a href="${href}" class="page-back__link" ${attr}>← ${label}</a>
       </div>
     </div>`;
 }

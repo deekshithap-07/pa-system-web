@@ -258,9 +258,16 @@
 }
 
 .cc-card--ivory {
-  --cc-bg: #fff;
+  --cc-bg: #fffdf8;
+  --cc-accent: var(--pa-gold-ochre);
+  border-top: 5px solid var(--pa-gold-ochre);
+}
+
+.cc-card--sage {
+  --cc-bg: linear-gradient(150deg, #eef6ea 0%, #d6eacd 100%);
+  --cc-ink: var(--pa-green-dark);
   --cc-accent: var(--pa-green-dark);
-  border-top: 5px solid var(--pa-green);
+  --cc-chip: rgba(255, 255, 255, 0.7);
 }
 
 .cc-card--lead {

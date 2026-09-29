@@ -16,8 +16,9 @@ function storyHref(story) {
   return `#/story/${story.slug}`;
 }
 
-function storyHeroImage(story, hub) {
-  return hub?.heroStoryImages?.[story.id] || story.image;
+/** Story cards always use the original field photo — never generated artwork. */
+function storyHeroImage(story) {
+  return story.image || "";
 }
 
 export function featuredStories(data, hub) {
@@ -37,11 +38,7 @@ function countryCode(hub) {
 
 function heroImage(hub, data) {
   const cover = getCountryCover(data, hub.country?.slug);
-  if (cover?.image) return cover;
-  const firstStoryId = hub.storyIds?.[0];
-  const fromHero = firstStoryId && hub.heroStoryImages?.[firstStoryId];
-  if (fromHero) return { image: fromHero, label: hub.countryName };
-  return { image: "", label: "" };
+  return cover?.image ? cover : { image: "", label: "" };
 }
 
 function presenceLine(hub) {
@@ -90,7 +87,7 @@ export function renderCountryIntro(hub, data) {
           <span class="cp-entry__code">${countryCode(hub)}</span>
           <p class="cp-entry__eyebrow">${hub.heroTagline || "PA Network"}</p>
         </div>
-        <div class="cp-entry__name-wrap">
+        <div class="cp-entry__name-wrap" style="--cp-name-len:${Math.max(4, String(hub.countryName || "").length)}">
           <h1 id="cp-intro-title" class="cp-entry__name" data-cp-entry-name><span>${hub.countryName}</span></h1>
         </div>
         <div class="cp-entry__copy" data-cp-entry-copy>
@@ -101,7 +98,11 @@ export function renderCountryIntro(hub, data) {
             <span><em>Updated</em> ${freshness.lastUpdatedLabel}</span>
           </div>
           <div class="cp-entry__actions">
-            <a class="cp-btn cp-btn--solid" href="#cp-map">See where PA works</a>
+            ${
+              hub.catchments?.length
+                ? `<a class="cp-btn cp-btn--solid" href="#/country/${slug}/catchments" data-link>Catchments &amp; communities →</a>`
+                : `<a class="cp-btn cp-btn--solid" href="#/country/${slug}/data" data-link>${hub.countryName} in numbers →</a>`
+            }
             <a class="cp-btn cp-btn--ghost" href="#/country/${slug}/stories" data-link>Country stories</a>
           </div>
         </div>
@@ -110,7 +111,7 @@ export function renderCountryIntro(hub, data) {
 }
 
 /* 01b — At a glance (headline figures, counted in place) */
-const GLANCE_IDS = ["communities", "catchments", "pastors", "shalom", "ppp", "volunteers", "households", "programs"];
+const GLANCE_IDS = ["communities", "catchments", "pastors", "shalom", "ppp", "households", "programs"];
 
 export function renderCountryGlance(hub) {
   const kpis = (hub.kpis || [])
@@ -141,6 +142,15 @@ export function renderCountryGlance(hub) {
     </section>`;
 }
 
+function regionLabel(hub, catchment) {
+  const area = hub.geoMap?.catchmentAreas?.find((a) => a.id === catchment.id);
+  if (area?.regionName) {
+    const kind = area.regionKind ? ` ${area.regionKind.charAt(0).toUpperCase()}${area.regionKind.slice(1)}` : "";
+    return `${area.regionName}${kind}`;
+  }
+  return catchment.region && catchment.region !== hub.countryName ? catchment.region : hub.countryName;
+}
+
 /* 02 — Map + location index (geography only — no aggregate counts) */
 export function renderCountryMapPresence(hub) {
   const catchments = hub.catchments || [];
@@ -155,7 +165,7 @@ export function renderCountryMapPresence(hub) {
              data-cp-loc="${c.id}" data-cp-loc-slug="${c.slug}" data-cp-reveal style="--i:${i}">
             <span class="cp-geo__n">${String(i + 1).padStart(2, "0")}</span>
             <strong class="cp-geo__name">${c.name}</strong>
-            <span class="cp-geo__region">${c.region || "Nearby group"}</span>
+            <span class="cp-geo__region">${regionLabel(hub, c)}</span>
           </a>
         </li>`
         )
@@ -298,7 +308,7 @@ export function renderCountryFeaturedStories(hub, stories = []) {
   }
 
   const featured = list[0];
-  const src = storyHeroImage(featured, hub);
+  const src = storyHeroImage(featured);
 
   return `
     <section class="cp-story" data-cp-section="stories" aria-labelledby="cp-stories-title">
@@ -506,22 +516,46 @@ export function bindCountryProgrammes(root) {
 }
 
 export function bindCountryMap(root, countrySlug) {
-  bindHubGeoMap(root, { countrySlug });
+  let picked = null;
+  const idForSlug = (slug) => root.querySelector(`[data-cp-loc-slug="${slug}"]`)?.dataset.cpLoc || null;
+
+  bindHubGeoMap(root, {
+    countrySlug,
+    onCatchmentNavigate: (slug) => {
+      const id = idForSlug(slug);
+      if (id && picked === id) {
+        location.hash = `#/catchment/${countrySlug}/${slug}`;
+        return;
+      }
+      picked = id;
+      highlight(id);
+      markPicked(id);
+    },
+  });
 
   const index = root.querySelector("[data-cp-loc-index]");
   const mapRoot = root.querySelector("[data-cp-map-root] [data-hub-geo-map]");
   if (!index || !mapRoot) return;
 
+  const markPicked = (id) => {
+    index.querySelectorAll("[data-cp-loc]").forEach((item) => {
+      const on = id != null && item.dataset.cpLoc === id;
+      item.classList.toggle("is-picked", on);
+      if (on) item.scrollIntoView({ block: "nearest", behavior: "smooth" });
+    });
+  };
+
   const svg = mapRoot.querySelector(".hub-geo-map__svg");
+  svg?.querySelectorAll(".hub-geo-map__zone--region, .hub-geo-map__catchment-anchor, .hub-geo-map__catchment-label").forEach((el) => {
+    el.addEventListener("mouseleave", () => requestAnimationFrame(() => highlight(picked)));
+  });
+
   const highlight = (id) => {
     if (!svg) return;
     svg.querySelectorAll(".hub-geo-map__catchment-anchor, .hub-geo-map__catchment-label").forEach((el) => {
       el.classList.toggle("is-selected", id != null && el.dataset.entityId === id);
     });
     svg.querySelectorAll(".hub-geo-map__zone--region").forEach((el) => {
-      el.classList.toggle("is-highlighted", id != null && el.dataset.catchmentId === id);
-    });
-    svg.querySelectorAll(".hub-geo-map__community-dot").forEach((el) => {
       el.classList.toggle("is-highlighted", id != null && el.dataset.catchmentId === id);
     });
     svg.classList.toggle("has-focus", id != null);
@@ -535,10 +569,10 @@ export function bindCountryMap(root, countrySlug) {
     });
     item.addEventListener("mouseleave", () => {
       item.classList.remove("is-hot");
-      highlight(null);
+      highlight(picked);
     });
     item.addEventListener("focus", () => highlight(id));
-    item.addEventListener("blur", () => highlight(null));
+    item.addEventListener("blur", () => highlight(picked));
   });
 }
 

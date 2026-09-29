@@ -8,8 +8,32 @@
 
 /* 01 — Hero: brighter photo, gold rail */
 .cp-portal-page .cp-entry {
-  min-height: min(84vh, 38rem);
+  min-height: min(66vh, 31rem);
   background: var(--pa-maroon-deep);
+}
+
+.cp-portal-page .cp-entry__name-wrap {
+  min-width: 0;
+  container-type: inline-size;
+}
+
+.cp-portal-page .cp-entry__name {
+  font-size: min(7.5rem, calc(100cqi / (var(--cp-name-len, 6) * 0.7)));
+  letter-spacing: -0.04em;
+  line-height: 0.9;
+  white-space: nowrap;
+}
+
+.cp-portal-page .cp-entry__lead {
+  font-size: 1rem;
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.cp-portal-page .cp-entry__presence {
+  font-size: 0.85rem;
 }
 
 .cp-portal-page .cp-entry__media img {
@@ -23,7 +47,8 @@
 }
 
 .cp-portal-page .cp-entry__grid {
-  padding-bottom: clamp(5rem, 11vh, 6.5rem);
+  padding-top: clamp(1.75rem, 5vh, 3rem);
+  padding-bottom: clamp(4.5rem, 9vh, 5.5rem);
 }
 
 .cp-portal-page .cp-entry__code {
@@ -161,7 +186,7 @@
 }
 
 .cp-portal-page .cp-geo__item,
-.cp-portal-page .cp-geo__index li:last-child .cp-geo__item {
+.cp-portal-page .cp-geo__index :where(li:last-child) .cp-geo__item {
   grid-template-columns: 2.4rem 1fr;
   align-items: center;
   padding: 0.85rem 1rem;
@@ -189,7 +214,6 @@
 .cp-portal-page .cp-geo__item:hover,
 .cp-portal-page .cp-geo__item:focus-visible,
 .cp-portal-page .cp-geo__item.is-hot {
-  transform: translateX(4px);
   border-color: var(--pa-green);
   background: #fff;
   box-shadow: 0 10px 24px rgba(47, 122, 56, 0.14);
@@ -199,6 +223,63 @@
 .cp-portal-page .cp-geo__item.is-hot .cp-geo__n {
   background: var(--pa-green);
   color: #fff;
+}
+
+.cp-portal-page .cp-geo__item.is-picked {
+  border-color: var(--pa-maroon);
+  background: var(--pa-maroon);
+  box-shadow: 0 12px 26px rgba(92, 36, 40, 0.25);
+}
+
+.cp-portal-page .cp-geo__item.is-picked .cp-geo__name {
+  color: #fff;
+}
+
+.cp-portal-page .cp-geo__item.is-picked .cp-geo__region {
+  color: var(--pa-gold-soft);
+}
+
+.cp-portal-page .cp-geo__item.is-picked .cp-geo__n {
+  background: var(--pa-gold);
+  color: var(--pa-maroon-deep);
+}
+
+/* Country map: no pulsing markers — the chosen catchment's name is highlighted instead */
+.cp-geo .hub-geo-map__catchment-anchor,
+.cp-geo .hub-geo-map__catchment-anchor.is-selected,
+.cp-geo.is-ambient .hub-geo-map__catchment-anchor.is-selected {
+  animation: none !important;
+  filter: none !important;
+}
+
+.cp-geo .hub-geo-map__catchment-label {
+  cursor: pointer;
+}
+
+.cp-geo .hub-geo-map__catchment-label__text {
+  transition: fill 0.2s ease;
+}
+
+.cp-geo .hub-geo-map__catchment-label.is-selected {
+  filter: none !important;
+}
+
+.cp-geo .hub-geo-map__catchment-label.is-selected .hub-geo-map__catchment-label__text {
+  fill: var(--pa-maroon);
+  font-weight: 800;
+  paint-order: stroke fill;
+  stroke: var(--pa-gold-soft);
+  stroke-width: 4px;
+  stroke-linejoin: round;
+}
+
+.hub-geo-map__region-border {
+  fill: none;
+  stroke: rgba(42, 16, 20, 0.55);
+  stroke-width: 1.1;
+  stroke-dasharray: none;
+  vector-effect: non-scaling-stroke;
+  pointer-events: none;
 }
 
 .cp-geo__all {
@@ -256,21 +337,6 @@
   stroke-width: 2.4;
 }
 
-.hub-geo-map__community-dot {
-  fill: var(--pa-gold);
-  stroke: rgba(42, 16, 20, 0.35);
-  stroke-width: 0.6;
-  vector-effect: non-scaling-stroke;
-  pointer-events: none;
-  transition: fill 0.2s ease;
-}
-
-.hub-geo-map__community-dot.is-highlighted {
-  fill: var(--pa-gold-soft);
-  stroke: var(--pa-maroon);
-  stroke-width: 1;
-}
-
 .hub-geo-map--regions .hub-geo-map__catchment-anchor {
   fill: #fff;
   stroke: var(--pa-maroon);
@@ -307,6 +373,13 @@
   gap: 0.45rem;
 }
 
+.hub-geo-map__legend .hub-geo-map__credit {
+  margin-top: 0.15rem;
+  font-size: 0.6rem;
+  font-weight: 600;
+  color: var(--pa-muted);
+}
+
 .hub-geo-map__key {
   width: 0.8rem;
   height: 0.8rem;
@@ -322,13 +395,6 @@
 .hub-geo-map__key--catchment {
   background: #fff;
   box-shadow: inset 0 0 0 2px var(--pa-maroon);
-}
-
-.hub-geo-map__key--community {
-  width: 0.55rem;
-  height: 0.55rem;
-  margin-inline: 0.125rem;
-  background: var(--pa-gold);
 }
 
 .hub-geo-map--regions {
@@ -750,6 +816,10 @@
 }
 
 @media (max-width: 640px) {
+  .cp-portal-page .cp-entry__name {
+    font-size: min(4.6rem, calc(100cqi / (var(--cp-name-len, 6) * 0.7)));
+  }
+
   .cp-glance {
     margin-top: -2.5rem;
     background: linear-gradient(180deg, transparent 0 2.5rem, #f3f7f0 2.5rem);

@@ -511,6 +511,118 @@
   color: var(--pa-green-dark);
 }
 
+.cm-page .cm-story__note {
+  margin: 0 0 1.1rem;
+  font-size: 0.85rem;
+  line-height: 1.5;
+  color: rgba(255, 250, 240, 0.72);
+  font-style: italic;
+}
+
+.cm-page .cm-story__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.6rem 1.1rem;
+}
+
+.cm-page .cm-story__source {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--pa-gold);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.cm-page .cm-story__more {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+  gap: 0.9rem;
+  margin: 2rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.cm-page .cm-story__more a {
+  display: grid;
+  gap: 0.3rem;
+  padding: 1rem 1.2rem;
+  border-radius: 1rem;
+  border: 1px solid rgba(245, 215, 138, 0.28);
+  background: rgba(255, 255, 255, 0.06);
+  color: #fffaf0;
+  text-decoration: none;
+  transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+.cm-page .cm-story__more a:hover {
+  background: rgba(245, 215, 138, 0.14);
+  border-color: var(--pa-gold);
+}
+
+.cm-page .cm-story__more span {
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--pa-gold);
+}
+
+/* Verified outcomes: soft gold band between maroon projects and ivory activity */
+.cm-page .cm-outcomes {
+  padding: clamp(3rem, 7vh, 4.5rem) 0;
+  background: linear-gradient(180deg, #fbf0d6 0%, #f6e4bd 100%);
+}
+
+.cm-page .cm-outcomes__list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr));
+  gap: 1rem;
+  margin: 1.8rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.cm-page .cm-outcome {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.9rem;
+  padding: 1.2rem 1.3rem;
+  border-radius: 1rem;
+  background: #fffdf8;
+  box-shadow: 0 12px 28px rgba(92, 36, 40, 0.08);
+}
+
+.cm-page .cm-outcome__n {
+  font-family: var(--font-display, inherit);
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--pa-maroon);
+}
+
+.cm-page .cm-outcome strong {
+  display: block;
+  color: var(--pa-maroon-deep);
+}
+
+.cm-page .cm-outcome p {
+  margin: 0.35rem 0 0;
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+.cm-page .cm-outcome__meta {
+  display: flex;
+  gap: 0.8rem;
+  margin-top: 0.6rem;
+  font-size: 0.78rem;
+}
+
+.cm-page .cm-outcome__meta a {
+  font-weight: 700;
+  color: var(--pa-green-dark);
+}
+
 /* 9 — Media: warm white, tilted polaroids */
 .cm-page .cm-media {
   background: #fffdf8;

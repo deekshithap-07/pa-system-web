@@ -38,16 +38,17 @@
         ]
       }
     ],
-    "heroImage": "assets/field-reports/hero.jpg",
+    "heroImage": "assets/field-reports/hero-pastor.jpg",
     "aboutCover": "assets/field-reports/cover.jpg",
     "relatedCards": [
       { "title": "Our results", "text": "See the numbers reports feed into", "href": "#/scorecard", "imageUrl": "assets/stories/story-ntchisi-health.jpg" },
-      { "title": "Field stories", "text": "People and progress from the network", "href": "#/resources", "imageUrl": "assets/stories/story-tanzania.jpg" },
+      { "title": "Field stories", "text": "People and progress from the network", "href": "#/stories", "imageUrl": "assets/stories/story-tanzania.jpg" },
       { "title": "Where we work", "text": "Browse countries and communities", "href": "#/africa", "imageUrl": "assets/stories/story-zambia-crops.jpg" },
       { "title": "Insight packs", "text": "Short downloads beside the stories", "href": "#/resources/packs", "imageUrl": "assets/stories/story-bungoma-school.jpg" }
     ],
     "relatedLinks": [
-      { "label": "Stories & reports hub", "href": "#/resources" },
+      { "label": "Knowledge Hub", "href": "#/resources" },
+      { "label": "Field stories", "href": "#/stories" },
       { "label": "Our results (scorecard)", "href": "#/scorecard" },
       { "label": "Where we work", "href": "#/africa" },
       { "label": "Insight packs", "href": "#/resources/packs" }
