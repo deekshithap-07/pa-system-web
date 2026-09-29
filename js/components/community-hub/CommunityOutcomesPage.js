@@ -590,7 +590,6 @@ function renderStory(payload, entries) {
           ${areaNote}
           <div class="cm-story__actions">
             <a class="cm-story__cta" href="${href}" data-link>Read story →</a>
-            ${lead.sourceUrl ? `<a class="cm-story__source" href="${lead.sourceUrl}" target="_blank" rel="noopener">Original on possibilitiesafrica.org ↗</a>` : ""}
           </div>
         </div>
       </div>

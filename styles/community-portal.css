@@ -526,14 +526,6 @@
   gap: 0.6rem 1.1rem;
 }
 
-.cm-page .cm-story__source {
-  font-size: 0.82rem;
-  font-weight: 600;
-  color: var(--pa-gold);
-  text-decoration: underline;
-  text-underline-offset: 3px;
-}
-
 .cm-page .cm-story__more {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
