@@ -48,6 +48,8 @@ function locationLine(payload) {
 
 function heroImage(payload) {
   return (
+    payload.community?.heroImage ||
+    payload.catchmentHeroImage ||
     {
       kenya: "assets/community-heroes/kenya.jpg",
       malawi: "assets/community-heroes/malawi.jpg",
@@ -70,6 +72,7 @@ function collectCommunityPpps(payload) {
     seen.add(key);
     items.push({
       name: title,
+      type: entry.type || projectType(title),
       status: entry.status || "Active",
       summary: entry.summary || `Community project underway in ${name}.`,
       date: entry.date || null,
@@ -140,7 +143,15 @@ function stageIndex(stageLabel) {
   const i = JOURNEY_STAGES.findIndex(
     (s) => needle.includes(s.label.toLowerCase()) || needle.includes(s.id)
   );
-  return i < 0 ? 0 : i;
+  return i;
+}
+
+function isInactive(payload) {
+  return /inactive/i.test(`${payload.community.status || ""} ${journeyStage(payload)}`);
+}
+
+function projectType(title = "") {
+  return /\bchips?\b|church[- ]led/i.test(title) ? "CHIP" : "PPP";
 }
 
 function collectMedia(payload, data) {
@@ -273,6 +284,7 @@ function renderJourney(payload) {
   const stage = journeyStage(payload);
   const current = stageIndex(stage);
   const next = JOURNEY_STAGES[Math.min(current + 1, JOURNEY_STAGES.length - 1)];
+  const onJourney = current >= 0;
 
   const steps = [
     `<li class="cm-journey__mark" aria-hidden="true"><span>Start</span></li>`,
@@ -286,10 +298,15 @@ function renderJourney(payload) {
         <em>Month ${s.month}</em>
       </li>`;
     }),
-    current < JOURNEY_STAGES.length - 1
-      ? `<li class="cm-journey__mark cm-journey__mark--next"><span>Next</span><strong>${next.label}</strong></li>`
-      : `<li class="cm-journey__mark"><span>Journey</span><strong>Continuing</strong></li>`,
+    !onJourney
+      ? `<li class="cm-journey__mark"><span>Status</span><strong>${stage}</strong></li>`
+      : current < JOURNEY_STAGES.length - 1
+        ? `<li class="cm-journey__mark cm-journey__mark--next"><span>Next</span><strong>${next.label}</strong></li>`
+        : `<li class="cm-journey__mark"><span>Journey</span><strong>Continuing</strong></li>`,
   ].join("");
+  const nowNote = onJourney
+    ? `Current stage: <strong>${stage}</strong> · Phase ${current + 1} of ${JOURNEY_STAGES.length}`
+    : `Current status: <strong>${stage}</strong> — not currently moving through a journey stage in public reporting.`;
 
   return `
     <section class="cm-journey" data-cm-section="journey" id="cm-journey" aria-labelledby="cm-journey-title">
@@ -298,7 +315,7 @@ function renderJourney(payload) {
           <p class="cm-kicker">Two-year journey</p>
           <h2 id="cm-journey-title" class="cm-sec-title">Where ${payload.community.name} is now</h2>
           <p class="cm-sec-lead">Communities move through awareness, engagement, training, implementation, and multiplication over about two years.</p>
-          <p class="cm-journey__now">Current stage: <strong>${stage}</strong></p>
+          <p class="cm-journey__now">${nowNote}</p>
         </header>
         <ol class="cm-journey__track" data-cm-journey data-cm-rise>${steps}</ol>
       </div>
@@ -314,23 +331,16 @@ function renderGlance(payload) {
   const projects = collectCommunityPpps(payload).length;
   const a = analyticsFor(payload.community, payload.analytics);
 
-  const tiles = [];
-  if (reach.shalom != null) {
-    tiles.push({ label: "Shalom Groups", value: formatNumber(reach.shalom), count: reach.shalom });
-  }
-  if (reach.households != null) {
-    tiles.push({
-      label: "Households",
-      value: formatNumber(reach.households),
-      count: reach.households,
-    });
-  }
+  const figure = (label, n) =>
+    n != null
+      ? { label, value: formatNumber(n), count: n }
+      : { label, value: "—", count: null, note: "Not yet reported" };
+
+  const tiles = [figure("Shalom Groups", reach.shalom), figure("Households", reach.households)];
   const projectCount = projects || (typeof a?.projects === "number" ? a.projects : null);
   if (projectCount != null && projectCount > 0) {
-    tiles.push({ label: "Projects", value: formatNumber(projectCount), count: projectCount });
+    tiles.push({ label: "PPPs & CHIPs", value: formatNumber(projectCount), count: projectCount });
   }
-
-  if (!tiles.length) return "";
 
   return `
     <section class="cm-glance" data-cm-section="glance" id="cm-reach" aria-labelledby="cm-glance-title">
@@ -346,6 +356,7 @@ function renderGlance(payload) {
               (t) => `<div class="cm-glance__item">
                 <strong${t.count != null ? ` data-cm-count="${t.count}"` : ""}>${t.value}</strong>
                 <span>${t.label}</span>
+                ${t.note ? `<em class="cm-glance__note">${t.note}</em>` : ""}
               </div>`
             )
             .join("")}
@@ -368,8 +379,8 @@ function renderProjects(payload) {
         <div class="container">
           <header class="cm-sec-head cm-sec-head--light" data-cm-rise>
             <p class="cm-kicker cm-kicker--light">What is happening here</p>
-            <h2 id="cm-work-title" class="cm-sec-title cm-sec-title--light">Projects in ${place}</h2>
-            <p class="cm-sec-lead cm-sec-lead--light">No public project summaries are listed for ${place} yet. Field teams continue planning water, farming, health, and livelihood work locally.</p>
+            <h2 id="cm-work-title" class="cm-sec-title cm-sec-title--light">PPPs &amp; CHIPs in ${place}</h2>
+            <p class="cm-sec-lead cm-sec-lead--light">No Pastor-Planned Projects (PPPs) or Church-led initiatives (CHIPs) are publicly listed for ${place} yet.</p>
           </header>
         </div>
       </section>`;
@@ -382,7 +393,7 @@ function renderProjects(payload) {
       <li>
         <button type="button" class="cm-work__row${i === 0 ? " is-open" : ""}" data-cm-proj="${i}" aria-expanded="${i === 0 ? "true" : "false"}">
           <span class="cm-work__n">${String(i + 1).padStart(2, "0")}</span>
-          <strong class="cm-work__name">${p.name}</strong>
+          <strong class="cm-work__name"><span class="cm-work__type">${p.type}</span> ${p.name}</strong>
           <span class="cm-work__status">${p.status}${p.date ? ` · ${formatPppDate(p.date)}` : ""}</span>
         </button>
         <div class="cm-work__detail" data-cm-proj-detail="${i}" ${i === 0 ? "" : "hidden"}>
@@ -398,8 +409,8 @@ function renderProjects(payload) {
       <div class="container">
         <header class="cm-sec-head cm-sec-head--light" data-cm-rise>
           <p class="cm-kicker cm-kicker--light">What is happening here</p>
-          <h2 id="cm-work-title" class="cm-sec-title cm-sec-title--light">Projects in ${place}</h2>
-          <p class="cm-sec-lead cm-sec-lead--light">High-level community projects — titles and status only. Budgets, household lists, and operational detail stay internal.</p>
+          <h2 id="cm-work-title" class="cm-sec-title cm-sec-title--light">PPPs &amp; CHIPs in ${place}</h2>
+          <p class="cm-sec-lead cm-sec-lead--light">Pastor-Planned Projects (PPPs) and Church-led initiatives (CHIPs) — titles and status only. Budgets, household lists, and operational detail stay internal.</p>
         </header>
         <ol class="cm-work__index" data-cm-work>${items}</ol>
       </div>
@@ -416,27 +427,37 @@ function renderActivity(payload) {
   const a = analyticsFor(payload.community, payload.analytics);
   const projectCount = projects || (typeof a?.projects === "number" ? a.projects : 0);
   const pastors = typeof payload.community.pastors === "number" ? payload.community.pastors : null;
+  const current = stageIndex(stage);
+  const inactive = isInactive(payload);
+  const lastActivity = payload.community.lastActivity ? formatPppDate(payload.community.lastActivity) : "";
 
-  const bars = [
-    {
-      label: "Journey activity",
-      note: stage,
-      fill: Math.round(((stageIndex(stage) + 1) / JOURNEY_STAGES.length) * 100),
-    },
-    {
-      label: "Project activity",
-      note: projectCount ? `${formatNumber(projectCount)} public projects` : "Planning locally",
-      fill: Math.min(100, projectCount * 18 || 12),
-    },
-  ];
+  const bars = [];
 
   if (pastors != null) {
     bars.push({
       label: "Pastor leaders",
       note: `${formatNumber(pastors)} in public reporting`,
-      fill: Math.min(100, Math.round((pastors / 50) * 100) || 20),
+      fill: Math.min(100, Math.round((pastors / 50) * 100)),
     });
   }
+
+  bars.push(
+    {
+      label: "Journey activity",
+      note: current >= 0 ? `${stage} · phase ${current + 1} of ${JOURNEY_STAGES.length}` : stage,
+      fill: current >= 0 ? Math.round(((current + 1) / JOURNEY_STAGES.length) * 100) : 0,
+    },
+    {
+      label: "PPP & CHIP activity",
+      note: projectCount ? `${formatNumber(projectCount)} public projects` : "None publicly listed",
+      fill: Math.min(100, projectCount * 18),
+    }
+  );
+
+  const statusLine = `<p class="cm-activity__status">
+      <span class="cm-activity__pill${inactive ? " is-inactive" : ""}">${inactive ? "Inactive" : "Active"}</span>
+      ${lastActivity ? `<span>Last recorded activity: <strong>${lastActivity}</strong></span>` : ""}
+    </p>`;
 
   return `
     <section class="cm-activity" data-cm-section="activity" id="cm-activity" aria-labelledby="cm-activity-title">
@@ -446,6 +467,7 @@ function renderActivity(payload) {
             <p class="cm-kicker">Leadership &amp; activity</p>
             <h2 id="cm-activity-title" class="cm-sec-title">How active is ${payload.community.name}?</h2>
             <p class="cm-sec-lead">High-level public signals of community life — not personal or operational detail.</p>
+            ${statusLine}
           </header>
           <div class="cm-activity__field" data-cm-rise>
             ${bars
@@ -474,6 +496,38 @@ function renderProgress(payload, data) {
   const current = stageIndex(stage);
   const freshness = resolvePublicFreshness(data, "communities");
   const hasChart = Boolean(payload.dash?.charts?.impactLine);
+  const c = payload.community;
+
+  const indicators = [
+    {
+      label: "Journey completion",
+      value: current >= 0 ? `${Math.round(((current + 1) / JOURNEY_STAGES.length) * 100)}%` : "0%",
+      note: current >= 0 ? `Phase ${current + 1} of ${JOURNEY_STAGES.length}` : stage,
+    },
+    {
+      label: "Participation rate",
+      value: typeof c.participationRate === "number" ? `${c.participationRate}%` : "—",
+      note: typeof c.participationRate === "number" ? "From PA's tracking dashboard" : "Not yet reported",
+    },
+    {
+      label: "Activity trend",
+      value: typeof c.trend === "number" ? `${c.trend > 0 ? "+" : ""}${c.trend}%` : "—",
+      note: typeof c.trend === "number" ? (c.trend > 0 ? "Growing" : c.trend < 0 ? "Declining" : "Stable") : "Not yet reported",
+      tone: typeof c.trend === "number" ? (c.trend > 0 ? "up" : c.trend < 0 ? "down" : "") : "",
+    },
+  ];
+
+  const indicatorHtml = `<ul class="cm-progress__kpis" data-cm-rise>
+      ${indicators
+        .map(
+          (k) => `<li class="cm-progress__kpi${k.tone ? ` is-${k.tone}` : ""}">
+            <span>${k.label}</span>
+            <strong>${k.value}</strong>
+            <em>${k.note}</em>
+          </li>`
+        )
+        .join("")}
+    </ul>`;
 
   const path = JOURNEY_STAGES.map((s, i) => {
     const state = i < current ? "is-past" : i === current ? "is-current" : "";
@@ -495,6 +549,7 @@ function renderProgress(payload, data) {
           ${freshness.reportingPeriod ? `<span><em>Reporting</em> ${freshness.reportingPeriod}</span>` : ""}
           <span><em>Updated</em> ${freshness.lastUpdatedLabel}</span>
         </div>
+        ${indicatorHtml}
         <div class="cm-progress__path" data-cm-rise>
           <p class="cm-progress__axis"><span>Earlier</span><span>Current</span></p>
           <ol class="cm-progress__nodes" data-cm-progress-path>${path}</ol>

@@ -320,7 +320,7 @@ function renderAnalysisPanel(sc, ia) {
             <p class="wbs-arc__text">${past.text || ""}</p>
             <div class="wbs-arc__figures">
               ${renderArcFigure("Communities on the journey", "32", "59")}
-              ${renderArcFigure("Homes reached", "120K", "253K+")}
+              ${renderArcFigure("Homes reached", "120K", "260K+")}
               ${renderArcFigure("Shalom groups", "28", "86")}
             </div>
             <div class="wbs-arc__evidence">

@@ -14,6 +14,12 @@ const JUMP = [
   { id: "nu-milestones", label: "Milestones" },
 ];
 
+function sampleTag(item = {}) {
+  return item.verified === true
+    ? ""
+    : `<span class="pa-sample-tag" title="Sample entry — awaiting PA verification">Sample</span>`;
+}
+
 function linkAttrs(href = "#") {
   if (!href) return `href="#"`;
   if (href.startsWith("#/")) return `href="${href}" data-link`;
@@ -115,7 +121,7 @@ function renderNews(items = []) {
           <span class="nu-entry__mark"></span>
         </span>
         <span class="nu-entry__body">
-          <span class="nu-entry__cat">News</span>
+          <span class="nu-entry__cat">News ${sampleTag(item)}</span>
           <strong class="nu-entry__title">${item.title}</strong>
           ${item.summary ? `<span class="nu-entry__sum">${item.summary}</span>` : ""}
         </span>
@@ -128,6 +134,7 @@ function renderNews(items = []) {
   return `
     <section class="nu-band nu-band--stream" id="nu-news" data-nu-section="news" aria-labelledby="nu-news-title">
       <div class="container">
+        <p class="pa-sample-note" role="note">Entries tagged <span class="pa-sample-tag">Sample</span> show how updates will appear. They are placeholders awaiting confirmation from PA and will be replaced with verified news.</p>
         <header class="nu-sec-head" data-nu-reveal>
           <p class="nu-eyebrow">News</p>
           <h2 id="nu-news-title" class="pa-title">${formatPaTitle({
@@ -160,7 +167,7 @@ function renderCountryUpdates(items = []) {
       i === 0 ? "" : "hidden"
     }>
       <p class="nu-geo__place">${item.country}</p>
-      <p class="nu-geo__when">${item.dateLabel || ""}</p>
+      <p class="nu-geo__when">${item.dateLabel || ""} ${sampleTag(item)}</p>
       <h3 class="nu-geo__title">${item.title}</h3>
       <a class="nu-geo__link" ${linkAttrs(item.href || `#/country/${item.slug}`)}>Open ${item.country} <span aria-hidden="true">→</span></a>
     </article>`
@@ -198,7 +205,7 @@ function renderEvents(items = []) {
         </span>
         <span class="nu-event__rail" aria-hidden="true"><span class="nu-event__dot"></span></span>
         <span class="nu-event__copy">
-          <span class="nu-event__cat">Event</span>
+          <span class="nu-event__cat">Event ${sampleTag(ev)}</span>
           <strong class="nu-event__title">${ev.title}</strong>
           ${ev.place ? `<span class="nu-event__place">${ev.place}</span>` : ""}
           ${ev.summary ? `<span class="nu-event__sum">${ev.summary}</span>` : ""}
@@ -232,7 +239,7 @@ function renderAnnouncements(items = []) {
       <a class="nu-announce nu-announce--${a.tone || "maroon"}" ${linkAttrs(
             a.href || "#/news"
           )} data-nu-stagger-item style="--i:${i}">
-        <span class="nu-announce__label">${a.label || "Note"}</span>
+        <span class="nu-announce__label">${a.label || "Note"} ${sampleTag(a)}</span>
         <span class="nu-announce__title">${a.title}</span>
         <span class="nu-announce__go" aria-hidden="true">→</span>
       </a>`

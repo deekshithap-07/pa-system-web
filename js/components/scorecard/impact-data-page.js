@@ -142,7 +142,7 @@ function renderIndicators(sc = {}) {
       const n = parseNumeric(k.value);
       return `<article class="id-metric" data-id-metric style="--i:${i}">
         <span class="id-metric__value" data-count-to="${n != null ? n : ""}" data-count-display="${fmtVal(k.value)}">${fmtVal(k.value)}</span>
-        <span class="id-metric__label">${k.label}</span>
+        <span class="id-metric__label">${k.label}${k.sample ? ` <span class="pa-sample-tag" title="Sample figure — awaiting PA verification">Sample</span>` : ""}</span>
         ${k.trend ? `<span class="id-metric__trend">${k.trend}</span>` : ""}
       </article>`;
     })
@@ -160,7 +160,7 @@ function renderIndicators(sc = {}) {
         <div class="id-metric-field" data-id-metric-field>
           <article class="id-metric id-metric--hero" data-id-metric>
             <span class="id-metric__value" data-count-to="${primaryNum != null ? primaryNum : ""}" data-count-display="${fmtVal(primary.value)}">${fmtVal(primary.value)}</span>
-            <span class="id-metric__label">${primary.label}</span>
+            <span class="id-metric__label">${primary.label}${primary.sample ? ` <span class="pa-sample-tag" title="Sample figure — awaiting PA verification">Sample</span>` : ""}</span>
             ${primary.trend ? `<span class="id-metric__trend">${primary.trend}</span>` : ""}
           </article>
           <div class="id-metric-field__divider" data-id-metric-divider aria-hidden="true"></div>

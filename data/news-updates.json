@@ -135,6 +135,7 @@
       "id": "a3",
       "tone": "maroon",
       "label": "Invite",
+      "verified": true,
       "title": "Churches and friends can walk with PA — start on Partner with us",
       "href": "#/#partner-support"
     },
@@ -149,33 +150,27 @@
   "milestones": [
     {
       "id": "m1",
-      "year": "2006",
-      "title": "Work begins in Webuye",
-      "summary": "The early field model takes root in western Kenya."
+      "year": "2002 – 2008",
+      "title": "Ideation, Learning & Discovery Season",
+      "summary": "During a mission trip to Kenya with a group of students and faculty from Moody Graduate School USA, Martin shared his desire to return to Africa to help poor communities."
     },
     {
       "id": "m2",
-      "year": "2014",
-      "title": "Multi-country expansion",
-      "summary": "The network grows beyond Kenya into neighbouring countries."
+      "year": "2009 – 2016",
+      "title": "Mission Acceptance & Expansion Season",
+      "summary": "Training programs for pastors led to PA presence in 13 communities in Kenya, Malawi, and Rwanda."
     },
     {
       "id": "m3",
-      "year": "2019",
-      "title": "Seven-country footprint",
-      "summary": "PA presence spans Kenya, Ethiopia, Malawi, Zambia, Rwanda, Tanzania, and Burundi."
+      "year": "2017 – 2019",
+      "title": "Evaluation, Reorganization & Repositioning Season",
+      "summary": "A “Know Your Client” survey established a new baseline for the program."
     },
     {
       "id": "m4",
-      "year": "2024",
-      "title": "Public evidence layer",
-      "summary": "Impact indicators, stories, and field reports become easier to browse in one place."
-    },
-    {
-      "id": "m5",
-      "year": "2025",
-      "title": "Current season of activity",
-      "summary": "Cohorts, partnerships, and country updates continue across the network."
+      "year": "2020",
+      "title": "Vision 2030 Initiated",
+      "summary": "A major holistic programs review with a vision to establish 20 new countries of operation in strategic locations in Africa."
     }
   ]
 }

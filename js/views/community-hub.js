@@ -43,6 +43,7 @@ export function renderCommunityHub(countrySlug, catchmentSlug, communitySlug, da
       analytics,
       programmes: data.home?.ourWork?.programs || null,
       catchmentActivities: catchmentHub?.activities || [],
+      catchmentHeroImage: catchmentHub?.heroImage || null,
     },
     data
   );

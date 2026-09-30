@@ -724,7 +724,7 @@ export function renderImpactDataBand(section = {}) {
         ? `<a class="pa-impact__delta" ${linkAttrs(c.href)}>${c.delta || "Explore"} →</a>`
         : `<span class="pa-impact__delta">${c.delta || ""}</span>`;
       return `<article class="pa-impact__card pa-impact__card--${c.tone || "gold"}">
-        <p class="pa-impact__label">${c.label}</p>
+        <p class="pa-impact__label">${c.label}${c.sample ? ` <span class="pa-sample-tag" title="Sample figure — awaiting PA verification">Sample</span>` : ""}</p>
         <p class="pa-impact__value">${c.value}</p>
         ${delta}
         <div class="pa-impact__viz" aria-hidden="true">${renderImpactChart(c)}</div>
@@ -924,6 +924,7 @@ export function renderKnowledgeNewsSplit(section = {}) {
       (item, i) => `<a class="pa-news__item" ${linkAttrs(item.href || "#/news")} style="--i:${i}" data-pa-news-item>
         <span class="pa-news__meta">
           <span class="pa-news__tag">${item.tag || "News"}</span>
+          ${item.sample ? `<span class="pa-sample-tag" title="Sample entry — awaiting PA verification">Sample</span>` : ""}
           <time class="pa-news__date">${item.date || ""}</time>
         </span>
         <strong class="pa-news__headline">${item.title}</strong>

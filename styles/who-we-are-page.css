@@ -1210,3 +1210,382 @@
     padding-bottom: 3.5rem;
   }
 }
+
+/* ==========================================================================
+   Who We Are - visual refresh (existing content only)
+   ========================================================================== */
+.ab-page [data-ab-section] {
+  scroll-margin-top: calc(var(--header-h, 4.5rem) + 1rem);
+}
+
+/* Nehemiah statement - framed photo */
+.ab-page .ab-statement__line {
+  padding: 1rem 1.25rem;
+  border-left: 4px solid var(--pa-gold);
+  border-radius: 0 0.9rem 0.9rem 0;
+  background: #fffaf0;
+}
+
+.ab-page .ab-statement__figure {
+  max-width: 36rem;
+  border-radius: 1.25rem;
+  box-shadow: 0 22px 48px rgba(42, 16, 20, 0.18);
+  outline: 1px solid rgba(232, 169, 26, 0.35);
+  outline-offset: 6px;
+}
+
+.ab-page .ab-statement__figure img {
+  aspect-ratio: 16 / 10;
+}
+
+/* Vision & mission - rounded cards */
+.ab-page .ab-vm2030,
+.ab-page .ab-vm-card {
+  border-radius: 1.25rem;
+  box-shadow: 0 16px 38px rgba(92, 36, 40, 0.12);
+}
+
+/* Values - compact numbered cards */
+.ab-page .ab-chapters__track {
+  gap: 1rem;
+}
+
+.ab-page .ab-chapter {
+  min-height: 0;
+  padding: 1.6rem 1.75rem;
+  border: 0;
+  border-left: 5px solid rgba(47, 93, 58, 0.35);
+  border-radius: 1.1rem;
+  background: rgba(255, 255, 255, 0.72);
+  box-shadow: 0 8px 22px rgba(47, 93, 58, 0.08);
+  opacity: 0.6;
+}
+
+.ab-page .ab-chapter.is-active {
+  opacity: 1;
+  border-left-color: var(--pa-maroon);
+  background: #fff;
+  box-shadow: 0 18px 38px rgba(42, 16, 20, 0.12);
+}
+
+.ab-page .ab-chapter.is-past {
+  opacity: 0.82;
+  border-left-color: var(--pa-gold);
+}
+
+/* Founder - dark maroon feature with portrait */
+.ab-page .ab-leaders {
+  background:
+    radial-gradient(ellipse at 85% 10%, rgba(232, 169, 26, 0.18), transparent 50%),
+    linear-gradient(160deg, var(--pa-maroon) 0%, #2a1014 100%);
+  color: #fff;
+  border-top: 0;
+}
+
+.ab-page .ab-leaders__grid {
+  grid-template-columns: 1fr;
+  gap: clamp(1.75rem, 4vh, 2.5rem);
+}
+
+.ab-page .ab-leaders__title {
+  color: #fff;
+  font-size: clamp(1.9rem, 3.6vw, 2.8rem);
+}
+
+.ab-page .ab-leaders .ab-eyebrow {
+  color: var(--pa-gold-soft, #f5d78a);
+}
+
+.ab-founder {
+  display: grid;
+  grid-template-columns: minmax(12rem, 16rem) minmax(0, 1fr);
+  gap: clamp(2rem, 5vw, 4.5rem);
+  align-items: center;
+}
+
+.ab-founder__portrait {
+  position: relative;
+  margin: 0;
+  aspect-ratio: 4 / 5;
+  border-radius: 1.5rem;
+  overflow: visible;
+}
+
+.ab-founder__portrait img,
+.ab-founder__mono {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 1.5rem;
+}
+
+.ab-founder__portrait img {
+  z-index: 1;
+  object-fit: cover;
+  object-position: center 20%;
+  box-shadow: 0 28px 60px rgba(0, 0, 0, 0.35);
+}
+
+.ab-founder__mono {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(150deg, var(--pa-gold) 0%, #c99212 100%);
+  color: #2a1014;
+  font-size: clamp(3.5rem, 8vw, 5.5rem);
+  font-weight: 800;
+  letter-spacing: -0.04em;
+}
+
+.ab-founder__frame {
+  position: absolute;
+  inset: 1.1rem -1.1rem -1.1rem 1.1rem;
+  z-index: 0;
+  border: 2px solid rgba(245, 215, 138, 0.55);
+  border-radius: 1.5rem;
+  pointer-events: none;
+}
+
+.ab-founder__quote {
+  position: relative;
+  margin: 0;
+  padding-top: 2.75rem;
+}
+
+.ab-founder__quote::before {
+  content: "\201C";
+  position: absolute;
+  top: -1rem;
+  left: -0.25rem;
+  font-size: 6rem;
+  line-height: 1;
+  font-weight: 800;
+  color: var(--pa-gold);
+}
+
+.ab-founder__quote p {
+  margin: 0;
+  font-size: clamp(1.35rem, 2.6vw, 2.05rem);
+  font-weight: 700;
+  font-style: italic;
+  line-height: 1.4;
+  letter-spacing: -0.015em;
+  color: #fff;
+}
+
+.ab-founder__quote p::after {
+  content: "\201D";
+  margin-left: 0.08em;
+  font-style: normal;
+  font-weight: 800;
+  color: var(--pa-gold);
+}
+
+.ab-founder__sig {
+  margin: 1.75rem 0 0;
+  padding-left: 1rem;
+  border-left: 3px solid var(--pa-gold);
+}
+
+.ab-founder__name {
+  display: block;
+  font-size: 1.2rem;
+  color: #fff;
+}
+
+.ab-founder__role {
+  display: block;
+  margin-top: 0.2rem;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--pa-gold-soft, #f5d78a);
+}
+
+.ab-founder__link {
+  display: inline-flex;
+  gap: 0.4rem;
+  margin-top: 1.75rem;
+  padding: 0.7rem 1.3rem;
+  border-radius: 999px;
+  background: var(--pa-gold);
+  color: #2a1014;
+  font-weight: 700;
+  text-decoration: none;
+  transition: transform 0.25s ease, background 0.25s ease;
+}
+
+.ab-founder__link:hover,
+.ab-founder__link:focus-visible {
+  background: #fff;
+  transform: translateY(-2px);
+  outline: none;
+}
+
+.ab-founder__more {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-top: 1.1rem;
+  padding: 0.45rem 1rem;
+  border: 1px solid rgba(245, 215, 138, 0.55);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--pa-gold-soft, #f5d78a);
+  font: inherit;
+  font-size: 0.9rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.25s ease, color 0.25s ease, border-color 0.25s ease;
+}
+
+.ab-founder__more:hover,
+.ab-founder__more:focus-visible {
+  background: var(--pa-gold);
+  border-color: var(--pa-gold);
+  color: #2a1014;
+  outline: none;
+}
+
+.ab-founder__more[hidden],
+.ab-founder__letter-body[hidden] {
+  display: none;
+}
+
+.ab-founder__more--less {
+  margin-top: 1.25rem;
+}
+
+.ab-founder__letter-body p:focus {
+  outline: none;
+}
+
+.ab-founder__letter-body {
+  max-width: 42rem;
+  margin-top: 1.25rem;
+  padding: 1.5rem 1.6rem;
+  border-radius: 1rem;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(245, 215, 138, 0.18);
+  color: rgba(255, 255, 255, 0.88);
+  font-size: 1rem;
+  line-height: 1.75;
+}
+
+.ab-founder__letter-body p {
+  margin: 0 0 1rem;
+}
+
+.ab-founder__letter-body strong {
+  color: var(--pa-gold-soft, #f5d78a);
+}
+
+.ab-founder__greeting {
+  font-weight: 700;
+  color: #fff;
+}
+
+.ab-founder__letter-sig {
+  margin: 1.5rem 0 0 !important;
+  padding-left: 1rem;
+  border-left: 3px solid var(--pa-gold);
+}
+
+.ab-founder__letter-sig strong,
+.ab-founder__letter-sig span,
+.ab-founder__letter-sig em {
+  display: block;
+}
+
+.ab-founder__letter-sig strong {
+  color: #fff;
+}
+
+.ab-founder__letter-sig span {
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.ab-founder__letter-sig em {
+  margin-top: 0.5rem;
+  color: var(--pa-gold-soft, #f5d78a);
+}
+
+@media (max-width: 640px) {
+  .ab-founder__letter-body {
+    padding: 1.15rem 1.1rem;
+    font-size: 0.95rem;
+  }
+}
+
+/* History - milestone cards */
+.ab-page .ab-milestone__body {
+  padding: 1.1rem 1.35rem;
+  border-radius: 1rem;
+  background: #fff;
+  box-shadow: 0 10px 26px rgba(92, 36, 40, 0.08);
+}
+
+.ab-page .ab-journey__roots {
+  padding: 1.25rem 1.5rem;
+  border-left: 4px solid var(--pa-maroon);
+  border-radius: 0 1rem 1rem 0;
+  background: rgba(255, 255, 255, 0.7);
+}
+
+/* Countries - pill list */
+.ab-page .ab-regions__list-item {
+  border-radius: 0.8rem;
+}
+
+/* Contact - light band, since the footer below is maroon */
+.ab-page .ab-closer {
+  background:
+    radial-gradient(ellipse at 85% 0%, rgba(232, 169, 26, 0.22), transparent 55%),
+    linear-gradient(160deg, #fffaf0 0%, #fdf1d6 100%);
+  color: var(--pa-slate);
+  border-top: 4px solid var(--pa-gold);
+}
+
+.ab-page .ab-closer .ab-eyebrow { color: var(--pa-gold); }
+.ab-page .ab-closer__title { color: var(--pa-maroon); }
+.ab-page .ab-closer__title em { color: var(--pa-gold); }
+.ab-page .ab-closer__lead { color: var(--pa-slate); }
+
+.ab-page .ab-closer__panel {
+  padding: 1.75rem;
+  border-radius: 1.25rem;
+  background: #fff;
+  box-shadow: 0 18px 40px rgba(92, 36, 40, 0.12);
+}
+
+.ab-page .ab-closer__item { color: var(--pa-slate); }
+.ab-page .ab-closer__item-label { color: var(--pa-muted); }
+.ab-page .ab-closer__item a { color: var(--pa-maroon); }
+.ab-page .ab-closer__item a:hover { color: var(--pa-gold); }
+.ab-page .ab-closer__note { color: var(--pa-muted); }
+
+.ab-page .ab-btn--solid {
+  border-radius: 999px;
+  background: var(--pa-maroon);
+  border-color: var(--pa-maroon);
+  color: #fff;
+}
+
+.ab-page .ab-btn--solid:hover {
+  background: var(--pa-gold);
+  border-color: var(--pa-gold);
+  color: #2a1014;
+}
+
+@media (max-width: 900px) {
+  .ab-founder {
+    grid-template-columns: 1fr;
+  }
+
+  .ab-founder__portrait {
+    max-width: 15rem;
+  }
+}

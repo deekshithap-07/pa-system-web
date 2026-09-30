@@ -438,6 +438,7 @@
       "description": "Hossana catchment in southern Ethiopia with five pastor-led communities.",
       "overview": "Hossana spans five communities — Belesa/Lemo, Jajura, Mare, Misha/Wasgebtea, and Soro/Gimbichu. All communities are currently inactive in the tracking dashboard with 121 pastors across the catchment.",
       "heroTagline": "Southern Ethiopia · Hossana",
+      "heroImage": "assets/country-heroes/ethiopia-hero-water.jpg",
       "growthStatus": "Inactive",
       "kpis": [
         { "id": "communities", "label": "Communities", "value": 5, "trend": "stable", "direction": "neutral" },

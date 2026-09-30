@@ -120,3 +120,34 @@ img { max-width: 100%; display: block; }
   line-height: 1.5;
   color: var(--pa-muted);
 }
+
+/* Marks placeholder figures/entries that are not yet verified by PA */
+.pa-sample-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.12rem 0.55rem;
+  border-radius: 999px;
+  border: 1px dashed currentColor;
+  font-size: 0.64rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  line-height: 1.5;
+  opacity: 0.85;
+  vertical-align: middle;
+}
+
+.pa-sample-note {
+  display: flex;
+  gap: 0.6rem;
+  align-items: flex-start;
+  margin: 0 0 1.5rem;
+  padding: 0.85rem 1.1rem;
+  border-radius: 0.9rem;
+  border: 1px dashed rgba(92, 36, 40, 0.35);
+  background: rgba(255, 250, 235, 0.92);
+  color: var(--pa-maroon, #5c2428);
+  font-size: 0.9rem;
+  line-height: 1.5;
+}

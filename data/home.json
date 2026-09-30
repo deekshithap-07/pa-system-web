@@ -6,7 +6,7 @@
       { "text": "Developing leaders.", "accent": true },
       { "text": "Creating possibilities." }
     ],
-    "description": "Possibilities Africa delivers its programs through organizing, training and networking pastor leaders to develop their communities — starting with their families and churches.",
+    "description": "Possibilities Africa (PA) delivers its programs through organizing, training, programming and networking our pastor leaders to develop their communities, starting with their families and churches.",
     "image": "assets/home-hero/woman.jpg",
     "imageAlt": "Smiling woman in a colorful headscarf standing outdoors across rural Africa",
     "primaryCta": { "label": "Explore Our Work", "target": "#/work" },
@@ -26,8 +26,8 @@
     "titleHtml": "<span>A growing movement.</span> <em>Of transformation.</em>",
     "lead": "From urban centres to rural communities, Possibilities Africa is working across countries to catalyze holistic transformation — leadership, discipleship, livelihoods, youth, and citizenship.",
     "stats": [
-      { "value": "2K+", "label": "Spiritual Leaders Trained" },
-      { "value": "253K+", "label": "Households Reached" },
+      { "value": "3K+", "label": "Spiritual Leaders, of Whom 2,000+ Are Pastors" },
+      { "value": "260K+", "label": "Households Reached" },
       { "value": "1.3M+", "label": "Lives Impacted" },
       { "value": "7", "label": "Countries Working Across Africa" }
     ],
@@ -48,14 +48,14 @@
     "eyebrow": "Results Areas",
     "titleHtml": "<span>Five results areas that compound into</span> <em>lasting transformation.</em>",
     "title": "Five results areas that compound into lasting transformation.",
-    "lead": "Possibilities Africa stands out as a ministry appointed to bring hope and transformation across Africa through five interconnected areas of impact.",
+    "lead": "Possibilities Africa stands out as a ministry appointed at this time to bring hope and true transformation on the continent of Africa. We achieve this transformation through five result areas.",
     "cta": { "label": "Explore the programme", "href": "#/work" },
     "programs": [
       {
         "id": "leadership",
         "title": "Transformational Leadership Development",
         "text": "Developing leaders at every level.",
-        "description": "We recruit, select, organize and equip pastor leaders to provide visionary, servant leadership for sustainable community-wide transformation.",
+        "description": "This is the PA anchor program from which other programs are implemented. The program focuses on recruiting & selecting, organizing and equipping pastor leaders, who together as a cohesive group, provide visionary, servant leadership necessary for sustainable holistic transformation.",
         "tone": "maroon",
         "href": "#/work#work-leadership"
       },
@@ -63,7 +63,7 @@
         "id": "discipleship",
         "title": "Spiritual Discipleship",
         "text": "Building strong faith and values.",
-        "description": "Guiding people in Christian faith and practice to build a solid foundation for true, eternal, and holistic community transformation.",
+        "description": "PA believes that guiding people in the Judeo-Christian faith and practice gives them a foundation necessary for true and eternal transformation. This means teaching the whole gospel to transform the whole person and impact the whole community.",
         "tone": "gold",
         "href": "#/work"
       },
@@ -71,7 +71,7 @@
         "id": "economic",
         "title": "Economic Productivity",
         "text": "Creating sustainable livelihoods.",
-        "description": "Empowering rural communities to discover, develop and sustainably utilize local resources.",
+        "description": "PA empowers the people in the community through the pastor leaders' groups to see the resources around them, learn how to develop them through diligence and hard work, and use them sustainably for the wellbeing of their communities.",
         "tone": "green",
         "href": "#/work"
       },
@@ -79,7 +79,7 @@
         "id": "youth",
         "title": "Mentoring the Next Generation",
         "text": "Equipping young people for a better future.",
-        "description": "Supporting children and youth with godly values, character and practical life skills.",
+        "description": "A core program that invests in children and teenagers to grow up with the values, beliefs and life skills necessary to live holistic lives.",
         "tone": "maroon",
         "href": "#/work"
       },
@@ -87,7 +87,7 @@
         "id": "citizenship",
         "title": "Responsible Citizenship",
         "text": "Building peaceful, engaged communities.",
-        "description": "Churches building community programmes addressing education, water, health and infrastructure.",
+        "description": "This program recognizes our responsibility to live our values in the community where God has placed us as responsible citizens contributing to solving community problems and creating an orderly society.",
         "tone": "gold",
         "href": "#/work"
       }
@@ -100,13 +100,12 @@
     "lead": "Over two decades of holistic ministry across rural African villages.",
     "cta": { "label": "Explore Impact Data", "href": "#/scorecard" },
     "image": "assets/country-heroes/ethiopia-hero-farm.jpg",
-    "updatedAt": "August 2025",
     "cards": [
       {
         "id": "households",
         "label": "Households Reached",
-        "value": "253,000+",
-        "delta": "+18%",
+        "value": "260,000+",
+        "delta": "",
         "tone": "gold",
         "chart": "bars",
         "series": [22, 30, 38, 48, 58, 72, 88]
@@ -115,6 +114,7 @@
         "id": "shalom",
         "label": "Shalom Groups",
         "value": "1,084",
+        "sample": true,
         "delta": "+22%",
         "tone": "green",
         "chart": "area",
@@ -124,6 +124,7 @@
         "id": "communities",
         "label": "Communities",
         "value": "59",
+        "sample": true,
         "delta": "+14%",
         "tone": "maroon",
         "chart": "bars",
@@ -203,18 +204,21 @@
           "tag": "Report",
           "date": "April 15, 2024",
           "title": "Annual Impact Report 2024",
+          "sample": true,
           "href": "#/news#nu-news"
         },
         {
           "tag": "Event",
           "date": "May 10, 2024",
           "title": "PA Leadership Summit 2025",
+          "sample": true,
           "href": "#/news#nu-events"
         },
         {
           "tag": "News",
           "date": "June 1, 2024",
           "title": "New partnership to expand in Kenya",
+          "sample": true,
           "href": "#/news#nu-news"
         }
       ]
@@ -231,7 +235,7 @@
     "contact": {
       "email": "karibu@possibilitiesafrica.org",
       "phone": "+254 721 238 198",
-      "address": "P.O. Box: 55604 - 00200\\nNairobi, Kenya"
+      "address": "BTL Centre, Gate 7 Upperhill, Masaba Road, off Bunyala Road\\nP.O. Box: 55604 - 00200, Nairobi, Kenya"
     },
     "secondaryCta": {
       "label": "What we do",

@@ -81,6 +81,7 @@ function vision2030Stats(data, historySection = {}) {
     {
       value: fmtStat(byId.communities?.value),
       label: "Communities",
+      sample: byId.communities?.sample,
       note: "Pastor-led communities in the current network.",
     },
     {
@@ -166,7 +167,7 @@ function renderWhoWeAre(section = {}) {
           ${
             image
               ? `<figure class="ab-statement__figure" data-ab-clip-reveal>
-                  <img src="${image}" alt="" loading="lazy">
+                  <img src="${image}" alt="${section.imageAlt || ""}" loading="lazy">
                 </figure>`
               : ""
           }
@@ -187,7 +188,7 @@ function renderVisionMission(section = {}, data = {}, historySection = {}) {
     .map(
       (s) => `<div class="ab-vm2030__stat" data-ab-reveal>
         <strong class="ab-vm2030__stat-value">${s.value}</strong>
-        <span class="ab-vm2030__stat-label">${s.label}</span>
+        <span class="ab-vm2030__stat-label">${s.label}${s.sample ? ` <span class="pa-sample-tag" title="Sample figure — awaiting PA verification">Sample</span>` : ""}</span>
         <p class="ab-vm2030__stat-note">${s.note}</p>
       </div>`
     )
@@ -274,12 +275,94 @@ function renderApproach(section = {}) {
     </section>`;
 }
 
+function initials(name = "") {
+  return name
+    .split(/\s+/)
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((w) => w[0].toUpperCase())
+    .join("");
+}
+
+function renderFounder(p = {}) {
+  const quote = (p.bio || "").trim().replace(/^["“]+|["”]+$/g, "");
+  return `<article class="ab-founder" data-ab-leader data-ab-reveal>
+      <figure class="ab-founder__portrait">
+        <span class="ab-founder__mono" aria-hidden="true">${initials(p.name)}</span>
+        ${
+          p.image
+            ? `<img src="${p.image}" alt="${p.name ? `${p.name}, ${p.role || "Founder"}` : ""}" loading="lazy" onerror="this.remove()">`
+            : ""
+        }
+        <span class="ab-founder__frame" aria-hidden="true"></span>
+      </figure>
+      <div class="ab-founder__copy">
+        ${quote ? `<blockquote class="ab-founder__quote" id="ab-founder-quote"><p>${quote}</p></blockquote>` : ""}
+        ${renderFounderLetter(p)}
+        <p class="ab-founder__sig">
+          <strong class="ab-founder__name">${p.name || ""}</strong>
+          <span class="ab-founder__role">${p.role || ""}</span>
+        </p>
+        <a class="ab-founder__link" href="#ab-history">Read PA's story <span aria-hidden="true">↓</span></a>
+      </div>
+    </article>`;
+}
+
+function renderFounderLetter(p = {}) {
+  const paras = p.message || [];
+  if (!paras.length) return "";
+  return `<button type="button" class="ab-founder__more" data-founder-more aria-expanded="false" aria-controls="ab-founder-letter">
+        Read more <span aria-hidden="true">↓</span>
+      </button>
+      <div class="ab-founder__letter-body" id="ab-founder-letter" data-founder-letter hidden>
+        ${p.messageGreeting ? `<p class="ab-founder__greeting">${p.messageGreeting}</p>` : ""}
+        ${paras.map((t) => `<p>${t}</p>`).join("")}
+        <p class="ab-founder__letter-sig">
+          <strong>${p.name || ""}</strong>
+          ${p.messageSignoff ? `<span>${p.messageSignoff}</span>` : ""}
+          ${p.messageMotto ? `<em>${p.messageMotto}</em>` : ""}
+        </p>
+        <button type="button" class="ab-founder__more ab-founder__more--less" data-founder-less aria-controls="ab-founder-letter">
+          Read less <span aria-hidden="true">↑</span>
+        </button>
+      </div>`;
+}
+
+function initFounderLetter(page) {
+  const more = page.querySelector("[data-founder-more]");
+  const less = page.querySelector("[data-founder-less]");
+  const letter = page.querySelector("[data-founder-letter]");
+  if (!more || !less || !letter) return;
+
+  const refresh = () => {
+    if (typeof ScrollTrigger !== "undefined") ScrollTrigger.refresh();
+  };
+
+  more.addEventListener("click", () => {
+    letter.hidden = false;
+    more.hidden = true;
+    more.setAttribute("aria-expanded", "true");
+    letter.querySelector("p")?.setAttribute("tabindex", "-1");
+    letter.querySelector("p")?.focus({ preventScroll: true });
+    refresh();
+  });
+
+  less.addEventListener("click", () => {
+    letter.hidden = true;
+    more.hidden = false;
+    more.setAttribute("aria-expanded", "false");
+    more.focus({ preventScroll: true });
+    page.querySelector("#ab-founder-quote")?.scrollIntoView({ behavior: "smooth", block: "center" });
+    refresh();
+  });
+}
+
 function renderLeadership(section = {}) {
   const people = section.people || [];
   const featured = people[0];
   const rest = people.slice(1);
 
-  const personCard = (p, featured = false) => `<article class="ab-leader${featured ? " ab-leader--featured" : ""}" data-ab-leader>
+  const personCard = (p) => `<article class="ab-leader" data-ab-leader>
       <div class="ab-leader__media">
         ${
           p.image
@@ -296,7 +379,7 @@ function renderLeadership(section = {}) {
 
   const stage = people.length
     ? `<div class="ab-leaders__stage">
-        ${featured ? personCard(featured, true) : ""}
+        ${featured ? renderFounder(featured) : ""}
         ${
           rest.length
             ? `<div class="ab-leaders__list">${rest.map((p) => personCard(p)).join("")}</div>`
@@ -491,6 +574,7 @@ export function mountWhoWeArePage(section = "overview") {
   if (!page) return;
 
   initAboutMotion(page);
+  initFounderLetter(page);
 
   const targetId = page.dataset.scrollTarget || SECTION_BY_ROUTE[section];
   if (targetId && section !== "overview") {

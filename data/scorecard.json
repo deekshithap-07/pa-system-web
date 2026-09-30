@@ -7,11 +7,11 @@
     "lastUpdated": "2024-09-15",
     "lastUpdatedLabel": "15 September 2024",
     "sources": "Field reports · Community surveys · Country hubs",
-    "freshnessNote": "Figures on this page are demo data for the website. Live reporting will replace them as field submissions are verified."
+    "freshnessNote": "Households reached and lives impacted are PA's published network totals. Other figures on this page are sample placeholders; live reporting from the PA tracking system will replace them as field submissions are verified."
   },
   "overview": {
     "headline": "How the work is going across Africa",
-    "description": "These figures show reach and progress in seven countries — communities, homes, projects, and leadership. Figures here are demo data for this website.",
+    "description": "These figures show reach and progress in seven countries — communities, homes, projects, and leadership. Households reached and lives impacted are PA's published totals; figures tagged Sample, and the trends, comparisons and programme scores below, are placeholders awaiting verified PA reporting.",
     "highlights": [
       { "label": "Network countries", "value": "7" },
       { "label": "Reporting period", "value": "Jan – Sep 2024" },
@@ -20,10 +20,10 @@
   },
   "kpis": [
     { "id": "countries", "label": "Countries", "value": 7, "trend": "stable", "direction": "neutral" },
-    { "id": "communities", "label": "Communities", "value": 59, "trend": "+5", "direction": "up" },
-    { "id": "households", "label": "Households", "value": 253000, "trend": "+14%", "direction": "up" },
-    { "id": "lives", "label": "Lives Impacted", "value": 335000, "trend": "+9%", "direction": "up" },
-    { "id": "shalom", "label": "Shalom Groups", "value": 86, "trend": "+8", "direction": "up" }
+    { "id": "communities", "label": "Communities", "value": 59, "trend": "+5", "direction": "up", "sample": true },
+    { "id": "households", "label": "Households", "value": 260000, "direction": "neutral" },
+    { "id": "lives", "label": "Lives Impacted", "value": 1300000, "direction": "neutral" },
+    { "id": "shalom", "label": "Shalom Groups", "value": 86, "trend": "+8", "direction": "up", "sample": true }
   ],
   "growthTrends": {
     "communityGrowth": { "type": "line", "title": "Community Growth", "labels": ["2021", "2022", "2023", "2024"], "data": [32, 41, 52, 59], "color": "#5c2428" },

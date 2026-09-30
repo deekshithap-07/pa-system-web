@@ -11,6 +11,7 @@ import {
 import { renderHubGeoMap, bindHubGeoMap } from "../../map/components/HubGeoMap.js";
 import { resolvePublicFreshness } from "../../utils/public-api.js";
 import { bindPartnerContact } from "../contact-modal.js";
+import { resolvePaProgrammes } from "../shared/pa-programmes.js";
 
 function storyHref(story) {
   return `#/story/${story.slug}`;
@@ -47,25 +48,14 @@ function presenceLine(hub) {
     : `This page shares regional context for ${hub.countryName}. Possibilities Africa does not currently operate a full network here.`;
 }
 
-/** Programme chapters from What We Do model (not Home selector). */
+/** The five official PA programmes (Home → Results Areas). */
 function countryProgrammeChapters(data) {
-  const steps = data?.ourWork?.model?.steps || [];
-  const resources = data?.ourWork?.resources;
-  const chapters = steps.map((s) => ({
-    id: s.id,
-    title: s.title,
-    text: s.text,
-    href: s.href || "#/work",
+  return resolvePaProgrammes(data?.home?.ourWork?.programs).map((p) => ({
+    id: p.id,
+    title: p.title,
+    text: p.description || p.text,
+    href: p.href || "#/work",
   }));
-  if (resources?.title) {
-    chapters.push({
-      id: "ownership",
-      title: resources.title.replace(/\.$/, ""),
-      text: resources.lead || resources.title,
-      href: resources.cta?.href || "#/scorecard",
-    });
-  }
-  return chapters;
 }
 
 /* 01 — Country introduction (identity only — no counts) */

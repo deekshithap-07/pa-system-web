@@ -37,7 +37,7 @@ function kpiFromScorecard(data) {
   const find = (id) => cards.find((c) => c.id === id);
   const countries = find("countries")?.value ?? getPaCountries(data).length;
   const communities = find("communities")?.value ?? 59;
-  const households = find("households")?.value ?? 253000;
+  const households = find("households")?.value ?? 260000;
   return [
     { id: "countries", label: "Countries", value: formatNumber(countries) },
     { id: "communities", label: "Communities", value: formatNumber(communities) },

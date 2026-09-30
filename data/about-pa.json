@@ -3,7 +3,7 @@
     "eyebrow": "Who We Are",
     "title": "We Are Africa.",
     "titleHtml": "<span>We Are</span> <em>Africa.</em>",
-    "lead": "Possibilities Africa (PA) is a Christian ministry organization dedicated to equipping pastors in rural African communities with the knowledge, skills, and attitude necessary to conduct holistic transformation ministries.",
+    "lead": "We empower communities to understand the root causes of poverty in their communities and partner with them to devise solutions to address the issues.",
     "image": "assets/country-heroes/ethiopia-hero-leaders.jpg",
     "imageAlt": "Local church leader teaching from an open book with community members seated under open sky"
   },
@@ -12,6 +12,8 @@
     "title": "Nehemiah's approach.",
     "titleHtml": "<span>Nehemiah's</span> <em>approach.</em>",
     "lead": "Our philosophy of ministry is rooted in the story and work of Nehemiah in the Bible.",
+    "image": "assets/stories/story-kenya-dams.jpg",
+    "imageAlt": "Community members rebuilding together, Nehemiah-style",
     "points": [
       "Our philosophy of ministry is rooted in the story and work of Nehemiah in the Bible.",
       "Just as Nehemiah worked diligently with his fellow countrymen to rebuild the broken walls of Jerusalem so that they would not live in disgrace (Nehemiah 2:17-18),",
@@ -77,7 +79,21 @@
       {
         "name": "Martin Simiyu",
         "role": "Founder & President",
-        "bio": "\"We can change the cycle of dependence to create a new way of life that empowers Africans to build and create the lives they desire.\""
+        "image": "assets/about/founder.jpg",
+        "bio": "\"We can change the cycle of dependence to create a new way of life that empowers Africans to build and create the lives they desire.\"",
+        "messageSource": "https://www.possibilitiesafrica.org/founder.html",
+        "messageGreeting": "Dear Friends and Partners,",
+        "message": [
+          "My mom taught and modelled to all her children that life can get better only if one applied self to three core disciplines of <strong>hard work</strong>, <strong>education</strong> and <strong>Christian faith</strong>. This lesson and these values from my mom are the inner driving ingredients that make us at Possibilities Africa believe that it is possible to transform Africa one village at a time.",
+          "Possibilities Africa is on a journey to revolutionize how Africa does life and development. We appreciate others who over the centuries have \"done or given things\" — such as building schools, providing water-wells, giving charity food, adopting our kids, paying school fees, building our churches, and supporting the training of our pastors to help Africans live a better life.",
+          "Nevertheless, we are motivated that we can change the cycle of dependence to create a new way of life that empowers Africans to build and create the lives they desire. At Possibilities Africa, we reimagine and reengineer the future where through faith, personal responsibility, industry, and servant leadership, we create and pursue a vision of better lives.",
+          "Through this platform, we have one desire: to engage with you and help you see how Africa can transform and how it is transforming. This is an invitation for you to be part of this movement for a new Africa.",
+          "Africa will only become what we choose to make it. Let us, together, create an Africa that our children will be grateful to inherit.",
+          "Possibilities Africa provides a platform for each one of us to help create a new, revolutionized and transformed Africa, full of dignity, self-worth, and hope. This transformation is not because of what others from other continents have done for us, but because we use what God has given to our continent for the good of our people.",
+          "Indeed, We Are Africa!"
+        ],
+        "messageSignoff": "Founder & President, Possibilities Africa",
+        "messageMotto": "With God all things are possible"
       }
     ]
   },
@@ -134,6 +150,6 @@
     "lead": "Do not ask what Africa can do for you, ask what you can do for Africa.",
     "email": "karibu@possibilitiesafrica.org",
     "phone": "+254 721 238 198",
-    "address": "P.O. Box: 55604 - 00200, Nairobi, Kenya"
+    "address": "BTL Centre, Gate 7 Upperhill, Masaba Road, off Bunyala Road, Nairobi, Kenya · P.O. Box: 55604 - 00200"
   }
 }
