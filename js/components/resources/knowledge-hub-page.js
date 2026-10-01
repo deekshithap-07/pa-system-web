@@ -202,26 +202,79 @@ function renderHero(hero = {}, collections = [], counts = {}) {
     </header>`;
 }
 
-function renderExplore(collections = [], counts = {}) {
-  const items = collections
+const INDEX_ICONS = {
+  reports:
+    '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/><path d="M9 17v-3M12 17v-5M15 17v-2"/></svg>',
+  research:
+    '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="6"/><path d="m20 20-4.5-4.5"/><path d="M8.5 11h5M11 8.5v5"/></svg>',
+  "case-studies":
+    '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16v12a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1z"/><path d="M9 7V5a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/><path d="m9 14 2 2 4-4"/></svg>',
+  guides:
+    '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="m15.5 8.5-2 5-5 2 2-5z"/></svg>',
+  training:
+    '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-5 9 5-9 5z"/><path d="M7 11.5V16c0 1.4 2.2 3 5 3s5-1.6 5-3v-4.5"/><path d="M21 9v5"/></svg>',
+  publications:
+    '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4h11a2 2 0 0 1 2 2v13a1 1 0 0 0 1 1H6a2 2 0 0 1-2-2V5a1 1 0 0 1 1-1z"/><path d="M18 9h2v10a1 1 0 0 1-1 1"/><path d="M8 8h6M8 12h6M8 16h4"/></svg>',
+  videos:
+    '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m10 9 5 3-5 3z"/></svg>',
+};
+
+const TAB_PREVIEW = 4;
+
+function countLabelFor(id, count) {
+  if (id === "videos") {
+    return count ? `${count} ${count === 1 ? "video" : "videos"}` : "Field films";
+  }
+  return `${count} ${count === 1 ? "resource" : "resources"}`;
+}
+
+function renderTabPreview(item, countriesData, fallbackHref) {
+  const meta = itemMeta(item, countriesData);
+  const target = item.href ? item : { ...item, href: fallbackHref };
+  return `<li><a class="kh-tabs__row" ${linkAttrs(target)}>
+      <span class="kh-tabs__row-body">
+        ${meta ? `<span class="kh-tabs__row-meta">${meta}</span>` : ""}
+        <strong class="kh-tabs__row-title">${item.title || ""}</strong>
+      </span>
+      <span class="kh-tabs__row-go" aria-hidden="true">→</span>
+    </a></li>`;
+}
+
+function renderExplore(collections = [], counts = {}, byType = {}, countriesData) {
+  if (!collections.length) return "";
+
+  const tabs = collections
+    .map((c, i) => {
+      const on = i === 0;
+      return `<button type="button" class="kh-tabs__tab${on ? " is-active" : ""}" role="tab" id="kh-tab-${c.id}"
+          aria-selected="${on}" aria-controls="kh-tabpanel-${c.id}" tabindex="${on ? 0 : -1}" data-kh-tab="${c.id}">
+        <span class="kh-tabs__tab-icon" aria-hidden="true">${INDEX_ICONS[c.id] || INDEX_ICONS.reports}</span>
+        <span class="kh-tabs__tab-label">${c.label || c.title}</span>
+        <span class="kh-tabs__tab-count">${counts[c.id] ?? 0}</span>
+      </button>`;
+    })
+    .join("");
+
+  const panels = collections
     .map((c, i) => {
       const count = counts[c.id] ?? 0;
       const href = c.href || `#kh-${c.id}`;
-      const countLabel =
-        c.id === "videos"
-          ? count
-            ? `${count} ${count === 1 ? "video" : "videos"}`
-            : "Field films"
-          : `${count} ${count === 1 ? "resource" : "resources"}`;
-      return `<a class="kh-index__item" href="${href}" data-kh-index="${c.id}" style="--i:${i}">
-        <span class="kh-index__n">${String(i + 1).padStart(2, "0")}</span>
-        <span class="kh-index__copy">
-          <span class="kh-index__label">${c.label || c.title}</span>
-          <span class="kh-index__desc">${c.description || ""}</span>
-          <span class="kh-index__count">${countLabel}</span>
-        </span>
-        <span class="kh-index__go" aria-hidden="true">→</span>
-      </a>`;
+      const list = (byType[c.id] || []).slice(0, TAB_PREVIEW);
+      const label = c.label || c.title;
+      const rows = list.length
+        ? `<ul class="kh-tabs__list">${list.map((item) => renderTabPreview(item, countriesData, href)).join("")}</ul>`
+        : `<p class="kh-tabs__empty">No ${label.toLowerCase()} published here yet — check back soon.</p>`;
+      return `<div class="kh-tabs__panel" role="tabpanel" id="kh-tabpanel-${c.id}" aria-labelledby="kh-tab-${c.id}"
+          data-kh-tabpanel="${c.id}"${i === 0 ? "" : " hidden"}>
+        <div class="kh-tabs__intro">
+          <span class="kh-tabs__intro-icon" aria-hidden="true">${INDEX_ICONS[c.id] || INDEX_ICONS.reports}</span>
+          <h3 class="kh-tabs__intro-title">${label}</h3>
+          ${c.description ? `<p class="kh-tabs__intro-desc">${c.description}</p>` : ""}
+          <span class="kh-tabs__intro-count">${countLabelFor(c.id, count)}</span>
+          <a class="kh-tabs__all" href="${href}">View all ${label.toLowerCase()} <span aria-hidden="true">→</span></a>
+        </div>
+        ${rows}
+      </div>`;
     })
     .join("");
 
@@ -234,7 +287,10 @@ function renderExplore(collections = [], counts = {}) {
             titleHtml: "<span>Browse the</span> <em>library.</em>",
           })}</h2>
         </header>
-        <nav class="kh-index" aria-label="Resource types" data-kh-stagger>${items}</nav>
+        <div class="kh-tabs" data-kh-tabs data-kh-reveal>
+          <div class="kh-tabs__bar" role="tablist" aria-label="Resource types">${tabs}</div>
+          ${panels}
+        </div>
       </div>
     </section>`;
 }
@@ -505,7 +561,7 @@ export function renderKnowledgeHubPage(data) {
   return `
     <div class="kh-page" data-resources-hub data-knowledge-hub>
       ${renderHero(hero, collections, counts)}
-      ${renderExplore(collections, counts)}
+      ${renderExplore(collections, counts, byType, data.countries)}
       ${renderSearch(lib, collections, countries, programs)}
       ${renderFeatured(featured, data.countries)}
       ${ARCHIVE.map((cfg) =>
@@ -525,7 +581,7 @@ export function mountKnowledgeHubPage() {
   destroyKnowledgeHubPage();
   const cleanups = [];
   cleanups.push(bindFilters(page));
-  cleanups.push(bindIndexHover(page));
+  cleanups.push(bindLibraryTabs(page));
   initMotion(page);
   khCleanup = () => cleanups.forEach((fn) => fn && fn());
 }
@@ -542,29 +598,61 @@ export function destroyKnowledgeHubPage() {
   }
 }
 
-function bindIndexHover(page) {
-  const items = [...page.querySelectorAll("[data-kh-index]")];
-  if (!items.length) return () => {};
+function bindLibraryTabs(page) {
+  const wrap = page.querySelector("[data-kh-tabs]");
+  if (!wrap) return () => {};
+  const tabs = [...wrap.querySelectorAll("[data-kh-tab]")];
+  const panels = [...wrap.querySelectorAll("[data-kh-tabpanel]")];
+  if (!tabs.length) return () => {};
+  const bar = wrap.querySelector(".kh-tabs__bar");
+  const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-  const onEnter = (e) => e.currentTarget.classList.add("is-hot");
-  const onLeave = (e) => e.currentTarget.classList.remove("is-hot");
-  const onFocus = (e) => e.currentTarget.classList.add("is-hot");
-  const onBlur = (e) => e.currentTarget.classList.remove("is-hot");
-
-  items.forEach((el) => {
-    el.addEventListener("mouseenter", onEnter);
-    el.addEventListener("mouseleave", onLeave);
-    el.addEventListener("focus", onFocus);
-    el.addEventListener("blur", onBlur);
-  });
-
-  return () => {
-    items.forEach((el) => {
-      el.removeEventListener("mouseenter", onEnter);
-      el.removeEventListener("mouseleave", onLeave);
-      el.removeEventListener("focus", onFocus);
-      el.removeEventListener("blur", onBlur);
+  const select = (id, { focus = false } = {}) => {
+    tabs.forEach((tab) => {
+      const on = tab.dataset.khTab === id;
+      tab.classList.toggle("is-active", on);
+      tab.setAttribute("aria-selected", on ? "true" : "false");
+      tab.tabIndex = on ? 0 : -1;
+      if (on && focus) tab.focus();
+      if (on && bar && bar.scrollWidth > bar.clientWidth) {
+        bar.scrollTo({
+          left: tab.offsetLeft - (bar.clientWidth - tab.offsetWidth) / 2,
+          behavior: reduce ? "auto" : "smooth",
+        });
+      }
     });
+    panels.forEach((panel) => {
+      const on = panel.dataset.khTabpanel === id;
+      panel.hidden = !on;
+      if (on && !reduce && typeof gsap !== "undefined") {
+        gsap.fromTo(panel, { autoAlpha: 0, y: 12 }, { autoAlpha: 1, y: 0, duration: 0.4, ease: "power2.out", clearProps: "transform" });
+      }
+    });
+  };
+
+  const onClick = (e) => {
+    const tab = e.target.closest("[data-kh-tab]");
+    if (tab) select(tab.dataset.khTab);
+  };
+
+  const onKey = (e) => {
+    const i = tabs.indexOf(document.activeElement);
+    if (i < 0) return;
+    let next = null;
+    if (e.key === "ArrowRight") next = tabs[(i + 1) % tabs.length];
+    else if (e.key === "ArrowLeft") next = tabs[(i - 1 + tabs.length) % tabs.length];
+    else if (e.key === "Home") next = tabs[0];
+    else if (e.key === "End") next = tabs[tabs.length - 1];
+    if (!next) return;
+    e.preventDefault();
+    select(next.dataset.khTab, { focus: true });
+  };
+
+  wrap.addEventListener("click", onClick);
+  wrap.addEventListener("keydown", onKey);
+  return () => {
+    wrap.removeEventListener("click", onClick);
+    wrap.removeEventListener("keydown", onKey);
   };
 }
 

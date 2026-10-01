@@ -10,6 +10,7 @@ import { renderHubGeoMap, bindHubGeoMap } from "../../map/components/HubGeoMap.j
 import { highlightCommunityOnMap } from "../../utils/hub-geo-maps.js";
 import { JOURNEY_STAGES } from "../shared/story-chapters.js";
 import { resolvePublicFreshness } from "../../utils/public-api.js";
+import { toFivePaProgrammes } from "../shared/pa-programmes.js";
 
 function analyticsFor(community, analytics) {
   return analytics?.communityComparison?.communities?.find((c) => c.id === community.id) || null;
@@ -326,21 +327,52 @@ function renderJourney(payload) {
 /* 4 — Glance (compact typography — once)                                     */
 /* -------------------------------------------------------------------------- */
 
+const RING_COLORS = { maroon: "#5c2428", gold: "#e8a91a", green: "#3f9a4a", ochre: "#c48914" };
+
+/** SVG ring gauge: `pct` 0–100 fills the arc, `center` is the big label. */
+function ring({ pct = 0, color = RING_COLORS.maroon, center = "", label = "" }) {
+  const p = Math.max(0, Math.min(100, Math.round(pct)));
+  return `<div class="cm-ring" style="--p:${p};--c:${color}" role="img" aria-label="${label}: ${center}">
+      <svg viewBox="0 0 120 120" aria-hidden="true">
+        <circle class="cm-ring__track" cx="60" cy="60" r="52"></circle>
+        <circle class="cm-ring__fill" cx="60" cy="60" r="52" pathLength="100"></circle>
+      </svg>
+      <strong class="cm-ring__center">${center}</strong>
+    </div>`;
+}
+
+function catchmentTotal(payload, key) {
+  const list = payload.siblingCommunities || [];
+  return list.reduce((sum, c) => sum + (typeof c[key] === "number" ? c[key] : 0), 0);
+}
+
 function renderGlance(payload) {
   const reach = publicReach(payload.community, payload.analytics);
-  const projects = collectCommunityPpps(payload).length;
-  const a = analyticsFor(payload.community, payload.analytics);
+  const pastors = typeof payload.community.pastors === "number" ? payload.community.pastors : null;
+  const area = payload.catchment.name;
 
-  const figure = (label, n) =>
-    n != null
-      ? { label, value: formatNumber(n), count: n }
-      : { label, value: "—", count: null, note: "Not yet reported" };
+  const metric = (label, key, value, color) => {
+    if (value == null) {
+      return { label, color, pct: 0, center: "—", caption: "Not yet reported" };
+    }
+    const total = catchmentTotal(payload, key);
+    const pct = total > 0 ? (value / total) * 100 : 0;
+    return {
+      label,
+      color,
+      pct,
+      center: formatNumber(value),
+      caption: total > 0
+        ? `${formatNumber(value)} of ${formatNumber(total)} in ${area} · ${Math.round(pct)}%`
+        : `None recorded across ${area} yet`,
+    };
+  };
 
-  const tiles = [figure("Shalom Groups", reach.shalom), figure("Households", reach.households)];
-  const projectCount = projects || (typeof a?.projects === "number" ? a.projects : null);
-  if (projectCount != null && projectCount > 0) {
-    tiles.push({ label: "PPPs & CHIPs", value: formatNumber(projectCount), count: projectCount });
-  }
+  const items = [
+    metric("Shalom Groups", "shalomGroups", reach.shalom, RING_COLORS.green),
+    metric("Households", "households", reach.households, RING_COLORS.gold),
+    metric("Pastor leaders", "pastors", pastors, RING_COLORS.maroon),
+  ];
 
   return `
     <section class="cm-glance" data-cm-section="glance" id="cm-reach" aria-labelledby="cm-glance-title">
@@ -348,16 +380,18 @@ function renderGlance(payload) {
         <header class="cm-sec-head" data-cm-rise>
           <p class="cm-kicker">Community at a glance</p>
           <h2 id="cm-glance-title" class="cm-sec-title">Public figures for ${payload.community.name}</h2>
-          <p class="cm-sec-lead">Only figures approved for public display appear here.</p>
+          <p class="cm-sec-lead">Each ring shows ${payload.community.name}'s share of the ${area} catchment total.</p>
         </header>
-        <div class="cm-glance__field" data-cm-rise>
-          ${tiles
+        <div class="cm-gauges" data-cm-rise>
+          ${items
             .map(
-              (t) => `<div class="cm-glance__item">
-                <strong${t.count != null ? ` data-cm-count="${t.count}"` : ""}>${t.value}</strong>
-                <span>${t.label}</span>
-                ${t.note ? `<em class="cm-glance__note">${t.note}</em>` : ""}
-              </div>`
+              (m) => `<figure class="cm-gauge">
+                ${ring({ pct: m.pct, color: m.color, center: m.center, label: m.label })}
+                <figcaption>
+                  <strong>${m.label}</strong>
+                  <span>${m.caption}</span>
+                </figcaption>
+              </figure>`
             )
             .join("")}
         </div>
@@ -372,6 +406,7 @@ function renderGlance(payload) {
 function renderProjects(payload) {
   const projects = collectCommunityPpps(payload);
   const place = payload.community.name;
+  const initiatives = renderCountryInitiatives(payload);
 
   if (!projects.length) {
     return `
@@ -380,8 +415,9 @@ function renderProjects(payload) {
           <header class="cm-sec-head cm-sec-head--light" data-cm-rise>
             <p class="cm-kicker cm-kicker--light">What is happening here</p>
             <h2 id="cm-work-title" class="cm-sec-title cm-sec-title--light">PPPs &amp; CHIPs in ${place}</h2>
-            <p class="cm-sec-lead cm-sec-lead--light">No Pastor-Planned Projects (PPPs) or Church-led initiatives (CHIPs) are publicly listed for ${place} yet.</p>
+            <p class="cm-sec-lead cm-sec-lead--light">No community-specific Pastor-Planned Projects (PPPs) or Church-led initiatives (CHIPs) are publicly listed for ${place} yet.</p>
           </header>
+          ${initiatives}
         </div>
       </section>`;
   }
@@ -413,8 +449,32 @@ function renderProjects(payload) {
           <p class="cm-sec-lead cm-sec-lead--light">Pastor-Planned Projects (PPPs) and Church-led initiatives (CHIPs) — titles and status only. Budgets, household lists, and operational detail stay internal.</p>
         </header>
         <ol class="cm-work__index" data-cm-work>${items}</ol>
+        ${initiatives}
       </div>
     </section>`;
+}
+
+function renderCountryInitiatives(payload) {
+  const ini = payload.countryInitiatives;
+  if (!ini?.items?.length) return "";
+  return `
+    <div class="cm-initiatives" data-cm-rise>
+      <header class="cm-initiatives__head">
+        <h3>${ini.title || "Pastor-Led Initiatives"} across ${payload.country.name}</h3>
+        <p>${ini.lead || "Key activities across communities"} — as published by Possibilities Africa for its communities in ${payload.country.name}.</p>
+      </header>
+      <ol class="cm-initiatives__list">
+        ${ini.items
+          .map(
+            (item, i) => `<li>
+              <span class="cm-initiatives__n">${String(i + 1).padStart(2, "0")}</span>
+              <span>${item}</span>
+            </li>`
+          )
+          .join("")}
+      </ol>
+      ${ini.sourceUrl ? `<a class="cm-initiatives__src" href="${ini.sourceUrl}" target="_blank" rel="noopener noreferrer">Source: PA ${payload.country.name} ↗</a>` : ""}
+    </div>`;
 }
 
 /* -------------------------------------------------------------------------- */
@@ -483,6 +543,17 @@ function renderActivity(payload) {
               .join("")}
           </div>
         </div>
+        ${
+          (payload.siblingCommunities || []).length > 1
+            ? `<article class="cm-chart cm-chart--compare" data-chart="cmPastorCompare" data-cm-rise>
+                <header>
+                  <h3>Pastor leaders across ${payload.catchment.name}</h3>
+                  <p>${payload.community.name} is highlighted against the other communities in its catchment.</p>
+                </header>
+                <div class="cm-chart__canvas" style="--rows:${payload.siblingCommunities.length}"><canvas aria-label="Pastor leaders by community in ${payload.catchment.name}"></canvas></div>
+              </article>`
+            : ""
+        }
       </div>
     </section>`;
 }
@@ -495,47 +566,62 @@ function renderProgress(payload, data) {
   const stage = journeyStage(payload);
   const current = stageIndex(stage);
   const freshness = resolvePublicFreshness(data, "communities");
-  const hasChart = Boolean(payload.dash?.charts?.impactLine);
   const c = payload.community;
 
-  const indicators = [
-    {
-      label: "Journey completion",
-      value: current >= 0 ? `${Math.round(((current + 1) / JOURNEY_STAGES.length) * 100)}%` : "0%",
-      note: current >= 0 ? `Phase ${current + 1} of ${JOURNEY_STAGES.length}` : stage,
-    },
-    {
-      label: "Participation rate",
-      value: typeof c.participationRate === "number" ? `${c.participationRate}%` : "—",
-      note: typeof c.participationRate === "number" ? "From PA's tracking dashboard" : "Not yet reported",
-    },
-    {
-      label: "Activity trend",
-      value: typeof c.trend === "number" ? `${c.trend > 0 ? "+" : ""}${c.trend}%` : "—",
-      note: typeof c.trend === "number" ? (c.trend > 0 ? "Growing" : c.trend < 0 ? "Declining" : "Stable") : "Not yet reported",
-      tone: typeof c.trend === "number" ? (c.trend > 0 ? "up" : c.trend < 0 ? "down" : "") : "",
-    },
-  ];
+  const journeyPct = current >= 0 ? Math.round(((current + 1) / JOURNEY_STAGES.length) * 100) : 0;
+  const hasRate = typeof c.participationRate === "number";
+  const hasTrend = typeof c.trend === "number";
+  const trendDir = hasTrend ? (c.trend > 0 ? "up" : c.trend < 0 ? "down" : "flat") : "flat";
+  const trendSpan = 25;
+  const trendFill = hasTrend ? Math.min(100, (Math.abs(c.trend) / trendSpan) * 100) : 0;
 
-  const indicatorHtml = `<ul class="cm-progress__kpis" data-cm-rise>
-      ${indicators
-        .map(
-          (k) => `<li class="cm-progress__kpi${k.tone ? ` is-${k.tone}` : ""}">
-            <span>${k.label}</span>
-            <strong>${k.value}</strong>
-            <em>${k.note}</em>
-          </li>`
-        )
-        .join("")}
-    </ul>`;
+  const indicatorHtml = `<div class="cm-gauges cm-gauges--progress" data-cm-rise>
+      <figure class="cm-gauge">
+        ${ring({ pct: journeyPct, color: RING_COLORS.maroon, center: `${journeyPct}%`, label: "Journey completion" })}
+        <figcaption>
+          <strong>Journey completion</strong>
+          <span>${current >= 0 ? `Phase ${current + 1} of ${JOURNEY_STAGES.length} · ${stage}` : `${stage} — no active journey stage`}</span>
+        </figcaption>
+      </figure>
+      <figure class="cm-gauge">
+        ${ring({ pct: hasRate ? c.participationRate : 0, color: RING_COLORS.green, center: hasRate ? `${c.participationRate}%` : "—", label: "Participation rate" })}
+        <figcaption>
+          <strong>Participation rate</strong>
+          <span>${hasRate ? "From PA's tracking dashboard" : "Not yet reported"}</span>
+        </figcaption>
+      </figure>
+      <figure class="cm-gauge cm-gauge--meter">
+        <div class="cm-meter is-${trendDir}" style="--f:${trendFill}" role="img" aria-label="Activity trend: ${hasTrend ? `${c.trend}%` : "not reported"}">
+          <strong class="cm-meter__value">${hasTrend ? `${c.trend > 0 ? "+" : ""}${c.trend}%` : "—"}</strong>
+          <div class="cm-meter__track" aria-hidden="true">
+            <span class="cm-meter__zero"></span>
+            <span class="cm-meter__fill"></span>
+          </div>
+          <div class="cm-meter__scale" aria-hidden="true"><span>−${trendSpan}%</span><span>0</span><span>+${trendSpan}%</span></div>
+        </div>
+        <figcaption>
+          <strong>Activity trend</strong>
+          <span>${hasTrend ? (trendDir === "up" ? "Growing" : trendDir === "down" ? "Declining" : "Stable") + " · from PA's tracking dashboard" : "Not yet reported"}</span>
+        </figcaption>
+      </figure>
+    </div>`;
 
-  const path = JOURNEY_STAGES.map((s, i) => {
-    const state = i < current ? "is-past" : i === current ? "is-current" : "";
-    return `<li class="cm-progress__node ${state}" style="--i:${i}">
-      <span class="cm-progress__pip" aria-hidden="true"></span>
-      <strong>${s.label}</strong>
-    </li>`;
-  }).join("");
+  const dashCharts = COMMUNITY_DASH_CHARTS.filter((d) => payload.communityCharts?.[d.key]);
+  const dashHtml = dashCharts.length
+    ? `<div class="cm-chart-grid">
+        ${dashCharts
+          .map(
+            (d) => `<article class="cm-chart" data-chart="${d.key}" data-cm-rise>
+              <header>
+                <h3>${d.fixedTitle ? d.title : payload.communityCharts[d.key].title || d.title} <span class="pa-sample-tag" title="Sample figures — awaiting PA verification">Sample</span></h3>
+                <p>${d.caption}</p>
+              </header>
+              <div class="cm-chart__canvas"><canvas aria-label="${d.title}"></canvas></div>
+            </article>`
+          )
+          .join("")}
+      </div>`
+    : "";
 
   return `
     <section class="cm-progress" data-cm-section="progress" id="cm-progress" aria-labelledby="cm-progress-title">
@@ -550,21 +636,52 @@ function renderProgress(payload, data) {
           <span><em>Updated</em> ${freshness.lastUpdatedLabel}</span>
         </div>
         ${indicatorHtml}
-        <div class="cm-progress__path" data-cm-rise>
-          <p class="cm-progress__axis"><span>Earlier</span><span>Current</span></p>
-          <ol class="cm-progress__nodes" data-cm-progress-path>${path}</ol>
-          <span class="cm-progress__line" aria-hidden="true"><span data-cm-progress-fill></span></span>
-        </div>
-        ${
-          hasChart
-            ? `<div class="cm-progress__chart" data-chart="impactLine" data-cm-rise>
-                <h3>${payload.dash.charts.impactLine.title || "Progress over time"}</h3>
-                <div class="cm-progress__canvas"><canvas aria-label="Community progress chart"></canvas></div>
-              </div>`
-            : ""
-        }
+        ${dashHtml}
       </div>
     </section>`;
+}
+
+const COMMUNITY_DASH_CHARTS = [
+  { key: "impactLine", title: "Progress over time", caption: "Community progress by quarter." },
+  { key: "householdTrend", title: "Households reached", caption: "Households reached by year." },
+  { key: "leadershipRadar", title: "Leadership profile", caption: "Leadership scores across five qualities." },
+  { key: "programPie", title: "Activity across the five programs", caption: "Share of activity by PA program.", fixedTitle: true },
+];
+
+/** Chart.js configs for every data-chart on the community page. */
+export function communityChartConfigs(payload) {
+  const configs = {};
+  const own = payload.communityCharts || {};
+  const tones = [RING_COLORS.maroon, RING_COLORS.green, RING_COLORS.gold, RING_COLORS.ochre];
+
+  COMMUNITY_DASH_CHARTS.forEach((d, i) => {
+    const cfg = own[d.key];
+    if (!cfg) return;
+    const isProgrammes = d.key === "programPie";
+    configs[d.key] = {
+      ...cfg,
+      ...(isProgrammes ? toFivePaProgrammes(cfg.labels, cfg.data) : {}),
+      type: cfg.type === "pie" ? "doughnut" : cfg.type === "line" ? "area" : cfg.type,
+      color: tones[i % tones.length],
+      seriesLabel: isProgrammes ? d.title : cfg.title || d.title,
+      ...(cfg.type === "pie" ? { showLegend: true, showPercent: true, unit: "%" } : {}),
+      ...(isProgrammes ? { legendPosition: "bottom" } : {}),
+    };
+  });
+
+  const siblings = payload.siblingCommunities || [];
+  if (siblings.length > 1) {
+    configs.cmPastorCompare = {
+      type: "bar",
+      indexAxis: "y",
+      seriesLabel: "Pastor leaders",
+      labels: siblings.map((s) => s.name),
+      data: siblings.map((s) => s.pastors ?? 0),
+      colors: siblings.map((s) => (s.id === payload.community.id ? RING_COLORS.maroon : "rgba(232, 169, 26, 0.55)")),
+    };
+  }
+
+  return configs;
 }
 
 /* -------------------------------------------------------------------------- */
@@ -812,7 +929,28 @@ export function mountCommunityOutcomes(root, payload) {
   });
   highlightCommunityOnMap(page, payload.community.slug);
   bindProjectIndex(page);
+  bindGauges(page);
   initCommunityMotion(page);
+}
+
+function bindGauges(page) {
+  const gauges = page.querySelectorAll(".cm-ring, .cm-meter");
+  const reveal = (el) => el.classList.add("is-in");
+  if (!("IntersectionObserver" in window)) {
+    gauges.forEach(reveal);
+    return;
+  }
+  const io = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((e) => {
+        if (!e.isIntersecting) return;
+        reveal(e.target);
+        io.unobserve(e.target);
+      });
+    },
+    { threshold: 0.35 }
+  );
+  gauges.forEach((el) => io.observe(el));
 }
 
 function bindProjectIndex(page) {

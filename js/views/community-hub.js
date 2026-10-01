@@ -2,6 +2,7 @@ import {
   getCountryBySlug,
   getCatchmentBySlug,
   getCommunityBySlug,
+  getCommunitiesByCatchment,
   getDashboard,
 } from "../utils/data.js";
 import { toPublicCommunity, toPublicCommunityAnalytics } from "../utils/public-api.js";
@@ -10,6 +11,7 @@ import {
   renderCommunityOutcomes,
   mountCommunityOutcomes,
   destroyCommunityOutcomes,
+  communityChartConfigs,
 } from "../components/community-hub/CommunityOutcomesPage.js";
 import {
   mountCountryHubCharts,
@@ -44,6 +46,9 @@ export function renderCommunityHub(countrySlug, catchmentSlug, communitySlug, da
       programmes: data.home?.ourWork?.programs || null,
       catchmentActivities: catchmentHub?.activities || [],
       catchmentHeroImage: catchmentHub?.heroImage || null,
+      siblingCommunities: getCommunitiesByCatchment(data.communities, catchment.id).map((c) => toPublicCommunity(c)),
+      communityCharts: data.charts?.dashboards?.[`community:${community.id}`]?.charts || null,
+      countryInitiatives: data.countryHubs?.hubs?.[country.slug]?.initiatives || null,
     },
     data
   );
@@ -55,16 +60,12 @@ export function renderCommunityHub(countrySlug, catchmentSlug, communitySlug, da
 export function mountCommunityHub(root, hub) {
   mountCommunityOutcomes(root, hub);
 
-  const progressCharts = Object.fromEntries(
-    ["impactLine"]
-      .filter((k) => hub.dash?.charts?.[k])
-      .map((k) => [k, hub.dash.charts[k]])
-  );
+  const configs = communityChartConfigs(hub);
 
   requestAnimationFrame(() => {
-    if (Object.keys(progressCharts).length) {
+    if (Object.keys(configs).length) {
       const wrap = root.querySelector("[data-community-outcomes]");
-      if (wrap) mountCountryHubCharts(wrap, progressCharts);
+      if (wrap) mountCountryHubCharts(wrap, configs);
     }
     if (typeof ScrollTrigger !== "undefined") ScrollTrigger.refresh();
   });

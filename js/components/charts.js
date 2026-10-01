@@ -107,7 +107,7 @@ export function renderChart(canvas, config) {
   let datasets;
 
   if (type === "bar") {
-    const barColors = sliceColors(dataLen, accent);
+    const barColors = config.colors || sliceColors(dataLen, accent);
     datasets = [
       {
         label: config.seriesLabel || config.title,
@@ -135,7 +135,7 @@ export function renderChart(canvas, config) {
       },
     ];
   } else if (isRound) {
-    const pieColors = sliceColors(dataLen, accent);
+    const pieColors = config.colors || sliceColors(dataLen, accent);
     datasets = [
       {
         data: config.data,
@@ -217,12 +217,32 @@ export function renderChart(canvas, config) {
       : { y: valueAxis, x: categoryAxis };
   }
 
+  if (config.sparkline && type === "line") {
+    datasets[0].backgroundColor = `${accent}33`;
+    datasets[0].fill = true;
+    datasets[0].borderWidth = 2;
+    const chart = new Chart(canvas, {
+      type,
+      data: { labels: config.labels, datasets },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: { legend: { display: false }, tooltip: wbTooltip(config) },
+        interaction: { mode: "index", intersect: false },
+        scales: { x: { display: false }, y: { display: false, beginAtZero: true } },
+        layout: { padding: 2 },
+      },
+    });
+    instances.push(chart);
+    return chart;
+  }
+
   const unit = config.unit || "";
   const legendLabels =
     showLegend && (type === "pie" || type === "doughnut")
       ? {
           display: true,
-          position: "right",
+          position: config.legendPosition || "right",
           align: "center",
           labels: {
             boxWidth: 12,

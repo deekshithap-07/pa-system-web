@@ -11,7 +11,7 @@ import {
 import { renderHubGeoMap, bindHubGeoMap } from "../../map/components/HubGeoMap.js";
 import { resolvePublicFreshness } from "../../utils/public-api.js";
 import { bindPartnerContact } from "../contact-modal.js";
-import { resolvePaProgrammes } from "../shared/pa-programmes.js";
+import { resolvePaProgrammes, toFivePaProgrammes } from "../shared/pa-programmes.js";
 
 function storyHref(story) {
   return `#/story/${story.slug}`;
@@ -98,6 +98,50 @@ export function renderCountryIntro(hub, data) {
         </div>
       </div>
     </header>`;
+}
+
+/* 01a — Country film (click-to-play YouTube embed) */
+export function renderCountryVideo(hub) {
+  const v = hub.video;
+  if (!v?.videoId) return "";
+  const watchUrl = v.youtubeUrl || `https://www.youtube.com/watch?v=${v.videoId}`;
+  return `
+    <section class="cp-film" data-cp-section="film" aria-labelledby="cp-film-title">
+      <div class="container cp-film__grid">
+        <div class="cp-film__player" data-cp-film data-video-id="${v.videoId}" data-video-start="${v.start || 0}" data-video-title="${v.title || ""}" data-cp-reveal>
+          <button type="button" class="cp-film__poster" data-cp-film-play aria-label="Play video: ${v.title || `PA in ${hub.countryName}`}">
+            <img src="https://i.ytimg.com/vi/${v.videoId}/hqdefault.jpg" alt="" loading="lazy" decoding="async">
+            <span class="cp-film__play" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="26" height="26" fill="currentColor"><path d="M8 5.5v13l11-6.5L8 5.5z"/></svg>
+            </span>
+          </button>
+        </div>
+        <div class="cp-film__copy" data-cp-reveal>
+          <p class="cp-kicker">Watch · PA in ${hub.countryName}</p>
+          <h2 id="cp-film-title" class="cp-sec-title">${v.title || `Possibilities Africa in ${hub.countryName}`}</h2>
+          <p class="cp-sec-lead">A film by Possibilities Africa.</p>
+          <a class="cp-text-link" href="${watchUrl}" target="_blank" rel="noopener noreferrer">Watch on YouTube ↗</a>
+        </div>
+      </div>
+    </section>`;
+}
+
+export function bindCountryVideo(root) {
+  const player = root.querySelector("[data-cp-film]");
+  const btn = player?.querySelector("[data-cp-film-play]");
+  if (!btn) return;
+  btn.addEventListener("click", () => {
+    const params = new URLSearchParams({ autoplay: "1", rel: "0", playsinline: "1" });
+    const start = Number(player.dataset.videoStart) || 0;
+    if (start > 0) params.set("start", String(start));
+    const frame = document.createElement("iframe");
+    frame.src = `https://www.youtube.com/embed/${player.dataset.videoId}?${params}`;
+    frame.title = player.dataset.videoTitle || "Possibilities Africa video";
+    frame.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share";
+    frame.allowFullscreen = true;
+    frame.referrerPolicy = "strict-origin-when-cross-origin";
+    player.replaceChildren(frame);
+  });
 }
 
 /* 01b — At a glance (headline figures, counted in place) */
@@ -229,21 +273,125 @@ export function renderCountryProgrammes(hub, data) {
 }
 
 /* 04 — Growth & progress (ONLY home for performance indicators) */
-export function renderCountryTrends(hub, data) {
+const BRAND = { maroon: "#5c2428", gold: "#e8a91a", green: "#3f9a4a", ochre: "#c48914" };
+const SAMPLE_TAG = `<span class="pa-sample-tag" title="Sample figures — awaiting PA verification">Sample</span>`;
+
+const TREND_CHARTS = [
+  { key: "communitiesAdded", caption: "Total communities on the network each year.", size: "wide", color: BRAND.maroon },
+  { key: "growthOverTime", caption: "Growth of the country network by year.", color: BRAND.gold },
+  { key: "householdsReached", caption: "Households reached through community programs.", color: BRAND.green, type: "area" },
+  { key: "leadershipDev", caption: "Leadership development by quarter.", color: BRAND.ochre },
+  { key: "projectImpl", title: "PPP & CHIP focus areas", caption: "Projects by sector.", indexAxis: "y" },
+  { key: "programActivity", title: "Activity across the five programs", caption: "Share of activity by PA program.", type: "doughnut", showLegend: true, showPercent: true, unit: "%" },
+];
+
+const HEADLINE_SERIES = [
+  { key: "communitiesAdded", label: "Communities", color: BRAND.maroon },
+  { key: "householdsReached", label: "Households reached", color: BRAND.green },
+  { key: "leadershipDev", label: "Leadership score", color: BRAND.ochre },
+  { key: "growthOverTime", label: "Network growth", color: BRAND.gold },
+];
+
+const hasSignal = (cfg) => Array.isArray(cfg?.data) && cfg.data.some((v) => Number(v) > 0);
+
+/** Chart configs for the Growth & progress section, keyed by data-chart id. */
+export function buildCountryTrendCharts(hub) {
   const charts = hub.charts || {};
-  const keys = ["communitiesAdded", "growthOverTime", "leadershipDev"].filter((k) => charts[k]);
-  if (!keys.length) return "";
+  const configs = {};
+  const panels = [];
+
+  TREND_CHARTS.forEach((t) => {
+    const cfg = charts[t.key];
+    if (!hasSignal(cfg)) return;
+    configs[t.key] = {
+      ...cfg,
+      ...(t.key === "programActivity" ? toFivePaProgrammes(cfg.labels, cfg.data) : {}),
+      ...(t.key === "programActivity" ? { legendPosition: "bottom" } : {}),
+      title: t.title || cfg.title,
+      seriesLabel: t.title || cfg.title,
+      color: t.color || BRAND.gold,
+      type: t.type || cfg.type,
+      ...(t.indexAxis ? { indexAxis: t.indexAxis } : {}),
+      ...(t.showLegend ? { showLegend: true, showPercent: true, unit: t.unit } : {}),
+    };
+    panels.push({ key: t.key, title: t.title || cfg.title, caption: t.caption, size: t.size || "", sample: true });
+  });
+
+  const catchments = (hub.catchments || []).filter((c) => typeof c.summary?.pastors === "number");
+  if (catchments.length > 1) {
+    configs.catchmentCompare = {
+      type: "bar",
+      indexAxis: "y",
+      title: "Pastor leaders by catchment",
+      seriesLabel: "Pastor leaders",
+      labels: catchments.map((c) => c.name),
+      data: catchments.map((c) => c.summary.pastors),
+      colors: catchments.map((_, i) => [BRAND.maroon, BRAND.gold, BRAND.green][i % 3]),
+    };
+    panels.push({
+      key: "catchmentCompare",
+      title: "Pastor leaders by catchment",
+      caption: `How pastor leadership is spread across ${hub.countryName}.`,
+      size: "",
+      sample: false,
+    });
+  }
+
+  const headline = HEADLINE_SERIES.filter((h) => hasSignal(charts[h.key]))
+    .slice(0, 3)
+    .map((h) => {
+      const series = charts[h.key].data.map(Number);
+      const first = series.find((v) => v > 0) ?? series[0];
+      const last = series[series.length - 1];
+      const pct = first > 0 ? Math.round(((last - first) / first) * 100) : null;
+      const labels = charts[h.key].labels || [];
+      configs[`spark-${h.key}`] = {
+        type: "line",
+        sparkline: true,
+        labels,
+        data: series,
+        color: h.color,
+        seriesLabel: h.label,
+      };
+      return {
+        key: h.key,
+        label: h.label,
+        value: last.toLocaleString("en-US"),
+        delta: pct == null ? "" : `${pct >= 0 ? "+" : ""}${pct}%`,
+        since: labels[0] || "",
+        up: pct == null ? null : pct >= 0,
+      };
+    });
+
+  return { configs, panels, headline };
+}
+
+export function renderCountryTrends(hub, data) {
+  const trend = hub.trendCharts || buildCountryTrendCharts(hub);
+  if (!trend.panels.length && !trend.headline.length) return "";
 
   const freshness = resolvePublicFreshness(data, "country-hubs");
-  const primary = charts[keys[0]];
-  const secondary = keys[1] ? charts[keys[1]] : null;
 
-  const miles = (primary.labels || [])
+  const headline = trend.headline
     .map(
-      (label, i) => `<li>
-        <strong>${label}</strong>
-        <span>${primary.data?.[i] ?? ""}</span>
+      (h) => `<li class="cp-trend-metric" data-chart="spark-${h.key}">
+        <span class="cp-trend-metric__label">${h.label} ${SAMPLE_TAG}</span>
+        <strong class="cp-trend-metric__value">${h.value}</strong>
+        ${h.delta ? `<span class="cp-trend-metric__delta${h.up ? " is-up" : " is-down"}">${h.up ? "▲" : "▼"} ${h.delta} <em>since ${h.since}</em></span>` : ""}
+        <div class="cp-trend-metric__spark"><canvas aria-label="${h.label} trend"></canvas></div>
       </li>`
+    )
+    .join("");
+
+  const panels = trend.panels
+    .map(
+      (p) => `<article class="cp-progress__chart${p.size ? ` cp-progress__chart--${p.size}` : ""}" data-chart="${p.key}" data-cp-reveal>
+        <header class="cp-progress__chart-head">
+          <h3>${p.title} ${p.sample ? SAMPLE_TAG : ""}</h3>
+          ${p.caption ? `<p>${p.caption}</p>` : ""}
+        </header>
+        <div class="cp-progress__canvas"><canvas aria-label="${p.title}"></canvas></div>
+      </article>`
     )
     .join("");
 
@@ -259,28 +407,16 @@ export function renderCountryTrends(hub, data) {
           ${freshness.reportingPeriod ? `<span><em>Reporting</em> ${freshness.reportingPeriod}</span>` : ""}
           <span><em>Updated</em> ${freshness.lastUpdatedLabel}</span>
         </div>
-        <div class="cp-progress__stage">
-          <article class="cp-progress__chart" data-chart="${keys[0]}" data-cp-reveal>
-            <h3>${primary.title}</h3>
-            <div class="cp-progress__canvas"><canvas aria-label="${primary.title}"></canvas></div>
-          </article>
-          ${
-            secondary
-              ? `<article class="cp-progress__chart cp-progress__chart--side" data-chart="${keys[1]}" data-cp-reveal>
-                  <h3>${secondary.title}</h3>
-                  <div class="cp-progress__canvas"><canvas aria-label="${secondary.title}"></canvas></div>
-                </article>`
-              : ""
-          }
-        </div>
-        <ol class="cp-progress__miles" data-cp-reveal>${miles}</ol>
+        ${headline ? `<ul class="cp-trend-metrics" data-cp-reveal aria-label="Headline trends">${headline}</ul>` : ""}
+        <div class="cp-progress__grid">${panels}</div>
+        <p class="pa-sample-note" role="note">Charts tagged <strong>Sample</strong> use placeholder series awaiting PA verification. The catchment chart uses PA's tracking data.</p>
       </div>
     </section>`;
 }
 
 /* 05 — Transformation story (human meaning only) */
 export function renderCountryFeaturedStories(hub, stories = []) {
-  const list = (stories.length ? stories : hub.stories || []).slice(0, 1);
+  const list = stories.length ? stories : hub.stories || [];
   const allHref = `#/country/${hub.country?.slug || ""}/stories`;
 
   if (!list.length) {
@@ -297,8 +433,30 @@ export function renderCountryFeaturedStories(hub, stories = []) {
       </section>`;
   }
 
-  const featured = list[0];
+  const [featured, ...more] = list;
   const src = storyHeroImage(featured);
+  const allLabel = `All ${list.length} ${list.length === 1 ? "story" : "stories"} from ${hub.countryName} →`;
+  const moreHtml = more.length
+    ? `<div class="container cp-story__more-wrap">
+        <p class="cp-kicker">More stories from ${hub.countryName}</p>
+        <ul class="cp-story__more" data-cp-reveal>
+          ${more
+            .map(
+              (s) => `<li>
+                <a class="cp-story__card" href="${storyHref(s)}" data-link>
+                  <span class="cp-story__card-img">${storyHeroImage(s) ? `<img src="${storyHeroImage(s)}" alt="" loading="lazy" decoding="async">` : ""}</span>
+                  <span class="cp-story__card-copy">
+                    ${s.program ? `<span class="cp-story__card-tag">${s.program}</span>` : ""}
+                    <strong>${s.title}</strong>
+                    <span class="cp-story__card-go">Read the story →</span>
+                  </span>
+                </a>
+              </li>`
+            )
+            .join("")}
+        </ul>
+      </div>`
+    : "";
 
   return `
     <section class="cp-story" data-cp-section="stories" aria-labelledby="cp-stories-title">
@@ -312,9 +470,10 @@ export function renderCountryFeaturedStories(hub, stories = []) {
           <h2 id="cp-stories-title" class="cp-story__title">${featured.title}</h2>
           ${featured.excerpt ? `<p class="cp-story__excerpt">${featured.excerpt}</p>` : ""}
           <a class="cp-story__cta" href="${storyHref(featured)}" data-link>Read the story →</a>
-          <a class="cp-text-link cp-text-link--light" href="${allHref}" data-link style="margin-top:1rem">All stories →</a>
+          <a class="cp-text-link cp-text-link--light" href="${allHref}" data-link style="margin-top:1rem">${allLabel}</a>
         </div>
       </div>
+      ${moreHtml}
     </section>`;
 }
 

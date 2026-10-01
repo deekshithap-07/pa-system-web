@@ -3,6 +3,8 @@ import { attachCountryHubGeoMap } from "../utils/hub-geo-maps.js";
 import {
   renderCountryIntro,
   renderCountryGlance,
+  renderCountryVideo,
+  bindCountryVideo,
   renderCountryMapPresence,
   renderCountryProgrammes,
   renderCountryTrends,
@@ -14,6 +16,7 @@ import {
   bindCountryEngage,
   bindCountryProgrammes,
   featuredStories,
+  buildCountryTrendCharts,
   initCountryPageAnimations,
 } from "../components/work/CountryWbPage.js";
 import { mountCountryHubCharts, teardownCountryHub } from "../components/country-hub/country-hub-mount.js";
@@ -25,12 +28,14 @@ export function renderCountryHub(slug, data) {
   }
 
   attachCountryHubGeoMap(hub, data);
+  hub.trendCharts = buildCountryTrendCharts(hub);
   const stories = featuredStories(data, hub);
 
   const html = `
     <div class="wb-country cp-portal-page" data-country-hub data-country-slug="${slug}">
       ${renderCountryIntro(hub, data)}
       ${renderCountryGlance(hub)}
+      ${renderCountryVideo(hub)}
       ${renderCountryMapPresence(hub)}
       ${renderCountryProgrammes(hub, data)}
       ${renderCountryTrends(hub, data)}
@@ -50,19 +55,11 @@ export function mountCountryHub(root, hub) {
   bindCountryProgrammes(hubEl);
   bindCountryMap(hubEl, hub?.country?.slug || hubEl.dataset.countrySlug);
   bindCountryEngage(hubEl);
+  bindCountryVideo(hubEl);
   initCountryPageAnimations(hubEl);
 
-  if (hub?.charts && hubEl.querySelector("[data-chart]")) {
-    const branded = Object.fromEntries(
-      Object.entries(hub.charts).map(([key, cfg]) => [
-        key,
-        {
-          ...cfg,
-          color: cfg.color && cfg.color.startsWith("#00") ? "#e8a91a" : cfg.color || "#e8a91a",
-        },
-      ])
-    );
-    mountCountryHubCharts(hubEl, branded);
+  if (hub?.trendCharts && hubEl.querySelector("[data-chart]")) {
+    mountCountryHubCharts(hubEl, hub.trendCharts.configs);
   }
 }
 

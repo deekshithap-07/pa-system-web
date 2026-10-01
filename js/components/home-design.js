@@ -414,6 +414,9 @@ export function renderOurWorkPrograms(section = {}) {
             ${list}
           </div>
           <aside class="pa-work__panel pa-work__panel--${first.tone || "maroon"}" data-pa-work-panel aria-live="polite">
+            <div class="pa-work__panel-media" data-pa-work-media${first.image ? "" : " hidden"}>
+              <img src="${first.image || ""}" alt="${first.imageAlt || ""}" data-pa-work-img decoding="async">
+            </div>
             <span class="pa-work__panel-n" data-pa-work-n aria-hidden="true">${firstN}</span>
             <div class="pa-work__panel-icon" data-pa-work-icon aria-hidden="true">${firstIcon}</div>
             <h3 data-pa-work-title>${first.title || ""}</h3>
@@ -437,6 +440,9 @@ export function bindOurWorkPrograms(root = document, section = {}) {
   if (!tabs.length || !panel) return;
 
   const ctaLabel = section.cta?.label || "Explore the programme";
+  programs.forEach((p) => {
+    if (p.image) new Image().src = p.image;
+  });
   let activeId = tabs.find((t) => t.classList.contains("is-active"))?.dataset.paWorkTab || programs[0]?.id;
   let shownId = activeId;
   let hoverTimer = null;
@@ -466,7 +472,14 @@ export function bindOurWorkPrograms(root = document, section = {}) {
     const titleEl = panel.querySelector("[data-pa-work-title]");
     const descEl = panel.querySelector("[data-pa-work-desc]");
     const ctaEl = panel.querySelector("[data-pa-work-cta]");
+    const mediaEl = panel.querySelector("[data-pa-work-media]");
+    const imgEl = panel.querySelector("[data-pa-work-img]");
     const href = p.href || section.cta?.href || "#/work";
+    if (mediaEl) mediaEl.hidden = !p.image;
+    if (imgEl && p.image) {
+      imgEl.src = p.image;
+      imgEl.alt = p.imageAlt || "";
+    }
     if (nEl) nEl.textContent = n;
     if (iconEl) iconEl.innerHTML = PROGRAM_ICONS[p.id] || PROGRAM_ICONS.leadership;
     if (titleEl) titleEl.textContent = p.title || "";
@@ -502,10 +515,15 @@ export function bindOurWorkPrograms(root = document, section = {}) {
     const titleEl = panel.querySelector("[data-pa-work-title]");
     const descEl = panel.querySelector("[data-pa-work-desc]");
     const ctaEl = panel.querySelector("[data-pa-work-cta]");
+    const mediaEl = panel.querySelector("[data-pa-work-media]");
     const pieces = [nEl, iconEl, titleEl, descEl, ctaEl].filter(Boolean);
 
     transitionTl?.kill();
     transitionTl = gsap.timeline({ defaults: { ease: "power2.inOut" } });
+
+    if (mediaEl) {
+      transitionTl.to(mediaEl, { autoAlpha: 0, scale: 1.02, duration: 0.26, ease: "power2.in" }, 0);
+    }
 
     /* Out — old content leaves as one motion */
     transitionTl.to(
@@ -559,6 +577,22 @@ export function bindOurWorkPrograms(root = document, section = {}) {
     );
 
     /* In — visual first, then type, then CTA */
+    if (mediaEl) {
+      transitionTl.fromTo(
+        mediaEl,
+        { autoAlpha: 0, scale: 1.06, x: entry.x * 0.6, y: entry.y * 0.6 },
+        {
+          autoAlpha: 1,
+          scale: 1,
+          x: 0,
+          y: 0,
+          duration: 0.7,
+          ease: "power3.out",
+          clearProps: "transform",
+        },
+        "-=0.45"
+      );
+    }
     if (iconEl) {
       transitionTl.to(
         iconEl,
@@ -919,9 +953,19 @@ export function renderKnowledgeNewsSplit(section = {}) {
 
   const kCta = knowledge.cta || { label: "Visit knowledge centre", href: "#/resources" };
   const nCta = news.cta || { label: "View all news", href: "#/news" };
+  const dateBlock = (raw) => {
+    const d = raw ? new Date(raw) : null;
+    if (!d || Number.isNaN(d.getTime())) return "";
+    const month = d.toLocaleString("en", { month: "short" });
+    return `<span class="pa-news__cal" aria-hidden="true">
+        <span class="pa-news__cal-day">${d.getDate()}</span>
+        <span class="pa-news__cal-month">${month} ${d.getFullYear()}</span>
+      </span>`;
+  };
   const items = (news.items || [])
     .map(
       (item, i) => `<a class="pa-news__item" ${linkAttrs(item.href || "#/news")} style="--i:${i}" data-pa-news-item>
+        ${dateBlock(item.date)}
         <span class="pa-news__meta">
           <span class="pa-news__tag">${item.tag || "News"}</span>
           ${item.sample ? `<span class="pa-sample-tag" title="Sample entry — awaiting PA verification">Sample</span>` : ""}

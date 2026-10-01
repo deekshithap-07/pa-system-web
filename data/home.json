@@ -57,6 +57,8 @@
         "text": "Developing leaders at every level.",
         "description": "This is the PA anchor program from which other programs are implemented. The program focuses on recruiting & selecting, organizing and equipping pastor leaders, who together as a cohesive group, provide visionary, servant leadership necessary for sustainable holistic transformation.",
         "tone": "maroon",
+        "image": "assets/results-areas/leadership.jpg",
+        "imageAlt": "Pastor leaders meeting in a circle under an acacia tree",
         "href": "#/work#work-leadership"
       },
       {
@@ -65,6 +67,8 @@
         "text": "Building strong faith and values.",
         "description": "PA believes that guiding people in the Judeo-Christian faith and practice gives them a foundation necessary for true and eternal transformation. This means teaching the whole gospel to transform the whole person and impact the whole community.",
         "tone": "gold",
+        "image": "assets/results-areas/discipleship.jpg",
+        "imageAlt": "Community members reading the Bible together in a village church",
         "href": "#/work"
       },
       {
@@ -73,6 +77,8 @@
         "text": "Creating sustainable livelihoods.",
         "description": "PA empowers the people in the community through the pastor leaders' groups to see the resources around them, learn how to develop them through diligence and hard work, and use them sustainably for the wellbeing of their communities.",
         "tone": "green",
+        "image": "assets/results-areas/economic.jpg",
+        "imageAlt": "A table banking savings group recording contributions, with poultry and a vegetable plot behind",
         "href": "#/work"
       },
       {
@@ -81,6 +87,8 @@
         "text": "Equipping young people for a better future.",
         "description": "A core program that invests in children and teenagers to grow up with the values, beliefs and life skills necessary to live holistic lives.",
         "tone": "maroon",
+        "image": "assets/results-areas/youth.jpg",
+        "imageAlt": "A mentor talking with school children in a village schoolyard",
         "href": "#/work"
       },
       {
@@ -89,6 +97,8 @@
         "text": "Building peaceful, engaged communities.",
         "description": "This program recognizes our responsibility to live our values in the community where God has placed us as responsible citizens contributing to solving community problems and creating an orderly society.",
         "tone": "gold",
+        "image": "assets/results-areas/citizenship.jpg",
+        "imageAlt": "Villagers building a stone water point together",
         "href": "#/work"
       }
     ]

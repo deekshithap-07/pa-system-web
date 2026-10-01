@@ -5,6 +5,27 @@
       "description": "Where the journey began.",
       "overview": "Kenya is the headquarters of Possibilities Africa (PA) activities. Africa's transformation journey started here in 2005, in a village called Namawanga in Webuye Constituency, Bungoma County, in the Western part of the country. Over the years, we have seen growth now spanning many villages across 32 constituencies.",
       "heroTagline": "PA Network · East Africa",
+      "video": {
+        "title": "PA Holistic transformation in Kenya",
+        "youtubeUrl": "https://www.youtube.com/watch?v=cAmc84c4A3I&t=6s",
+        "videoId": "cAmc84c4A3I",
+        "start": 6
+      },
+      "initiatives": {
+        "title": "Pastor-Led Initiatives",
+        "lead": "Key activities across communities",
+        "sourceUrl": "https://www.possibilitiesafrica.org/kenya.html",
+        "items": [
+          "Pastor's spiritual growth activities",
+          "Systematic and holistic teaching and preaching of the word of God in churches",
+          "Organising churches into small groups as per the needs of congregants",
+          "Establishing community Christian schools",
+          "Enhancing church children's activities",
+          "Merry-go-round and table banking in groups",
+          "Income-Generating Activities (IGAs) by church members to build household economic resilience",
+          "Enrolment in the PAK Savings and Credit Cooperative (SACCO)"
+        ]
+      },
       "kpis": [
         { "id": "communities", "label": "Communities", "value": 23, "trend": "stable", "direction": "neutral" },
         { "id": "catchments", "label": "Catchment Areas", "value": 5, "trend": "stable", "direction": "neutral" },
@@ -70,6 +91,26 @@
       "description": "The Warm Heart of Africa.",
       "overview": "Malawi, commonly referred to as the 'Warm Heart of Africa,' is a landlocked country in southeastern Africa. It is endowed with spectacular highlands and extensive lakes. Since 2012, Possibilities Africa (PA) has been changing this narrative by engaging pastors in rural areas through holistic ministry.",
       "heroTagline": "PA Network · Southern Africa",
+      "video": {
+        "title": "PA MALAWI",
+        "youtubeUrl": "https://www.youtube.com/watch?v=3hwGXdLtmj4",
+        "videoId": "3hwGXdLtmj4",
+        "start": 0
+      },
+      "initiatives": {
+        "title": "Pastor-Led Initiatives",
+        "lead": "Key activities across communities",
+        "sourceUrl": "https://www.possibilitiesafrica.org/malawi.html",
+        "items": [
+          "Pastor's spiritual growth activities",
+          "Systematic and holistic teaching and preaching of the word of God in churches",
+          "Organising churches into small groups as per the needs of congregants",
+          "Establishing community Christian schools",
+          "Enhancing church children's activities",
+          "Merry-go-round and table banking in groups",
+          "Income-Generating Activities (IGAs) by church members to build household economic resilience"
+        ]
+      },
       "kpis": [
         { "id": "communities", "label": "Communities", "value": 21, "trend": "stable", "direction": "neutral" },
         { "id": "catchments", "label": "Catchment Areas", "value": 6, "trend": "stable", "direction": "neutral" },
@@ -135,6 +176,20 @@
       "description": "Resilience in the Horn of Africa.",
       "overview": "Ethiopia, the largest and most populated country in the Horn of Africa, has a rich history dating back at least 3,000 years, and comprises over 80 ethnic groups and numerous languages. The country's transformation has from time to time been hit by challenges such as dependency on handouts and preaching lacking depth. To help find a lasting solution, Possibilities Africa was compelled to start operating in Ethiopia in 2019.",
       "heroTagline": "PA Network · Horn of Africa",
+      "initiatives": {
+        "title": "Pastor-Led Initiatives",
+        "lead": "Key activities across communities",
+        "sourceUrl": "https://www.possibilitiesafrica.org/ethiopia.html",
+        "items": [
+          "Pastor's spiritual growth activities",
+          "Systematic and holistic teaching and preaching of the word of God in churches",
+          "Organising churches into small groups as per the needs of congregants",
+          "Establishing community Christian schools",
+          "Enhancing church children's activities",
+          "Merry-go-round and table banking in groups",
+          "Income-Generating Activities (IGAs) by church members to build household economic resilience"
+        ]
+      },
       "kpis": [
         { "id": "communities", "label": "Communities", "value": 11, "trend": "stable", "direction": "neutral" },
         { "id": "catchments", "label": "Catchment Areas", "value": 3, "trend": "stable", "direction": "neutral" },
@@ -194,6 +249,34 @@
       "description": "Growing churches and crops.",
       "overview": "Zambia is a landlocked country in south-central Africa, with Lusaka serving as its capital. The country is one of the locations that PA has recently entered, having been formally registered as Possibilities Africa Zambia (PAZ) in 2022. PAZ began its operations in May 2023, and in early 2024 pastors from an additional five constituencies joined the ministry, making a total of 12 communities.",
       "heroTagline": "PA Network · Southern Africa",
+      "initiatives": {
+        "title": "Pastor-Led Initiatives",
+        "lead": "Key activities across communities",
+        "sourceUrl": "https://www.possibilitiesafrica.org/zambia.html",
+        "items": [
+          "Pastor's spiritual growth activities",
+          "Systematic and holistic teaching and preaching of the word of God in churches",
+          "Organising churches into small groups as per the needs of congregants",
+          "Establishing community Christian schools",
+          "Enhancing church children's activities",
+          "Merry-go-round and table banking in groups",
+          "Income-Generating Activities (IGAs) by church members to build household economic resilience"
+        ]
+      },
+      "initiatives": {
+        "title": "Pastor-Led Initiatives",
+        "lead": "Key activities across communities",
+        "sourceUrl": "https://www.possibilitiesafrica.org/zambia.html",
+        "items": [
+          "Pastor's spiritual growth activities",
+          "Systematic and holistic teaching and preaching of the word of God in churches",
+          "Organising churches into small groups as per the needs of congregants",
+          "Establishing community Christian schools",
+          "Enhancing church children's activities",
+          "Merry-go-round and table banking in groups",
+          "Income-Generating Activities (IGAs) by church members to build household economic resilience"
+        ]
+      },
       "kpis": [
         { "id": "communities", "label": "Communities", "value": 10, "trend": "stable", "direction": "neutral" },
         { "id": "catchments", "label": "Catchment Areas", "value": 3, "trend": "stable", "direction": "neutral" },

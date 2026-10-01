@@ -68,6 +68,31 @@ export function resolvePaProgrammes(list) {
   return PA_PROGRAMMES;
 }
 
+const PROGRAMME_MATCHERS = [
+  { id: "leadership", test: /leader/i },
+  { id: "discipleship", test: /disciple|spiritual|faith/i },
+  { id: "economic", test: /econom|productiv|livelihood|agri|farm|saving/i },
+  { id: "youth", test: /youth|mentor|next gen|child|teen/i },
+  { id: "citizenship", test: /citizen|water|health|educat|infrastructure/i },
+];
+
+/**
+ * Folds any programme breakdown into the five official programmes (Home → Results Areas).
+ * Water, health, education and infrastructure count as Responsible Citizenship, per PA's
+ * own description of that programme.
+ */
+export function toFivePaProgrammes(labels = [], data = []) {
+  const totals = Object.fromEntries(PA_PROGRAMMES.map((p) => [p.id, 0]));
+  labels.forEach((label, i) => {
+    const match = PROGRAMME_MATCHERS.find((m) => m.test.test(String(label)));
+    if (match) totals[match.id] += Number(data[i]) || 0;
+  });
+  return {
+    labels: PA_PROGRAMMES.map((p) => p.title),
+    data: PA_PROGRAMMES.map((p) => totals[p.id]),
+  };
+}
+
 /** Topics shape expected by renderDevelopmentTopics / priority accordion */
 export function paPriorityTopics(list) {
   return resolvePaProgrammes(list).map((p) => ({
