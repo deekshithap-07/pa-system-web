@@ -165,16 +165,8 @@ function bagByType(bag) {
   };
 }
 
-function renderHero(hero = {}, collections = [], counts = {}) {
+function renderHero(hero = {}) {
   const image = hero.image || "assets/knowledge-hub/hero.jpg";
-  const jumps = collections
-    .map(
-      (c) => `<a class="kh-hero__jump" href="#kh-${c.id}">
-        <span>${c.label || c.title}</span>
-        ${counts[c.id] ? `<em>${counts[c.id]}</em>` : ""}
-      </a>`
-    )
-    .join("");
   return `
     <header class="kh-hero" data-kh-section="hero">
       <div class="kh-hero__media" aria-hidden="true">
@@ -196,7 +188,6 @@ function renderHero(hero = {}, collections = [], counts = {}) {
           <p class="kh-hero__lead" data-kh-hero-line>${
             hero.lead || "PA as a source of knowledge, learning and evidence."
           }</p>
-          ${jumps ? `<nav class="kh-hero__jumps" aria-label="Jump to a collection" data-kh-hero-line>${jumps}</nav>` : ""}
         </div>
       </div>
     </header>`;
@@ -219,80 +210,20 @@ const INDEX_ICONS = {
     '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m10 9 5 3-5 3z"/></svg>',
 };
 
-const TAB_PREVIEW = 4;
-
-function countLabelFor(id, count) {
-  if (id === "videos") {
-    return count ? `${count} ${count === 1 ? "video" : "videos"}` : "Field films";
-  }
-  return `${count} ${count === 1 ? "resource" : "resources"}`;
-}
-
-function renderTabPreview(item, countriesData, fallbackHref) {
-  const meta = itemMeta(item, countriesData);
-  const target = item.href ? item : { ...item, href: fallbackHref };
-  return `<li><a class="kh-tabs__row" ${linkAttrs(target)}>
-      <span class="kh-tabs__row-body">
-        ${meta ? `<span class="kh-tabs__row-meta">${meta}</span>` : ""}
-        <strong class="kh-tabs__row-title">${item.title || ""}</strong>
-      </span>
-      <span class="kh-tabs__row-go" aria-hidden="true">→</span>
-    </a></li>`;
-}
-
-function renderExplore(collections = [], counts = {}, byType = {}, countriesData) {
+function renderJumpBar(collections = [], counts = {}) {
   if (!collections.length) return "";
-
-  const tabs = collections
-    .map((c, i) => {
-      const on = i === 0;
-      return `<button type="button" class="kh-tabs__tab${on ? " is-active" : ""}" role="tab" id="kh-tab-${c.id}"
-          aria-selected="${on}" aria-controls="kh-tabpanel-${c.id}" tabindex="${on ? 0 : -1}" data-kh-tab="${c.id}">
-        <span class="kh-tabs__tab-icon" aria-hidden="true">${INDEX_ICONS[c.id] || INDEX_ICONS.reports}</span>
-        <span class="kh-tabs__tab-label">${c.label || c.title}</span>
-        <span class="kh-tabs__tab-count">${counts[c.id] ?? 0}</span>
-      </button>`;
-    })
+  const jumps = collections
+    .map(
+      (c) => `<a class="kh-jumps__link" href="#kh-${c.id}">
+        <span class="kh-jumps__icon" aria-hidden="true">${INDEX_ICONS[c.id] || INDEX_ICONS.reports}</span>
+        <span>${c.label || c.title}</span>
+        ${counts[c.id] ? `<em>${counts[c.id]}</em>` : ""}
+      </a>`
+    )
     .join("");
-
-  const panels = collections
-    .map((c, i) => {
-      const count = counts[c.id] ?? 0;
-      const href = c.href || `#kh-${c.id}`;
-      const list = (byType[c.id] || []).slice(0, TAB_PREVIEW);
-      const label = c.label || c.title;
-      const rows = list.length
-        ? `<ul class="kh-tabs__list">${list.map((item) => renderTabPreview(item, countriesData, href)).join("")}</ul>`
-        : `<p class="kh-tabs__empty">No ${label.toLowerCase()} published here yet — check back soon.</p>`;
-      return `<div class="kh-tabs__panel" role="tabpanel" id="kh-tabpanel-${c.id}" aria-labelledby="kh-tab-${c.id}"
-          data-kh-tabpanel="${c.id}"${i === 0 ? "" : " hidden"}>
-        <div class="kh-tabs__intro">
-          <span class="kh-tabs__intro-icon" aria-hidden="true">${INDEX_ICONS[c.id] || INDEX_ICONS.reports}</span>
-          <h3 class="kh-tabs__intro-title">${label}</h3>
-          ${c.description ? `<p class="kh-tabs__intro-desc">${c.description}</p>` : ""}
-          <span class="kh-tabs__intro-count">${countLabelFor(c.id, count)}</span>
-          <a class="kh-tabs__all" href="${href}">View all ${label.toLowerCase()} <span aria-hidden="true">→</span></a>
-        </div>
-        ${rows}
-      </div>`;
-    })
-    .join("");
-
-  return `
-    <section class="kh-explore" id="kh-explore" data-kh-section="explore" aria-labelledby="kh-explore-title">
-      <div class="container">
-        <header class="kh-sec-head" data-kh-reveal>
-          <p class="kh-eyebrow">Resource exploration</p>
-          <h2 id="kh-explore-title" class="pa-title">${formatPaTitle({
-            titleHtml: "<span>Browse the</span> <em>library.</em>",
-          })}</h2>
-        </header>
-        <div class="kh-tabs" data-kh-tabs data-kh-reveal>
-          <div class="kh-tabs__bar" role="tablist" aria-label="Resource types">${tabs}</div>
-          ${panels}
-        </div>
-      </div>
-    </section>`;
+  return `<nav class="kh-jumps" aria-label="Jump to a collection">
+      <div class="container kh-jumps__inner">${jumps}</div>
+    </nav>`;
 }
 
 function renderSearch(lib = {}, collections = [], countries = [], programs = []) {
@@ -560,8 +491,8 @@ export function renderKnowledgeHubPage(data) {
 
   return `
     <div class="kh-page" data-resources-hub data-knowledge-hub>
-      ${renderHero(hero, collections, counts)}
-      ${renderExplore(collections, counts, byType, data.countries)}
+      ${renderHero(hero)}
+      ${renderJumpBar(collections, counts)}
       ${renderSearch(lib, collections, countries, programs)}
       ${renderFeatured(featured, data.countries)}
       ${ARCHIVE.map((cfg) =>
@@ -581,7 +512,6 @@ export function mountKnowledgeHubPage() {
   destroyKnowledgeHubPage();
   const cleanups = [];
   cleanups.push(bindFilters(page));
-  cleanups.push(bindLibraryTabs(page));
   initMotion(page);
   khCleanup = () => cleanups.forEach((fn) => fn && fn());
 }
@@ -596,64 +526,6 @@ export function destroyKnowledgeHubPage() {
       if (t.trigger?.closest?.("[data-knowledge-hub]")) t.kill();
     });
   }
-}
-
-function bindLibraryTabs(page) {
-  const wrap = page.querySelector("[data-kh-tabs]");
-  if (!wrap) return () => {};
-  const tabs = [...wrap.querySelectorAll("[data-kh-tab]")];
-  const panels = [...wrap.querySelectorAll("[data-kh-tabpanel]")];
-  if (!tabs.length) return () => {};
-  const bar = wrap.querySelector(".kh-tabs__bar");
-  const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-
-  const select = (id, { focus = false } = {}) => {
-    tabs.forEach((tab) => {
-      const on = tab.dataset.khTab === id;
-      tab.classList.toggle("is-active", on);
-      tab.setAttribute("aria-selected", on ? "true" : "false");
-      tab.tabIndex = on ? 0 : -1;
-      if (on && focus) tab.focus();
-      if (on && bar && bar.scrollWidth > bar.clientWidth) {
-        bar.scrollTo({
-          left: tab.offsetLeft - (bar.clientWidth - tab.offsetWidth) / 2,
-          behavior: reduce ? "auto" : "smooth",
-        });
-      }
-    });
-    panels.forEach((panel) => {
-      const on = panel.dataset.khTabpanel === id;
-      panel.hidden = !on;
-      if (on && !reduce && typeof gsap !== "undefined") {
-        gsap.fromTo(panel, { autoAlpha: 0, y: 12 }, { autoAlpha: 1, y: 0, duration: 0.4, ease: "power2.out", clearProps: "transform" });
-      }
-    });
-  };
-
-  const onClick = (e) => {
-    const tab = e.target.closest("[data-kh-tab]");
-    if (tab) select(tab.dataset.khTab);
-  };
-
-  const onKey = (e) => {
-    const i = tabs.indexOf(document.activeElement);
-    if (i < 0) return;
-    let next = null;
-    if (e.key === "ArrowRight") next = tabs[(i + 1) % tabs.length];
-    else if (e.key === "ArrowLeft") next = tabs[(i - 1 + tabs.length) % tabs.length];
-    else if (e.key === "Home") next = tabs[0];
-    else if (e.key === "End") next = tabs[tabs.length - 1];
-    if (!next) return;
-    e.preventDefault();
-    select(next.dataset.khTab, { focus: true });
-  };
-
-  wrap.addEventListener("click", onClick);
-  wrap.addEventListener("keydown", onKey);
-  return () => {
-    wrap.removeEventListener("click", onClick);
-    wrap.removeEventListener("keydown", onKey);
-  };
 }
 
 function bindFilters(page) {
@@ -683,7 +555,6 @@ function bindFilters(page) {
 
     page.querySelectorAll("[data-kh-section]").forEach((section) => {
       if (section.id === "kh-search" || section.dataset.khSection === "hero") return;
-      if (section.dataset.khSection === "explore") return;
       if (section.dataset.khSection === "featured") return;
       if (section.dataset.khSection === "close") return;
       const items = [...section.querySelectorAll("[data-kh-item]")];
