@@ -150,7 +150,7 @@ function renderReportsList(reports = []) {
 
 function renderPlaces(catchments = [], communitiesByCatchment = {}, countrySlug) {
   if (!catchments.length) {
-    return `<p class="d360-empty">Nearby groups will appear as communities join the network.</p>`;
+    return `<p class="d360-empty">Catchments will appear as communities join the network.</p>`;
   }
   return catchments
     .map((ct) => {
@@ -168,7 +168,7 @@ function renderPlaces(catchments = [], communitiesByCatchment = {}, countrySlug)
           <span class="d360-place-card__top">
             <span>
               <h3>${ct.name}</h3>
-              <p>${ct.region || "Nearby group of communities"}</p>
+              <p>${ct.region || "Catchment area"}</p>
             </span>
             <span class="d360-place-card__open">Open group →</span>
           </span>
@@ -252,7 +252,7 @@ export function renderCountryDataPage(payload) {
         <header class="d360-places-head">
           <p class="d360-places-head__eyebrow">Drill down</p>
           <h2>Places in ${hub.countryName}</h2>
-          <p>Open a nearby group or community for local figures and stories.</p>
+          <p>Open a catchment or community for local figures and stories.</p>
         </header>
         <div class="d360-places-grid">${renderPlaces(catchments, communitiesByCatchment, slug)}</div>`;
     }

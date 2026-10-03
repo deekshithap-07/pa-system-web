@@ -20,23 +20,69 @@
       "start": 5
     }
   },
+  "intro": {
+    "eyebrow": "PA at a glance",
+    "whyLabel": "Why PA exists",
+    "whatLabel": "The transformation we work toward",
+    "howLabel": "How we approach it",
+    "aboutCta": { "label": "Read our story", "href": "#/about" },
+    "entryTitle": "Explore PA your way",
+    "entries": [
+      {
+        "id": "country", "label": "By country", "text": "Africa → country → community", "href": "#/africa", "go": "Explore Africa",
+        "links": [
+          { "label": "Kenya", "href": "#/country/kenya" },
+          { "label": "Malawi", "href": "#/country/malawi" },
+          { "label": "Ethiopia", "href": "#/country/ethiopia" },
+          { "label": "Zambia", "href": "#/country/zambia" },
+          { "label": "Rwanda", "href": "#/country/rwanda" },
+          { "label": "Tanzania", "href": "#/country/tanzania" },
+          { "label": "Burundi", "href": "#/country/burundi" }
+        ]
+      },
+      {
+        "id": "program", "label": "By program", "text": "The five programs and their PPPs", "href": "#our-work", "scroll": true, "go": "See the five programs",
+        "links": [
+          { "label": "Transformational Leadership Development", "href": "#/program/leadership" },
+          { "label": "Spiritual Discipleship", "href": "#/program/discipleship" },
+          { "label": "Economic Productivity", "href": "#/program/economic" },
+          { "label": "Mentoring the Next Generation", "href": "#/program/youth" },
+          { "label": "Responsible Citizenship", "href": "#/program/citizenship" }
+        ]
+      },
+      {
+        "id": "impact", "label": "By impact", "text": "Progress and results", "href": "#/scorecard", "go": "Open Impact & Data",
+        "links": [
+          { "label": "Impact & Data", "href": "#/scorecard" },
+          { "label": "The two-year journey", "href": "#/work#work-journey" },
+          { "label": "Where we work", "href": "#/africa" }
+        ]
+      },
+      {
+        "id": "story", "label": "By story", "text": "Real people, real change", "href": "#/stories", "go": "Read all stories",
+        "links": [
+          { "label": "Stories from Kenya", "href": "#/country/kenya/stories" },
+          { "label": "Stories from Malawi", "href": "#/country/malawi/stories" },
+          { "label": "Stories from Ethiopia", "href": "#/country/ethiopia/stories" },
+          { "label": "Stories from Zambia", "href": "#/country/zambia/stories" }
+        ]
+      },
+      {
+        "id": "knowledge", "label": "By knowledge", "text": "Reports, research and learning", "href": "#/resources", "go": "Visit the Knowledge Hub",
+        "links": [
+          { "label": "Knowledge Hub", "href": "#/resources" },
+          { "label": "Field reports", "href": "#/field-reports" },
+          { "label": "News & updates", "href": "#/news" }
+        ]
+      }
+    ]
+  },
   "africaBand": {
-    "eyebrow": "PA Across Africa",
-    "title": "A growing movement. Of transformation.",
-    "titleHtml": "<span>A growing movement.</span> <em>Of transformation.</em>",
-    "lead": "From urban centres to rural communities, Possibilities Africa is working across countries to catalyze holistic transformation — leadership, discipleship, livelihoods, youth, and citizenship.",
-    "stats": [
-      { "value": "3K+", "label": "Spiritual Leaders, of Whom 2,000+ Are Pastors" },
-      { "value": "260K+", "label": "Households Reached" },
-      { "value": "1.3M+", "label": "Lives Impacted" },
-      { "value": "7", "label": "Countries Working Across Africa" }
-    ],
+    "eyebrow": "Explore Africa",
+    "title": "One Mission, Every Village.",
+    "titleHtml": "<span>One Mission,</span> <em>Every Village.</em>",
+    "regionLabel": "Explore by region",
     "exploreCta": { "label": "Explore Africa", "href": "#/africa" },
-    "numbers": {
-      "title": "Numbers that hold a generation.",
-      "titleHtml": "<span>Numbers that hold</span> <em>a generation.</em>",
-      "lead": "Over two decades of holistic ministry across rural African villages."
-    },
     "panelTitle": "Explore our work across Africa",
     "panelText": "Click on a country to see live data, programmes, stories and more.",
     "panelCta": { "label": "View interactive map", "href": "#home-africa-map-root" },
@@ -45,11 +91,10 @@
     "mapDescription": "Click a country to explore. Use Ctrl + scroll to zoom the map; scroll the page as usual to keep reading."
   },
   "ourWork": {
-    "eyebrow": "Results Areas",
-    "titleHtml": "<span>Five results areas that compound into</span> <em>lasting transformation.</em>",
-    "title": "Five results areas that compound into lasting transformation.",
-    "lead": "Possibilities Africa stands out as a ministry appointed at this time to bring hope and true transformation on the continent of Africa. We achieve this transformation through five result areas.",
-    "cta": { "label": "Explore the programme", "href": "#/work" },
+    "eyebrow": "How PA works · Five programs",
+    "titleHtml": "<span>We achieve this transformation through</span> <em>five result areas.</em>",
+    "title": "We achieve this transformation through five result areas.",
+    "lead": "Possibilities Africa stands out as a ministry appointed at this time to bring hope and true transformation on the continent of Africa.",
     "programs": [
       {
         "id": "leadership",
@@ -59,7 +104,7 @@
         "tone": "maroon",
         "image": "assets/results-areas/leadership.jpg",
         "imageAlt": "Pastor leaders meeting in a circle under an acacia tree",
-        "href": "#/work#work-leadership"
+        "href": "#/program/leadership"
       },
       {
         "id": "discipleship",
@@ -69,7 +114,7 @@
         "tone": "gold",
         "image": "assets/results-areas/discipleship.jpg",
         "imageAlt": "Community members reading the Bible together in a village church",
-        "href": "#/work"
+        "href": "#/program/discipleship"
       },
       {
         "id": "economic",
@@ -79,7 +124,7 @@
         "tone": "green",
         "image": "assets/results-areas/economic.jpg",
         "imageAlt": "A table banking savings group recording contributions, with poultry and a vegetable plot behind",
-        "href": "#/work"
+        "href": "#/program/economic"
       },
       {
         "id": "youth",
@@ -89,7 +134,7 @@
         "tone": "maroon",
         "image": "assets/results-areas/youth.jpg",
         "imageAlt": "A mentor talking with school children in a village schoolyard",
-        "href": "#/work"
+        "href": "#/program/youth"
       },
       {
         "id": "citizenship",
@@ -99,64 +144,37 @@
         "tone": "gold",
         "image": "assets/results-areas/citizenship.jpg",
         "imageAlt": "Villagers building a stone water point together",
-        "href": "#/work"
+        "href": "#/program/citizenship"
       }
     ]
   },
+  "howItWorks": {
+    "eyebrow": "How PA works",
+    "title": "Country to households.",
+    "titleHtml": "<span>Country</span> <em>to households.</em>",
+    "lead": "From a country to each household — through pastors, their fellowship and Shalom groups.",
+    "cta": { "label": "See it in a country", "href": "#/africa" }
+  },
   "impactData": {
-    "eyebrow": "Our Impact",
+    "eyebrow": "Latest impact and updates",
     "title": "Numbers that hold a generation.",
     "titleHtml": "<span>Numbers that hold</span> <em>a generation.</em>",
     "lead": "Over two decades of holistic ministry across rural African villages.",
     "cta": { "label": "Explore Impact Data", "href": "#/scorecard" },
     "image": "assets/country-heroes/ethiopia-hero-farm.jpg",
+    "source": "Figures published by Possibilities Africa. Background charts are illustrative.",
     "cards": [
-      {
-        "id": "households",
-        "label": "Households Reached",
-        "value": "260,000+",
-        "delta": "",
-        "tone": "gold",
-        "chart": "bars",
-        "series": [22, 30, 38, 48, 58, 72, 88]
-      },
-      {
-        "id": "shalom",
-        "label": "Shalom Groups",
-        "value": "1,084",
-        "sample": true,
-        "delta": "+22%",
-        "tone": "green",
-        "chart": "area",
-        "series": [18, 28, 34, 46, 55, 70, 92]
-      },
-      {
-        "id": "communities",
-        "label": "Communities",
-        "value": "59",
-        "sample": true,
-        "delta": "+14%",
-        "tone": "maroon",
-        "chart": "bars",
-        "series": [12, 18, 24, 32, 40, 48, 62]
-      },
-      {
-        "id": "growth",
-        "label": "Growth Over Time",
-        "value": "2012–2025",
-        "delta": "View full data explorer",
-        "href": "#/scorecard",
-        "tone": "gold",
-        "chart": "line",
-        "series": [8, 16, 24, 36, 48, 64, 78, 96]
-      }
+      { "id": "countries", "label": "Country Ministry Programs", "value": "7", "tone": "gold", "chart": "bars", "series": [2, 3, 3, 4, 5, 6, 7] },
+      { "id": "leaders", "label": "Spiritual Leaders Of Whom 2000+ Are Pastors", "value": "3K+", "tone": "green", "chart": "line", "series": [12, 18, 24, 36, 48, 64, 78, 96] },
+      { "id": "households", "label": "Households Reached", "value": "260K+", "tone": "maroon", "chart": "area", "series": [18, 28, 34, 46, 55, 70, 92] },
+      { "id": "lives", "label": "Lives Impacted", "value": "1.3M+", "tone": "gold", "chart": "bars", "series": [22, 30, 38, 48, 58, 72, 88] }
     ]
   },
   "storiesBand": {
-    "eyebrow": "Field Stories",
+    "eyebrow": "Transformation stories",
     "title": "Real lives, rewritten.",
     "titleHtml": "<span>Real lives,</span> <em>rewritten.</em>",
-    "lead": "Every transformed life begins with one local church choosing to love, serve and disciple its community.",
+    "lead": "The Whole Gospel; Impacting the Whole Person; Transforming the Whole Community.",
     "cta": { "label": "View all stories", "href": "#/stories" },
     "cards": [
       {
@@ -195,7 +213,7 @@
   },
   "knowledgeNews": {
     "knowledge": {
-      "eyebrow": "Knowledge",
+      "eyebrow": "Featured knowledge",
       "title": "Knowledge Centre.",
       "titleHtml": "<span>Knowledge</span> <em>Centre.</em>",
       "lead": "Research, reports and resources from the field — so PA is also a source of learning and evidence.",
@@ -235,7 +253,7 @@
     }
   },
   "partnerSupport": {
-    "eyebrow": "Get Involved",
+    "eyebrow": "Partner / Support",
     "title": "Be part of the transformation.",
     "titleHtml": "<span>Be part of</span> <em>the transformation.</em>",
     "lead": "At PA we believe in giving what we have as a way of partnering with God in spreading the Gospel and impacting lives across Africa.",

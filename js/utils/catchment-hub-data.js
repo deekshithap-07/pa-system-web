@@ -108,7 +108,7 @@ function buildDefaultCatchmentPayload(
       { id: "communities", label: "Communities", value: catchment.summary.communities, direction: "neutral" },
       { id: "households", label: "Households", value: catchment.summary.households, direction: "neutral" },
       { id: "shalom", label: "Shalom Groups", value: catchment.summary.shalomGroups || 0, direction: "neutral" },
-      { id: "ppp", label: "PPP Projects", value: 0, direction: "neutral" },
+      { id: "ppp", label: "PPPs active", value: 0, direction: "neutral" },
       { id: "chips", label: "CHIPs", value: 0, direction: "neutral" },
       { id: "leadership", label: "Leadership Teams", value: catchment.summary.communities, direction: "neutral" },
       { id: "growth", label: "Growth Status", value: 0, text: catchment.status, direction: "neutral" },

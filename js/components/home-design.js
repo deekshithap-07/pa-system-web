@@ -10,6 +10,10 @@ import {
   getCatchmentsByCountry,
   getCommunitiesByCatchment,
 } from "../utils/data.js";
+import { PA_FLOW } from "./shared/pa-model.js";
+import { PA_PROGRAMMES } from "./shared/pa-programmes.js";
+import { bindPppExplorer } from "./shared/pa-ppp-explorer.js";
+import { cover as khCover } from "./resources/knowledge-hub-page.js";
 
 const PROGRAM_ICONS = {
   leadership: `<svg viewBox="0 0 48 48" fill="none" aria-hidden="true"><circle cx="24" cy="16" r="6" stroke="currentColor" stroke-width="2"/><path d="M10 38c2.5-7 8-11 14-11s11.5 4 14 11" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="36" cy="18" r="4" stroke="currentColor" stroke-width="2"/></svg>`,
@@ -27,55 +31,191 @@ function linkAttrs(href = "#") {
 
 export { formatPaTitle } from "../utils/pa-title.js";
 
-/** PA Across Africa band chrome around the existing interactive map root. */
-export function renderAfricaExploreBand(band = {}, mapSection = {}, countries = []) {
-  const parseStat = (raw) => {
-    const s = String(raw ?? "");
-    const m = s.match(/^([^\d]*)([\d,]+)(\.\d+)?(.*)$/);
-    if (!m || m[3]) return { display: s, num: NaN, prefix: "", suffix: "" };
-    return {
-      display: s,
-      num: parseInt(m[2].replace(/,/g, ""), 10),
-      prefix: m[1] || "",
-      suffix: m[4] || "",
-    };
-  };
+const ENTRY_ICONS = {
+  country: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg>`,
+  program: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>`,
+  impact: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 20h18"/><path d="M6 16v-4M11 16V8M16 16v-6M21 4l-5 5-3-3-4 4"/></svg>`,
+  story: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v14l-4-3H6a2 2 0 0 1-2-2z"/><path d="M8 8h8M8 12h5"/></svg>`,
+  knowledge: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H20v15H6.5A2.5 2.5 0 0 0 4 20.5z"/><path d="M4 20.5A2.5 2.5 0 0 0 6.5 23H20v-5"/></svg>`,
+};
 
-  const statList = band.stats || [];
-  const statItems = statList
-    .map((s) => {
-      const parsed = parseStat(s.value);
-      const countAttrs = Number.isFinite(parsed.num)
-        ? ` data-pa-count="${parsed.num}" data-pa-count-prefix="${parsed.prefix}" data-pa-count-suffix="${parsed.suffix}"`
-        : "";
-      return `<li class="pa-africa__stat" data-pa-africa-stat>
-        <span class="pa-africa__stat-value">
-          <span class="pa-africa__stat-ghost" aria-hidden="true">${s.value}</span>
-          <span class="pa-africa__stat-num"${countAttrs}>${s.value}</span>
-        </span>
-        <span class="pa-africa__stat-label">${s.label}</span>
-      </li>`;
-    })
-    .join("");
-  const numbers = band.numbers || {};
-  const stats = statList.length
-    ? `<div class="pa-africa__numbers" data-pa-africa-stats>
-        <div class="container pa-africa__numbers-inner">
+/** Explore PA your way — five ways in, each with a hover dropdown of quick links. */
+export function renderPaWays(section = {}) {
+  const entries = section.entries || [];
+  if (!entries.length) return "";
+  const wayHref = (e) => (e.scroll ? `href="${e.href}" data-pa-scroll="${e.href.replace(/^#/, "")}"` : linkAttrs(e.href));
+  const ways = entries
+    .map(
+      (e, i) => `<li class="pa-ways__item" style="--i:${i}" data-pa-ways-item>
+        <div class="pa-ways__bar">
+          <a class="pa-ways__tab" ${wayHref(e)}>
+            <span class="pa-ways__tab-icon" aria-hidden="true">${ENTRY_ICONS[e.id] || ENTRY_ICONS.program}</span>
+            <span class="pa-ways__tab-label">${e.label}</span>
+          </a>
+          <button type="button" class="pa-ways__toggle" aria-expanded="false" aria-controls="pa-ways-drop-${e.id}"
+            aria-label="Show ${e.label.toLowerCase()} links" data-pa-ways-toggle>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+          </button>
+        </div>
+        <div class="pa-ways__drop" id="pa-ways-drop-${e.id}">
+          <p class="pa-ways__drop-text">${e.text}</p>
           ${
-            numbers.title
-              ? `<header class="pa-africa__numbers-head">
-                  <h3 class="pa-title">${formatPaTitle(numbers)}</h3>
-                  ${numbers.lead ? `<p>${numbers.lead}</p>` : ""}
-                </header>`
+            (e.links || []).length
+              ? `<ul class="pa-ways__links">${e.links
+                  .map((l, j) => `<li style="--j:${j}"><a class="pa-ways__link" ${linkAttrs(l.href)}>${l.label}<span aria-hidden="true">→</span></a></li>`)
+                  .join("")}</ul>`
               : ""
           }
-          <ul class="pa-africa__numbers-grid">${statItems}</ul>
+          <a class="pa-ways__go" ${wayHref(e)}>${e.go || e.label} <span aria-hidden="true">→</span></a>
         </div>
-      </div>`
-    : "";
+      </li>`
+    )
+    .join("");
 
-  const explore = band.exploreCta || mapSection.countriesCta || { label: "Explore Africa", href: "#/africa" };
+  return `
+    <section class="pa-ways" aria-labelledby="pa-ways-title" data-home-section="ways" data-pa-ways>
+      <div class="container">
+        <h2 class="pa-ways__title pa-title" id="pa-ways-title" data-reveal data-anim="fade-up">${section.entryTitle || "Explore PA your way"}</h2>
+        <nav aria-labelledby="pa-ways-title" data-reveal data-anim="fade-up">
+          <ul class="pa-ways__menu">${ways}</ul>
+        </nav>
+      </div>
+    </section>`;
+}
+
+/** Who is PA, why it exists, what it works toward — PA's own words. */
+export function renderPaIntro(section = {}, about = {}) {
+  const hero = about.hero || {};
+  const vm = about.visionMission || {};
+  const philosophy = about.whoWeAre || {};
+  if (!hero.title && !vm.mission) return "";
+  const cta = section.aboutCta || { label: "Read our story", href: "#/about" };
+
+  const pillar = (label, text, n) =>
+    text
+      ? `<div class="pa-intro__pillar" style="--i:${n}" data-pa-pillar>
+          <button type="button" class="pa-intro__pillar-head" aria-expanded="false" aria-controls="pa-pillar-${n}">
+            <span class="pa-intro__pillar-n">${String(n + 1).padStart(2, "0")}</span>
+            <h3>${label}</h3>
+            <span class="pa-intro__pillar-plus" aria-hidden="true"></span>
+          </button>
+          <div class="pa-intro__pillar-body" id="pa-pillar-${n}">
+            <p>${text}</p>
+          </div>
+        </div>`
+      : "";
+
+  return `
+    <section class="pa-intro" id="who-is-pa" aria-labelledby="pa-intro-title" data-home-section="intro">
+      <div class="container">
+        <div class="pa-intro__top">
+          <header class="pa-intro__head" data-reveal data-anim="fade-up">
+            ${section.eyebrow ? `<p class="pa-intro__eyebrow">${section.eyebrow}</p>` : ""}
+            <h2 id="pa-intro-title" class="pa-title">${formatPaTitle(hero, "We Are Africa.")}</h2>
+            ${hero.lead ? `<p class="pa-intro__lead">${hero.lead}</p>` : ""}
+            <a class="pa-intro__about" ${linkAttrs(cta.href)}>${cta.label} <span aria-hidden="true">→</span></a>
+          </header>
+          <div class="pa-intro__pillars" data-reveal data-stagger="fade-up">
+            ${pillar(section.whyLabel || "Why PA exists", vm.mission?.text, 0)}
+            ${pillar(section.whatLabel || "The transformation we work toward", vm.vision?.text, 1)}
+            ${pillar(section.howLabel || "How we approach it", philosophy.points?.[2] || philosophy.lead, 2)}
+          </div>
+        </div>
+      </div>
+    </section>`;
+}
+
+/** Pillars stay collapsed to their titles; hover (fine pointers) or click opens one at a time. */
+export function bindPaIntro(root = document) {
+  const pillars = [...root.querySelectorAll("[data-pa-pillar]")];
+  if (!pillars.length || pillars[0].dataset.bound) return;
+  const canHover = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
+
+  const setOpen = (pillar, on) => {
+    pillar.classList.toggle("is-open", on);
+    pillar.querySelector(".pa-intro__pillar-head")?.setAttribute("aria-expanded", String(on));
+  };
+
+  pillars.forEach((pillar) => {
+    pillar.dataset.bound = "true";
+    pillar.querySelector(".pa-intro__pillar-head")?.addEventListener("click", () => {
+      const next = !pillar.classList.contains("is-open");
+      pillars.forEach((p) => setOpen(p, p === pillar && next));
+    });
+    if (canHover) {
+      pillar.addEventListener("mouseenter", () => pillars.forEach((p) => setOpen(p, p === pillar)));
+    }
+  });
+
+  if (canHover) {
+    pillars[0].parentElement?.addEventListener("mouseleave", () => pillars.forEach((p) => setOpen(p, false)));
+  }
+
+  bindPaWays(root);
+}
+
+/**
+ * Explore PA your way — each tab opens its dropdown on hover (fine pointers) or via the
+ * chevron (touch / keyboard); clicking the tab itself goes to its page or section.
+ */
+function bindPaWays(root = document) {
+  const box = root.querySelector("[data-pa-ways]");
+  if (!box || box.dataset.bound) return;
+  box.dataset.bound = "true";
+  const items = [...box.querySelectorAll("[data-pa-ways-item]")];
+  const canHover = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
+
+  const setOpen = (item, on) => {
+    item.classList.toggle("is-open", on);
+    item.querySelector("[data-pa-ways-toggle]")?.setAttribute("aria-expanded", String(on));
+  };
+  const closeAll = (except) => items.forEach((it) => it !== except && setOpen(it, false));
+
+  items.forEach((item) => {
+    item.querySelector("[data-pa-ways-toggle]")?.addEventListener("click", () => {
+      const next = !item.classList.contains("is-open");
+      closeAll(item);
+      setOpen(item, next);
+    });
+    if (canHover) {
+      item.addEventListener("mouseenter", () => {
+        closeAll(item);
+        setOpen(item, true);
+      });
+      item.addEventListener("mouseleave", () => setOpen(item, false));
+    }
+    item.addEventListener("focusout", (e) => {
+      if (!item.contains(e.relatedTarget)) setOpen(item, false);
+    });
+    item.addEventListener("keydown", (e) => {
+      if (e.key !== "Escape" || !item.classList.contains("is-open")) return;
+      setOpen(item, false);
+      item.querySelector(".pa-ways__tab")?.focus();
+    });
+  });
+
+  box.querySelectorAll("[data-pa-scroll]").forEach((link) => {
+    link.addEventListener("click", (e) => {
+      const target = document.getElementById(link.dataset.paScroll);
+      if (!target) return;
+      e.preventDefault();
+      closeAll();
+      const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      target.scrollIntoView({ behavior: reduce ? "auto" : "smooth", block: "start" });
+    });
+  });
+}
+
+/** Explore Africa — heading, one tab per PA country (opens the country panel), then the interactive map. */
+export function renderAfricaMapBand(band = {}, countries = []) {
+  const explore = band.exploreCta || { label: "Explore Africa", href: "#/africa" };
   const exploreHref = explore.href || explore.target || "#/africa";
+  const tabs = countries
+    .filter((c) => c.isPaNetwork)
+    .map(
+      (c) => `<button type="button" class="pa-africa__tab" role="tab" aria-selected="false" data-pa-country-pick="${c.slug}">${c.name}</button>`
+    )
+    .join("");
   return `
     <section class="pa-africa" id="pa-across-africa" aria-labelledby="pa-africa-title" data-home-section="africa">
       <div class="pa-africa__geo" aria-hidden="true">
@@ -92,13 +232,20 @@ export function renderAfricaExploreBand(band = {}, mapSection = {}, countries = 
       </div>
       <div class="container pa-africa__top">
         <div class="pa-africa__intro">
-          <p class="pa-africa__eyebrow" data-pa-africa-rise>${band.eyebrow || mapSection.eyebrow || "PA Across Africa"}</p>
-          <h2 class="pa-africa__title pa-title" id="pa-africa-title" data-pa-africa-rise>${formatPaTitle(band, mapSection.title || "A growing movement of transformation")}</h2>
-          <p class="pa-africa__lead" data-pa-africa-rise>${band.lead || mapSection.description || ""}</p>
+          <p class="pa-africa__eyebrow" data-pa-africa-rise>${band.eyebrow || "Explore Africa"}</p>
+          <h2 class="pa-africa__title pa-title" id="pa-africa-title" data-pa-africa-rise>${formatPaTitle(band, "A growing movement of transformation")}</h2>
+          ${band.lead ? `<p class="pa-africa__lead" data-pa-africa-rise>${band.lead}</p>` : ""}
           <a class="pa-africa__link" data-pa-africa-rise ${linkAttrs(exploreHref)}>${explore.label || "Explore Africa"} →</a>
         </div>
       </div>
-      ${stats}
+      ${
+        tabs
+          ? `<div class="container pa-africa__region">
+              <p class="pa-africa__region-label" id="pa-africa-region-label" data-reveal data-anim="fade-up">${band.regionLabel || "Explore by region"}</p>
+              <div class="pa-africa__tabs pa-africa__tabs--pills" role="tablist" aria-labelledby="pa-africa-region-label" data-reveal data-stagger="fade-up">${tabs}</div>
+            </div>`
+          : ""
+      }
       <div class="pa-africa__bridge" aria-hidden="true">
         <span class="pa-africa__bridge-line"></span>
         <span class="pa-africa__bridge-dot"></span>
@@ -338,7 +485,7 @@ export function bindAfricaCountrySelect(root = document, data = null) {
 
   const picks = root.querySelectorAll("[data-pa-country-pick]");
   if (picks.length) {
-    const nav = root.querySelector(".pa-africa__nav") || root;
+    const nav = root.querySelector(".pa-africa__tabs, .pa-africa__nav") || picks[0].parentElement;
     if (!nav.dataset.countryPicksBound) {
       nav.dataset.countryPicksBound = "true";
       picks.forEach((btn) => {
@@ -374,413 +521,351 @@ export function destroyAfricaCountryDrawer() {
   document.body.classList.remove("pa-drawer-open");
 }
 
+/** Results areas — numbered list on the left, the chosen program's photo panel on the right. */
 export function renderOurWorkPrograms(section = {}) {
   const programs = section.programs || [];
   if (!programs.length && !section.title) return "";
 
-  const first = programs[0] || {};
-  const list = programs
-    .map((p, i) => {
-      const n = String(i + 1).padStart(2, "0");
-      const active = i === 0 ? " is-active" : "";
-      return `<button type="button" class="pa-work__tab${active}" data-pa-work-tab="${p.id}" aria-pressed="${i === 0 ? "true" : "false"}">
-        <span class="pa-work__tab-n">${n}</span>
-        <span class="pa-work__tab-label">${p.title}</span>
-        <span class="pa-work__tab-go" aria-hidden="true">→</span>
-      </button>`;
-    })
-    .join("");
-
   const titleHtml = formatPaTitle(section, "Five programmes. One whole community.");
+  const cta = section.cta || null;
 
-  const cta = section.cta || { label: "Explore the programme", href: "#/work" };
-  const firstHref = first.href || cta.href || "#/work";
-  const firstIcon = PROGRAM_ICONS[first.id] || PROGRAM_ICONS.leadership;
-  const firstN = "01";
-
-  return `
-    <section class="pa-work" id="our-work" aria-labelledby="our-work-title" data-home-section="work" data-pa-work>
-      <div class="container">
-        <header class="pa-work__intro" data-reveal data-anim="fade-up">
-          <div class="pa-work__intro-copy">
-            ${section.eyebrow ? `<p class="pa-work__eyebrow">${section.eyebrow}</p>` : ""}
-            <h2 id="our-work-title" class="pa-work__title pa-title">${titleHtml}</h2>
-          </div>
-          ${section.lead ? `<p class="pa-work__lead">${section.lead}</p>` : ""}
-        </header>
-
-        <div class="pa-work__stage" data-reveal data-anim="fade-up">
-          <div class="pa-work__list" role="list" data-pa-work-list>
-            ${list}
-          </div>
-          <aside class="pa-work__panel pa-work__panel--${first.tone || "maroon"}" data-pa-work-panel aria-live="polite">
-            <div class="pa-work__panel-media" data-pa-work-media${first.image ? "" : " hidden"}>
-              <img src="${first.image || ""}" alt="${first.imageAlt || ""}" data-pa-work-img decoding="async">
-            </div>
-            <span class="pa-work__panel-n" data-pa-work-n aria-hidden="true">${firstN}</span>
-            <div class="pa-work__panel-icon" data-pa-work-icon aria-hidden="true">${firstIcon}</div>
-            <h3 data-pa-work-title>${first.title || ""}</h3>
-            <p data-pa-work-desc>${first.description || first.text || ""}</p>
-            <a class="pa-work__panel-cta" data-pa-work-cta ${linkAttrs(firstHref)}>${cta.label || "Explore the programme"} <span class="pa-work__panel-cta-arrow" aria-hidden="true">→</span></a>
-          </aside>
-        </div>
-      </div>
-    </section>`;
-}
-
-export function bindOurWorkPrograms(root = document, section = {}) {
-  const wrap = root.querySelector?.("[data-pa-work]") || document.querySelector("[data-pa-work]");
-  if (!wrap || wrap.dataset.bound) return;
-  wrap.dataset.bound = "true";
-
-  const programs = section.programs || [];
-  const byId = Object.fromEntries(programs.map((p) => [p.id, p]));
-  const tabs = [...wrap.querySelectorAll("[data-pa-work-tab]")];
-  const panel = wrap.querySelector("[data-pa-work-panel]");
-  if (!tabs.length || !panel) return;
-
-  const ctaLabel = section.cta?.label || "Explore the programme";
-  programs.forEach((p) => {
-    if (p.image) new Image().src = p.image;
-  });
-  let activeId = tabs.find((t) => t.classList.contains("is-active"))?.dataset.paWorkTab || programs[0]?.id;
-  let shownId = activeId;
-  let hoverTimer = null;
-  let transitionTl = null;
-  const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-
-  const ENTRY = [
-    { x: -22, y: 0, clip: "inset(0 55% 0 0)", scale: 1.04 },
-    { x: 22, y: 0, clip: "inset(0 0 0 55%)", scale: 1.035 },
-    { x: 0, y: -18, clip: "inset(50% 0 0 0)", scale: 1.04 },
-    { x: 14, y: -14, clip: "inset(0 0 40% 30%)", scale: 1.03 },
-    { x: -14, y: 12, clip: "inset(0 35% 35% 0)", scale: 1.04 },
-  ];
-
-  const setTabState = (id) => {
-    tabs.forEach((tab) => {
-      const on = tab.dataset.paWorkTab === id;
-      tab.classList.toggle("is-active", on);
-      tab.setAttribute("aria-pressed", on ? "true" : "false");
-    });
-  };
-
-  const setContent = (p, n) => {
-    panel.className = `pa-work__panel pa-work__panel--${p.tone || "maroon"}`;
-    const nEl = panel.querySelector("[data-pa-work-n]");
-    const iconEl = panel.querySelector("[data-pa-work-icon]");
-    const titleEl = panel.querySelector("[data-pa-work-title]");
-    const descEl = panel.querySelector("[data-pa-work-desc]");
-    const ctaEl = panel.querySelector("[data-pa-work-cta]");
-    const mediaEl = panel.querySelector("[data-pa-work-media]");
-    const imgEl = panel.querySelector("[data-pa-work-img]");
-    const href = p.href || section.cta?.href || "#/work";
-    if (mediaEl) mediaEl.hidden = !p.image;
-    if (imgEl && p.image) {
-      imgEl.src = p.image;
-      imgEl.alt = p.imageAlt || "";
-    }
-    if (nEl) nEl.textContent = n;
-    if (iconEl) iconEl.innerHTML = PROGRAM_ICONS[p.id] || PROGRAM_ICONS.leadership;
-    if (titleEl) titleEl.textContent = p.title || "";
-    if (descEl) descEl.textContent = p.description || p.text || "";
-    if (ctaEl) {
-      ctaEl.innerHTML = `${ctaLabel} <span class="pa-work__panel-cta-arrow" aria-hidden="true">→</span>`;
-      ctaEl.setAttribute("href", href);
-      if (href.startsWith("#/")) ctaEl.setAttribute("data-link", "");
-    }
-  };
-
-  const apply = (id, { animate = true, pin = false } = {}) => {
-    const p = byId[id];
-    if (!p) return;
-    if (pin) activeId = id;
-
-    setTabState(id);
-
-    if (id === shownId) return;
-    shownId = id;
-
-    const index = programs.findIndex((x) => x.id === id);
-    const n = String(Math.max(index, 0) + 1).padStart(2, "0");
-    const entry = ENTRY[((index % ENTRY.length) + ENTRY.length) % ENTRY.length];
-
-    if (!animate || reduce || typeof gsap === "undefined") {
-      setContent(p, n);
-      return;
-    }
-
-    const nEl = panel.querySelector("[data-pa-work-n]");
-    const iconEl = panel.querySelector("[data-pa-work-icon]");
-    const titleEl = panel.querySelector("[data-pa-work-title]");
-    const descEl = panel.querySelector("[data-pa-work-desc]");
-    const ctaEl = panel.querySelector("[data-pa-work-cta]");
-    const mediaEl = panel.querySelector("[data-pa-work-media]");
-    const pieces = [nEl, iconEl, titleEl, descEl, ctaEl].filter(Boolean);
-
-    transitionTl?.kill();
-    transitionTl = gsap.timeline({ defaults: { ease: "power2.inOut" } });
-
-    if (mediaEl) {
-      transitionTl.to(mediaEl, { autoAlpha: 0, scale: 1.02, duration: 0.26, ease: "power2.in" }, 0);
-    }
-
-    /* Out — old content leaves as one motion */
-    transitionTl.to(
-      pieces,
-      {
-        autoAlpha: 0,
-        y: 12,
-        x: entry.x * -0.35,
-        duration: 0.28,
-        stagger: 0.03,
-        ease: "power2.in",
-      },
-      0
-    );
-    transitionTl.to(
-      panel,
-      {
-        filter: "brightness(0.92)",
-        duration: 0.28,
-        ease: "power1.in",
-      },
-      0
-    );
-
-    /* Swap + prepare enter state only after exit */
-    transitionTl.add(() => {
-      setContent(p, n);
-      if (iconEl) {
-        gsap.set(iconEl, {
-          autoAlpha: 0,
-          x: entry.x,
-          y: entry.y,
-          scale: entry.scale,
-          clipPath: entry.clip,
-        });
-      }
-      if (nEl) gsap.set(nEl, { autoAlpha: 0, scale: 0.92, y: 10 });
-      if (titleEl) gsap.set(titleEl, { autoAlpha: 0, y: 16 });
-      if (descEl) gsap.set(descEl, { autoAlpha: 0, y: 14 });
-      if (ctaEl) gsap.set(ctaEl, { autoAlpha: 0, y: 10, x: -6 });
-    });
-
-    transitionTl.to(
-      panel,
-      {
-        filter: "brightness(1)",
-        duration: 0.45,
-        ease: "power2.out",
-      },
-      "-=0.02"
-    );
-
-    /* In — visual first, then type, then CTA */
-    if (mediaEl) {
-      transitionTl.fromTo(
-        mediaEl,
-        { autoAlpha: 0, scale: 1.06, x: entry.x * 0.6, y: entry.y * 0.6 },
-        {
-          autoAlpha: 1,
-          scale: 1,
-          x: 0,
-          y: 0,
-          duration: 0.7,
-          ease: "power3.out",
-          clearProps: "transform",
-        },
-        "-=0.45"
-      );
-    }
-    if (iconEl) {
-      transitionTl.to(
-        iconEl,
-        {
-          autoAlpha: 1,
-          x: 0,
-          y: 0,
-          scale: 1,
-          clipPath: "inset(0% 0% 0% 0%)",
-          duration: 0.55,
-          ease: "power3.out",
-          clearProps: "clipPath,transform",
-        },
-        "-=0.4"
-      );
-    }
-    if (nEl) {
-      transitionTl.to(
-        nEl,
-        {
-          autoAlpha: 1,
-          scale: 1,
-          y: 0,
-          duration: 0.5,
-          ease: "power3.out",
-          clearProps: "transform",
-        },
-        "-=0.48"
-      );
-    }
-    if (titleEl) {
-      transitionTl.to(
-        titleEl,
-        {
-          autoAlpha: 1,
-          y: 0,
-          duration: 0.45,
-          ease: "power3.out",
-          clearProps: "transform",
-        },
-        "-=0.4"
-      );
-    }
-    if (descEl) {
-      transitionTl.to(
-        descEl,
-        {
-          autoAlpha: 1,
-          y: 0,
-          duration: 0.42,
-          ease: "power3.out",
-          clearProps: "transform",
-        },
-        "-=0.32"
-      );
-    }
-    if (ctaEl) {
-      transitionTl.to(
-        ctaEl,
-        {
-          autoAlpha: 1,
-          y: 0,
-          x: 0,
-          duration: 0.4,
-          ease: "power3.out",
-          clearProps: "transform",
-        },
-        "-=0.28"
-      );
-    }
-  };
-
-  tabs.forEach((tab) => {
-    const id = tab.dataset.paWorkTab;
-    tab.addEventListener("mouseenter", () => {
-      window.clearTimeout(hoverTimer);
-      apply(id);
-    });
-    tab.addEventListener("focus", () => apply(id, { pin: true }));
-    tab.addEventListener("click", () => apply(id, { pin: true }));
-  });
-
-  wrap.querySelector("[data-pa-work-list]")?.addEventListener("mouseleave", () => {
-    hoverTimer = window.setTimeout(() => apply(activeId, { animate: true }), 140);
-  });
-}
-
-/** Mini SVG charts for impact cards — brand gold/green/maroon, not a dashboard. */
-function renderImpactChart(card = {}) {
-  const series = Array.isArray(card.series) && card.series.length ? card.series : [28, 36, 42, 55, 68, 80];
-  const max = Math.max(...series, 1);
-  const type = card.chart || "bars";
-  const tone = card.tone || "gold";
-  const w = 160;
-  const h = 48;
-  const pad = 2;
-
-  if (type === "area") {
-    const step = (w - pad * 2) / Math.max(series.length - 1, 1);
-    const pts = series
-      .map((v, i) => {
-        const x = pad + i * step;
-        const y = h - pad - (v / max) * (h - pad * 2);
-        return `${x},${y}`;
-      })
-      .join(" ");
-    const lastX = pad + (series.length - 1) * step;
-    return `<svg class="pa-impact__chart pa-impact__chart--${tone}" viewBox="0 0 ${w} ${h}" preserveAspectRatio="none" aria-hidden="true">
-      <defs>
-        <linearGradient id="pa-impact-fill-${card.id || "a"}" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stop-color="currentColor" stop-opacity="0.35"/>
-          <stop offset="100%" stop-color="currentColor" stop-opacity="0.02"/>
-        </linearGradient>
-      </defs>
-      <polygon points="${pad},${h - pad} ${pts} ${lastX},${h - pad}" fill="url(#pa-impact-fill-${card.id || "a"})"/>
-      <polyline points="${pts}" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
-    </svg>`;
-  }
-
-  if (type === "line") {
-    const step = (w - pad * 2) / Math.max(series.length - 1, 1);
-    const pts = series
-      .map((v, i) => {
-        const x = pad + i * step;
-        const y = h - pad - (v / max) * (h - pad * 2);
-        return `${x},${y}`;
-      })
-      .join(" ");
-    const dots = series
-      .map((v, i) => {
-        const x = pad + i * step;
-        const y = h - pad - (v / max) * (h - pad * 2);
-        return `<circle cx="${x}" cy="${y}" r="2.4" fill="currentColor"/>`;
-      })
-      .join("");
-    return `<svg class="pa-impact__chart pa-impact__chart--${tone}" viewBox="0 0 ${w} ${h}" preserveAspectRatio="none" aria-hidden="true">
-      <polyline points="${pts}" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
-      ${dots}
-    </svg>`;
-  }
-
-  // default: bars (rising columns)
-  const gap = 3;
-  const barW = (w - pad * 2 - gap * (series.length - 1)) / series.length;
-  const bars = series
-    .map((v, i) => {
-      const bh = Math.max(4, (v / max) * (h - pad * 2));
-      const x = pad + i * (barW + gap);
-      const y = h - pad - bh;
-      const opacity = 0.45 + (i / Math.max(series.length - 1, 1)) * 0.55;
-      return `<rect class="pa-impact__bar" x="${x}" y="${y}" width="${barW}" height="${bh}" rx="1.5" fill="currentColor" opacity="${opacity.toFixed(2)}"/>`;
+  const items = programs
+    .map((p, i) => {
+      const on = i === 0;
+      return `<li role="presentation">
+        <button type="button" class="pa-rl__item${on ? " is-active" : ""}" role="tab" id="pa-rl-tab-${p.id}"
+          aria-selected="${on}" aria-controls="pa-rl-panel-${p.id}" tabindex="${on ? 0 : -1}" data-pa-rl-tab>
+          <span class="pa-rl__n">${String(i + 1).padStart(2, "0")}</span>
+          <span class="pa-rl__name">${p.title}</span>
+          <span class="pa-rl__arrow" aria-hidden="true">→</span>
+        </button>
+      </li>`;
     })
     .join("");
-  return `<svg class="pa-impact__chart pa-impact__chart--${tone}" viewBox="0 0 ${w} ${h}" preserveAspectRatio="none" aria-hidden="true">${bars}</svg>`;
-}
 
-export function renderImpactDataBand(section = {}) {
-  if (!section.title) return "";
-  const cta = section.cta || { label: "Explore Impact Data", href: "#/scorecard" };
-  const cards = (section.cards || [])
-    .map((c) => {
-      const delta = c.href
-        ? `<a class="pa-impact__delta" ${linkAttrs(c.href)}>${c.delta || "Explore"} →</a>`
-        : `<span class="pa-impact__delta">${c.delta || ""}</span>`;
-      return `<article class="pa-impact__card pa-impact__card--${c.tone || "gold"}">
-        <p class="pa-impact__label">${c.label}${c.sample ? ` <span class="pa-sample-tag" title="Sample figure — awaiting PA verification">Sample</span>` : ""}</p>
-        <p class="pa-impact__value">${c.value}</p>
-        ${delta}
-        <div class="pa-impact__viz" aria-hidden="true">${renderImpactChart(c)}</div>
+  const panels = programs
+    .map((p, i) => {
+      const on = i === 0;
+      const href = p.href || `#/program/${p.id}`;
+      return `<article class="pa-rl__panel${on ? " is-active" : ""}" role="tabpanel" id="pa-rl-panel-${p.id}"
+        aria-labelledby="pa-rl-tab-${p.id}"${on ? "" : ' aria-hidden="true"'} data-pa-rl-panel>
+        ${p.image ? `<img class="pa-rl__img" src="${p.image}" alt="${p.imageAlt || ""}" loading="${i ? "lazy" : "eager"}" decoding="async">` : ""}
+        <span class="pa-rl__veil" aria-hidden="true"></span>
+        <div class="pa-rl__body">
+          <span class="pa-rl__icon" aria-hidden="true">${PROGRAM_ICONS[p.id] || ""}</span>
+          <h3 class="pa-rl__title">${p.title}</h3>
+          <p class="pa-rl__text">${p.description || p.text || ""}</p>
+          <a class="pa-rl__more" ${linkAttrs(href)}${on ? "" : ' tabindex="-1"'}>Explore the programme <span aria-hidden="true">→</span></a>
+        </div>
       </article>`;
     })
     .join("");
 
   return `
-    <section class="pa-impact" id="impact-data" aria-labelledby="impact-data-title" data-home-section="impact">
-      <div class="pa-impact__bg" aria-hidden="true">
-        ${section.image ? `<img src="${section.image}" alt="">` : ""}
-        <span class="pa-impact__veil"></span>
+    <section class="pa-ra pa-rl" id="our-work" aria-labelledby="our-work-title" data-home-section="work" data-pa-ra>
+      <div class="container pa-ra__head" data-reveal data-anim="fade-up">
+        <div>
+          ${section.eyebrow ? `<p class="pa-ra__eyebrow">${section.eyebrow}</p>` : ""}
+          <h2 id="our-work-title" class="pa-title">${titleHtml}</h2>
+        </div>
+        <div class="pa-ra__head-side">
+          ${section.lead ? `<p class="pa-ra__lead">${section.lead}</p>` : ""}
+          ${cta?.href ? `<a class="pa-ra__cta" ${linkAttrs(cta.href)}>${cta.label} <span aria-hidden="true">→</span></a>` : ""}
+        </div>
       </div>
-      <div class="container pa-impact__inner">
-        <header class="pa-impact__head" data-reveal data-anim="slide-right">
-          ${section.eyebrow ? `<p class="pa-impact__eyebrow">${section.eyebrow}</p>` : ""}
-          <h2 id="impact-data-title" class="pa-title">${formatPaTitle(section)}</h2>
-          ${section.lead ? `<p class="pa-impact__lead">${section.lead}</p>` : ""}
-          ${section.updatedAt ? `<p class="pa-impact__fresh">Figures last updated: <strong>${section.updatedAt}</strong></p>` : ""}
-          <a class="pa-impact__cta" ${linkAttrs(cta.href)}>${cta.label} →</a>
+      <div class="container pa-rl__wrap" data-reveal data-anim="fade-up">
+        <ul class="pa-rl__list" role="tablist" aria-labelledby="our-work-title">${items}</ul>
+        <div class="pa-rl__stage">${panels}</div>
+      </div>
+    </section>`;
+}
+
+const FLOW_BADGES = {
+  community: "First active unit",
+  shalom: "Main implementation unit",
+};
+
+/** Overview of how the five programs reach people — the only place these definitions are shown. */
+export function renderHowPaWorks(section = {}) {
+  if (!section.title) return "";
+  const titleHtml = formatPaTitle(section, "How PA works");
+  const cta = section.cta || { label: "See it in a country", href: "#/africa" };
+
+  const path = PA_FLOW.map(
+    (s, i) => `<li class="pa-how__node${FLOW_BADGES[s.id] ? " is-key" : ""}" style="--i:${i}">
+        <span class="pa-how__dot" aria-hidden="true"></span>
+        <strong>${s.label}</strong>
+        ${FLOW_BADGES[s.id] ? `<em>${FLOW_BADGES[s.id]}</em>` : ""}
+        <span>${s.text}</span>
+      </li>`
+  ).join("");
+
+  return `
+    <section class="pa-how" id="how-pa-works" aria-labelledby="how-pa-works-title" data-home-section="how">
+      <div class="container">
+        <header class="pa-how__head" data-reveal data-anim="fade-up">
+          <div>
+            ${section.eyebrow ? `<p class="pa-how__eyebrow">${section.eyebrow}</p>` : ""}
+            <h2 id="how-pa-works-title" class="pa-title">${titleHtml}</h2>
+          </div>
+          <div class="pa-how__head-side">
+            ${section.lead ? `<p class="pa-how__lead">${section.lead}</p>` : ""}
+            <a class="pa-how__cta" ${linkAttrs(cta.href)}>${cta.label} <span aria-hidden="true">→</span></a>
+          </div>
         </header>
-        <div class="pa-impact__grid" data-reveal data-stagger="slide-up">${cards}</div>
+
+        <ol class="pa-how__path" data-pa-how-path aria-label="How the work is organised">${path}</ol>
+      </div>
+    </section>`;
+}
+
+export function bindHowPaWorks(root = document) {
+  bindPppExplorer(root);
+  bindHowPathDraw(root);
+}
+
+/** Impact figures run up from zero the first time the strip comes into view ("1.3M+" keeps its unit and decimals). */
+export function bindImpactCounters(root = document) {
+  const values = [...root.querySelectorAll("[data-pa-run]")];
+  if (!values.length || values[0].dataset.bound) return;
+  values.forEach((el) => (el.dataset.bound = "true"));
+  const stats = values[0].closest(".pa-impact__stats");
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches || !("IntersectionObserver" in window)) {
+    stats?.classList.add("is-charted");
+    return;
+  }
+  stats?.classList.add("is-chart-armed");
+
+  const parse = (raw) => {
+    const m = String(raw).match(/^(\D*)([\d.,]+)(.*)$/);
+    if (!m) return null;
+    const num = Number(m[2].replace(/,/g, ""));
+    if (!Number.isFinite(num)) return null;
+    return { prefix: m[1], num, suffix: m[3], decimals: (m[2].split(".")[1] || "").length };
+  };
+
+  const run = (el) => {
+    const p = parse(el.dataset.paRun);
+    if (!p) return;
+    const duration = 1800;
+    const start = performance.now();
+    el.classList.add("is-running");
+    const tick = (now) => {
+      const t = Math.min(1, (now - start) / duration);
+      const eased = 1 - Math.pow(1 - t, 3);
+      el.textContent = `${p.prefix}${(p.num * eased).toFixed(p.decimals)}${p.suffix}`;
+      if (t < 1) requestAnimationFrame(tick);
+      else {
+        el.textContent = el.dataset.paRun;
+        el.classList.remove("is-running");
+      }
+    };
+    requestAnimationFrame(tick);
+  };
+
+  values.forEach((el) => {
+    const p = parse(el.dataset.paRun);
+    if (p) el.textContent = `${p.prefix}${(0).toFixed(p.decimals)}${p.suffix}`;
+  });
+
+  const io = new IntersectionObserver(
+    (entries) => {
+      if (!entries.some((e) => e.isIntersecting)) return;
+      io.disconnect();
+      stats?.classList.add("is-charted");
+      values.forEach((el, i) => window.setTimeout(() => run(el), i * 150));
+    },
+    { rootMargin: "0px 0px -15% 0px" }
+  );
+  io.observe(stats || values[0]);
+}
+
+/**
+ * One continuous line drawn through the real dot positions — Country → Catchment → Community,
+ * round the curve, Pastors Fellowship → Shalom Groups → Households. Each step appears as the
+ * line reaches it. Rebuilt on resize; phones get a straight vertical run.
+ */
+const HOW_DRAW_SECONDS = 3.6;
+
+function bindHowPathDraw(root = document) {
+  const path = root.querySelector("[data-pa-how-path]");
+  if (!path || path.dataset.bound) return;
+  path.dataset.bound = "true";
+
+  const NS = "http://www.w3.org/2000/svg";
+  const svg = document.createElementNS(NS, "svg");
+  svg.setAttribute("class", "pa-how__svg");
+  svg.setAttribute("aria-hidden", "true");
+  const track = document.createElementNS(NS, "path");
+  track.setAttribute("class", "pa-how__track");
+  const line = document.createElementNS(NS, "path");
+  line.setAttribute("class", "pa-how__line");
+  svg.append(track, line);
+  path.append(svg);
+  path.classList.add("has-svg");
+
+  const nodes = [...path.querySelectorAll(".pa-how__node")];
+  const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches || !("IntersectionObserver" in window);
+  let drawn = reduce;
+
+  const build = () => {
+    const box = path.getBoundingClientRect();
+    if (!box.width) return;
+    const pts = nodes.map((n) => {
+      const r = n.querySelector(".pa-how__dot").getBoundingClientRect();
+      return { x: r.left + r.width / 2 - box.left, y: r.top + r.height / 2 - box.top };
+    });
+    const dist = (a, b) => Math.hypot(b.x - a.x, b.y - a.y);
+    const stops = [0];
+    let d;
+    let len;
+
+    const vertical = pts.length < 6 || Math.abs(pts[0].y - pts[2].y) > 4;
+    if (vertical) {
+      d = `M${pts[0].x},${pts[0].y} L${pts[pts.length - 1].x},${pts[pts.length - 1].y}`;
+      pts.slice(1).forEach((p) => stops.push(dist(pts[0], p)));
+      len = dist(pts[0], pts[pts.length - 1]);
+    } else {
+      const [p1, p2, p3, p4, p5, p6] = pts;
+      const r = Math.max((p4.y - p3.y) / 2, 1);
+      const xr = Math.max(box.width - 2 - r, p3.x);
+      const top = xr - p3.x;
+      const arc = Math.PI * r;
+      d = `M${p1.x},${p1.y} L${xr},${p3.y} A${r},${r} 0 0 1 ${xr},${p4.y} L${p6.x},${p6.y}`;
+      const a = dist(p1, p3) + top;
+      stops.push(dist(p1, p2), dist(p1, p3), a + arc + (xr - p4.x), a + arc + (xr - p5.x), a + arc + (xr - p6.x));
+      len = a + arc + (xr - p6.x);
+    }
+
+    track.setAttribute("d", d);
+    line.setAttribute("d", d);
+    svg.setAttribute("viewBox", `0 0 ${box.width} ${box.height}`);
+    line.style.strokeDasharray = `${len}`;
+    if (drawn) {
+      line.style.transition = "none";
+      line.style.strokeDashoffset = "0";
+    } else {
+      line.style.strokeDashoffset = `${len}`;
+    }
+    nodes.forEach((n, i) => n.style.setProperty("--d", `${((stops[i] || 0) / len) * HOW_DRAW_SECONDS}s`));
+  };
+
+  build();
+  if (typeof ResizeObserver !== "undefined") new ResizeObserver(() => build()).observe(path);
+  if (reduce) return;
+
+  path.classList.add("is-armed");
+  const io = new IntersectionObserver(
+    (entries) => {
+      if (!entries.some((e) => e.isIntersecting)) return;
+      io.disconnect();
+      build();
+      requestAnimationFrame(() =>
+        requestAnimationFrame(() => {
+          line.style.transition = `stroke-dashoffset ${HOW_DRAW_SECONDS}s linear`;
+          line.style.strokeDashoffset = "0";
+          path.classList.add("is-drawn");
+          drawn = true;
+        })
+      );
+      window.setTimeout(() => path.classList.add("is-done"), HOW_DRAW_SECONDS * 1000 + 900);
+    },
+    { rootMargin: "0px 0px -20% 0px" }
+  );
+  io.observe(path);
+}
+
+export function bindOurWorkPrograms(root = document) {
+  const wrap = root.querySelector?.("[data-pa-ra]") || document.querySelector("[data-pa-ra]");
+  if (!wrap || wrap.dataset.bound) return;
+  wrap.dataset.bound = "true";
+  const tabs = [...wrap.querySelectorAll("[data-pa-rl-tab]")];
+  const panels = [...wrap.querySelectorAll("[data-pa-rl-panel]")];
+  const canHover = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
+
+  const select = (tab, focus = false) => {
+    const id = tab.getAttribute("aria-controls");
+    tabs.forEach((t) => {
+      const on = t === tab;
+      t.classList.toggle("is-active", on);
+      t.setAttribute("aria-selected", String(on));
+      t.tabIndex = on ? 0 : -1;
+    });
+    panels.forEach((p) => {
+      const on = p.id === id;
+      p.classList.toggle("is-active", on);
+      p.setAttribute("aria-hidden", String(!on));
+      p.querySelector(".pa-rl__more")?.setAttribute("tabindex", on ? "0" : "-1");
+    });
+    if (focus) tab.focus();
+  };
+
+  tabs.forEach((tab, i) => {
+    tab.addEventListener("click", () => select(tab));
+    if (canHover) tab.addEventListener("mouseenter", () => select(tab));
+    tab.addEventListener("keydown", (e) => {
+      const step = { ArrowDown: 1, ArrowRight: 1, ArrowUp: -1, ArrowLeft: -1 }[e.key];
+      if (!step) return;
+      e.preventDefault();
+      select(tabs[(i + step + tabs.length) % tabs.length], true);
+    });
+  });
+}
+
+/** Faint background trend for a stat — bars, line or area from its series (illustrative). */
+function impactChart(card = {}) {
+  const s = card.series || [];
+  if (s.length < 2) return "";
+  const W = 100;
+  const H = 40;
+  const max = Math.max(...s);
+  const y = (v) => H - (v / max) * (H - 4);
+  let body;
+  if (card.chart === "bars") {
+    const slot = W / s.length;
+    const bw = slot * 0.62;
+    body = s
+      .map((v, i) => `<rect class="pa-impact__bar" style="--k:${i}" x="${(i * slot + (slot - bw) / 2).toFixed(2)}" y="${y(v).toFixed(2)}" width="${bw.toFixed(2)}" height="${(H - y(v)).toFixed(2)}" rx="1"/>`)
+      .join("");
+  } else {
+    const step = W / (s.length - 1);
+    const pts = s.map((v, i) => `${(i * step).toFixed(2)},${y(v).toFixed(2)}`);
+    const line = `<polyline class="pa-impact__line" points="${pts.join(" ")}" pathLength="1"/>`;
+    body = card.chart === "area" ? `<polygon class="pa-impact__area" points="0,${H} ${pts.join(" ")} ${W},${H}"/>${line}` : line;
+  }
+  return `<svg class="pa-impact__chart pa-impact__chart--${card.chart || "line"}" viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" aria-hidden="true" focusable="false">${body}</svg>`;
+}
+
+/** PA's published headline figures — big number, short label, nothing else. */
+export function renderImpactDataBand(section = {}) {
+  if (!section.title) return "";
+  const cta = section.cta || { label: "Explore Impact Data", href: "#/scorecard" };
+  const cards = (section.cards || [])
+    .filter((c) => !c.sample)
+    .map(
+      (c) => `<li class="pa-impact__stat">
+        ${impactChart(c)}
+        <span class="pa-impact__value" data-pa-run="${c.value}">${c.value}</span>
+        <span class="pa-impact__label">${c.label}</span>
+      </li>`
+    )
+    .join("");
+
+  return `
+    <section class="pa-impact" id="impact-data" aria-labelledby="impact-data-title" data-home-section="impact">
+      <div class="container">
+        <header class="pa-impact__head" data-reveal data-anim="fade-up">
+          <div>
+            ${section.eyebrow ? `<p class="pa-impact__eyebrow">${section.eyebrow}</p>` : ""}
+            <h2 id="impact-data-title" class="pa-title">${formatPaTitle(section)}</h2>
+          </div>
+          <div class="pa-impact__side">
+            ${section.lead ? `<p class="pa-impact__lead">${section.lead}</p>` : ""}
+            <a class="pa-impact__cta" ${linkAttrs(cta.href)}>${cta.label} <span aria-hidden="true">→</span></a>
+          </div>
+        </header>
+        <ul class="pa-impact__stats" data-reveal data-stagger="fade-up">${cards}</ul>
+        ${section.source ? `<p class="pa-impact__source">${section.source}</p>` : ""}
       </div>
     </section>`;
 }
@@ -791,70 +876,47 @@ export function renderStoriesBand(section = {}) {
   const cards = section.cards || [];
   if (!cards.length) return "";
 
-  const first = cards[0];
-  const index = cards
+  const cols = cards
     .map(
-      (c, i) => `<button type="button" class="pa-stories__nav-item${i === 0 ? " is-active" : ""}" data-pa-story-nav="${i}"
-        data-story-title="${String(c.title || "").replace(/"/g, "&quot;")}"
-        data-story-country="${String(c.country || "").replace(/"/g, "&quot;")}"
-        data-story-program="${String(c.program || "").replace(/"/g, "&quot;")}"
-        data-story-href="${String(c.href || "#/stories").replace(/"/g, "&quot;")}"
-        data-story-image="${String(c.image || "").replace(/"/g, "&quot;")}"
-        data-story-alt="${String(c.imageAlt || "").replace(/"/g, "&quot;")}"
-        aria-pressed="${i === 0 ? "true" : "false"}">
-        <span class="pa-stories__nav-n">${String(i + 1).padStart(2, "0")}</span>
-        <span class="pa-stories__nav-copy">
-          <span class="pa-stories__nav-meta">${c.country || ""} · ${c.program || ""}</span>
-          <strong>${c.title}</strong>
-        </span>
-      </button>`
+      (c, i) => `<li class="pa-tl__col${i === 0 ? " is-active" : ""}" style="--i:${i}" data-pa-tl-col="${i}">
+        <p class="pa-tl__meta">${[c.country, c.program].filter(Boolean).join(" · ")}</p>
+        <h3 class="pa-tl__name">${c.title}</h3>
+        <a class="pa-tl__more" ${linkAttrs(c.href || "#/stories")}>Read story</a>
+      </li>`
     )
     .join("");
 
-  const mobileCards = cards
+  const photos = cards
     .map(
-      (c, i) => `<a class="pa-stories__mobile-card" ${linkAttrs(c.href || "#/stories")} style="--i:${i}">
-        <span class="pa-stories__mobile-shot">${c.image ? `<img src="${c.image}" alt="" loading="lazy" decoding="async">` : ""}</span>
-        <span class="pa-stories__mobile-copy">
-          <span class="pa-stories__meta">${c.country || ""} · ${c.program || ""}</span>
-          <strong class="pa-stories__title">${c.title}</strong>
-          <span class="pa-stories__go">Read story →</span>
-        </span>
-      </a>`
+      (c, i) =>
+        c.image
+          ? `<img class="pa-tl__img${i === 0 ? " is-active" : ""}" src="${c.image}" alt="${c.imageAlt || ""}" loading="lazy" decoding="async" data-pa-tl-img="${i}">`
+          : ""
     )
     .join("");
+
+  const line1 = section.eyebrow || "";
+  const line2 = (section.title || "").replace(/\.$/, "");
 
   return `
-    <section class="pa-stories" id="stories-of-transformation" aria-labelledby="stories-band-title" data-home-section="stories" data-pa-stories>
-      <div class="container">
-        <header class="pa-stories__head" data-reveal data-anim="fade-up">
-          <div>
-            ${section.eyebrow ? `<p class="pa-stories__eyebrow">${section.eyebrow}</p>` : ""}
-            <h2 id="stories-band-title" class="pa-title">${formatPaTitle(section)}</h2>
-            ${section.lead ? `<p class="pa-stories__lead">${section.lead}</p>` : ""}
-          </div>
-          <a class="pa-stories__all" ${linkAttrs(cta.href)}>${cta.label} →</a>
-        </header>
-
-        <div class="pa-stories__cinema" data-reveal data-anim="fade-up">
-          <article class="pa-stories__feature">
-            <div class="pa-stories__feature-media">
-              ${first.image ? `<img src="${first.image}" alt="${first.imageAlt || ""}" data-pa-story-img decoding="async">` : ""}
-              <span class="pa-stories__feature-veil" aria-hidden="true"></span>
-            </div>
-            <div class="pa-stories__feature-copy">
-              <p class="pa-stories__meta" data-pa-story-meta>${first.country || ""} · ${first.program || ""}</p>
-              <h3 class="pa-stories__feature-title" data-pa-story-title>${first.title}</h3>
-              <a class="pa-stories__go" data-pa-story-cta ${linkAttrs(first.href || "#/stories")}>Read story →</a>
-            </div>
-          </article>
-          <nav class="pa-stories__index" aria-label="Story chapters">
-            <p class="pa-stories__index-label">Chapters</p>
-            ${index}
-          </nav>
+    <section class="pa-stories pa-tl" id="stories-of-transformation" aria-labelledby="stories-band-title" data-home-section="stories" data-pa-stories>
+      <div class="container pa-tl__inner">
+        <div class="pa-tl__copy" data-reveal data-anim="fade-up">
+          <h2 id="stories-band-title" class="pa-tl__heading">
+            ${line1 ? `<span class="pa-tl__heading-light">${line1}</span>` : ""}
+            <span class="pa-tl__heading-bold">${line2}</span>
+          </h2>
+          ${section.lead ? `<p class="pa-tl__lead">${section.lead}</p>` : ""}
+          <ul class="pa-tl__cols">${cols}</ul>
+          <a class="pa-tl__all" ${linkAttrs(cta.href)}>${cta.label} <span aria-hidden="true">→</span></a>
         </div>
-
-        <div class="pa-stories__mobile" data-reveal data-stagger="slide-up">${mobileCards}</div>
+        <div class="pa-tl__visual" aria-hidden="true" data-reveal data-anim="fade-up">
+          <svg class="pa-tl__brush" viewBox="0 0 200 200" focusable="false">
+            <path d="M100 6c52 0 94 42 94 94s-42 94-94 94S6 152 6 100 48 6 100 6z" />
+            <path d="M104 14c46 2 82 40 80 86-2 48-42 84-88 82-44-2-80-40-78-86 2-46 40-84 86-82z" />
+          </svg>
+          <div class="pa-tl__circle">${photos}</div>
+        </div>
       </div>
     </section>`;
 }
@@ -864,89 +926,23 @@ export function bindStoriesBand(root = document) {
   if (!section || section.dataset.bound) return;
   section.dataset.bound = "true";
 
-  const navs = [...section.querySelectorAll("[data-pa-story-nav]")];
-  if (!navs.length) return;
+  const cols = [...section.querySelectorAll("[data-pa-tl-col]")];
+  const imgs = [...section.querySelectorAll("[data-pa-tl-img]")];
+  if (!cols.length) return;
 
-  const img = section.querySelector("[data-pa-story-img]");
-  const meta = section.querySelector("[data-pa-story-meta]");
-  const title = section.querySelector("[data-pa-story-title]");
-  const cta = section.querySelector("[data-pa-story-cta]");
-  let active = 0;
-  let busy = false;
-
-  const cardFrom = (btn) => ({
-    title: btn.dataset.storyTitle || "",
-    country: btn.dataset.storyCountry || "",
-    program: btn.dataset.storyProgram || "",
-    href: btn.dataset.storyHref || "#/stories",
-    image: btn.dataset.storyImage || "",
-    imageAlt: btn.dataset.storyAlt || "",
-  });
-
-  const apply = (i) => {
-    const btn = navs[i];
-    if (!btn || busy || i === active) return;
-    busy = true;
-    active = i;
-    const card = cardFrom(btn);
-
-    navs.forEach((el, n) => {
-      const on = n === i;
-      el.classList.toggle("is-active", on);
-      el.setAttribute("aria-pressed", on ? "true" : "false");
-    });
-
-    const swap = () => {
-      if (img && card.image) {
-        img.src = card.image;
-        img.alt = card.imageAlt || "";
-      }
-      if (meta) meta.textContent = `${card.country}${card.country && card.program ? " · " : ""}${card.program}`;
-      if (title) title.textContent = card.title || "";
-      if (cta) {
-        cta.setAttribute("href", card.href || "#/stories");
-        if ((card.href || "").startsWith("#/")) cta.setAttribute("data-link", "");
-      }
-    };
-
-    const feature = section.querySelector(".pa-stories__feature");
-    if (typeof gsap !== "undefined" && feature && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-      gsap.to(feature, {
-        autoAlpha: 0.35,
-        y: 10,
-        duration: 0.28,
-        ease: "power1.in",
-        onComplete: () => {
-          swap();
-          gsap.to(feature, {
-            autoAlpha: 1,
-            y: 0,
-            duration: 0.5,
-            ease: "power2.out",
-            clearProps: "transform",
-            onComplete: () => {
-              busy = false;
-            },
-          });
-        },
-      });
-    } else {
-      swap();
-      busy = false;
-    }
+  const show = (i) => {
+    cols.forEach((c) => c.classList.toggle("is-active", c.dataset.paTlCol === String(i)));
+    imgs.forEach((img) => img.classList.toggle("is-active", img.dataset.paTlImg === String(i)));
   };
 
-  navs.forEach((btn) => {
-    const i = Number(btn.dataset.paStoryNav);
-    btn.addEventListener("mouseenter", () => {
-      if (window.matchMedia("(hover: hover)").matches) apply(i);
-    });
-    btn.addEventListener("focus", () => apply(i));
-    btn.addEventListener("click", () => apply(i));
+  cols.forEach((col) => {
+    const i = col.dataset.paTlCol;
+    col.addEventListener("mouseenter", () => show(i));
+    col.addEventListener("focusin", () => show(i));
   });
 }
 
-export function renderKnowledgeNewsSplit(section = {}) {
+export function renderKnowledgeNewsSplit(section = {}, learned = null) {
   const knowledge = section.knowledge || {};
   const news = section.news || {};
   if (!knowledge.title && !news.title) return "";
@@ -963,12 +959,12 @@ export function renderKnowledgeNewsSplit(section = {}) {
       </span>`;
   };
   const items = (news.items || [])
+    .filter((item) => !item.sample)
     .map(
       (item, i) => `<a class="pa-news__item" ${linkAttrs(item.href || "#/news")} style="--i:${i}" data-pa-news-item>
         ${dateBlock(item.date)}
         <span class="pa-news__meta">
           <span class="pa-news__tag">${item.tag || "News"}</span>
-          ${item.sample ? `<span class="pa-sample-tag" title="Sample entry — awaiting PA verification">Sample</span>` : ""}
           <time class="pa-news__date">${item.date || ""}</time>
         </span>
         <strong class="pa-news__headline">${item.title}</strong>
@@ -985,23 +981,27 @@ export function renderKnowledgeNewsSplit(section = {}) {
             ${knowledge.eyebrow ? `<p class="pa-know__eyebrow">${knowledge.eyebrow}</p>` : ""}
             <h2 id="knowledge-centre-title" class="pa-title">${formatPaTitle(knowledge, "Knowledge Centre")}</h2>
             ${knowledge.lead ? `<p class="pa-know__lead">${knowledge.lead}</p>` : ""}
-            <a class="pa-know__cta" ${linkAttrs(kCta.href)}>${kCta.label} →</a>
-          </div>
-          <figure class="pa-know__pub" data-pa-know-book>
             ${
-              knowledge.image
-                ? `<a class="pa-know__cover" href="#/field-reports" data-link aria-label="Open field reports">
-                    <img class="pa-know__cover-img" src="${knowledge.image}" alt="${knowledge.imageAlt || "Field Reports"}" loading="lazy" decoding="async" width="272" height="400">
-                    <span class="pa-know__cover-label">Report</span>
+              learned
+                ? `<a class="pa-know__learned" href="#/resources#kh-learned" data-link>
+                    <span class="pa-know__learned-label">What we've learned · ${learned.programme.title}</span>
+                    <q>${learned.text}</q>
+                    <span class="pa-know__learned-meta">${learned.story.title}${learned.country ? ` · ${learned.country.name}` : ""}</span>
                   </a>`
                 : ""
             }
+            <a class="pa-know__cta" ${linkAttrs(kCta.href)}>${kCta.label} →</a>
+          </div>
+          <figure class="pa-know__pub" data-pa-know-book>
+            <a class="pa-know__cover pa-know__cover--kh" href="#/field-reports" data-link aria-label="Open ${knowledge.imageAlt || "Field Reports"}">
+              ${khCover({ type: "reports", title: knowledge.imageAlt || "Field Reports" }, "Report", "xl")}
+            </a>
           </figure>
         </div>
       </section>`
     : "";
 
-  const newsHtml = news.title
+  const newsHtml = news.title && items
     ? `<section class="pa-news" id="news-updates" aria-labelledby="news-updates-title" data-home-section="news">
         <div class="container pa-news__layout">
           <header class="pa-news__head" data-reveal data-anim="fade-up">
@@ -1012,7 +1012,7 @@ export function renderKnowledgeNewsSplit(section = {}) {
           </header>
           <div class="pa-news__stream" data-reveal>
             <span class="pa-news__rail" aria-hidden="true"></span>
-            <div class="pa-news__list" data-stagger="slide-up">${items}</div>
+            <div class="pa-news__list" data-stagger="fade-up">${items}</div>
           </div>
         </div>
       </section>`
@@ -1035,7 +1035,7 @@ export function renderPartnerBanner(section = {}) {
 
   return `
     <section class="pa-partner" id="partner-support" aria-labelledby="partner-banner-title" data-home-section="partner">
-      <div class="container pa-partner__inner pa-partner__inner--cta" data-reveal data-anim="pop">
+      <div class="container pa-partner__inner pa-partner__inner--cta" data-reveal data-anim="fade-up">
         <div class="pa-partner__copy">
           ${section.eyebrow ? `<p class="pa-partner__eyebrow">${section.eyebrow}</p>` : ""}
           <h2 id="partner-banner-title" class="pa-title">${formatPaTitle(section)}</h2>

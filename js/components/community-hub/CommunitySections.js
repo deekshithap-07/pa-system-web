@@ -18,9 +18,9 @@ export function renderCommunityHero({ community, country, catchment }) {
     eyebrow: "One community",
     question: "What is happening in this community?",
     title: community.name,
-    lead: "This is the closest view: homes, local projects, pastors, and a two-year journey of change. Faith groups (Shalom) and church-led projects sit here too.",
+    lead: "This is the closest view: homes, local projects, pastors, and a two-year journey of change. Faith groups (Shalom) and Community High Impact Projects (CHIPs) sit here too.",
     chapterNext: {
-      kicker: "Nearby group",
+      kicker: "Catchment",
       title: catchment.name,
       href: `#/catchment/${country.slug}/${catchment.slug}`,
     },

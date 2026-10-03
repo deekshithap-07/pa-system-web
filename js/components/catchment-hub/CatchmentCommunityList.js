@@ -40,7 +40,7 @@ export function renderCatchmentCommunityList(communities, countrySlug, catchment
           <div>
             <p class="wb-out__eyebrow">Places in this group</p>
             <h2>${title}</h2>
-            <p class="cth-communities__desc">${communities.length} communit${communities.length === 1 ? "y" : "ies"} in this nearby group — open any card for local figures, projects, and journey stage.</p>
+            <p class="cth-communities__desc">${communities.length} communit${communities.length === 1 ? "y" : "ies"} in this catchment — open any card for local figures, projects, and journey stage.</p>
           </div>
           <nav class="cth-community-nav" aria-label="Communities in ${catchmentName || "catchment"}">
             ${navLinks}

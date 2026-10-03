@@ -22,6 +22,8 @@ import { renderFieldReports, mountFieldReports, destroyFieldReports } from "./vi
 import { destroyInsights } from "./views/insights-hub.js";
 import { renderAbout, mountAbout, destroyAbout } from "./views/about.js";
 import { renderWhatWeDo, mountWhatWeDo, destroyWhatWeDo } from "./views/what-we-do.js";
+import { renderPrograms, mountPrograms, destroyPrograms, ALL_PROGRAMS_HREF } from "./views/programs.js";
+import { programmeById } from "./components/shared/pa-model.js";
 import { closeSearchModal } from "./components/search-modal.js";
 import { closeVideoModal } from "./components/video-modal.js";
 import { closeContactModal } from "./components/contact-modal.js";
@@ -125,7 +127,7 @@ function updateNavActive(parts) {
     const nav = el.dataset.nav;
     let active = false;
     if (nav === "home") active = parts.length === 0;
-    else if (nav === "work") active = parts[0] === "work";
+    else if (nav === "work") active = parts[0] === "work" || parts[0] === "programs" || parts[0] === "program";
     else if (nav === "africa")
       active = parts[0] === "africa" || parts[0] === "country" || parts[0] === "catchment" || parts[0] === "community" || parts[0] === "story";
     else if (nav === "scorecard") active = parts[0] === "scorecard" || parts[0] === "insights";
@@ -191,6 +193,7 @@ function handleRoute() {
   destroyFieldReports();
   destroyAbout();
   destroyWhatWeDo();
+  destroyPrograms();
   destroyCountryStoriesPage();
   destroyStoryFeature();
   const header = document.getElementById("site-header");
@@ -271,6 +274,13 @@ function handleRoute() {
     view = "work";
     hub = { section: "overview" };
     html = renderWhatWeDo(appData);
+  } else if (parts[0] === "programs" || parts[0] === "program") {
+    if (parts[0] === "programs" || !programmeById(parts[1])) {
+      location.hash = ALL_PROGRAMS_HREF;
+      return;
+    }
+    view = "programs";
+    html = renderPrograms(appData, parts[0] === "program" ? parts[1] || null : null);
   } else if (parts[0] === "about") {
     if (parts[1] === "how-we-work") {
       location.hash = "#/work";
@@ -357,6 +367,8 @@ function handleRoute() {
       mountResources(appData, hub?.section || "overview");
     } else if (view === "work") {
       mountWhatWeDo(app);
+    } else if (view === "programs") {
+      mountPrograms(app);
     } else if (view === "static") {
       mountAbout(appData, hub?.section || "overview");
     }

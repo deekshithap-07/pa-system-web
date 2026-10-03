@@ -8,7 +8,7 @@ import { prefersReducedMotion } from "./pa-motion.js";
 
 const AMBIENT_SELECTORS = [
   ".pa-africa",
-  ".pa-work",
+  ".pa-ra",
   ".pa-stories",
   ".pa-know",
   ".pa-news",

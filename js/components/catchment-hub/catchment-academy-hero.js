@@ -40,7 +40,7 @@ function renderCatchmentHeroSection(hub, status) {
           <span>${hub.catchmentName}</span>
         </nav>
         <div class="cth-scroll-section__copy" data-scroll-reveal>
-          <p class="cth-scroll-section__eyebrow">${hub.heroTagline || `${hub.countryName} · Nearby group`}</p>
+          <p class="cth-scroll-section__eyebrow">${hub.heroTagline || `${hub.countryName} · Catchment`}</p>
           <h1 class="cth-scroll-section__title">${hub.catchmentName}</h1>
           <p class="cth-scroll-section__lead">${hub.description || hub.overview || `Pastor-led work across ${communityCount} communities in ${hub.countryName}.`}</p>
           <p class="cth-scroll-section__status"><span>${status}</span></p>

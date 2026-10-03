@@ -2236,3 +2236,966 @@
     transition: none !important;
   }
 }
+
+/* Leadership sits between the light model band and the light Shalom band — warm gold keeps them apart */
+.ow-band--ochre {
+  background:
+    radial-gradient(ellipse at 8% 0%, rgba(255, 255, 255, 0.45), transparent 45%),
+    linear-gradient(180deg, #f6e6c2 0%, #efd9a6 100%);
+}
+
+/* PPPs & CHIPs — same explorer as Home, on deep maroon */
+.ow-pppx {
+  color: #fff;
+  background:
+    radial-gradient(ellipse at 88% 0%, rgba(232, 169, 26, 0.16), transparent 50%),
+    linear-gradient(160deg, #5c2428 0%, #4a1c20 55%, #3d181c 100%);
+}
+
+.ow-pppx__head {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 1.25rem 3rem;
+  align-items: end;
+  margin-bottom: clamp(1.75rem, 4vh, 2.5rem);
+}
+
+.ow-pppx .pa-title,
+.ow-pppx .pa-title span {
+  color: #fff;
+}
+
+.ow-pppx .pa-title em {
+  color: var(--pa-gold);
+}
+
+.ow-pppx .pa-pppx__tab.is-active,
+.ow-pppx .pa-pppx__tab:hover {
+  color: #fff;
+}
+
+@media (max-width: 860px) {
+  .ow-pppx__head {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* How We Transform — structure row + activity types */
+.ow-tf--structure .ow-tf__grid {
+  grid-template-columns: 1fr;
+  gap: clamp(1.75rem, 4vh, 2.5rem);
+}
+
+.ow-tf--structure .ow-tf__head {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 1rem 3rem;
+  align-items: end;
+}
+
+.ow-tf--structure .ow-tf__head .ow-sec-lead {
+  margin-top: 0;
+}
+
+.ow-tf--structure .ow-tf__sub {
+  max-width: 12rem;
+}
+
+.ow-tf__acts {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.75rem 1.25rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid rgba(92, 36, 40, 0.14);
+}
+
+.ow-tf__acts-label {
+  margin: 0;
+  font-size: 0.74rem;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--pa-maroon);
+}
+
+.ow-tf__acts-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+}
+
+.ow-tf__act {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem 0.5rem 0.55rem;
+  border: 1px solid rgba(92, 36, 40, 0.18);
+  border-radius: 999px;
+  background: #fff;
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: var(--pa-maroon);
+}
+
+.ow-tf__act-n {
+  display: grid;
+  place-items: center;
+  width: 1.7rem;
+  height: 1.7rem;
+  border-radius: 50%;
+  background: var(--pa-gold-soft);
+  font-size: 0.7rem;
+  font-weight: 800;
+}
+
+@media (max-width: 860px) {
+  .ow-tf--structure .ow-tf__head {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (min-width: 641px) and (max-width: 1080px) {
+  .ow-tf--structure .ow-tf__flow {
+    flex-wrap: wrap;
+    row-gap: 1.5rem;
+  }
+
+  .ow-tf--structure .ow-tf__step {
+    flex: 0 0 calc((100% - 6rem) / 3);
+  }
+
+  .ow-tf--structure .ow-tf__arrow:nth-child(6) {
+    display: none;
+  }
+}
+
+/* The ministry model — Program → PPP → Activity type → Activity */
+.ow-band--model.ow-mm {
+  color: #fff;
+  background:
+    radial-gradient(ellipse at 12% 0%, rgba(232, 169, 26, 0.14), transparent 50%),
+    linear-gradient(160deg, #5c2428 0%, #4a1c20 55%, #3d181c 100%);
+}
+
+.ow-band--model.ow-mm::after {
+  display: none;
+}
+
+.ow-mm .pa-title,
+.ow-mm .pa-title span {
+  color: #fff;
+}
+
+.ow-mm .pa-title em,
+.ow-band--model.ow-mm .ow-sec-title em {
+  background: none;
+  color: var(--pa-gold);
+  -webkit-text-fill-color: currentColor;
+}
+
+.ow-mm__head {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 1rem 3rem;
+  align-items: end;
+  margin-bottom: clamp(1.75rem, 4vh, 2.5rem);
+}
+
+.ow-mm__chain {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1rem;
+  counter-reset: none;
+}
+
+.ow-mm__level {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+  padding: 1.25rem 1.2rem 1.35rem;
+  border: 1px solid rgba(245, 215, 138, 0.22);
+  border-radius: 1rem;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.ow-mm__level:not(:last-child)::after {
+  content: "→";
+  position: absolute;
+  top: 1.2rem;
+  right: -0.85rem;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  width: 1.6rem;
+  height: 1.6rem;
+  border-radius: 50%;
+  background: var(--pa-gold);
+  font-size: 0.85rem;
+  font-weight: 800;
+  color: var(--pa-maroon-dark);
+}
+
+.ow-mm__top {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.ow-mm__n {
+  font-size: 0.74rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  color: var(--pa-gold-soft);
+}
+
+.ow-mm__count {
+  font-size: 1.6rem;
+  font-weight: 800;
+  line-height: 1;
+  color: var(--pa-gold);
+}
+
+.ow-mm__count em {
+  font-size: 0.72rem;
+  font-style: normal;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.ow-mm__label {
+  margin: 0;
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: #fff;
+}
+
+.ow-mm__level p {
+  margin: 0;
+  font-size: 0.86rem;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.78);
+}
+
+.ow-mm__chips {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.ow-mm__chips li {
+  padding: 0.3rem 0.65rem;
+  border-radius: 999px;
+  background: rgba(245, 215, 138, 0.14);
+  font-size: 0.78rem;
+  font-weight: 600;
+  line-height: 1.3;
+  color: #fff;
+}
+
+.ow-mm__examples {
+  margin-top: clamp(1.5rem, 4vh, 2.25rem);
+}
+
+.ow-mm__examples-title {
+  margin: 0 0 0.75rem;
+  font-size: 0.74rem;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--pa-gold-soft);
+}
+
+.ow-mm__table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+
+.ow-mm__table th,
+.ow-mm__table td {
+  padding: 0.75rem 1rem;
+  text-align: left;
+  border-bottom: 1px solid rgba(245, 215, 138, 0.16);
+}
+
+.ow-mm__table th {
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--pa-gold);
+}
+
+.ow-mm__table td {
+  color: rgba(255, 255, 255, 0.88);
+}
+
+@media (max-width: 980px) {
+  .ow-mm__chain {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .ow-mm__level:nth-child(2)::after {
+    display: none;
+  }
+}
+
+@media (max-width: 860px) {
+  .ow-mm__head {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  .ow-mm__chain {
+    grid-template-columns: 1fr;
+  }
+
+  .ow-mm__level:not(:last-child)::after {
+    content: "↓";
+    top: auto;
+    right: 1.2rem;
+    bottom: -0.95rem;
+  }
+
+  .ow-mm__level:nth-child(2)::after {
+    display: grid;
+  }
+
+  .ow-mm__table thead {
+    display: none;
+  }
+
+  .ow-mm__table tr {
+    display: grid;
+    padding: 0.6rem 0;
+    border-bottom: 1px solid rgba(245, 215, 138, 0.16);
+  }
+
+  .ow-mm__table td {
+    padding: 0.15rem 0;
+    border: 0;
+  }
+}
+
+/* How we transform — brief: journey stages, then Programs → PPPs → Activities */
+.ow-tf--brief .ow-tf__grid {
+  grid-template-columns: 1fr;
+  gap: 1.75rem;
+  align-items: stretch;
+}
+
+.ow-tf--brief .ow-tf__head {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 1rem 3rem;
+  align-items: end;
+}
+
+.ow-tf--brief .ow-tf__head .ow-sec-lead {
+  margin-top: 0;
+}
+
+.ow-tf__row {
+  padding-top: 1.5rem;
+  border-top: 1px solid rgba(92, 36, 40, 0.14);
+}
+
+.ow-tf__row-label {
+  margin: 0 0 1rem;
+  font-size: 0.74rem;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--pa-maroon);
+}
+
+.ow-tf__stages {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 0.75rem;
+}
+
+.ow-tf__stage {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  padding: 1rem 1.1rem 1.1rem;
+  border-top: 3px solid var(--pa-gold);
+  border-radius: 0.6rem;
+  background: #fff;
+}
+
+.ow-tf__stage:nth-child(n + 4) {
+  border-top-color: var(--pa-green);
+}
+
+.ow-tf__stage-n {
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  color: #8f5f08;
+}
+
+.ow-tf__stage-name {
+  font-size: 1.05rem;
+  color: var(--pa-maroon);
+}
+
+.ow-tf__stage-m {
+  font-size: 0.8rem;
+  color: rgba(61, 24, 28, 0.66);
+}
+
+.ow-tf__lvls {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  align-items: stretch;
+  gap: 0.75rem;
+}
+
+.ow-tf__lvl {
+  flex: 1 1 0;
+}
+
+.ow-tf__lvl-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  height: 100%;
+  padding: 1.1rem 1.25rem;
+  border-radius: 0.8rem;
+  background: var(--pa-maroon);
+  color: #fff;
+  text-decoration: none;
+  transition: transform 0.25s var(--ease-out), background 0.25s ease;
+}
+
+.ow-tf__lvl-card:hover,
+.ow-tf__lvl-card:focus-visible {
+  transform: translateY(-3px);
+  background: var(--pa-maroon-dark);
+}
+
+.ow-tf__lvl-count {
+  font-size: 1.8rem;
+  font-weight: 800;
+  line-height: 1;
+  color: var(--pa-gold);
+}
+
+.ow-tf__lvl-count em {
+  font-size: 0.75rem;
+  font-style: normal;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.ow-tf__lvl-name {
+  font-size: 1.1rem;
+}
+
+.ow-tf__lvl-arrow {
+  align-self: center;
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: var(--pa-maroon);
+}
+
+/* Ministry model — six-step structure (3 per row) */
+.ow-mm__part {
+  margin-top: clamp(1.75rem, 4vh, 2.5rem);
+}
+
+.ow-mm__chain--flow {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.ow-mm__chain--flow .ow-mm__level:nth-child(3n)::after {
+  display: none;
+}
+
+@media (max-width: 980px) {
+  .ow-tf__stages {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .ow-mm__chain--flow {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .ow-mm__chain--flow .ow-mm__level:nth-child(3n)::after {
+    display: grid;
+  }
+
+  .ow-mm__chain--flow .ow-mm__level:nth-child(2n)::after {
+    display: none;
+  }
+}
+
+@media (max-width: 860px) {
+  .ow-tf--brief .ow-tf__head {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  .ow-tf__stages {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .ow-tf__lvls {
+    flex-direction: column;
+  }
+
+  .ow-tf__lvl-arrow {
+    transform: rotate(90deg);
+  }
+
+  .ow-mm__chain--flow {
+    grid-template-columns: 1fr;
+  }
+
+  .ow-mm__chain--flow .ow-mm__level:not(:last-child)::after {
+    display: grid;
+  }
+}
+
+/* Shalom — brand green, set apart from the gold Leadership band above and the maroon PPP band below */
+.ow-band--green {
+  color: #fff;
+  background:
+    radial-gradient(ellipse at 88% 10%, rgba(245, 215, 138, 0.16), transparent 50%),
+    linear-gradient(160deg, #3f9a4a 0%, #358a40 55%, #2f7a38 100%);
+}
+
+.ow-band--green .ow-eyebrow {
+  color: var(--pa-gold-soft);
+}
+
+.ow-band--green .pa-title,
+.ow-band--green .pa-title span {
+  color: #fff;
+}
+
+.ow-band--green .pa-title em {
+  background: none;
+  color: var(--pa-gold-soft);
+  -webkit-text-fill-color: currentColor;
+}
+
+.ow-band--green .ow-sec-lead {
+  color: rgba(255, 255, 255, 0.88);
+}
+
+.ow-band--green .ow-text-link {
+  color: #fff;
+  border-bottom-color: rgba(245, 215, 138, 0.6);
+}
+
+.ow-band--green .ow-text-link:hover {
+  color: var(--pa-gold-soft);
+}
+
+.ow-band--green .ow-organic__orb-ring {
+  border-color: rgba(245, 215, 138, 0.45);
+  background: radial-gradient(circle at 40% 35%, rgba(255, 255, 255, 0.22), rgba(245, 215, 138, 0.08));
+}
+
+/* PPPs & CHIPs — full explanation */
+.ow-ppp .ow-mm__chain {
+  margin-bottom: 0;
+}
+
+.ow-ppp .ow-mm__level p {
+  font-size: 0.84rem;
+}
+
+.ow-ppp__progs {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 0.85rem;
+}
+
+.ow-ppp__prog {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  padding: 1.15rem 1.1rem 1.25rem;
+  border-top: 3px solid var(--pa-gold);
+  border-radius: 0.8rem;
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.ow-ppp__prog-head {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  color: #fff;
+  text-decoration: none;
+}
+
+.ow-ppp__prog-head strong {
+  font-size: 1rem;
+  line-height: 1.3;
+}
+
+.ow-ppp__prog-head:hover strong,
+.ow-ppp__prog-head:focus-visible strong {
+  color: var(--pa-gold-soft);
+}
+
+.ow-ppp__prog-n {
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  color: var(--pa-gold);
+}
+
+.ow-ppp__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.5rem;
+}
+
+.ow-ppp__list li {
+  padding: 0.55rem 0.7rem;
+  border-radius: 0.5rem;
+  background: rgba(245, 215, 138, 0.1);
+  font-size: 0.84rem;
+  font-weight: 600;
+  line-height: 1.35;
+  color: rgba(255, 255, 255, 0.92);
+}
+
+.ow-ppp__list li small {
+  display: block;
+  margin-top: 0.2rem;
+  font-size: 0.74rem;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.66);
+}
+
+.ow-ppp__list li.is-chip {
+  background: var(--pa-gold);
+  color: var(--pa-maroon-dark);
+}
+
+.ow-ppp__chips {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+  gap: 1.5rem 3rem;
+  align-items: center;
+  margin-top: clamp(1.75rem, 4vh, 2.5rem);
+  padding: clamp(1.25rem, 3vw, 2rem);
+  border: 1px solid rgba(245, 215, 138, 0.28);
+  border-radius: 1rem;
+  background: rgba(245, 215, 138, 0.08);
+}
+
+.ow-ppp__chips-copy p {
+  margin: 0;
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.88);
+}
+
+.ow-ppp__chips-copy p + p {
+  margin-top: 0.75rem;
+}
+
+.ow-ppp__own strong {
+  color: var(--pa-gold-soft);
+}
+
+.ow-ppp__chip-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.65rem;
+}
+
+.ow-ppp__chip-list li {
+  padding: 0.9rem 1rem;
+  border-radius: 0.7rem;
+  background: var(--pa-gold);
+  font-weight: 800;
+  color: var(--pa-maroon-dark);
+  text-align: center;
+}
+
+@media (max-width: 1080px) {
+  .ow-ppp__progs {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 860px) {
+  .ow-ppp__chips {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  .ow-ppp__progs {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Section header — eyebrow on top, title left, statement right; the statement starts level with the title */
+.ow-split {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 0.75rem 3rem;
+  align-items: start;
+  margin-bottom: clamp(1.75rem, 4vh, 2.5rem);
+}
+
+.ow-split__eyebrow {
+  grid-column: 1 / -1;
+  margin: 0;
+}
+
+.ow-split__title {
+  margin: 0;
+}
+
+.ow-split__side {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.9rem;
+  padding-top: 0.35rem;
+}
+
+.ow-split__side .ow-sec-lead {
+  margin: 0;
+}
+
+/* How We Transform — the two-year journey: path, then stages across 24 months */
+.ow-tj .ow-tj__path {
+  position: relative;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.ow-tj__path::before {
+  content: "";
+  position: absolute;
+  top: 1.35rem;
+  left: calc(100% / 12);
+  right: calc(100% / 12);
+  height: 2px;
+  background: linear-gradient(90deg, var(--pa-gold), var(--pa-green));
+}
+
+.ow-tj__step {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  text-align: center;
+}
+
+.ow-tj__dot {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  width: 2.7rem;
+  height: 2.7rem;
+  border-radius: 50%;
+  border: 2px solid var(--pa-gold);
+  background: #fff;
+  font-size: 0.78rem;
+  font-weight: 800;
+  color: var(--pa-maroon);
+}
+
+.ow-tj__step:last-child .ow-tj__dot {
+  border-color: var(--pa-green);
+  background: var(--pa-green);
+  color: #fff;
+}
+
+.ow-tj__label {
+  font-size: 0.95rem;
+  font-weight: 700;
+  line-height: 1.35;
+  color: var(--pa-maroon);
+}
+
+.ow-tj__time {
+  margin-top: clamp(2rem, 5vh, 3rem);
+  padding-top: 1.5rem;
+  border-top: 1px solid rgba(92, 36, 40, 0.14);
+}
+
+.ow-tj__time-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.ow-tj__time-title {
+  margin: 0;
+  font-size: 0.74rem;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--pa-maroon);
+}
+
+.ow-tj__years {
+  display: flex;
+  gap: 1.5rem;
+  font-size: 0.74rem;
+  font-weight: 700;
+  color: rgba(61, 24, 28, 0.6);
+}
+
+.ow-tj__stages {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  gap: 0.4rem;
+}
+
+.ow-tj__stage {
+  flex: var(--span, 3) 1 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  min-width: 0;
+}
+
+.ow-tj__bar {
+  height: 0.55rem;
+  margin-bottom: 0.35rem;
+  border-radius: 999px;
+  background: var(--pa-gold);
+}
+
+.ow-tj__stage:nth-child(n + 4) .ow-tj__bar {
+  background: var(--pa-green);
+}
+
+.ow-tj__stage strong {
+  font-size: 0.95rem;
+  color: var(--pa-maroon);
+}
+
+.ow-tj__months {
+  font-size: 0.78rem;
+  color: rgba(61, 24, 28, 0.66);
+}
+
+/* Ministry model — Programs, PPPs, Activities, CHIPs in brief */
+.ow-mm__brief {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.ow-mm__brief-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  padding: 1.2rem 1.2rem 1.3rem;
+  border-top: 3px solid var(--pa-gold);
+  border-radius: 0.8rem;
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.ow-mm__brief-item p {
+  margin: 0;
+  font-size: 0.86rem;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+@media (max-width: 980px) {
+  .ow-tj .ow-tj__path {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    row-gap: 1.75rem;
+  }
+
+  .ow-tj__path::before {
+    display: none;
+  }
+
+  .ow-mm__brief {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 860px) {
+  .ow-split {
+    grid-template-columns: 1fr;
+  }
+
+  .ow-split__side {
+    padding-top: 0;
+  }
+}
+
+@media (max-width: 640px) {
+  .ow-tj .ow-tj__path {
+    grid-template-columns: 1fr;
+    row-gap: 1rem;
+  }
+
+  .ow-tj__step {
+    flex-direction: row;
+    text-align: left;
+  }
+
+  .ow-tj__stages {
+    flex-direction: column;
+    gap: 0.9rem;
+  }
+
+  .ow-tj__years {
+    display: none;
+  }
+
+  .ow-mm__brief {
+    grid-template-columns: 1fr;
+  }
+}

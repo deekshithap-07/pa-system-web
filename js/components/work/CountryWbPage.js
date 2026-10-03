@@ -11,7 +11,9 @@ import {
 import { renderHubGeoMap, bindHubGeoMap } from "../../map/components/HubGeoMap.js";
 import { resolvePublicFreshness } from "../../utils/public-api.js";
 import { bindPartnerContact } from "../contact-modal.js";
-import { resolvePaProgrammes, toFivePaProgrammes } from "../shared/pa-programmes.js";
+import { PA_PROGRAMMES, toFivePaProgrammes } from "../shared/pa-programmes.js";
+import { programmeIdFor, isChip, HOW_PA_WORKS_HREF, PA_PPPS, pppFor } from "../shared/pa-model.js";
+import { renderMetricContext } from "../shared/metric-context.js";
 
 function storyHref(story) {
   return `#/story/${story.slug}`;
@@ -48,14 +50,62 @@ function presenceLine(hub) {
     : `This page shares regional context for ${hub.countryName}. Possibilities Africa does not currently operate a full network here.`;
 }
 
-/** The five official PA programmes (Home → Results Areas). */
-function countryProgrammeChapters(data) {
-  return resolvePaProgrammes(data?.home?.ourWork?.programs).map((p) => ({
-    id: p.id,
-    title: p.title,
-    text: p.description || p.text,
-    href: p.href || "#/work",
-  }));
+/**
+ * Country evidence for each of the five programs — only what this country has published:
+ * its Pastor-Led Initiatives, field activities and stories. Definitions live on Home.
+ */
+export function countryProgrammeEvidence(hub, data) {
+  const initiatives = hub.initiatives?.items || [];
+  const activities = hub.activities || [];
+  const stories = featuredStories(data, hub);
+  const share = hub.charts?.programActivity
+    ? toFivePaProgrammes(hub.charts.programActivity.labels, hub.charts.programActivity.data)
+    : null;
+  const shareTotal = share ? share.data.reduce((a, b) => a + b, 0) : 0;
+
+  return PA_PROGRAMMES.map((p, i) => {
+    const own = {
+      initiatives: initiatives.filter((t) => programmeIdFor(t) === p.id),
+      activities: activities
+        .filter((a) => programmeIdFor(a.project) === p.id)
+        .map((a) => ({ ...a, type: isChip(a.project) ? "CHIP" : "PPP" })),
+      stories: stories.filter((s) => programmeIdFor(s.program) === p.id),
+    };
+    const evidenceText = [
+      ...own.initiatives,
+      ...own.activities.map((a) => a.project),
+      ...own.stories.map((s) => s.title),
+    ];
+    const ppps = (PA_PPPS[p.id] || []).map((x) => ({
+      ...x,
+      examples: evidenceText.filter((t) => pppFor(t, p.id)?.id === x.id).length,
+    }));
+    return {
+      ...p,
+      ...own,
+      ppps,
+      active: own.initiatives.length + own.activities.length + own.stories.length > 0,
+      sharePct: shareTotal ? Math.round((share.data[i] / shareTotal) * 100) : null,
+    };
+  });
+}
+
+/** Country PPP and CHIP picture: counts with growth, plus this country's own project examples. */
+function countryProjects(hub) {
+  const kpi = (id) => (hub.kpis || []).find((k) => k.id === id) || null;
+  const activities = (hub.activities || []).filter((a) => a.project);
+  const chipInitiatives = (hub.initiatives?.items || []).filter((t) => isChip(t));
+  return {
+    ppp: kpi("ppp"),
+    chips: kpi("chips"),
+    chipExamples: [
+      ...activities.filter((a) => isChip(a.project)).map((a) => ({ title: a.project, where: a.community, status: a.status, date: a.date })),
+      ...chipInitiatives.map((t) => ({ title: t, where: null, status: "Initiative" })),
+    ],
+    pppExamples: activities
+      .filter((a) => !isChip(a.project))
+      .map((a) => ({ title: a.project, where: a.community, status: a.status, date: a.date, programme: programmeIdFor(a.project) })),
+  };
 }
 
 /* 01 — Country introduction (identity only — no counts) */
@@ -147,7 +197,9 @@ export function bindCountryVideo(root) {
 /* 01b — At a glance (headline figures, counted in place) */
 const GLANCE_IDS = ["communities", "catchments", "pastors", "shalom", "ppp", "households", "programs"];
 
-export function renderCountryGlance(hub) {
+const GLANCE_SAMPLE_IDS = ["ppp", "programs"];
+
+export function renderCountryGlance(hub, data = null) {
   const kpis = (hub.kpis || [])
     .filter((k) => GLANCE_IDS.includes(k.id) && typeof k.value === "number" && k.value > 0)
     .sort((a, b) => GLANCE_IDS.indexOf(a.id) - GLANCE_IDS.indexOf(b.id))
@@ -162,7 +214,7 @@ export function renderCountryGlance(hub) {
           <span class="cp-glance__ghost" aria-hidden="true">${display}</span>
           <span class="cp-glance__num" data-cp-count="${k.value}" data-cp-prefix="${k.prefix || ""}" data-cp-suffix="${k.suffix || ""}">${display}</span>
         </span>
-        <span class="cp-glance__label">${k.label}</span>
+        <span class="cp-glance__label">${k.label}${GLANCE_SAMPLE_IDS.includes(k.id) ? ` ${SAMPLE_TAG}` : ""}</span>
         ${k.trend && k.direction === "up" ? `<span class="cp-glance__trend">${k.trend}</span>` : ""}
       </li>`;
     })
@@ -172,6 +224,14 @@ export function renderCountryGlance(hub) {
     <section class="cp-glance" data-cp-section="glance" aria-label="${hub.countryName} at a glance">
       <div class="container">
         <ul class="cp-glance__card" data-cp-glance>${items}</ul>
+        ${renderMetricContext({
+          meaning: "Places and people taking part in PA's work in this country.",
+          where: hub.countryName,
+          updated: data ? resolvePublicFreshness(data, "country-hubs").lastUpdatedLabel : "",
+          source: "PA tracking system — figures tagged Sample are placeholders",
+          sample: false,
+          className: "cp-glance__ctx",
+        })}
       </div>
     </section>`;
 }
@@ -218,7 +278,7 @@ export function renderCountryMapPresence(hub) {
         <header class="cp-sec-head" data-cp-reveal>
           <p class="cp-kicker">Where PA works</p>
           <h2 id="cp-map-title" class="cp-sec-title">Where PA is working in ${hub.countryName}</h2>
-          <p class="cp-sec-lead">Open a nearby group to explore its communities.</p>
+          <p class="cp-sec-lead">Open a catchment to explore its communities.</p>
           ${catchments.length ? `<a class="cp-geo__all" href="#/country/${slug}/catchments" data-link>See all ${catchments.length} catchments →</a>` : ""}
         </header>
         <div class="cp-geo__stage">
@@ -230,44 +290,157 @@ export function renderCountryMapPresence(hub) {
 }
 
 /* 03 — What PA is doing (programmes + field activity — no intro/map/stats) */
-export function renderCountryProgrammes(hub, data) {
-  const chapters = countryProgrammeChapters(data);
-  if (!chapters.length) return "";
+function renderProgrammePanel(p, i, name) {
+  const sampleShare =
+    p.sharePct != null
+      ? `<p class="cp-do__share"><span class="cp-do__share-bar" aria-hidden="true"><span style="--w:${p.sharePct}%"></span></span>
+          <span><strong>${p.sharePct}%</strong> of reported program activity in ${name}</span> ${SAMPLE_TAG}</p>`
+      : "";
 
-  const nav = chapters
+  const initiatives = p.initiatives.length
+    ? `<div class="cp-do__block">
+        <h4>What PA ${name} is doing</h4>
+        <ul class="cp-do__list">${p.initiatives.map((t) => `<li>${t}</li>`).join("")}</ul>
+      </div>`
+    : "";
+
+  const field = p.activities.length
+    ? `<div class="cp-do__block">
+        <h4>In the field</h4>
+        <ul class="cp-do__field">${p.activities
+          .map(
+            (a) => `<li>
+              <span class="cp-do__tag cp-do__tag--${a.type.toLowerCase()}">${a.type}</span>
+              <strong>${a.project}</strong>
+              <span>${[pppFor(a.project, p.id)?.name, a.community, a.status, a.date ? formatDate(a.date) : ""].filter(Boolean).join(" · ")}</span>
+            </li>`
+          )
+          .join("")}</ul>
+      </div>`
+    : "";
+
+  const [story, ...moreStories] = p.stories;
+  const example = story
+    ? `<a class="cp-do__story" href="${storyHref(story)}" data-link>
+        ${storyHeroImage(story) ? `<img src="${storyHeroImage(story)}" alt="" loading="lazy" decoding="async">` : ""}
+        <span class="cp-do__story-copy">
+          <span class="cp-do__story-kicker">Example from ${name}</span>
+          <strong>${story.title}</strong>
+          <span class="cp-do__story-go">Read the story →${moreStories.length ? ` <em>+${moreStories.length} more</em>` : ""}</span>
+        </span>
+      </a>`
+    : "";
+
+  const pppStrip = p.ppps?.length
+    ? `<div class="cp-do__block cp-do__ppps">
+        <h4>PPPs in ${name}</h4>
+        <ul class="cp-do__ppp-list">${p.ppps
+          .map(
+            (x) => `<li class="${x.examples ? "is-on" : ""}">
+              <span>${x.name}</span>
+              <em>${x.examples ? `${x.examples} ${x.examples === 1 ? "example" : "examples"}` : "None published"}</em>
+            </li>`
+          )
+          .join("")}</ul>
+      </div>`
+    : "";
+
+  const body = p.active
+    ? `${pppStrip}${initiatives}${field}${example}`
+    : `${pppStrip}<p class="cp-empty">No published examples of this program in ${name} yet.</p>`;
+
+  return `
+      <article class="cp-do__panel${i === 0 ? " is-active" : ""}" data-cp-chapter-panel="${i}" ${i === 0 ? "" : "hidden"}>
+        <span class="cp-do__big" aria-hidden="true">${String(i + 1).padStart(2, "0")}</span>
+        <p class="cp-do__status${p.active ? " is-active" : ""}">${p.active ? `Active in ${name}` : "No published activity yet"}</p>
+        <h3>${p.title}</h3>
+        ${sampleShare}
+        <div class="cp-do__evidence">${body}</div>
+      </article>`;
+}
+
+function renderCountryProjectsBlock(hub) {
+  const proj = countryProjects(hub);
+  const stat = (k, label) =>
+    k && typeof k.value === "number"
+      ? `<div class="cp-pc__stat">
+          <span class="cp-pc__value">${k.value.toLocaleString("en-US")}</span>
+          <span class="cp-pc__label">${label}</span>
+          ${k.trend && k.direction === "up" ? `<span class="cp-pc__trend">▲ ${k.trend}</span>` : k.trend ? `<span class="cp-pc__trend is-flat">${k.trend}</span>` : ""}
+        </div>`
+      : "";
+  const stats = `${stat(proj.ppp, "PPPs active")}${stat(proj.chips, "CHIPs")}`;
+  const list = (items, empty) =>
+    items.length
+      ? `<ul class="cp-pc__list">${items
+          .map(
+            (x) => `<li><strong>${x.title}</strong>${x.where || x.status ? `<span>${[x.where, x.status, x.date ? formatDate(x.date) : ""].filter(Boolean).join(" · ")}</span>` : ""}</li>`
+          )
+          .join("")}</ul>`
+      : `<p class="cp-pc__empty">${empty}</p>`;
+
+  if (!stats && !proj.chipExamples.length && !proj.pppExamples.length) return "";
+
+  return `
+    <div class="cp-pc" data-cp-reveal>
+      <header class="cp-pc__head">
+        <h3>PPPs &amp; CHIPs in ${hub.countryName}</h3>
+        <a class="cp-text-link" href="${HOW_PA_WORKS_HREF}" data-link>What are PPPs and CHIPs? →</a>
+      </header>
+      <div class="cp-pc__grid">
+        ${stats ? `<div class="cp-pc__stats">${stats}<p class="cp-pc__note">${SAMPLE_TAG} Counts and growth from PA's tracking dashboard, awaiting verification.</p></div>` : ""}
+        <div class="cp-pc__col">
+          <h4>PPP activity in ${hub.countryName}</h4>
+          ${list(proj.pppExamples, `No PPP field activity published for ${hub.countryName} yet.`)}
+        </div>
+        <div class="cp-pc__col">
+          <h4>CHIPs in ${hub.countryName}</h4>
+          ${list(proj.chipExamples, `No CHIPs published for ${hub.countryName} yet.`)}
+        </div>
+      </div>
+    </div>`;
+}
+
+export function renderCountryProgrammes(hub, data) {
+  const programmes = countryProgrammeEvidence(hub, data);
+  const name = hub.countryName;
+  const activeCount = programmes.filter((p) => p.active).length;
+  const coveragePct = Math.round((activeCount / programmes.length) * 100);
+
+  const nav = programmes
     .map(
-      (c, i) => `
-      <button type="button" class="cp-do__tab${i === 0 ? " is-active" : ""}"
+      (p, i) => `
+      <button type="button" class="cp-do__tab${i === 0 ? " is-active" : ""}${p.active ? "" : " is-quiet"}"
         data-cp-chapter="${i}" aria-selected="${i === 0 ? "true" : "false"}">
         <span>${String(i + 1).padStart(2, "0")}</span>
-        <strong>${c.title}</strong>
+        <strong>${p.title}</strong>
+        <i class="cp-do__dot${p.active ? " is-on" : ""}" aria-label="${p.active ? "Active" : "No published activity"}"></i>
       </button>`
     )
     .join("");
 
-  const panels = chapters
-    .map(
-      (c, i) => `
-      <article class="cp-do__panel${i === 0 ? " is-active" : ""}" data-cp-chapter-panel="${i}" ${i === 0 ? "" : "hidden"}>
-        <span class="cp-do__big" aria-hidden="true">${String(i + 1).padStart(2, "0")}</span>
-        <h3>${c.title}</h3>
-        <p>${c.text}</p>
-        <a class="cp-text-link" href="${c.href}" data-link>Learn more →</a>
-      </article>`
-    )
-    .join("");
+  const coverage = `
+    <div class="cp-do__coverage" data-cp-reveal>
+      <div class="cp-do__coverage-meter" role="img" aria-label="${activeCount} of 5 programs with published activity">
+        ${programmes.map((p) => `<span class="${p.active ? "is-on" : ""}" title="${p.title}"></span>`).join("")}
+      </div>
+      <p><strong>${activeCount} / 5 programs</strong> · ${coveragePct}% program coverage in ${name}, based on published initiatives, field activity and stories.</p>
+    </div>`;
 
   return `
     <section class="cp-do" data-cp-section="programmes" aria-labelledby="cp-do-title">
       <div class="container">
         <header class="cp-sec-head" data-cp-reveal>
           <p class="cp-kicker">What PA is doing</p>
-          <h2 id="cp-do-title" class="cp-sec-title">Work underway in ${hub.countryName}</h2>
+          <h2 id="cp-do-title" class="cp-sec-title">How ${name} runs the five programs</h2>
+          <p class="cp-sec-lead">Examples from ${name} only. <a class="cp-text-link" href="${HOW_PA_WORKS_HREF}" data-link>How the programs work →</a></p>
         </header>
+        ${coverage}
         <div class="cp-do__stage" data-cp-chapters>
           <div class="cp-do__rail" role="tablist" aria-label="Programmes">${nav}</div>
-          <div class="cp-do__detail">${panels}</div>
+          <div class="cp-do__detail">${programmes.map((p, i) => renderProgrammePanel(p, i, name)).join("")}</div>
         </div>
+        ${renderCountryProjectsBlock(hub)}
       </div>
     </section>`;
 }

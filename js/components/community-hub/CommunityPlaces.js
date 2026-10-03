@@ -29,7 +29,7 @@ export function renderCommunityPlaces({ community, country, catchment, geoMap, s
         <header class="cm-places__head">
           <p class="cm-places__eyebrow">Place in the network</p>
           <h2>${community.name} in ${catchment.name}</h2>
-          <p class="cm-places__lead">See where this community sits within ${country.name} — and explore neighbouring places in the same nearby group.</p>
+          <p class="cm-places__lead">See where this community sits within ${country.name} — and explore neighbouring places in the same catchment.</p>
         </header>
         <dl class="cm-places__facts">
           ${stats

@@ -1,199 +1,24 @@
 /**
- * Knowledge Hub — premium digital library (PA brand).
- * Content/data/routes/filters preserved; presentation only.
+ * Knowledge Hub — laid out like the World Bank "Research & Publications" page:
+ * In Focus → Key resources → search band → browse by collection → what we've learned
+ * → more from the hub (+ two shortcuts) → need assistance. PA brand colours and PA content only.
  */
 
 import { formatPaTitle } from "../../utils/pa-title.js";
 import { getCountryName } from "../../utils/hub-filters.js";
+import { learnedFromStories } from "../shared/pa-learning.js";
 
-const ARCHIVE = [
-  {
-    id: "kh-reports",
-    type: "reports",
-    key: "reports",
-    titleHtml: "<span>Reports</span>",
-    skin: "burgundy",
-  },
-  {
-    id: "kh-research",
-    type: "research",
-    key: "research",
-    titleHtml: "<span>Research</span>",
-    skin: "cream",
-  },
-  {
-    id: "kh-case-studies",
-    type: "case-studies",
-    key: "case-studies",
-    titleHtml: "<span>Case</span> <em>studies.</em>",
-    skin: "green",
-  },
-  {
-    id: "kh-guides",
-    type: "guides",
-    key: "guides",
-    titleHtml: "<span>Guides</span>",
-    skin: "ivory",
-  },
-  {
-    id: "kh-training",
-    type: "training",
-    key: "training",
-    titleHtml: "<span>Training</span> <em>resources.</em>",
-    skin: "ochre",
-  },
-  {
-    id: "kh-publications",
-    type: "publications",
-    key: "publications",
-    titleHtml: "<span>Publications</span>",
-    skin: "cream",
-  },
-];
+const TYPE_TONE = {
+  reports: "maroon",
+  research: "green",
+  "case-studies": "gold",
+  guides: "green",
+  training: "maroon",
+  publications: "gold",
+  videos: "maroon",
+};
 
-function linkAttrs(item = {}) {
-  const href = item.href || "#/resources";
-  if (item.external || href.startsWith("http")) {
-    return `href="${href}" target="_blank" rel="noopener noreferrer"`;
-  }
-  if (href.startsWith("#/")) return `href="${href}" data-link`;
-  if (href.startsWith("#")) return `href="${href}"`;
-  return `href="${href}"`;
-}
-
-function searchBlob(item) {
-  return `${item.title || ""} ${item.summary || item.description || ""}`
-    .toLowerCase()
-    .replace(/"/g, "");
-}
-
-function escapeAttr(s = "") {
-  return String(s).replace(/"/g, "&quot;");
-}
-
-function itemMeta(item, countriesData) {
-  const bits = [];
-  if (item.typeLabel) bits.push(item.typeLabel);
-  if (item.dateLabel || item.year || item.period) bits.push(item.dateLabel || item.year || item.period);
-  if (item.program) bits.push(item.program);
-  if (item.countryId) {
-    const name = getCountryName(countriesData, item.countryId);
-    if (name) bits.push(name);
-  }
-  if (item.format) bits.push(item.format);
-  return bits.filter(Boolean).join(" · ");
-}
-
-function actionLabel(item) {
-  if (item.cta) return item.cta;
-  if (item.external || (item.href || "").startsWith("http")) return "Open resource";
-  if ((item.href || "").includes("download") || item.downloadUrl) return "Download";
-  return "View";
-}
-
-function collectItems(data) {
-  const hub = data.knowledgeHub || {};
-  const items = hub.items || {};
-  const reportsRaw = data.reports?.reports || [];
-  const caseStudies = hub.caseStudies || [];
-
-  const reports = [
-    {
-      id: "report-impact-2024",
-      title: "Annual Impact Report 2024",
-      summary: "Network indicators, country progress, and field evidence in one place.",
-      year: "2024",
-      dateLabel: "15 Apr 2025",
-      href: "#/scorecard#id-indicators",
-      typeLabel: "Reports",
-    },
-    {
-      id: "report-monthly-field",
-      title: "Monthly ministry reports",
-      summary: "Ongoing field reports from Kenya, Ethiopia, Malawi, and Zambia.",
-      year: "2025",
-      dateLabel: "Ongoing",
-      href: "#/field-reports#reports",
-      typeLabel: "Reports",
-    },
-    ...reportsRaw.map((r) => ({
-      id: r.id,
-      title: r.title,
-      summary: r.summary,
-      year: r.period || r.year,
-      dateLabel: r.period || r.year,
-      countryId: (r.countryIds || [])[0] || "",
-      href: `#/field-reports#report-${r.id}`,
-      cta: "Read summary",
-      typeLabel: "Reports",
-    })),
-  ];
-
-  const research = (items.research || []).map((r) => ({ ...r, typeLabel: "Research" }));
-
-  const cases = caseStudies.map((cs) => ({
-    id: cs.id,
-    title: cs.title,
-    summary: cs.summary,
-    program: cs.program,
-    countryId: cs.countryId,
-    year: cs.year,
-    href: cs.storySlug ? `#/story/${cs.storySlug}` : "#/field-reports",
-    typeLabel: "Case studies",
-  }));
-
-  const guides = (items.guides || []).map((g) => ({ ...g, typeLabel: "Guides" }));
-  const training = (items.training || []).map((t) => ({ ...t, typeLabel: "Training resources" }));
-  const publications = (items.publications || []).map((p) => ({
-    ...p,
-    typeLabel: "Publications",
-  }));
-  const videos = (items.videos || []).map((v) => ({ ...v, typeLabel: "Videos" }));
-
-  return { reports, research, cases, guides, training, publications, videos };
-}
-
-function bagByType(bag) {
-  return {
-    reports: bag.reports,
-    research: bag.research,
-    "case-studies": bag.cases,
-    guides: bag.guides,
-    training: bag.training,
-    publications: bag.publications,
-    videos: bag.videos,
-  };
-}
-
-function renderHero(hero = {}) {
-  const image = hero.image || "assets/knowledge-hub/hero.jpg";
-  return `
-    <header class="kh-hero" data-kh-section="hero">
-      <div class="kh-hero__media" aria-hidden="true">
-        <img src="${image}" alt="" fetchpriority="high" data-kh-hero-img>
-        <span class="kh-hero__veil"></span>
-        <span class="kh-hero__grain"></span>
-      </div>
-      <span class="kh-hero__watermark" aria-hidden="true">Knowledge</span>
-      <div class="container kh-hero__layout">
-        <div class="kh-hero__inner">
-          <p class="kh-eyebrow kh-eyebrow--on-dark" data-kh-hero-line>${hero.eyebrow || "Knowledge Hub"}</p>
-          <h1 class="pa-title kh-hero__title" data-kh-hero-line>${formatPaTitle(
-            {
-              titleHtml: hero.titleHtml || "<span>Knowledge</span> <em>Hub.</em>",
-              title: hero.title || "Knowledge Hub",
-            },
-            "Knowledge Hub."
-          )}</h1>
-          <p class="kh-hero__lead" data-kh-hero-line>${
-            hero.lead || "PA as a source of knowledge, learning and evidence."
-          }</p>
-        </div>
-      </div>
-    </header>`;
-}
-
-const INDEX_ICONS = {
+const ICONS = {
   reports:
     '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/><path d="M9 17v-3M12 17v-5M15 17v-2"/></svg>',
   research:
@@ -210,296 +35,357 @@ const INDEX_ICONS = {
     '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m10 9 5 3-5 3z"/></svg>',
 };
 
-function renderJumpBar(collections = [], counts = {}) {
+const SOCIAL_ICONS = {
+  facebook: '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M14 8h3V4h-3c-2.8 0-4.5 1.8-4.5 4.6V11H7v4h2.5v9h4v-9h3l.5-4h-3.5V8.8c0-.5.3-.8.5-.8z"/></svg>',
+  x: '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.8 3h3.1l-6.8 7.8L22 21h-6.2l-4.9-6.4L5.3 21H2.2l7.3-8.3L2 3h6.4l4.4 5.8L17.8 3zm-1.1 16.2h1.7L7.4 4.7H5.6l11.1 14.5z"/></svg>',
+  youtube: '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M23 7.2a3 3 0 0 0-2.1-2.1C19 4.6 12 4.6 12 4.6s-7 0-8.9.5A3 3 0 0 0 1 7.2 31 31 0 0 0 .5 12a31 31 0 0 0 .5 4.8 3 3 0 0 0 2.1 2.1c1.9.5 8.9.5 8.9.5s7 0 8.9-.5a3 3 0 0 0 2.1-2.1 31 31 0 0 0 .5-4.8 31 31 0 0 0-.5-4.8zM9.8 15.1V8.9l5.7 3.1-5.7 3.1z"/></svg>',
+  instagram: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor"/></svg>',
+};
+
+function linkAttrs(item = {}) {
+  const href = item.href || "#/resources";
+  if (item.external || href.startsWith("http")) return `href="${href}" target="_blank" rel="noopener noreferrer"`;
+  if (href.startsWith("#/")) return `href="${href}" data-link`;
+  return `href="${href}"`;
+}
+
+function escapeAttr(s = "") {
+  return String(s).replace(/"/g, "&quot;");
+}
+
+function searchBlob(item) {
+  return `${item.title || ""} ${item.summary || item.description || ""} ${item.program || ""}`
+    .toLowerCase()
+    .replace(/"/g, "");
+}
+
+function itemMeta(item, countriesData) {
+  const bits = [];
+  if (item.dateLabel || item.year || item.period) bits.push(item.dateLabel || item.year || item.period);
+  if (item.countryId) {
+    const name = getCountryName(countriesData, item.countryId);
+    if (name) bits.push(name);
+  }
+  if (item.program) bits.push(item.program);
+  return bits.filter(Boolean).join(" · ");
+}
+
+function actionLabel(item) {
+  if (item.cta) return item.cta;
+  if (item.external || (item.href || "").endsWith(".pdf")) return "Download";
+  return "View";
+}
+
+function collectItems(data) {
+  const hub = data.knowledgeHub || {};
+  const items = hub.items || {};
+  const reportsRaw = data.reports?.reports || [];
+
+  const reports = [
+    {
+      id: "report-impact-2024",
+      title: "Annual Impact Report 2024",
+      summary: "Network indicators, country progress, and field evidence in one place.",
+      dateLabel: "15 Apr 2025",
+      href: "#/scorecard#id-indicators",
+    },
+    {
+      id: "report-monthly-field",
+      title: "Monthly ministry reports",
+      summary: "Ongoing field reports from Kenya, Ethiopia, Malawi, and Zambia.",
+      dateLabel: "Ongoing",
+      href: "#/field-reports#reports",
+    },
+    ...reportsRaw.map((r) => ({
+      id: r.id,
+      title: r.title,
+      summary: r.summary,
+      dateLabel: r.period || r.year,
+      countryId: (r.countryIds || [])[0] || "",
+      href: `#/field-reports#report-${r.id}`,
+      cta: "Read summary",
+    })),
+  ];
+
+  const cases = (hub.caseStudies || []).map((cs) => ({
+    id: cs.id,
+    title: cs.title,
+    summary: cs.summary,
+    program: cs.program,
+    countryId: cs.countryId,
+    href: cs.storySlug ? `#/story/${cs.storySlug}` : "#/field-reports",
+    cta: "Read the story",
+  }));
+
+  const tag = (list, type) => list.map((x) => ({ ...x, type }));
+  return {
+    reports: tag(reports, "reports"),
+    research: tag(items.research || [], "research"),
+    "case-studies": tag(cases, "case-studies"),
+    guides: tag(items.guides || [], "guides"),
+    training: tag(items.training || [], "training"),
+    publications: tag(items.publications || [], "publications"),
+    videos: tag(items.videos || [], "videos"),
+  };
+}
+
+/** Generated "cover" — PA colours stand in for publication artwork. */
+export function cover(item, label, size = "") {
+  const tone = TYPE_TONE[item.type] || "maroon";
+  return `<span class="kh-cover kh-cover--${tone}${size ? ` kh-cover--${size}` : ""}" aria-hidden="true">
+      <span class="kh-cover__type">${label}</span>
+      <span class="kh-cover__icon">${ICONS[item.type] || ICONS.reports}</span>
+      <span class="kh-cover__title">${item.title}</span>
+      <span class="kh-cover__brand">Possibilities Africa</span>
+    </span>`;
+}
+
+function renderFocus(item, label, hero = {}) {
+  if (!item) return "";
+  return `
+    <header class="kh-focus" data-kh-section="hero">
+      <div class="container">
+        <nav class="kh-crumbs" aria-label="Breadcrumb">
+          <a href="#/" data-link>Home</a><span aria-hidden="true">/</span><span aria-current="page">${hero.title || "Knowledge Hub"}</span>
+        </nav>
+        <h1 class="sr-only">${hero.title || "Knowledge Hub"}</h1>
+        <div class="kh-focus__grid">
+          <div class="kh-focus__copy" data-kh-reveal>
+            <p class="kh-focus__eyebrow">In focus</p>
+            <h2 class="kh-focus__title">${item.title}</h2>
+            ${item.summary ? `<p class="kh-focus__lead">${item.summary}</p>` : ""}
+            <a class="kh-btn kh-btn--gold" ${linkAttrs(item)}>${item.external ? "Download the newsletter" : actionLabel(item)} <span aria-hidden="true">→</span></a>
+          </div>
+          <a class="kh-focus__book" ${linkAttrs(item)} data-kh-reveal tabindex="-1" aria-hidden="true">
+            ${cover(item, label, "xl")}
+          </a>
+        </div>
+      </div>
+      <span class="kh-focus__swoosh" aria-hidden="true"></span>
+    </header>`;
+}
+
+function renderKey(list = [], hero = {}, labels = {}) {
+  if (!list.length) return "";
+  const [lead, ...rest] = list;
+  const tile = (item, i) => `<a class="kh-key__tile" ${linkAttrs(item)} data-kh-reveal style="--i:${i}">
+      ${cover(item, labels[item.type] || "")}
+      <strong>${item.title}</strong>
+    </a>`;
+  return `
+    <section class="kh-key" id="kh-key" aria-labelledby="kh-key-title">
+      <div class="container">
+        <header class="kh-head" data-kh-reveal>
+          <h2 id="kh-key-title" class="kh-head__title">Key resources</h2>
+          <p class="kh-head__lead">${hero.lead || "PA as a source of knowledge, learning and evidence."}</p>
+        </header>
+        <div class="kh-key__grid">
+          <a class="kh-key__lead" ${linkAttrs(lead)} data-kh-reveal>
+            ${cover(lead, labels[lead.type] || "", "lg")}
+            <span class="kh-key__lead-copy">
+              <span class="kh-key__type">${labels[lead.type] || ""}</span>
+              <strong>${lead.title}</strong>
+              ${lead.summary || lead.description ? `<span>${lead.summary || lead.description}</span>` : ""}
+              <em>${actionLabel(lead)} →</em>
+            </span>
+          </a>
+          <div class="kh-key__rest">${rest.map(tile).join("")}</div>
+        </div>
+      </div>
+    </section>`;
+}
+
+function renderFind(lib = {}, collections = [], countries = [], programs = []) {
+  const f = lib.filters || {};
+  return `
+    <section class="kh-find" id="kh-search" data-kh-section="search" aria-labelledby="kh-find-title">
+      <div class="container kh-find__inner" data-kh-reveal>
+        <h2 id="kh-find-title" class="kh-find__title">Looking for a specific resource?</h2>
+        <p class="kh-find__lead">${lib.subtitle || "Search by keyword, then filter by type, country, or programme."}</p>
+        <form class="kh-find__form" data-kh-filters role="search" onsubmit="return false;">
+          <label class="kh-find__search">
+            <span class="sr-only">Search</span>
+            <input type="search" id="kh-search-input" placeholder="${lib.searchPlaceholder || "Search reports, guides, videos…"}" autocomplete="off">
+            <button type="button" class="kh-find__go" data-kh-apply>Go</button>
+          </label>
+          <div class="kh-find__filters">
+            <label><span>${f.typeLabel || "Type"}</span>
+              <select id="kh-filter-type">
+                <option value="all">${f.allTypes || "All types"}</option>
+                ${collections.map((c) => `<option value="${c.id}">${c.label}</option>`).join("")}
+              </select>
+            </label>
+            <label><span>${f.countryLabel || "Country"}</span>
+              <select id="kh-filter-country">
+                <option value="all">${f.allCountries || "All countries"}</option>
+                ${countries.map((c) => `<option value="${c.id}">${c.name}</option>`).join("")}
+              </select>
+            </label>
+            <label><span>${f.programLabel || "Programme"}</span>
+              <select id="kh-filter-program">
+                <option value="all">${f.allPrograms || "All programmes"}</option>
+                ${programs.map((p) => `<option value="${escapeAttr(p)}">${p}</option>`).join("")}
+              </select>
+            </label>
+          </div>
+        </form>
+      </div>
+    </section>`;
+}
+
+function renderCollections(collections = [], counts = {}) {
   if (!collections.length) return "";
-  const jumps = collections
+  const cards = collections
     .map(
-      (c) => `<a class="kh-jumps__link" href="#kh-${c.id}">
-        <span class="kh-jumps__icon" aria-hidden="true">${INDEX_ICONS[c.id] || INDEX_ICONS.reports}</span>
-        <span>${c.label || c.title}</span>
-        ${counts[c.id] ? `<em>${counts[c.id]}</em>` : ""}
+      (c, i) => `<button type="button" class="kh-coll__card" data-kh-collection="${c.id}" data-kh-reveal style="--i:${i}">
+        <span class="kh-coll__icon" aria-hidden="true">${ICONS[c.id] || ICONS.reports}</span>
+        <strong>${c.label}</strong>
+        ${c.description ? `<span class="kh-coll__desc">${c.description}</span>` : ""}
+        <span class="kh-coll__count">${counts[c.id] || 0} ${counts[c.id] === 1 ? "item" : "items"} <span aria-hidden="true">→</span></span>
+      </button>`
+    )
+    .join("");
+  return `
+    <section class="kh-coll" id="kh-collections" aria-labelledby="kh-coll-title">
+      <div class="container">
+        <header class="kh-head kh-head--on-dark" data-kh-reveal>
+          <h2 id="kh-coll-title" class="kh-head__title">Browse by collection</h2>
+          <p class="kh-head__lead">Reports, research, case studies, guides, training, publications and videos from across the network.</p>
+        </header>
+        <div class="kh-coll__grid">${cards}</div>
+      </div>
+    </section>`;
+}
+
+function renderLearned(items = []) {
+  if (!items.length) return "";
+  const cards = items
+    .map(
+      (l, i) => `<a class="kh-learned__card kh-learned__card--${l.programme.tone}" href="#/story/${l.story.slug}" data-link data-kh-reveal style="--i:${i}">
+        <span class="kh-learned__prog">${l.programme.title}</span>
+        <blockquote>${l.text}</blockquote>
+        <span class="kh-learned__meta">${l.story.title}${l.country ? ` · ${l.country.name}` : ""}</span>
+        <span class="kh-learned__go">Read the story <span aria-hidden="true">→</span></span>
       </a>`
     )
     .join("");
-  return `<nav class="kh-jumps" aria-label="Jump to a collection">
-      <div class="container kh-jumps__inner">${jumps}</div>
-    </nav>`;
-}
-
-function renderSearch(lib = {}, collections = [], countries = [], programs = []) {
-  const typeOptions = [
-    { id: "all", label: lib.filters?.allTypes || "All types" },
-    ...collections.map((c) => ({ id: c.id, label: c.label })),
-  ]
-    .map((t) => `<option value="${t.id}">${t.label}</option>`)
-    .join("");
-
   return `
-    <section class="kh-search" id="kh-search" data-kh-section="search" aria-labelledby="kh-search-title">
+    <section class="kh-learned" id="kh-learned" aria-labelledby="kh-learned-title">
       <div class="container">
-        <header class="kh-sec-head" data-kh-reveal>
-          <p class="kh-eyebrow">Search and filters</p>
-          <h2 id="kh-search-title" class="pa-title">${formatPaTitle({
-            titleHtml: "<span>Find what</span> <em>you need.</em>",
-          })}</h2>
-          <p class="kh-sec-lead">${
-            lib.subtitle || "Search by keyword, then filter by type, country, or programme."
-          }</p>
+        <header class="kh-head" data-kh-reveal>
+          <h2 id="kh-learned-title" class="kh-head__title">What we've learned</h2>
+          <p class="kh-head__lead">What changed in communities, in the words of PA's field stories — one from each program.</p>
         </header>
-        <form class="kh-tools" data-kh-filters data-kh-reveal role="search" onsubmit="return false;">
-          <label class="kh-tools__search">
-            <span class="sr-only">Search</span>
-            <input type="search" id="kh-search-input" placeholder="${
-              lib.searchPlaceholder || "Search reports, guides, videos…"
-            }" autocomplete="off">
-          </label>
-          <label class="kh-tools__filter">
-            <span>${lib.filters?.typeLabel || "Type"}</span>
-            <select id="kh-filter-type">${typeOptions}</select>
-          </label>
-          <label class="kh-tools__filter">
-            <span>${lib.filters?.countryLabel || "Country"}</span>
-            <select id="kh-filter-country">
-              <option value="all">${lib.filters?.allCountries || "All countries"}</option>
-              ${countries.map((c) => `<option value="${c.id}">${c.name}</option>`).join("")}
-            </select>
-          </label>
-          <label class="kh-tools__filter">
-            <span>${lib.filters?.programLabel || "Programme"}</span>
-            <select id="kh-filter-program">
-              <option value="all">${lib.filters?.allPrograms || "All programmes"}</option>
-              ${programs.map((p) => `<option value="${p}">${p}</option>`).join("")}
-            </select>
-          </label>
-          <button type="button" class="kh-tools__apply" data-kh-apply>Show results</button>
-        </form>
-        <p class="kh-search-hint" data-kh-reveal>Set filters, then press Show results to jump to matching items.</p>
+        <div class="kh-learned__grid">${cards}</div>
       </div>
     </section>`;
 }
 
-function renderFeatured(featured = [], countriesData) {
-  if (!featured.length) return "";
-
-  const blocks = featured
-    .map((item, i) => {
-      const flip = i % 2 === 1 ? " kh-feature--flip" : "";
-      const dominant = i === 0 ? " kh-feature--dominant" : "";
-      const meta = item.subtitle || "";
-      return `<article class="kh-feature${flip}${dominant}" data-kh-feature data-kh-reveal>
-        <div class="kh-feature__mark" aria-hidden="true">
-          <span class="kh-feature__doc"></span>
-          <span class="kh-feature__n">${String(i + 1).padStart(2, "0")}</span>
-        </div>
-        <div class="kh-feature__copy">
-          ${meta ? `<p class="kh-feature__meta">${meta}</p>` : ""}
-          <h3 class="kh-feature__title"><a ${linkAttrs(item)}>${item.title}</a></h3>
-          ${
-            item.description || item.summary
-              ? `<p class="kh-feature__excerpt">${item.description || item.summary}</p>`
-              : ""
-          }
-          <a class="kh-feature__cta" ${linkAttrs(item)}>${actionLabel(item)} <span aria-hidden="true">→</span></a>
-        </div>
-      </article>`;
-    })
-    .join("");
-
-  return `
-    <section class="kh-featured" id="kh-featured" data-kh-section="featured" aria-labelledby="kh-featured-title">
-      <div class="container">
-        <header class="kh-sec-head" data-kh-reveal>
-          <p class="kh-eyebrow">Key resources</p>
-          <h2 id="kh-featured-title" class="pa-title">${formatPaTitle({
-            titleHtml: "<span>Start with</span> <em>evidence.</em>",
-          })}</h2>
-        </header>
-        <div class="kh-featured__stage">${blocks}</div>
-      </div>
-    </section>`;
-}
-
-function renderResourceRow(item, countriesData, index, type) {
-  const meta = itemMeta(item, countriesData);
-  return `<a class="kh-row" ${linkAttrs(item)} data-kh-item data-kh-type="${type}" data-country-id="${
-    item.countryId || ""
-  }" data-program="${escapeAttr(item.program || "")}" data-kh-text="${searchBlob(
-    item
-  )}" data-kh-stagger-item style="--i:${index}">
-    <span class="kh-row__n">${String(index + 1).padStart(2, "0")}</span>
-    <span class="kh-row__body">
-      ${meta ? `<span class="kh-row__meta">${meta}</span>` : ""}
-      <strong class="kh-row__title">${item.title}</strong>
-      ${
-        item.summary || item.description
-          ? `<span class="kh-row__sum">${item.summary || item.description}</span>`
-          : ""
-      }
-    </span>
-    <span class="kh-row__action">${actionLabel(item)}</span>
-    <span class="kh-row__go" aria-hidden="true">→</span>
-  </a>`;
-}
-
-function renderArchiveSection(cfg, collection, items, countriesData) {
-  const eyebrow = collection?.label || collection?.title || cfg.type;
-  const lead = collection?.description || "";
-  const titleHtml =
-    collection?.title && !cfg.titleHtml.includes("em")
-      ? `<span>${collection.title}</span>`
-      : cfg.titleHtml;
-
-  const rows = items.length
-    ? `<div class="kh-archive" data-kh-stagger>${items
-        .map((item, i) => renderResourceRow(item, countriesData, i, cfg.type))
-        .join("")}</div>`
-    : `<p class="kh-empty">No ${eyebrow.toLowerCase()} published here yet — check back soon.</p>`;
-
-  return `
-    <section class="kh-band kh-band--${cfg.skin}" id="${cfg.id}" data-kh-section="${cfg.type}" aria-labelledby="${cfg.id}-title">
-      <div class="container">
-        <header class="kh-sec-head" data-kh-reveal>
-          <p class="kh-eyebrow">${eyebrow}</p>
-          <h2 id="${cfg.id}-title" class="pa-title">${formatPaTitle({ titleHtml })}</h2>
-          ${lead ? `<p class="kh-sec-lead">${lead}</p>` : ""}
-        </header>
-        ${rows}
-      </div>
-    </section>`;
-}
-
-function renderVideos(videos = [], socialLinks = [], collection = {}) {
-  const yt = socialLinks.find((s) => s.id === "youtube");
-  const items = videos
-    .map((v, i) => {
-      const wide = i % 3 === 0 ? " kh-media--wide" : "";
-      const poster = v.poster || v.image || "";
-      const src = v.src || v.videoUrl || "";
-      const href = v.href || "";
-      const body =
-        src && !href
-          ? `<video src="${escapeAttr(src)}" controls playsinline preload="metadata" poster="${escapeAttr(
-              poster
-            )}"></video>`
-          : poster
-            ? `<img src="${escapeAttr(poster)}" alt="" loading="lazy" data-kh-img>`
-            : `<span class="kh-media__blank" aria-hidden="true"></span>`;
-
-      const wrapOpen = href
-        ? `<a class="kh-media${wide}" ${linkAttrs(v)} data-kh-item data-kh-type="videos" data-country-id="${
-            v.countryId || ""
-          }" data-program="${escapeAttr(v.program || "")}" data-kh-text="${searchBlob(
-            v
-          )}" data-kh-stagger-item style="--i:${i}">`
-        : `<figure class="kh-media${wide}" data-kh-item data-kh-type="videos" data-country-id="${
-            v.countryId || ""
-          }" data-program="${escapeAttr(v.program || "")}" data-kh-text="${searchBlob(
-            v
-          )}" data-kh-stagger-item style="--i:${i}">`;
-      const wrapClose = href ? `</a>` : `</figure>`;
-
-      return `${wrapOpen}
-        <span class="kh-media__frame">${body}
-          ${src || href ? `<span class="kh-media__play" aria-hidden="true"></span>` : ""}
-        </span>
-        <span class="kh-media__copy">
-          ${v.typeLabel || collection.label ? `<span class="kh-media__type">${v.typeLabel || collection.label}</span>` : ""}
-          <strong class="kh-media__title">${v.title || ""}</strong>
-          ${v.summary || v.description ? `<span class="kh-media__sum">${v.summary || v.description}</span>` : ""}
-        </span>
-      ${wrapClose}`;
-    })
-    .join("");
-
-  return `
-    <section class="kh-media-band" id="kh-videos" data-kh-section="videos" aria-labelledby="kh-videos-title">
-      <div class="container">
-        <header class="kh-sec-head kh-sec-head--on-dark" data-kh-reveal>
-          <p class="kh-eyebrow kh-eyebrow--on-dark">${collection.label || "Videos"}</p>
-          <h2 id="kh-videos-title" class="pa-title">${formatPaTitle({
-            titleHtml: "<span>From the</span> <em>field on film.</em>",
-          })}</h2>
-          ${
-            collection.description
-              ? `<p class="kh-sec-lead kh-sec-lead--on-dark">${collection.description}</p>`
-              : ""
-          }
-        </header>
-        ${
-          items
-            ? `<div class="kh-media-mosaic" data-kh-stagger>${items}</div>`
-            : `<div class="kh-media-blank" data-kh-reveal>
-                <p>No videos published here yet — check back soon.</p>
-                ${
-                  yt
-                    ? `<a class="kh-media-blank__link" href="${yt.href}" target="_blank" rel="noopener noreferrer">Watch on ${yt.label} ↗</a>`
-                    : ""
-                }
-              </div>`
-        }
-      </div>
-    </section>`;
-}
-
-function renderClosing(hero = {}, featured = []) {
-  const links = featured
-    .slice(0, 2)
+function renderLibrary(all = [], labels = {}, countriesData) {
+  const cards = all
     .map(
-      (f) =>
-        `<a class="kh-close__link" ${linkAttrs(f)}>${f.cta || f.title} <span aria-hidden="true">→</span></a>`
+      (item, i) => `<a class="kh-card" ${linkAttrs(item)} data-kh-item data-kh-type="${item.type}" data-country-id="${
+        item.countryId || ""
+      }" data-program="${escapeAttr(item.program || "")}" data-kh-text="${searchBlob(item)}" style="--i:${i % 8}">
+        ${cover(item, labels[item.type] || "", "sm")}
+        <span class="kh-card__body">
+          <span class="kh-card__type">${labels[item.type] || ""}</span>
+          <strong class="kh-card__title">${item.title}</strong>
+          ${item.summary || item.description ? `<span class="kh-card__sum">${item.summary || item.description}</span>` : ""}
+          <span class="kh-card__meta">${itemMeta(item, countriesData)}</span>
+          <span class="kh-card__action">${actionLabel(item)} <span aria-hidden="true">→</span></span>
+        </span>
+      </a>`
     )
     .join("");
 
   return `
-    <section class="kh-close" data-kh-section="close" aria-labelledby="kh-close-title">
-      <div class="container kh-close__inner" data-kh-reveal>
-        <p class="kh-eyebrow kh-eyebrow--on-dark">Knowledge Hub</p>
-        <h2 id="kh-close-title" class="pa-title">${formatPaTitle(
-          {
-            titleHtml: hero.titleHtml || "<span>Knowledge</span> <em>Hub.</em>",
-            title: hero.title || "Knowledge Hub",
-          },
-          "Knowledge Hub."
-        )}</h2>
-        <p class="kh-close__lead">${
-          hero.lead || "PA as a source of knowledge, learning and evidence."
-        }</p>
-        ${links ? `<div class="kh-close__actions">${links}</div>` : ""}
+    <section class="kh-lib" id="kh-library" data-kh-section="library" aria-labelledby="kh-lib-title">
+      <div class="container">
+        <header class="kh-head kh-head--row" data-kh-reveal>
+          <div>
+            <h2 id="kh-lib-title" class="kh-head__title">More from the Knowledge Hub</h2>
+            <p class="kh-head__lead">Everything in the hub. Use the search above to narrow it down.</p>
+          </div>
+          <button type="button" class="kh-link" data-kh-reset hidden>Show everything <span aria-hidden="true">→</span></button>
+        </header>
+        <p class="kh-lib__status" data-kh-status aria-live="polite"></p>
+        <div class="kh-lib__grid">${cards}</div>
+        <p class="kh-empty" data-kh-empty hidden>Nothing matches those filters yet — try another type, country or programme.</p>
+
+        <div class="kh-mini">
+          <a class="kh-mini__card" href="#/resources/packs" data-link data-kh-reveal>
+            <span class="kh-mini__icon" aria-hidden="true">${ICONS.research}</span>
+            <span><strong>Download insight packs</strong><small>Short data packs. They sit next to the stories — they do not replace them.</small></span>
+            <span class="kh-mini__go" aria-hidden="true">→</span>
+          </a>
+          <a class="kh-mini__card" href="#/field-reports" data-link data-kh-reveal>
+            <span class="kh-mini__icon" aria-hidden="true">${ICONS.reports}</span>
+            <span><strong>Go to field reports</strong><small>Monthly ministry reports and annual summaries from across the network.</small></span>
+            <span class="kh-mini__go" aria-hidden="true">→</span>
+          </a>
+        </div>
+      </div>
+    </section>`;
+}
+
+function renderAssist(contact = {}, social = []) {
+  const links = social
+    .map(
+      (s) => `<a class="kh-assist__social" href="${s.href}" target="_blank" rel="noopener noreferrer" aria-label="${s.label}">${
+        SOCIAL_ICONS[s.id] || s.label
+      }</a>`
+    )
+    .join("");
+  return `
+    <section class="kh-assist" aria-labelledby="kh-assist-title">
+      <div class="container kh-assist__grid">
+        <div data-kh-reveal>
+          <h2 id="kh-assist-title" class="kh-head__title">Need assistance?</h2>
+          <p class="kh-head__lead">For more information about PA's reports and resources.</p>
+          <dl class="kh-assist__list">
+            ${contact.email ? `<div><dt>Email</dt><dd><a href="mailto:${contact.email}">${contact.email}</a></dd></div>` : ""}
+            ${contact.phone ? `<div><dt>Phone</dt><dd><a href="tel:${contact.phone.replace(/\s/g, "")}">${contact.phone}</a></dd></div>` : ""}
+            ${contact.address ? `<div><dt>Office</dt><dd>${contact.address}</dd></div>` : ""}
+          </dl>
+          ${links ? `<div class="kh-assist__socials">${links}</div>` : ""}
+        </div>
+        <form class="kh-assist__form" data-kh-subscribe data-kh-reveal onsubmit="return false;">
+          <p class="kh-assist__form-title">Subscribe to the PA newsletter <span class="pa-sample-tag">Sample</span></p>
+          <label><span class="sr-only">Email address</span><input type="email" placeholder="Your email address" required></label>
+          <button type="submit" class="kh-btn kh-btn--maroon">Subscribe</button>
+          <p class="kh-assist__note" data-kh-subscribe-note hidden>Thanks — sign-up will work once the newsletter service is connected.</p>
+        </form>
       </div>
     </section>`;
 }
 
 export function renderKnowledgeHubPage(data) {
   const hub = data.knowledgeHub || {};
-  const hero = {
-    ...(hub.hero || {}),
-    titleHtml: hub.hero?.titleHtml || "<span>Knowledge</span> <em>Hub.</em>",
-    lead: hub.hero?.lead || "PA as a source of knowledge, learning and evidence.",
-    image: hub.hero?.image || "assets/knowledge-hub/hero.jpg",
-  };
+  const hero = { title: "Knowledge Hub", ...(hub.hero || {}) };
   const lib = hub.library || {};
   const collections = hub.collections || [];
+  const labels = Object.fromEntries(collections.map((c) => [c.id, c.label]));
   const countries = data.countries?.countries?.filter((c) => c.isPaNetwork) || [];
-  const programs = hub.programs || [];
-  const bag = collectItems(data);
-  const byType = bagByType(bag);
-  const counts = Object.fromEntries(
-    collections.map((c) => [c.id, (byType[c.id] || []).length])
-  );
-  const collectionMap = Object.fromEntries(collections.map((c) => [c.id, c]));
-  const featured = hub.featuredStories || [];
+  const byType = collectItems(data);
+  const all = collections.flatMap((c) => byType[c.id] || []);
+  const counts = Object.fromEntries(collections.map((c) => [c.id, (byType[c.id] || []).length]));
+
+  const focus = byType.publications[0] || byType.reports[0];
+  const featured = (hub.featuredStories || []).map((f) => ({ ...f, summary: f.description, type: f.theme === "data" ? "reports" : "case-studies" }));
+  const key = [byType.reports[0], ...featured, byType.research[0], byType.training[0], byType.guides[0]].filter(
+    (x) => x && x !== focus
+  ).slice(0, 5);
 
   return `
     <div class="kh-page" data-resources-hub data-knowledge-hub>
-      ${renderHero(hero)}
-      ${renderJumpBar(collections, counts)}
-      ${renderSearch(lib, collections, countries, programs)}
-      ${renderFeatured(featured, data.countries)}
-      ${ARCHIVE.map((cfg) =>
-        renderArchiveSection(cfg, collectionMap[cfg.key], byType[cfg.type] || [], data.countries)
-      ).join("")}
-      ${renderVideos(bag.videos, hub.socialLinks || [], collectionMap.videos || {})}
-      ${renderClosing(hero, featured)}
+      ${renderFocus(focus, labels[focus?.type] || "", hero)}
+      ${renderKey(key, hero, labels)}
+      ${renderFind(lib, collections, countries, hub.programs || [])}
+      ${renderCollections(collections, counts)}
+      ${renderLearned(learnedFromStories(data))}
+      ${renderLibrary(all, labels, data.countries)}
+      ${renderAssist(data.aboutPa?.contact || {}, hub.socialLinks || [])}
     </div>`;
 }
 
@@ -508,24 +394,46 @@ let khCleanup = null;
 export function mountKnowledgeHubPage() {
   const page = document.querySelector("[data-knowledge-hub]");
   if (!page) return;
-
   destroyKnowledgeHubPage();
-  const cleanups = [];
-  cleanups.push(bindFilters(page));
-  initMotion(page);
+  const cleanups = [bindFilters(page), bindReveal(page), bindSubscribe(page)];
   khCleanup = () => cleanups.forEach((fn) => fn && fn());
 }
 
 export function destroyKnowledgeHubPage() {
-  if (typeof khCleanup === "function") {
-    khCleanup();
-    khCleanup = null;
+  if (typeof khCleanup === "function") khCleanup();
+  khCleanup = null;
+}
+
+function bindReveal(page) {
+  const els = [...page.querySelectorAll("[data-kh-reveal]")];
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches || typeof IntersectionObserver === "undefined") {
+    els.forEach((el) => el.classList.add("is-in"));
+    return null;
   }
-  if (typeof ScrollTrigger !== "undefined") {
-    ScrollTrigger.getAll().forEach((t) => {
-      if (t.trigger?.closest?.("[data-knowledge-hub]")) t.kill();
-    });
-  }
+  const io = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((e) => {
+        if (!e.isIntersecting) return;
+        e.target.classList.add("is-in");
+        io.unobserve(e.target);
+      });
+    },
+    { rootMargin: "0px 0px -8% 0px", threshold: 0.12 }
+  );
+  els.forEach((el) => io.observe(el));
+  return () => io.disconnect();
+}
+
+function bindSubscribe(page) {
+  const form = page.querySelector("[data-kh-subscribe]");
+  if (!form) return null;
+  const onSubmit = (e) => {
+    e.preventDefault();
+    if (!form.querySelector("input")?.checkValidity()) return;
+    form.querySelector("[data-kh-subscribe-note]")?.removeAttribute("hidden");
+  };
+  form.addEventListener("submit", onSubmit);
+  return () => form.removeEventListener("submit", onSubmit);
 }
 
 function bindFilters(page) {
@@ -534,201 +442,77 @@ function bindFilters(page) {
   const countrySel = page.querySelector("#kh-filter-country");
   const programSel = page.querySelector("#kh-filter-program");
   const applyBtn = page.querySelector("[data-kh-apply]");
+  const resetBtn = page.querySelector("[data-kh-reset]");
+  const status = page.querySelector("[data-kh-status]");
+  const empty = page.querySelector("[data-kh-empty]");
+  const library = page.querySelector("#kh-library");
+  const cards = [...page.querySelectorAll("[data-kh-item]")];
 
-  const apply = ({ scrollToResults = false } = {}) => {
+  const scrollToLibrary = () => {
+    const headerH = parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--header-h")) || 64;
+    const top = library.getBoundingClientRect().top + window.scrollY - headerH - 12;
+    window.scrollTo({ top: Math.max(0, top), behavior: "smooth" });
+  };
+
+  const apply = ({ scroll = false } = {}) => {
     const q = (search?.value || "").trim().toLowerCase();
     const type = typeSel?.value || "all";
     const countryId = countrySel?.value || "all";
     const program = programSel?.value || "all";
-
-    page.querySelectorAll("[data-kh-item]").forEach((row) => {
-      const text = row.dataset.khText || "";
-      const cardType = row.dataset.khType || "";
-      const cardCountry = row.dataset.countryId || "";
-      const cardProgram = row.dataset.program || "";
-      const matchQ = !q || text.includes(q);
-      const matchType = type === "all" || cardType === type;
-      const matchCountry = countryId === "all" || !cardCountry || cardCountry === countryId;
-      const matchProgram = program === "all" || !cardProgram || cardProgram === program;
-      row.style.display = matchQ && matchType && matchCountry && matchProgram ? "" : "none";
+    let shown = 0;
+    cards.forEach((card) => {
+      const ok =
+        (!q || (card.dataset.khText || "").includes(q)) &&
+        (type === "all" || card.dataset.khType === type) &&
+        (countryId === "all" || !card.dataset.countryId || card.dataset.countryId === countryId) &&
+        (program === "all" || !card.dataset.program || card.dataset.program === program);
+      card.hidden = !ok;
+      if (ok) shown += 1;
     });
-
-    page.querySelectorAll("[data-kh-section]").forEach((section) => {
-      if (section.id === "kh-search" || section.dataset.khSection === "hero") return;
-      if (section.dataset.khSection === "featured") return;
-      if (section.dataset.khSection === "close") return;
-      const items = [...section.querySelectorAll("[data-kh-item]")];
-      if (!items.length) return;
-      const visible = items.some((c) => c.style.display !== "none");
-      const empty = section.querySelector(".kh-empty, .kh-media-blank");
-      if (empty) empty.style.display = visible ? "none" : "";
-      section.classList.toggle("is-empty-filter", !visible);
-    });
-
-    if (scrollToResults) {
-      const firstItem = [...page.querySelectorAll("[data-kh-item]")].find(
-        (el) => el.style.display !== "none"
-      );
-      const section =
-        firstItem?.closest?.("[data-kh-section]") ||
-        page.querySelector("[data-kh-section]:not(#kh-search):not(.is-empty-filter)") ||
-        page;
-      const headerH =
-        parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--header-h")) || 64;
-      const top = section.getBoundingClientRect().top + window.scrollY - headerH - 12;
-      window.scrollTo({ top: Math.max(0, top), behavior: "smooth" });
-    }
+    const filtered = q || type !== "all" || countryId !== "all" || program !== "all";
+    if (status) status.textContent = filtered ? `${shown} of ${cards.length} resources match.` : "";
+    if (empty) empty.hidden = shown > 0;
+    if (resetBtn) resetBtn.hidden = !filtered;
+    if (scroll && library) scrollToLibrary();
   };
 
-  const onApplyClick = () => apply({ scrollToResults: true });
-  const onSearchKey = (e) => {
+  const onApply = () => apply({ scroll: true });
+  const onKey = (e) => {
     if (e.key === "Enter") {
       e.preventDefault();
-      apply({ scrollToResults: true });
+      apply({ scroll: true });
     }
   };
-  const onFilterChange = () => apply();
+  const onChange = () => apply();
+  const onReset = () => {
+    if (search) search.value = "";
+    [typeSel, countrySel, programSel].forEach((s) => s && (s.value = "all"));
+    apply();
+  };
+  const onCollection = (e) => {
+    const btn = e.target.closest("[data-kh-collection]");
+    if (!btn || !typeSel) return;
+    typeSel.value = btn.dataset.khCollection;
+    apply({ scroll: true });
+  };
 
-  applyBtn?.addEventListener("click", onApplyClick);
-  search?.addEventListener("keydown", onSearchKey);
-  typeSel?.addEventListener("change", onFilterChange);
-  countrySel?.addEventListener("change", onFilterChange);
-  programSel?.addEventListener("change", onFilterChange);
+  applyBtn?.addEventListener("click", onApply);
+  search?.addEventListener("keydown", onKey);
+  [typeSel, countrySel, programSel].forEach((s) => s?.addEventListener("change", onChange));
+  resetBtn?.addEventListener("click", onReset);
+  page.addEventListener("click", onCollection);
+
+  const anchor = location.hash.match(/#kh-([a-z-]+)$/)?.[1];
+  if (anchor && typeSel && [...typeSel.options].some((o) => o.value === anchor)) {
+    typeSel.value = anchor;
+    requestAnimationFrame(() => apply({ scroll: true }));
+  }
 
   return () => {
-    applyBtn?.removeEventListener("click", onApplyClick);
-    search?.removeEventListener("keydown", onSearchKey);
-    typeSel?.removeEventListener("change", onFilterChange);
-    countrySel?.removeEventListener("change", onFilterChange);
-    programSel?.removeEventListener("change", onFilterChange);
+    applyBtn?.removeEventListener("click", onApply);
+    search?.removeEventListener("keydown", onKey);
+    [typeSel, countrySel, programSel].forEach((s) => s?.removeEventListener("change", onChange));
+    resetBtn?.removeEventListener("click", onReset);
+    page.removeEventListener("click", onCollection);
   };
-}
-
-function initMotion(page) {
-  if (typeof gsap === "undefined") return;
-  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-    page
-      .querySelectorAll(
-        "[data-kh-reveal], [data-kh-stagger] > *, [data-kh-hero-line], [data-kh-feature]"
-      )
-      .forEach((el) => {
-        el.style.opacity = "1";
-        el.style.transform = "none";
-        el.style.clipPath = "none";
-      });
-    return;
-  }
-
-  const heroLines = page.querySelectorAll("[data-kh-hero-line]");
-  if (heroLines.length) {
-    gsap.fromTo(
-      heroLines,
-      { autoAlpha: 0, y: 28 },
-      {
-        autoAlpha: 1,
-        y: 0,
-        duration: 0.7,
-        stagger: 0.1,
-        ease: "power3.out",
-        clearProps: "transform",
-      }
-    );
-  }
-
-  const watermark = page.querySelector(".kh-hero__watermark");
-  if (watermark) {
-    gsap.fromTo(
-      watermark,
-      { autoAlpha: 0, x: -40 },
-      { autoAlpha: 0.12, x: 0, duration: 1, ease: "power2.out", delay: 0.2 }
-    );
-  }
-
-  const heroImg = page.querySelector("[data-kh-hero-img]");
-  if (heroImg && typeof ScrollTrigger !== "undefined") {
-    gsap.fromTo(
-      heroImg,
-      { scale: 1.1 },
-      {
-        scale: 1,
-        ease: "none",
-        scrollTrigger: {
-          trigger: ".kh-hero",
-          start: "top top",
-          end: "bottom top",
-          scrub: 0.65,
-        },
-      }
-    );
-  }
-
-  page.querySelectorAll("[data-kh-reveal]").forEach((el) => {
-    const isFeature = el.hasAttribute("data-kh-feature");
-    gsap.fromTo(
-      el,
-      isFeature ? { autoAlpha: 0, y: 32 } : { autoAlpha: 0, y: 22 },
-      {
-        autoAlpha: 1,
-        y: 0,
-        duration: isFeature ? 0.75 : 0.55,
-        ease: "power3.out",
-        clearProps: "transform",
-        scrollTrigger: { trigger: el, start: "top 86%", once: true },
-      }
-    );
-
-    if (isFeature) {
-      const mark = el.querySelector(".kh-feature__mark");
-      if (mark) {
-        gsap.fromTo(
-          mark,
-          { clipPath: "inset(10% 12% 10% 12%)" },
-          {
-            clipPath: "inset(0% 0% 0% 0%)",
-            duration: 0.85,
-            ease: "power3.out",
-            scrollTrigger: { trigger: el, start: "top 82%", once: true },
-          }
-        );
-      }
-    }
-  });
-
-  page.querySelectorAll("[data-kh-stagger]").forEach((group) => {
-    const kids = [...group.children];
-    if (!kids.length) return;
-    gsap.fromTo(
-      kids,
-      { autoAlpha: 0, x: -16 },
-      {
-        autoAlpha: 1,
-        x: 0,
-        duration: 0.5,
-        stagger: 0.06,
-        ease: "power2.out",
-        clearProps: "transform",
-        scrollTrigger: { trigger: group, start: "top 88%", once: true },
-      }
-    );
-  });
-
-  page.querySelectorAll("[data-kh-img]").forEach((img) => {
-    if (typeof ScrollTrigger === "undefined") return;
-    gsap.fromTo(
-      img,
-      { scale: 1.06 },
-      {
-        scale: 1,
-        ease: "none",
-        scrollTrigger: {
-          trigger: img.closest(".kh-media") || img,
-          start: "top bottom",
-          end: "bottom top",
-          scrub: 0.8,
-        },
-      }
-    );
-  });
-
-  if (typeof ScrollTrigger !== "undefined") ScrollTrigger.refresh();
 }

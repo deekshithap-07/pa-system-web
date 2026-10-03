@@ -92,9 +92,9 @@ export function renderCountryCatchments(slug, data) {
           <a href="#/country/${slug}" data-link>${country.name}</a><span aria-hidden="true">→</span>
           <span class="is-here">Catchments</span>
         </nav>
-        <p class="cc-kicker">Nearby groups</p>
+        <p class="cc-kicker">Catchments</p>
         <h1 class="cc-hero__title">Catchments in <em>${country.name}</em></h1>
-        <p class="cc-hero__lead">Each catchment is a nearby group of communities walking the two-year journey together. Open a catchment for its progress, or go straight to a community.</p>
+        <p class="cc-hero__lead">Each catchment area is a cluster of neighbouring communities walking the two-year journey together. Open a catchment for its progress, or go straight to a community.</p>
         ${
           catchments.length
             ? `<ul class="cc-hero__totals">

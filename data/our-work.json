@@ -3,7 +3,7 @@
     "eyebrow": "Our Work",
     "title": "The whole gospel, in practice.",
     "titleHtml": "<span>The whole gospel,</span> <em>in practice.</em>",
-    "lead": "The work of PA is not directed at providing one thing or fixing one problem for people. Rather, we seek the holistic transformation of the entire person and community through the whole gospel of Jesus Christ. In our approach, we do not promote a handouts, entitlement and dependence culture. We instead challenge people to see the potential that is in and around them and teach them to cultivate and utilize those resources for the betterment of their lives.",
+    "lead": "We seek the holistic transformation of the entire person and community through the whole gospel of Jesus Christ. We do not promote a handouts, entitlement and dependence culture; we challenge people to see the potential that is in and around them.",
     "quote": "“…But with God all things are possible…” — Matthew 19:26",
     "image": "assets/our-work/hero-woman.jpg",
     "imageAlt": "Smiling woman in a colourful headscarf in front of green rural hills",
@@ -14,93 +14,50 @@
     "eyebrow": "Our Approach",
     "title": "How We Transform",
     "titleHtml": "How We Transform",
-    "lead": "Our work is based on a proven, community-led model that builds leaders, strengthens communities and creates sustainable change.",
-    "cta": { "label": "Learn More About Our Model", "href": "#work-model" },
+    "lead": "Every community progresses through a structured two-year journey from Awareness to Multiplication.",
     "steps": [
-      { "id": "leadership", "keyword": "Leadership Development", "text": "Build confident, capable and ethical leaders.", "href": "#work-leadership", "tone": "green" },
-      { "id": "shalom", "keyword": "Shalom Groups", "text": "Small groups. Big change.", "href": "#work-shalom", "tone": "maroon" },
-      { "id": "community", "keyword": "Community-Led Development", "text": "Communities identify and drive their own solutions.", "href": "#work-community", "tone": "gold" },
-      { "id": "projects", "keyword": "PPP & CHIPs", "text": "Partnerships for people and infrastructure.", "href": "#work-projects", "tone": "forest" },
-      { "id": "journey", "keyword": "2-Year Journey", "text": "From engagement to lasting transformation.", "href": "#work-journey", "tone": "wine" }
-    ]
+      "PA enters a community",
+      "Develops leaders",
+      "Mobilizes the community",
+      "Supports locally led action",
+      "Tracks progress",
+      "Works toward holistic transformation"
+    ],
+    "cta": { "label": "Learn More About Our Model", "href": "#work-model" }
   },
   "model": {
     "eyebrow": "Our Approach",
     "title": "The ministry model.",
     "titleHtml": "<span>The ministry</span> <em>model.</em>",
-    "cta": { "label": "Start with community transformation", "href": "#/africa" },
-    "sideLead": "The work is rooted in churches already present in the village. Pastors gather neighbours so faith, food, water, health, work, and leadership grow together.",
-    "sidePoints": [
-      "Country → nearby group → one community — the same path as the work on the ground",
-      "Local churches lead; PA walks beside for about two years",
-      "Families notice change in daily life, not only in programmes"
-    ],
-    "steps": [
-      {
-        "id": "community",
-        "title": "Community transformation",
-        "text": "Whole-person change led by churches already in the village.",
-        "href": "#/africa",
-        "tone": "gold"
-      },
-      {
-        "id": "leadership",
-        "title": "Leadership development",
-        "text": "Build confident, capable and ethical leaders.",
-        "href": "#work-leadership",
-        "tone": "green"
-      },
-      {
-        "id": "shalom",
-        "title": "Shalom Groups",
-        "text": "Small groups. Big change.",
-        "href": "#work-shalom",
-        "tone": "maroon"
-      },
-      {
-        "id": "projects",
-        "title": "PPP & CHIPs",
-        "text": "Partnerships for people and infrastructure.",
-        "href": "#work-projects",
-        "tone": "gold"
-      },
-      {
-        "id": "journey",
-        "title": "2-year transformation journey",
-        "text": "From engagement to lasting transformation.",
-        "href": "#work-journey",
-        "tone": "green"
-      }
-    ]
+    "lead": "Possibilities Africa (PA) delivers its programs through organizing, training, programming and networking our pastor leaders to develop their communities, starting with their families and churches.",
+    "cta": { "label": "Explore PPPs & CHIPs", "href": "#work-projects" }
   },
   "leadership": {
     "eyebrow": "Leadership development",
     "title": "Pastors grow in awareness, ability, and action.",
     "titleHtml": "<span>Pastors grow in awareness,</span> <em>ability, and action.</em>",
-    "lead": "This is the PA anchor program from which other programs are implemented. The program focuses on recruiting & selecting, organizing and equipping pastor leaders, who together as a cohesive group, provide visionary, servant leadership necessary for sustainable holistic transformation. We target pastor leaders because they have the truth of the bible upon which they can build a holistic vision for their families, churches and communities. These pastors are both ministry beneficiaries as well as the actual ministry implementers on the ground in the community."
+    "lead": "The PA anchor program from which other programs are implemented. It focuses on recruiting & selecting, organizing and equipping pastor leaders — both ministry beneficiaries and the actual ministry implementers on the ground in the community."
   },
   "shalom": {
     "eyebrow": "Shalom Groups",
-    "title": "30–50 leaders in each community.",
-    "titleHtml": "<span>30–50 leaders</span> <em>in each community.</em>",
-    "lead": "Each community develops Shalom groups who drive discipleship, cohesion, and local initiative — the engine of lasting change.",
-    "stat": "30–50",
-    "statLabel": "leaders per group",
+    "title": "Households learning together.",
+    "titleHtml": "<span>Households</span> <em>learning together.</em>",
+    "lead": "Pastors mobilise households into Shalom groups — each household represented by its head of family. This is where most transformation happens.",
     "cta": { "label": "See communities", "href": "#/africa" }
   },
   "projects": {
     "eyebrow": "PPP & CHIPs",
-    "title": "Community-led projects owned locally.",
-    "titleHtml": "<span>Community-led projects</span> <em>owned locally.</em>",
-    "lead": "Pastor-Planned Projects and church-led initiatives turn training into water, farming, health, and livelihoods — owned by the community.",
+    "title": "Five programs, their PPPs and CHIPs.",
+    "titleHtml": "<span>Five programs,</span> <em>their PPPs and CHIPs.</em>",
+    "lead": "Every activity sits under one of the five programs and one of its PPPs — three focus areas per program.",
     "items": [
       {
-        "title": "Pastor-Planned Projects (PPPs)",
-        "text": "Local plans for water, farming, health, and more."
+        "title": "PPPs",
+        "text": "Each of the five programs has three PPPs — focus areas such as Leaders raised and trained, Savings and loaning, or Children Sunday school. Every activity is reported under one."
       },
       {
-        "title": "Church-led initiatives (CHIPs)",
-        "text": "Skills and income work that spreads person to person."
+        "title": "CHIPs — Community High Impact Projects",
+        "text": "A PPP of Economic Productivity — projects that belong to the community, not one group: a water project, community farm, school support or medical camp."
       },
       {
         "title": "Local ownership first",

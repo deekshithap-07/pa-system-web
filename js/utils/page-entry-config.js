@@ -9,7 +9,7 @@ export function getPageEntryConfig(view, parts, data, hub) {
 
     case "africa": {
       const chapter = {
-        "how-places-are-grouped": { title: "How places are <strong>grouped</strong>", subtitle: "Country, nearby group, then one community." },
+        "how-places-are-grouped": { title: "How places are <strong>grouped</strong>", subtitle: "Country, catchment, then one community." },
       }[parts[1]];
       if (parts[1] === "region") {
         return {

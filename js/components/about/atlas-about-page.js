@@ -44,7 +44,7 @@ export function renderAtlasAboutPage(model, footerHtml = "", section = "overview
     {
       code: "Groups",
       title: "Shalom groups",
-      text: "Groups of 30–50 leaders in each community deepen discipleship, cohesion, and local initiative.",
+      text: "Households, represented by their heads of family, learn together and take what they learn home.",
     },
     {
       code: "Path",

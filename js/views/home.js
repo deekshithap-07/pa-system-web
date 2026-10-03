@@ -1,11 +1,17 @@
 import { renderHero } from "../components/home-sections.js";
 import {
-  renderAfricaExploreBand,
+  renderAfricaMapBand,
   bindAfricaCountrySelect,
   destroyAfricaCountryDrawer,
   renderOurWorkPrograms,
   bindOurWorkPrograms,
+  renderHowPaWorks,
+  bindHowPaWorks,
+  renderPaIntro,
+  renderPaWays,
+  bindPaIntro,
   renderImpactDataBand,
+  bindImpactCounters,
   renderStoriesBand,
   bindStoriesBand,
   renderKnowledgeNewsSplit,
@@ -17,14 +23,14 @@ import {
   destroyHomeAfricaMap,
 } from "../components/home-level1.js";
 import { initLandingAnimations, destroyHomeAnimations } from "../components/home-animations.js";
+import { learnedFromStories } from "../components/shared/pa-learning.js";
 import { bindHomeWatchStory, closeVideoModal } from "../components/video-modal.js";
 import { bindPartnerContact, closeContactModal } from "../components/contact-modal.js";
 
 /**
- * Order from PA Website Designs mockup (+ vision as reference):
- * Hero → PA Across Africa (map) → Our Work → Impact & Data →
- * Stories → Knowledge / News → Partner
- * Interactive map mount/root unchanged.
+ * The front door to PA — vision, scale, current activity and impact:
+ * Hero → PA at a glance → How PA works (path + five programs) → Latest impact and updates →
+ * Explore Africa (country tabs + interactive map) → Transformation stories → Featured knowledge → Partner
  */
 
 let unbindWatchStory = null;
@@ -32,18 +38,20 @@ let unbindPartnerContact = null;
 
 export function renderHome(data) {
   const home = data.home || {};
-  const paCountries = data.countries?.countries || [];
 
   return `
     <div class="home-page" data-level="1">
       <div class="home-hero-stack" data-home-scroll-stack>
         <div class="home-hero-stack__pin">${renderHero(home.hero)}</div>
       </div>
-      ${renderAfricaExploreBand(home.africaBand, home.level1?.africaMap, paCountries)}
+      ${renderPaIntro(home.intro, data.aboutPa)}
+      ${renderHowPaWorks(home.howItWorks)}
+      ${renderPaWays(home.intro)}
       ${renderOurWorkPrograms(home.ourWork)}
       ${renderImpactDataBand(home.impactData)}
+      ${renderAfricaMapBand(home.africaBand, data.countries?.countries || [])}
       ${renderStoriesBand(home.storiesBand)}
-      ${renderKnowledgeNewsSplit(home.knowledgeNews)}
+      ${renderKnowledgeNewsSplit(home.knowledgeNews, learnedFromStories(data, { max: 170 })[0] || null)}
       ${renderPartnerBanner(home.partnerSupport)}
     </div>`;
 }
@@ -59,8 +67,11 @@ export function mountHome(data) {
       console.error("[mountHome] watch/partner bind failed:", err);
     }
     try {
+      bindPaIntro(document);
+      bindImpactCounters(document);
       bindAfricaCountrySelect(document, data);
-      bindOurWorkPrograms(document, data.home?.ourWork || {});
+      bindOurWorkPrograms(document);
+      bindHowPaWorks(document);
       bindStoriesBand(document);
     } catch (err) {
       console.error("[mountHome] country select bind failed:", err);

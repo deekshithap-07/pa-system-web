@@ -31,7 +31,7 @@ function regionSnapshotHtml(hub) {
               <span class="cth-intro__title-mark" aria-hidden="true"></span>
               ${hub.catchmentName}${hub.catchment?.region ? ` · ${hub.catchment.region}` : ""}
             </h2>
-            <p class="cth-intro__lead">${hub.overview || hub.description || `Pastor-led work across ${tiles[0].value} communities in this nearby group.`}</p>
+            <p class="cth-intro__lead">${hub.overview || hub.description || `Pastor-led work across ${tiles[0].value} communities in this catchment.`}</p>
           </header>
           <dl class="cth-intro__stats">
             ${tiles
@@ -59,13 +59,13 @@ function placesSectionHtml(hub) {
   return `<header class="wb-out__places-head">
           <p class="wb-out__eyebrow">Places &amp; map</p>
           <h2>Where ${hub.catchmentName} sits in ${hub.countryName}</h2>
-          <p>Click a nearby group on the country map — or open a community on the catchment map.</p>
+          <p>Click a catchment on the country map — or open a community on the catchment map.</p>
         </header>
         <div class="wb-out__places-maps">
           ${
             countryMap
               ? `<div class="wb-out__places-map">
-              <h3>${hub.countryName} · nearby groups</h3>
+              <h3>${hub.countryName} · catchments</h3>
               ${countryMap}
             </div>`
               : ""
@@ -90,12 +90,12 @@ function whyMatterHtml(hub) {
                 <span class="cth-intro__title-mark" aria-hidden="true"></span>
                 Why outcomes matter here
               </h2>
-              <p class="cth-intro__lead">${hub.overview || hub.description || `This nearby group brings pastors from neighbouring communities together so training and projects are shared — then each community keeps its own story.`}</p>
+              <p class="cth-intro__lead">${hub.overview || hub.description || `This catchment brings pastors from neighbouring communities together so training and projects are shared — then each community keeps its own story.`}</p>
               <p class="cth-intro__body">Figures and field notes help the group see what is working, what needs support, and where to walk next on the two-year journey.</p>
             </div>
             <aside class="cth-intro__quote" data-cth-rise>
               <blockquote>A catchment is how Possibilities Africa groups 3–5 communities under coordinated pastor leadership — country strategy becomes community action here.</blockquote>
-              <cite>Nearby group · ${hub.countryName}</cite>
+              <cite>Catchment · ${hub.countryName}</cite>
             </aside>
           </div>
         </div>`;
@@ -119,7 +119,7 @@ function renderScorecard(hub) {
       const expected = scoreExpected(achieved);
       const pct = expected ? Math.min(100, Math.round((achieved / expected) * 100)) : achieved > 0 ? 100 : 0;
       return `<article class="wb-out-metric">
-        <p class="wb-out-metric__label"><strong>${k.label}</strong> in this nearby group</p>
+        <p class="wb-out-metric__label"><strong>${k.label}</strong> in this catchment</p>
         <p class="wb-out-metric__value">${kpiValue(k)}</p>
         <div class="wb-out-metric__bar" aria-hidden="true"><span style="width:${pct}%"></span></div>
         <p class="wb-out-metric__meta"><span>Reached</span>${expected ? ` · <span>Toward ${formatNumber(expected)}</span>` : ""}</p>
@@ -256,7 +256,7 @@ function renderResources(hub) {
         <div class="wb-out__resources-head">
           <p class="wb-out__eyebrow">Additional resources</p>
           <h2>Keep exploring</h2>
-          <p>Move from this nearby group into country stories, results, and field reports.</p>
+          <p>Move from this catchment into country stories, results, and field reports.</p>
         </div>
         <div class="wb-out-resources wb-out-resources--tiles">
           ${items

@@ -14,6 +14,7 @@ export function initLandingAnimations() {
         el.style.transform = "none";
         el.style.clipPath = "none";
       });
+    document.querySelectorAll(".home-page [data-home-section]").forEach((el) => el.classList.add("is-in"));
     return;
   }
 
@@ -35,23 +36,29 @@ function initHomeSectionMotion() {
   const page = document.querySelector(".home-page");
   if (!page || typeof ScrollTrigger === "undefined") return;
 
-  page.querySelectorAll("[data-reveal]").forEach((el, i) => {
+  page.querySelectorAll("[data-home-section]").forEach((section) => {
+    ScrollTrigger.create({
+      trigger: section,
+      start: "top 78%",
+      once: true,
+      onEnter: () => section.classList.add("is-in"),
+    });
+  });
+
+  page.querySelectorAll("[data-reveal]").forEach((el) => {
     if (el.hasAttribute("data-stagger") && el.children.length) return;
     if (el.matches("img") || el.querySelector(":scope > img")) return;
-    const cycle = ["fade-up", "scale-in", "slide-up", "fade-up"];
-    const type = el.dataset.anim || cycle[i % cycle.length];
-    playIn(el, type, { trigger: el, duration: type === "scale-in" ? 0.7 : 0.65 });
+    playIn(el, el.dataset.anim || "fade-up", { trigger: el, duration: 0.8 });
   });
 
   page.querySelectorAll("[data-stagger]").forEach((group) => {
-    const type = group.dataset.stagger === "stats" ? "pop" : group.dataset.stagger || "fade-up";
     const kids = [...group.children];
     if (!kids.length) return;
     gsap.set(group, { autoAlpha: 1, clearProps: "transform" });
-    playIn(kids, type, {
+    playIn(kids, group.dataset.stagger || "fade-up", {
       trigger: group,
-      stagger: type === "pop" ? 0.08 : 0.1,
-      duration: 0.55,
+      stagger: 0.12,
+      duration: 0.75,
     });
   });
 
@@ -62,25 +69,6 @@ function initHomeSectionMotion() {
       }
     });
   }, 1800);
-
-  const impactBg = page.querySelector(".pa-impact__bg img");
-  if (impactBg) {
-    gsap.fromTo(
-      impactBg,
-      { scale: 1.06, y: -16 },
-      {
-        scale: 1.12,
-        y: 16,
-        ease: "none",
-        scrollTrigger: {
-          trigger: ".pa-impact",
-          start: "top bottom",
-          end: "bottom top",
-          scrub: 0.7,
-        },
-      }
-    );
-  }
 }
 
 /** Directional clip-path image reveals — varied per section, not identical fades */
@@ -90,13 +78,12 @@ function initHomeImageReveals() {
 
   const directions = ["clip-left", "clip-right", "clip-up", "clip-down"];
   const images = page.querySelectorAll(
-    ".pa-work__panel-media img, .pa-stories__feature-media img, [data-motion-img]"
+    ".pa-stories__feature-media img, [data-motion-img]"
   );
 
   images.forEach((img, i) => {
-    if (img.closest(".pa-impact__bg")) return;
     const type = img.dataset.anim || directions[i % directions.length];
-    const frame = img.closest(".pa-stories__feature-media, .pa-know__cover, .pa-work__panel-media, .home-photo-hero__media") || img;
+    const frame = img.closest(".pa-stories__feature-media, .pa-know__cover, .home-photo-hero__media") || img;
 
     gsap.fromTo(
       img,
@@ -417,19 +404,21 @@ function initAfricaEditorialMotion() {
     if (!Number.isFinite(target)) return;
     const prefix = el.dataset.paCountPrefix || "";
     const suffix = el.dataset.paCountSuffix || "";
-    el.textContent = `${prefix}0${suffix}`;
+    const unit = el.dataset.paCountUnit || "";
+    const decimals = Number(el.dataset.paCountDecimals) || 0;
+    const scale = { K: 1e3, M: 1e6, B: 1e9 }[unit] || 1;
 
     countUpOnce(el, {
       value: target,
       prefix,
       suffix,
       duration: 1.8,
-      format: (n) => (target >= 1000 ? formatNumber(n).replace(/\.0(?=[KMB])/, "") : n),
+      format: (n) => (unit ? `${(n / scale).toFixed(decimals)}${unit}` : n),
     });
 
     gsap.fromTo(
       el,
-      { y: 14, color: "var(--pa-maroon)" },
+      { y: 14 },
       {
         y: 0,
         duration: 0.7,
@@ -497,41 +486,55 @@ function initKnowNewsMotion() {
       gsap.set(knowCopy.children, { autoAlpha: 0, x: -22, y: 10 });
     }
 
-    ScrollTrigger.create({
-      trigger: knowSection,
-      start: "top 78%",
-      once: true,
-      onEnter: () => {
-        if (knowCopy) {
-          gsap.to(knowCopy.children, {
-            autoAlpha: 1,
-            x: 0,
-            y: 0,
-            duration: 0.7,
-            stagger: 0.09,
-            ease: "power3.out",
-            clearProps: "transform",
-          });
-        }
-        gsap.to(cover, {
+    let revealed = false;
+    const reveal = () => {
+      if (revealed) return;
+      revealed = true;
+      if (knowCopy) {
+        gsap.to(knowCopy.children, {
           autoAlpha: 1,
           x: 0,
-          scale: 1,
-          rotation: 0,
-          filter: "drop-shadow(0 22px 36px rgba(42,16,20,0.3))",
-          duration: 0.95,
-          delay: 0.08,
+          y: 0,
+          duration: 0.7,
+          stagger: 0.09,
           ease: "power3.out",
-          onComplete: () => {
-            gsap.set(cover, { clearProps: "transform,filter" });
-            /* Restart CSS idle float after entrance */
-            cover.style.animation = "none";
-            void cover.offsetWidth;
-            cover.style.animation = "";
-          },
+          clearProps: "transform",
         });
-      },
-    });
+      }
+      gsap.to(cover, {
+        autoAlpha: 1,
+        x: 0,
+        scale: 1,
+        rotation: 0,
+        filter: "drop-shadow(0 22px 36px rgba(42,16,20,0.3))",
+        duration: 0.95,
+        delay: 0.08,
+        ease: "power3.out",
+        onComplete: () => {
+          gsap.set(cover, { clearProps: "transform,filter" });
+          /* Restart CSS idle float after entrance */
+          cover.style.animation = "none";
+          void cover.offsetWidth;
+          cover.style.animation = "";
+        },
+      });
+    };
+
+    /* The map above mounts late and shifts layout, so watch real visibility instead of a precomputed scroll offset */
+    if ("IntersectionObserver" in window) {
+      const io = new IntersectionObserver(
+        (entries) => {
+          if (entries.some((e) => e.isIntersecting)) {
+            io.disconnect();
+            reveal();
+          }
+        },
+        { rootMargin: "0px 0px -15% 0px" }
+      );
+      io.observe(knowSection);
+    } else {
+      reveal();
+    }
   }
 
   if (cover && window.matchMedia("(hover: none)").matches) {

@@ -5,11 +5,11 @@
     "title": "How the work is organised",
     "description": "This website follows the same path as the work on the ground — from Africa to one community.",
     "levels": [
-      { "id": "africa", "label": "Where we work", "description": "The countries, and a first look at the work" },
+      { "id": "africa", "label": "Possibilities Africa", "description": "The countries, and a first look at the work" },
       { "id": "country", "label": "Country", "description": "Pastors and communities in one nation" },
-      { "id": "catchment", "label": "Nearby group", "description": "3–5 neighbouring communities that share pastor leaders" },
+      { "id": "catchment", "label": "Catchment Area", "description": "3–5 neighbouring communities that share pastor leaders" },
       { "id": "community", "label": "Community", "description": "One local place on a two-year journey of change" },
-      { "id": "shalom", "label": "Faith groups", "description": "Shalom groups of 30–50 leaders in each community" }
+      { "id": "shalom", "label": "Shalom Groups", "description": "Households, each represented by its head of family, mobilised by pastors into groups" }
     ]
   },
   "pillars": [
@@ -23,8 +23,8 @@
     {
       "id": "shalom",
       "title": "Shalom Groups",
-      "metric": "30–50 leaders",
-      "description": "Each community develops Shalom groups of 30–50 leaders who drive discipleship, cohesion, and local initiative.",
+      "metric": "Heads of households",
+      "description": "Pastors mobilise households into Shalom groups — each household represented by its head of family. They train and practise with their families and start small projects at home; that is how implementation extends.",
       "tracks": ["shalomGroups", "leadership"]
     },
     {
@@ -38,7 +38,7 @@
       "id": "ppp-chips",
       "title": "Community-Led Development",
       "metric": "PPPs & CHIPs",
-      "description": "Pastor-Planned Projects (PPPs) and Church-initiated Projects (CHIPs) are community-owned initiatives — water, agriculture, livelihood, and more.",
+      "description": "Every activity sits under one of the five programs and one of its PPPs (three focus areas per program). CHIPs — Community High Impact Projects such as a water project, community farm, school support or medical camp — are a PPP of Economic Productivity and belong to the whole community.",
       "tracks": ["ppps", "chips", "projects"]
     },
     {
@@ -73,7 +73,7 @@
     "dimensions": [
       { "id": "awareness", "label": "Awareness", "description": "Vision for holistic community transformation; understanding the journey framework" },
       { "id": "ability", "label": "Ability", "description": "Skills in leadership, discipleship, facilitation, and programme delivery" },
-      { "id": "action", "label": "Action", "description": "Implementing PPPs, mobilizing Shalom groups, and driving measurable community outcomes" }
+      { "id": "action", "label": "Action", "description": "Implementing PPPs, mobilising households into Shalom groups, and driving measurable community outcomes" }
     ]
   },
   "differentiators": {
@@ -83,7 +83,7 @@
     "points": [
       { "label": "Shows real numbers", "description": "Field reports feed the pages — not only stories and photos" },
       { "label": "Tracks real progress", "description": "Journey stages, leadership, and projects are updated over time" },
-      { "label": "Connects places to results", "description": "Country → nearby group → one community — so you can see where work happens" },
+      { "label": "Connects places to results", "description": "Country → catchment → one community — so you can see where work happens" },
       { "label": "Explains what is changing", "description": "Our results walk through where the work began, what the field shows now, and what may come next" }
     ]
   },
@@ -105,7 +105,7 @@
     },
     "intro": {
       "title": "The ministry model behind the <strong>data</strong>",
-      "text": "Which communities need more support, and which are growing in faith, families, and daily life? We follow pastor-led communities over two years — from a country, to a nearby group, to one community."
+      "text": "Which communities need more support, and which are growing in faith, families, and daily life? We follow pastor-led communities over two years — from a country, to a catchment, to one community."
     },
     "featured": [
       {
@@ -118,7 +118,7 @@
       {
         "subtitle": "Where we work",
         "title": "From a country to one community",
-        "description": "Open a country, then a nearby group of 3–5 communities, then one community.",
+        "description": "Open a country, then a catchment of 3–5 communities, then one community.",
         "href": "#/africa",
         "cta": "Where we work"
       }
@@ -143,7 +143,7 @@
         "bg": "linear-gradient(180deg, #f0f8f2 0%, #e8f4ec 100%)",
         "ring": { "fill": 0.48, "headline": "59", "context": "active communities with Shalom groups building cohesion, discipleship depth, and local initiative" },
         "stories": [
-          { "tag": "SHALOM GROUPS", "title": "30–50 leaders per community in discipleship groups", "summary": "Each community develops Shalom groups that deepen faith, build cohesion, and mobilise households for transformation.", "href": "#/resources#atlas-theme-discipleship" },
+          { "tag": "SHALOM GROUPS", "title": "Pastors mobilise households into Shalom groups", "summary": "Pastors return to their churches and mobilise households into groups; each household is represented by its head of family.", "href": "#/resources#atlas-theme-discipleship" },
           { "tag": "2-YEAR JOURNEY", "title": "Structured stages from awareness to multiplication", "summary": "Communities progress through five journey stages — tracked in the community transformation system.", "href": "#/scorecard/journey" }
         ],
         "explore": { "label": "See journey progress", "href": "#/scorecard/journey" }
@@ -177,9 +177,9 @@
         "label": "Citizenship",
         "accent": "#009fda",
         "bg": "linear-gradient(180deg, #eef8fc 0%, #e3f4fa 100%)",
-        "ring": { "fill": 0.55, "headline": "335K+", "context": "lives impacted through pastor-planned projects addressing water, health, education, and infrastructure" },
+        "ring": { "fill": 0.55, "headline": "335K+", "context": "lives impacted through PPPs and CHIPs addressing water, health, education, and infrastructure" },
         "stories": [
-          { "tag": "RESPONSIBLE CITIZENSHIP", "title": "Communities building their own assets through PPPs", "summary": "Pastor-Planned Projects exemplify local ownership — trench dams, irrigation, and health outreaches led by churches.", "href": "#/country/kenya" },
+          { "tag": "RESPONSIBLE CITIZENSHIP", "title": "Communities building their own assets through PPPs", "summary": "PPPs and CHIPs (Community High Impact Projects) exemplify local ownership — trench dams, irrigation, and health outreaches led by churches.", "href": "#/country/kenya" },
           { "tag": "RESOURCE MOBILIZATION", "title": "Local resources mobilised for community programmes", "summary": "The platform tracks mobilization to guide where external support complements community-led initiative.", "href": "#/scorecard" }
         ],
         "explore": { "label": "See citizenship results", "href": "#/scorecard/working" }
@@ -187,7 +187,7 @@
     ],
     "acknowledgements": {
       "title": "About this website",
-      "text": "This site follows how Possibilities Africa works on the ground — from a country, to a nearby group of communities, to one community. Some figures are demo content for this website.",
+      "text": "This site follows how Possibilities Africa works on the ground — from a country, to a catchment of communities, to one community. Some figures are demo content for this website.",
       "cta": { "label": "Visit possibilitiesafrica.org", "href": "https://www.possibilitiesafrica.org/" }
     }
   }

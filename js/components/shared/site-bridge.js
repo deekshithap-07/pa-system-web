@@ -85,7 +85,7 @@ export const BRIDGE = {
     title: "What to open next",
     description: "You have seen the country list. Open a country to keep reading, or see our results for simple numbers.",
     cards: [
-      { type: "Country", title: "Kenya", description: "Communities, reports, and nearby groups — a full example of how we work.", target: "#/country/kenya", tone: "story" },
+      { type: "Country", title: "Kenya", description: "Communities, reports, and catchments — a full example of how we work.", target: "#/country/kenya", tone: "story" },
       { type: "Results", title: "Our results", description: "How many communities, what is improving, and how countries compare.", target: "#/scorecard", tone: "data" },
       { type: "Results", title: "What is changing", description: "Where the work began, what the field shows now, and what may come next.", target: "#/scorecard/together", tone: "analysis" },
     ],

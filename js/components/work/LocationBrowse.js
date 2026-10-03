@@ -122,12 +122,12 @@ export function renderPlacesGroupedPage(data) {
             <article>
               <span>01</span>
               <h3>Country</h3>
-              <p>A national pastor network — stories, figures, and nearby groups.</p>
+              <p>A national pastor network — stories, figures, and catchments.</p>
               <a href="#/africa" data-link>Browse countries</a>
             </article>
             <article>
               <span>02</span>
-              <h3>Nearby group</h3>
+              <h3>Catchment</h3>
               <p>3–5 neighbouring communities that share pastors.</p>
             </article>
             <article>

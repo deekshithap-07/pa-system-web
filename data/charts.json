@@ -141,7 +141,7 @@
       "reportIds": ["sep-2024"]
     },
     "community:dzombo": {
-      "hero": { "tagline": "Kwale South, Kenya", "description": "Leadership training preparing the community for Pastor-Planned Projects." },
+      "hero": { "tagline": "Kwale South, Kenya", "description": "Leadership training preparing the community for its PPPs and CHIPs." },
       "kpis": [
         { "label": "Pastors", "value": 45, "trend": "stable", "direction": "neutral" },
         { "label": "Journey Stage", "value": 0, "trend": "", "direction": "neutral", "text": "Training" },

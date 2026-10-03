@@ -10,7 +10,7 @@ export const PA_PROGRAMMES = [
     panelLabel: "Leadership",
     text: "Developing leaders at every level.",
     description: "This is the PA anchor program from which other programs are implemented. The program focuses on recruiting & selecting, organizing and equipping pastor leaders, who together as a cohesive group, provide visionary, servant leadership necessary for sustainable holistic transformation.",
-    href: "#/work#work-leadership",
+    href: "#/program/leadership",
     tone: "maroon",
   },
   {
@@ -19,7 +19,7 @@ export const PA_PROGRAMMES = [
     panelLabel: "Discipleship",
     text: "Building strong faith and values.",
     description: "PA believes that guiding people in the Judeo-Christian faith and practice gives them a foundation necessary for true and eternal transformation. This means teaching the whole gospel to transform the whole person and impact the whole community.",
-    href: "#/work",
+    href: "#/program/discipleship",
     tone: "gold",
   },
   {
@@ -28,7 +28,7 @@ export const PA_PROGRAMMES = [
     panelLabel: "Productivity",
     text: "Creating sustainable livelihoods.",
     description: "PA empowers the people in the community through the pastor leaders' groups to see the resources around them, learn how to develop them through diligence and hard work, and use them sustainably for the wellbeing of their communities.",
-    href: "#/work",
+    href: "#/program/economic",
     tone: "green",
   },
   {
@@ -37,7 +37,7 @@ export const PA_PROGRAMMES = [
     panelLabel: "Next Generation",
     text: "Equipping young people for a better future.",
     description: "A core program that invests in children and teenagers to grow up with the values, beliefs and life skills necessary to live holistic lives.",
-    href: "#/work",
+    href: "#/program/youth",
     tone: "maroon",
   },
   {
@@ -46,7 +46,7 @@ export const PA_PROGRAMMES = [
     panelLabel: "Citizenship",
     text: "Building peaceful, engaged communities.",
     description: "This program recognizes our responsibility to live our values in the community where God has placed us as responsible citizens contributing to solving community problems and creating an orderly society.",
-    href: "#/work",
+    href: "#/program/citizenship",
     tone: "gold",
   },
 ];
@@ -71,15 +71,15 @@ export function resolvePaProgrammes(list) {
 const PROGRAMME_MATCHERS = [
   { id: "leadership", test: /leader/i },
   { id: "discipleship", test: /disciple|spiritual|faith/i },
-  { id: "economic", test: /econom|productiv|livelihood|agri|farm|saving/i },
-  { id: "youth", test: /youth|mentor|next gen|child|teen/i },
-  { id: "citizenship", test: /citizen|water|health|educat|infrastructure/i },
+  { id: "economic", test: /econom|productiv|livelihood|agri|farm|saving|water|health|\bchips?\b/i },
+  { id: "youth", test: /youth|mentor|next gen|child|teen|educat|school/i },
+  { id: "citizenship", test: /citizen|infrastructure|civic|advoca/i },
 ];
 
 /**
  * Folds any programme breakdown into the five official programmes (Home → Results Areas).
- * Water, health, education and infrastructure count as Responsible Citizenship, per PA's
- * own description of that programme.
+ * Water and health projects are CHIPs — a PPP of Economic Productivity; education and schools
+ * sit under Mentoring the Next Generation (community children projects).
  */
 export function toFivePaProgrammes(labels = [], data = []) {
   const totals = Object.fromEntries(PA_PROGRAMMES.map((p) => [p.id, 0]));

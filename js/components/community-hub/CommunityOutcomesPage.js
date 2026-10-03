@@ -10,7 +10,9 @@ import { renderHubGeoMap, bindHubGeoMap } from "../../map/components/HubGeoMap.j
 import { highlightCommunityOnMap } from "../../utils/hub-geo-maps.js";
 import { JOURNEY_STAGES } from "../shared/story-chapters.js";
 import { resolvePublicFreshness } from "../../utils/public-api.js";
-import { toFivePaProgrammes } from "../shared/pa-programmes.js";
+import { PA_PROGRAMMES, toFivePaProgrammes } from "../shared/pa-programmes.js";
+import { programmeIdFor, programmeById, isChip, HOW_PA_WORKS_HREF, pppFor } from "../shared/pa-model.js";
+import { renderPageTrail, bindPageTrail, destroyPageTrail } from "../shared/page-trail.js";
 
 function analyticsFor(community, analytics) {
   return analytics?.communityComparison?.communities?.find((c) => c.id === community.id) || null;
@@ -74,6 +76,7 @@ function collectCommunityPpps(payload) {
     items.push({
       name: title,
       type: entry.type || projectType(title),
+      programme: programmeIdFor(`${title} ${entry.summary || ""}`),
       status: entry.status || "Active",
       summary: entry.summary || `Community project underway in ${name}.`,
       date: entry.date || null,
@@ -152,7 +155,24 @@ function isInactive(payload) {
 }
 
 function projectType(title = "") {
-  return /\bchips?\b|church[- ]led/i.test(title) ? "CHIP" : "PPP";
+  return isChip(title) ? "CHIP" : "PPP";
+}
+
+/** Programs with published activity in this community — its own projects and community-tagged stories. */
+function communityProgrammeCoverage(payload, data) {
+  const ids = new Set();
+  const ppps = {};
+  const note = (programme, text) => {
+    if (!programme) return;
+    ids.add(programme);
+    const ppp = pppFor(text, programme);
+    if (ppp) (ppps[programme] ||= new Map()).set(ppp.id, ppp);
+  };
+  collectCommunityPpps(payload).forEach((p) => note(p.programme, `${p.name} ${p.summary || ""}`));
+  communityStories(payload, data)
+    .filter((e) => !e.area)
+    .forEach((e) => note(programmeIdFor(e.story.program), e.story.title));
+  return PA_PROGRAMMES.map((p) => ({ ...p, active: ids.has(p.id), ppps: [...(ppps[p.id]?.values() || [])] }));
 }
 
 function collectMedia(payload, data) {
@@ -212,7 +232,7 @@ function renderHero(payload, data) {
   const img = heroImage(payload);
   const lead =
     payload.dash?.hero?.description ||
-    `${payload.community.name} is one community in the ${payload.catchment.name} nearby group — a public picture of pastor-led transformation.`;
+    `${payload.community.name} is one community in the ${payload.catchment.name} catchment — a public picture of pastor-led transformation.`;
 
   return `
     <header class="cm-entry" data-cm-section="hero" data-cm-entry>
@@ -270,7 +290,7 @@ function renderLocation(payload) {
         <header class="cm-sec-head" data-cm-rise>
           <p class="cm-kicker">Location</p>
           <h2 id="cm-loc-title" class="cm-sec-title">Where ${payload.community.name} sits</h2>
-          <p class="cm-sec-lead">${locationLine(payload)}. This map focuses on this community within its nearby group.</p>
+          <p class="cm-sec-lead">${locationLine(payload)}. This map focuses on this community within its catchment.</p>
         </header>
         ${map}
       </div>
@@ -369,23 +389,26 @@ function renderGlance(payload) {
   };
 
   const items = [
-    metric("Shalom Groups", "shalomGroups", reach.shalom, RING_COLORS.green),
-    metric("Households", "households", reach.households, RING_COLORS.gold),
-    metric("Pastor leaders", "pastors", pastors, RING_COLORS.maroon),
+    { part: "Groups", ...metric("Shalom Groups", "shalomGroups", reach.shalom, RING_COLORS.green) },
+    { part: "Groups", ...metric("Households", "households", reach.households, RING_COLORS.gold) },
+    { part: "Pastors Fellowship", ...metric("Pastor leaders", "pastors", pastors, RING_COLORS.maroon) },
   ];
+  const chips = collectCommunityPpps(payload).filter((p) => p.type === "CHIP");
+  const place = payload.community.name;
 
   return `
     <section class="cm-glance" data-cm-section="glance" id="cm-reach" aria-labelledby="cm-glance-title">
       <div class="container">
         <header class="cm-sec-head" data-cm-rise>
-          <p class="cm-kicker">Community at a glance</p>
-          <h2 id="cm-glance-title" class="cm-sec-title">Public figures for ${payload.community.name}</h2>
-          <p class="cm-sec-lead">Each ring shows ${payload.community.name}'s share of the ${area} catchment total.</p>
+          <p class="cm-kicker">How ${place} is organised</p>
+          <h2 id="cm-glance-title" class="cm-sec-title">Groups, pastors fellowship and CHIPs</h2>
+          <p class="cm-sec-lead">Each ring shows ${place}'s share of the ${area} catchment total. <a class="cm-inline-link" href="${HOW_PA_WORKS_HREF}" data-link>How communities work →</a></p>
         </header>
-        <div class="cm-gauges" data-cm-rise>
+        <div class="cm-gauges cm-gauges--parts" data-cm-rise>
           ${items
             .map(
               (m) => `<figure class="cm-gauge">
+                <span class="cm-gauge__part">${m.part}</span>
                 ${ring({ pct: m.pct, color: m.color, center: m.center, label: m.label })}
                 <figcaption>
                   <strong>${m.label}</strong>
@@ -394,6 +417,14 @@ function renderGlance(payload) {
               </figure>`
             )
             .join("")}
+          <figure class="cm-gauge">
+            <span class="cm-gauge__part">CHIPs</span>
+            <div class="cm-count" role="img" aria-label="CHIPs: ${chips.length}"><strong>${chips.length || "—"}</strong></div>
+            <figcaption>
+              <strong>Community High Impact Projects</strong>
+              <span>${chips.length ? chips.map((c) => c.name).slice(0, 2).join(" · ") : `None published for ${place} yet`}</span>
+            </figcaption>
+          </figure>
         </div>
       </div>
     </section>`;
@@ -403,10 +434,37 @@ function renderGlance(payload) {
 /* 5 — What is happening (projects)                                           */
 /* -------------------------------------------------------------------------- */
 
-function renderProjects(payload) {
+function renderCoverage(payload, data) {
+  const programmes = communityProgrammeCoverage(payload, data);
+  const active = programmes.filter((p) => p.active).length;
+  const place = payload.community.name;
+  return `
+    <div class="cm-coverage" data-cm-rise>
+      <div class="cm-coverage__head">
+        <strong>${active} / 5 programs</strong>
+        <span>${active ? `${Math.round((active / 5) * 100)}% program coverage in ${place}, from its published projects and stories` : `No program activity published for ${place} yet`}</span>
+      </div>
+      <ul class="cm-coverage__list">
+        ${programmes
+          .map(
+            (p) => `<li class="${p.active ? "is-on" : ""}"><i aria-hidden="true"></i>${p.title}${
+              p.ppps.length
+                ? `<span class="cm-coverage__ppps">${p.ppps
+                    .map((x) => x.name)
+                    .join(", ")}</span>`
+                : ""
+            }</li>`
+          )
+          .join("")}
+      </ul>
+    </div>`;
+}
+
+function renderProjects(payload, data) {
   const projects = collectCommunityPpps(payload);
   const place = payload.community.name;
   const initiatives = renderCountryInitiatives(payload);
+  const coverage = renderCoverage(payload, data);
 
   if (!projects.length) {
     return `
@@ -414,9 +472,10 @@ function renderProjects(payload) {
         <div class="container">
           <header class="cm-sec-head cm-sec-head--light" data-cm-rise>
             <p class="cm-kicker cm-kicker--light">What is happening here</p>
-            <h2 id="cm-work-title" class="cm-sec-title cm-sec-title--light">PPPs &amp; CHIPs in ${place}</h2>
-            <p class="cm-sec-lead cm-sec-lead--light">No community-specific Pastor-Planned Projects (PPPs) or Church-led initiatives (CHIPs) are publicly listed for ${place} yet.</p>
+            <h2 id="cm-work-title" class="cm-sec-title cm-sec-title--light">Programs, PPPs &amp; CHIPs in ${place}</h2>
+            <p class="cm-sec-lead cm-sec-lead--light">No PPP activity or CHIPs (Community High Impact Projects) are publicly listed for ${place} yet.</p>
           </header>
+          ${coverage}
           ${initiatives}
         </div>
       </section>`;
@@ -430,7 +489,14 @@ function renderProjects(payload) {
         <button type="button" class="cm-work__row${i === 0 ? " is-open" : ""}" data-cm-proj="${i}" aria-expanded="${i === 0 ? "true" : "false"}">
           <span class="cm-work__n">${String(i + 1).padStart(2, "0")}</span>
           <strong class="cm-work__name"><span class="cm-work__type">${p.type}</span> ${p.name}</strong>
-          <span class="cm-work__status">${p.status}${p.date ? ` · ${formatPppDate(p.date)}` : ""}</span>
+          <span class="cm-work__status">${[
+            p.programme ? programmeById(p.programme)?.title : "",
+            p.programme ? pppFor(`${p.name} ${p.summary || ""}`, p.programme)?.name : "",
+            p.status,
+            p.date ? formatPppDate(p.date) : "",
+          ]
+            .filter(Boolean)
+            .join(" · ")}</span>
         </button>
         <div class="cm-work__detail" data-cm-proj-detail="${i}" ${i === 0 ? "" : "hidden"}>
           <p>${p.summary}</p>
@@ -445,9 +511,10 @@ function renderProjects(payload) {
       <div class="container">
         <header class="cm-sec-head cm-sec-head--light" data-cm-rise>
           <p class="cm-kicker cm-kicker--light">What is happening here</p>
-          <h2 id="cm-work-title" class="cm-sec-title cm-sec-title--light">PPPs &amp; CHIPs in ${place}</h2>
-          <p class="cm-sec-lead cm-sec-lead--light">Pastor-Planned Projects (PPPs) and Church-led initiatives (CHIPs) — titles and status only. Budgets, household lists, and operational detail stay internal.</p>
+          <h2 id="cm-work-title" class="cm-sec-title cm-sec-title--light">Programs, PPPs &amp; CHIPs in ${place}</h2>
+          <p class="cm-sec-lead cm-sec-lead--light">PPP activity and CHIPs (Community High Impact Projects) in ${place} — titles, program and status only. Budgets, household lists, and operational detail stay internal.</p>
         </header>
+        ${coverage}
         <ol class="cm-work__index" data-cm-work>${items}</ol>
         ${initiatives}
       </div>
@@ -644,7 +711,6 @@ function renderProgress(payload, data) {
 const COMMUNITY_DASH_CHARTS = [
   { key: "impactLine", title: "Progress over time", caption: "Community progress by quarter." },
   { key: "householdTrend", title: "Households reached", caption: "Households reached by year." },
-  { key: "leadershipRadar", title: "Leadership profile", caption: "Leadership scores across five qualities." },
   { key: "programPie", title: "Activity across the five programs", caption: "Share of activity by PA program.", fixedTitle: true },
 ];
 
@@ -903,10 +969,19 @@ export function renderCommunityOutcomes(payload, _legacyStorySection = "", data 
   return `
     <div class="cm-page" data-community-outcomes data-country-slug="${payload.country.slug}" data-catchment-slug="${payload.catchment.slug}" data-community-slug="${payload.community.slug}">
       ${renderHero(payload, data)}
+      ${renderPageTrail({
+        glance: "#cm-reach",
+        where: "#cm-places",
+        work: "#cm-projects",
+        progress: "#cm-progress",
+        stories: "#cm-stories",
+        knowledge: "#cm-resources",
+        next: "#cm-next",
+      }, `${payload.community.name} on this page`)}
       ${renderLocation(payload)}
       ${renderJourney(payload)}
       ${renderGlance(payload)}
-      ${renderProjects(payload)}
+      ${renderProjects(payload, data)}
       ${renderOutcomes(payload, outcomes)}
       ${renderActivity(payload)}
       ${renderProgress(payload, data)}
@@ -931,6 +1006,7 @@ export function mountCommunityOutcomes(root, payload) {
   bindProjectIndex(page);
   bindGauges(page);
   initCommunityMotion(page);
+  bindPageTrail(page);
 }
 
 function bindGauges(page) {
@@ -1168,4 +1244,6 @@ function initCommunityMotion(page) {
   if (typeof ScrollTrigger !== "undefined") ScrollTrigger.refresh();
 }
 
-export function destroyCommunityOutcomes() {}
+export function destroyCommunityOutcomes() {
+  destroyPageTrail();
+}

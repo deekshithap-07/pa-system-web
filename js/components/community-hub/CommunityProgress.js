@@ -1,4 +1,4 @@
-const PROGRESS_CHART_KEYS = ["impactLine", "leadershipRadar"];
+const PROGRESS_CHART_KEYS = ["impactLine"];
 
 export function renderCommunityProgress({ dash }) {
   const charts = dash.charts || {};

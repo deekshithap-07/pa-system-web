@@ -4,6 +4,8 @@
  */
 
 import { formatPaTitle } from "../../utils/pa-title.js";
+import { PA_FLOW, ACTIVITY_TYPES, PPP_EXAMPLES, CHIP_EXAMPLES, PA_PPPS } from "../shared/pa-model.js";
+import { PA_PROGRAMMES } from "../shared/pa-programmes.js";
 
 function linkAttrs(href = "#") {
   if (!href) return `href="#"`;
@@ -38,52 +40,62 @@ function renderHero(hero = {}) {
     </header>`;
 }
 
-const TRANSFORM_ICONS = {
-  leadership: `<circle cx="12" cy="6.8" r="2.6"/><circle cx="5.6" cy="9" r="2"/><circle cx="18.4" cy="9" r="2"/><path d="M8.2 19.5v-2.2a3.8 3.8 0 0 1 7.6 0v2.2"/><path d="M2.8 18.5v-1.2a2.8 2.8 0 0 1 4-2.5M21.2 18.5v-1.2a2.8 2.8 0 0 0-4-2.5"/>`,
-  shalom: `<circle cx="8" cy="8" r="2.5"/><circle cx="16" cy="8" r="2.5"/><circle cx="12" cy="13" r="2.3"/><path d="M4 18.5v-.8a3.5 3.5 0 0 1 3.5-3.5M20 18.5v-.8a3.5 3.5 0 0 0-3.5-3.5M8.4 20.5v-.6a3.6 3.6 0 0 1 7.2 0v.6"/>`,
-  community: `<path d="M12 21v-9"/><path d="M12 12c0-4 2.8-6.5 7-6.5 0 4-2.8 6.5-7 6.5Z"/><path d="M12 14.5c0-3.2-2.3-5.3-5.8-5.3 0 3.2 2.3 5.3 5.8 5.3Z"/><path d="M7 21h10"/>`,
-  projects: `<path d="M2.5 11.5 6 8l3.2 1.2L12 7.5l3 1.8L18 8l3.5 3.5"/><path d="M6 8v5.2l4.3 4.1a1.5 1.5 0 0 0 2.1 0l.3-.3"/><path d="M18 8v5.2l-3.6 3.6"/><path d="M9.5 12.5l3 3M11.5 11l3 3"/>`,
-  journey: `<path d="M20 12a8 8 0 1 1-2.35-5.66"/><path d="M20 4.5v4h-4"/><path d="M12 8v4.2l2.8 1.8"/>`,
-};
-
-/** How we transform — icon cards with animated arrows. Copy lives in our-work.json → transform. */
-function renderTransform(section = {}) {
-  const steps = section.steps || [];
-  if (!steps.length) return "";
+/** Section header: eyebrow on top, title left, statement right — the statement starts level with the title. */
+function splitHead({ id, section = {}, dark = false }) {
   const cta = section.cta || {};
+  return `
+        <header class="ow-split${dark ? " ow-split--dark" : ""}" data-ow-reveal>
+          ${section.eyebrow ? `<p class="ow-eyebrow${dark ? " ow-eyebrow--on-dark" : ""} ow-split__eyebrow">${section.eyebrow}</p>` : ""}
+          <h2 id="${id}" class="ow-sec-title${dark ? " ow-sec-title--light" : ""} pa-title ow-split__title">${formatPaTitle(section)}</h2>
+          <div class="ow-split__side">
+            ${section.lead ? `<p class="ow-sec-lead${dark ? " ow-sec-lead--light" : ""}">${section.lead}</p>` : ""}
+            ${cta.href ? `<a class="ow-text-link${dark ? " ow-text-link--light" : ""}" ${linkAttrs(cta.href)}>${cta.label} →</a>` : ""}
+          </div>
+        </header>`;
+}
 
-  const cards = steps
-    .map((s, i) => {
-      const arrow =
-        i < steps.length - 1
-          ? `<li class="ow-tf__arrow" aria-hidden="true" style="--i:${i}">
-              <span class="ow-tf__arrow-line"></span>
-              <svg viewBox="0 0 24 24"><path d="M5 12h13M13 6l6 6-6 6"/></svg>
-            </li>`
-          : "";
-      return `<li class="ow-tf__step ow-tf__step--${s.tone || "gold"}" style="--i:${i}">
-          <a class="ow-tf__card" ${linkAttrs(s.href || "#work-model")}>
-            <span class="ow-tf__icon">
-              <span class="ow-tf__halo" aria-hidden="true"></span>
-              <svg viewBox="0 0 24 24" aria-hidden="true">${TRANSFORM_ICONS[s.id] || TRANSFORM_ICONS.leadership}</svg>
-            </span>
-            <strong class="ow-tf__name">${s.keyword}</strong>
-            ${s.text ? `<span class="ow-tf__sub">${s.text}</span>` : ""}
-          </a>
-        </li>${arrow}`;
-    })
+/** How we transform — the two-year journey only: the path, then the five stages across 24 months. */
+function renderTransform(section = {}, journey = {}) {
+  const path = (section.steps || [])
+    .map(
+      (s, i) => `<li class="ow-tj__step" style="--i:${i}">
+          <span class="ow-tj__dot" aria-hidden="true">${String(i + 1).padStart(2, "0")}</span>
+          <span class="ow-tj__label">${s}</span>
+        </li>`
+    )
+    .join("");
+
+  const stages = journey.stages || [];
+  const span = (m = "") => {
+    const [a, b] = String(m).split(/[–-]/).map((n) => parseInt(n, 10));
+    return a && b ? b - a + 1 : 3;
+  };
+  const timeline = stages
+    .map(
+      (s, i) => `<li class="ow-tj__stage" style="--span:${span(s.month)};--i:${i}">
+          <span class="ow-tj__bar" aria-hidden="true"></span>
+          <strong>${s.label}</strong>
+          ${s.month ? `<span class="ow-tj__months">Months ${s.month}</span>` : ""}
+        </li>`
+    )
     .join("");
 
   return `
-    <section class="ow-tf" id="work-transform" data-ow-section="transform" aria-labelledby="ow-tf-title" data-ow-tf>
-      <div class="container ow-tf__grid">
-        <header class="ow-tf__head" data-ow-reveal>
-          ${section.eyebrow ? `<p class="ow-eyebrow ow-tf__eyebrow">${section.eyebrow}</p>` : ""}
-          <h2 id="ow-tf-title" class="ow-sec-title ow-tf__title">${section.title || "How We Transform"}</h2>
-          ${section.lead ? `<p class="ow-sec-lead">${section.lead}</p>` : ""}
-          ${cta.href ? `<a class="ow-tf__cta" ${linkAttrs(cta.href)}>${cta.label} <span aria-hidden="true">→</span></a>` : ""}
-        </header>
-        <ol class="ow-tf__flow">${cards}</ol>
+    <section class="ow-tf ow-tj" id="work-transform" data-ow-section="transform" aria-labelledby="ow-tf-title" data-ow-tf>
+      <div class="container">
+        ${splitHead({ id: "ow-tf-title", section })}
+        ${path ? `<ol class="ow-tj__path" data-ow-reveal aria-label="How PA transforms a community">${path}</ol>` : ""}
+        ${
+          timeline
+            ? `<div class="ow-tj__time" data-ow-reveal>
+          <div class="ow-tj__time-head">
+            <p class="ow-tj__time-title">${journey.title || "The 2-Year Transformation Journey"}</p>
+            <div class="ow-tj__years" aria-hidden="true"><span>Year 1</span><span>Year 2</span></div>
+          </div>
+          <ol class="ow-tj__stages">${timeline}</ol>
+        </div>`
+            : ""
+        }
       </div>
     </section>`;
 }
@@ -110,97 +122,46 @@ export function destroyTransformFlow() {
   transformCleanup?.();
   transformCleanup = null;
 }
-const MODEL_ICONS = {
-  africa: `<circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.6 2.6 3.8 5.6 3.8 9s-1.2 6.4-3.8 9c-2.6-2.6-3.8-5.6-3.8-9S9.4 5.6 12 3Z"/>`,
-  country: `<path d="M5 21V4"/><path d="M5 4.5c4-2 7 2 14 0v8.5c-7 2-10-2-14 0"/>`,
-  catchment: `<circle cx="12" cy="6" r="2.4"/><circle cx="6" cy="16" r="2.4"/><circle cx="18" cy="16" r="2.4"/><path d="M10.8 8.1 7.2 13.9M13.2 8.1l3.6 5.8M8.4 16h7.2"/>`,
-  community: `<path d="M4 11.5 12 5l8 6.5"/><path d="M6 10v10h12V10"/><path d="M10 20v-5h4v5"/>`,
-  shalom: `<circle cx="9" cy="8" r="2.8"/><circle cx="16.5" cy="9" r="2.3"/><path d="M3.5 19.5v-1.2A4.3 4.3 0 0 1 7.8 14h2.4a4.3 4.3 0 0 1 4.3 4.3v1.2"/><path d="M15.5 14h1.2a3.8 3.8 0 0 1 3.8 3.8v1.7"/>`,
-};
+const chips = (items) => `<ul class="ow-mm__chips">${items.map((t) => `<li>${t}</li>`).join("")}</ul>`;
 
-/** Section 1 — How PA works. */
-function renderHowPaWorks(section = {}, hierarchy = {}) {
+/** The ministry model — Country → Catchment → Community → Pastors Fellowship → Shalom Groups → Households. */
+function renderHowPaWorks(section = {}) {
   if (!section.title) return "";
-  const cta = section.cta || {};
-  const levelList = hierarchy.levels || [];
-  const levels = levelList
+  const brief = [
+    { label: "Programs", count: PA_PROGRAMMES.length, text: PA_PROGRAMMES.map((p) => p.title).join(" · ") },
+    { label: "PPPs", count: 3, note: "per program", text: "Focus areas under each program." },
+    { label: "Activities", count: ACTIVITY_TYPES.length, note: "types", text: ACTIVITY_TYPES.map((a) => a.label).join(" · ") },
+    { label: "CHIPs", text: "Community High Impact Projects — a PPP of Economic Productivity." },
+  ]
     .map(
-      (l, i) => `<li class="ow-flow__node ow-flow__node--${l.id || i}" style="--i:${i};--scale:${Math.round(100 - (i * 80) / Math.max(levelList.length - 1, 1))}%" data-ow-flow-node>
-        <span class="ow-flow__badge" aria-hidden="true">
-          <svg viewBox="0 0 24 24">${MODEL_ICONS[l.id] || MODEL_ICONS.africa}</svg>
-        </span>
-        <span class="ow-flow__body">
-          <span class="ow-flow__n">${String(i + 1).padStart(2, "0")}</span>
-          <span class="ow-flow__label">${l.label}</span>
-          <span class="ow-flow__desc">${l.description || ""}</span>
-          <span class="ow-flow__scale" aria-hidden="true"><span></span></span>
-        </span>
-      </li>`
+      (b) => `<li class="ow-mm__brief-item">
+          ${b.count ? `<span class="ow-mm__count">${b.count}${b.note ? ` <em>${b.note}</em>` : ""}</span>` : ""}
+          <h3 class="ow-mm__label">${b.label}</h3>
+          <p>${b.text}</p>
+        </li>`
     )
     .join("");
-  const sidePoints = (section.sidePoints || [])
-    .map(
-      (p) => `<li data-ow-line>
-        <span class="ow-lines__tick" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12.5l4.2 4.2L19 7"/></svg></span>
-        <span>${p}</span>
+  const flow = PA_FLOW.map(
+    (f, i) => `<li class="ow-mm__level ow-mm__level--flow" style="--i:${i}">
+        <div class="ow-mm__top"><span class="ow-mm__n">${String(i + 1).padStart(2, "0")}</span></div>
+        <h3 class="ow-mm__label">${f.label}</h3>
+        <p>${f.text}</p>
       </li>`
-    )
-    .join("");
+  ).join("");
 
   return `
-    <section class="ow-band ow-band--model" id="work-model" data-ow-section="model" aria-labelledby="ow-model-title">
-      <span class="ow-model__blob ow-model__blob--a" aria-hidden="true"></span>
-      <span class="ow-model__blob ow-model__blob--b" aria-hidden="true"></span>
-      <span class="ow-model__blob ow-model__blob--c" aria-hidden="true"></span>
-      <span class="ow-band__bg-word" aria-hidden="true">How PA works</span>
-      <div class="container ow-intro">
-        <header class="ow-intro__head" data-ow-reveal>
-          ${section.eyebrow ? `<p class="ow-eyebrow ow-model__eyebrow">${section.eyebrow}</p>` : ""}
-          <h2 id="ow-model-title" class="ow-sec-title pa-title">${formatPaTitle(section)}</h2>
-          ${section.sideLead ? `<p class="ow-sec-lead">${section.sideLead}</p>` : ""}
-          ${sidePoints ? `<ul class="ow-lines">${sidePoints}</ul>` : ""}
-          ${cta.href ? `<a class="ow-model__cta" ${linkAttrs(cta.href)}>${cta.label} <span aria-hidden="true">→</span></a>` : ""}
-        </header>
-        ${
-          levels
-            ? `<div class="ow-model__panel" data-ow-reveal>
-                ${hierarchy.title ? `<p class="ow-model__panel-title">${hierarchy.title}</p>` : ""}
-                ${hierarchy.description ? `<p class="ow-model__panel-lead">${hierarchy.description}</p>` : ""}
-                <ol class="ow-flow" data-ow-flow aria-label="${hierarchy.title || "How the work is organised"}">
-                  ${levels}
-                </ol>
-              </div>`
-            : ""
-        }
+    <section class="ow-band ow-band--model ow-mm" id="work-model" data-ow-section="model" aria-labelledby="ow-model-title">
+      <div class="container">
+        ${splitHead({ id: "ow-model-title", section, dark: true })}
+        <p class="ow-mm__examples-title">How the work is organised</p>
+        <ol class="ow-mm__chain ow-mm__chain--flow" aria-label="Country to households">${flow}</ol>
+        <p class="ow-mm__examples-title ow-mm__part">Programs, PPPs, activities and CHIPs</p>
+        <ol class="ow-mm__brief" data-ow-reveal aria-label="Programs → PPPs → Activities → CHIPs">${brief}</ol>
       </div>
     </section>`;
 }
 
-/** Section 2 — Community transformation (deep burgundy). */
-function renderCommunity(step = {}, page = {}) {
-  const title = step.title || "Community transformation";
-  const text = step.text || "";
-  const lead = page.model?.sideLead || "";
-  const image = page.hero?.image || "assets/country-heroes/malawi-hero-savings.jpg";
-
-  return `
-    <section class="ow-band ow-band--burgundy" id="work-community" data-ow-section="community" aria-labelledby="ow-community-title">
-      <div class="container ow-cinema">
-        <div class="ow-cinema__copy" data-ow-reveal>
-          <p class="ow-eyebrow ow-eyebrow--on-dark">${title}</p>
-          <h2 id="ow-community-title" class="ow-sec-title ow-sec-title--light pa-title">${title}.</h2>
-          ${text ? `<p class="ow-cinema__lead">${text}</p>` : ""}
-          ${lead ? `<p class="ow-cinema__support">${lead}</p>` : ""}
-          ${step.href ? `<a class="ow-text-link ow-text-link--light" ${linkAttrs(step.href)}>${title} →</a>` : ""}
-        </div>
-        <figure class="ow-cinema__media" data-ow-clip>
-          <img src="${image}" alt="" loading="lazy" decoding="async">
-        </figure>
-      </div>
-    </section>`;
-}
-
-/** Section 3 — Leadership (warm ochre). */
+/** Leadership (warm gold). */
 function renderLeadership(section = {}, tripleA = {}) {
   if (!section.title) return "";
   const dims = (tripleA.dimensions || [])
@@ -251,10 +212,14 @@ function renderShalom(section = {}) {
         <div class="ow-organic__visual">
           <div class="ow-organic__orb" aria-hidden="true" data-ow-orb>
             <span class="ow-organic__orb-ring"></span>
-            <span class="ow-organic__orb-core" data-ow-stat>
-              <strong>${section.stat || "30–50"}</strong>
-              <em>${section.statLabel || "leaders per group"}</em>
-            </span>
+            ${
+              section.stat
+                ? `<span class="ow-organic__orb-core" data-ow-stat>
+                    <strong>${section.stat}</strong>
+                    ${section.statLabel ? `<em>${section.statLabel}</em>` : ""}
+                  </span>`
+                : ""
+            }
           </div>
           <figure class="ow-organic__photo" data-ow-clip>
             <img src="assets/stories/story-lilongwe-savings.jpg" alt="" loading="lazy" decoding="async">
@@ -270,52 +235,76 @@ function renderShalom(section = {}) {
     </section>`;
 }
 
-/** Section 5 — PPP & CHIPs (deep burgundy). */
+/** PPPs & CHIPs — the full explanation: tracking chain, all fifteen PPPs, CHIPs (deep maroon). */
 function renderProjects(section = {}) {
   if (!section.title) return "";
-  const items = section.items || [];
-  const ppp = items[0];
-  const chips = items[1];
-  const ownership = items[2];
   const cta = section.cta || {};
+  const [pppText, chipText, ownText] = section.items || [];
+
+  const chain = [
+    { label: "Program", count: PA_PROGRAMMES.length, body: chips(PA_PROGRAMMES.map((p) => p.title)) },
+    { label: "PPP", count: "3", note: "per program", body: pppText ? `<p>${pppText.text}</p>` : "" },
+    { label: "Activity type", count: ACTIVITY_TYPES.length, body: chips(ACTIVITY_TYPES.map((a) => a.label)) },
+    { label: "Activity", body: chips(PPP_EXAMPLES.map((e) => e.activity)) },
+  ]
+    .map(
+      (l, i) => `<li class="ow-mm__level" style="--i:${i}" data-ow-flow-node>
+        <div class="ow-mm__top">
+          <span class="ow-mm__n">${String(i + 1).padStart(2, "0")}</span>
+          ${l.count ? `<span class="ow-mm__count">${l.count}${l.note ? ` <em>${l.note}</em>` : ""}</span>` : ""}
+        </div>
+        <h3 class="ow-mm__label">${l.label}</h3>
+        ${l.body}
+      </li>`
+    )
+    .join("");
+
+  const rows = PPP_EXAMPLES.map(
+    (e) => `<tr><td>${e.programme}</td><td>${e.ppp}</td><td>${e.type}</td><td>${e.activity}</td></tr>`
+  ).join("");
+
+  const programs = PA_PROGRAMMES.map(
+    (p, i) => `<li class="ow-ppp__prog">
+        <a class="ow-ppp__prog-head" href="#/program/${p.id}" data-link>
+          <span class="ow-ppp__prog-n">${String(i + 1).padStart(2, "0")}</span>
+          <strong>${p.title}</strong>
+        </a>
+        <ol class="ow-ppp__list">
+          ${(PA_PPPS[p.id] || [])
+            .map(
+              (x) => `<li${x.id === "chips" ? ' class="is-chip"' : ""}>${x.name}${x.detail ? `<small>${x.detail}</small>` : ""}</li>`
+            )
+            .join("")}
+        </ol>
+      </li>`
+  ).join("");
 
   return `
-    <section class="ow-band ow-band--dark" id="work-projects" data-ow-section="projects" aria-labelledby="ow-projects-title">
+    <section class="ow-band ow-pppx ow-ppp" id="work-projects" data-ow-section="projects" aria-labelledby="ow-projects-title">
       <div class="container">
-        <header class="ow-sec-head ow-sec-head--wide" data-ow-reveal>
-          ${section.eyebrow ? `<p class="ow-eyebrow ow-eyebrow--on-dark">${section.eyebrow}</p>` : ""}
-          <h2 id="ow-projects-title" class="ow-sec-title ow-sec-title--light pa-title">${formatPaTitle(section)}</h2>
-          ${section.lead ? `<p class="ow-sec-lead ow-sec-lead--light">${section.lead}</p>` : ""}
-          ${cta.href ? `<a class="ow-text-link ow-text-link--light" ${linkAttrs(cta.href)}>${cta.label} →</a>` : ""}
-        </header>
-        <div class="ow-duo" data-ow-duo>
-          ${
-            ppp
-              ? `<article class="ow-duo__block" data-ow-stack-row>
-                  <span class="ow-duo__tag">PPP</span>
-                  <h3>${ppp.title}</h3>
-                  <p>${ppp.text || ""}</p>
-                </article>`
-              : ""
-          }
-          <div class="ow-duo__join" aria-hidden="true" data-ow-duo-line>
-            <span class="ow-duo__dot"></span>
-          </div>
-          ${
-            chips
-              ? `<article class="ow-duo__block" data-ow-stack-row>
-                  <span class="ow-duo__tag">CHIPs</span>
-                  <h3>${chips.title}</h3>
-                  <p>${chips.text || ""}</p>
-                </article>`
-              : ""
-          }
+        ${splitHead({ id: "ow-projects-title", section, dark: true })}
+
+        <p class="ow-mm__examples-title">How every activity is tracked</p>
+        <ol class="ow-mm__chain" data-ow-flow aria-label="Program → PPP → Activity type → Activity">${chain}</ol>
+        <div class="ow-mm__examples" data-ow-reveal>
+          <p class="ow-mm__examples-title">Examples</p>
+          <table class="ow-mm__table">
+            <thead><tr><th scope="col">Program</th><th scope="col">PPP</th><th scope="col">Activity type</th><th scope="col">Activity</th></tr></thead>
+            <tbody>${rows}</tbody>
+          </table>
         </div>
-        ${
-          ownership
-            ? `<p class="ow-duo__note" data-ow-reveal><strong>${ownership.title}.</strong> ${ownership.text || ""}</p>`
-            : ""
-        }
+
+        <p class="ow-mm__examples-title ow-mm__part">The five programs and their PPPs</p>
+        <ol class="ow-ppp__progs" data-ow-reveal>${programs}</ol>
+
+        <div class="ow-ppp__chips" data-ow-reveal>
+          <div class="ow-ppp__chips-copy">
+            <p class="ow-mm__examples-title">${chipText?.title || "CHIPs — Community High Impact Projects"}</p>
+            ${chipText ? `<p>${chipText.text}</p>` : ""}
+            ${ownText ? `<p class="ow-ppp__own"><strong>${ownText.title}.</strong> ${ownText.text}</p>` : ""}
+          </div>
+          <ul class="ow-ppp__chip-list">${CHIP_EXAMPLES.map((c) => `<li>${c}</li>`).join("")}</ul>
+        </div>
       </div>
     </section>`;
 }
@@ -418,14 +407,11 @@ function renderCtaBand(section = {}) {
 }
 
 export function renderOurWorkPage(page = {}, ministryModel = {}) {
-  const communityStep = (page.model?.steps || []).find((s) => s.id === "community") || page.model?.steps?.[0] || {};
-
   return `
     <div class="ow-page" data-what-we-do data-work-section="overview" data-our-work-page>
       ${renderHero(page.hero)}
-      ${renderTransform(page.transform)}
-      ${renderHowPaWorks(page.model, ministryModel.hierarchy)}
-      ${renderCommunity(communityStep, page)}
+      ${renderTransform(page.transform, ministryModel.journey)}
+      ${renderHowPaWorks(page.model)}
       ${renderLeadership(page.leadership, ministryModel.tripleA)}
       ${renderShalom(page.shalom)}
       ${renderProjects(page.projects)}

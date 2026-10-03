@@ -3,6 +3,8 @@
  * Updates title, description, canonical, and Open Graph tags per route.
  */
 
+import { PA_PROGRAMMES } from "../components/shared/pa-programmes.js";
+
 const SITE = "Possibilities Africa";
 const DEFAULT_DESCRIPTION =
   "Across rural Africa, Possibilities Africa walks with pastors and local leaders so churches and communities grow stronger together — in faith, family, livelihoods, and the next generation.";
@@ -54,7 +56,7 @@ function routeSeo(view, parts, data, hub) {
     case "africa":
       return {
         title: `Where we work | ${SITE}`,
-        description: "Explore Possibilities Africa across seven countries — open a country, nearby group, or community.",
+        description: "Explore Possibilities Africa across seven countries — open a country, catchment, or community.",
         path: parts.join("/"),
       };
     case "country":
@@ -71,7 +73,7 @@ function routeSeo(view, parts, data, hub) {
       };
     case "catchment":
       return {
-        title: `${hub?.catchmentName || parts[2] || "Nearby group"} | ${countryName || parts[1]} | ${SITE}`,
+        title: `${hub?.catchmentName || parts[2] || "Catchment"} | ${countryName || parts[1]} | ${SITE}`,
         description: `Nearby communities and pastor-led work in ${hub?.catchmentName || parts[2] || "this group"}, ${countryName || parts[1]}.`,
         path: parts.join("/"),
       };
@@ -117,6 +119,14 @@ function routeSeo(view, parts, data, hub) {
         description: "Five programmes that guide Possibilities Africa’s work with churches and communities.",
         path: "work",
       };
+    case "programs": {
+      const programme = parts[0] === "program" ? PA_PROGRAMMES.find((p) => p.id === parts[1]) : null;
+      return {
+        title: `${programme ? programme.title : "Programs"} | ${SITE}`,
+        description: programme?.description || "The five Possibilities Africa programs and the PPPs that carry them.",
+        path: parts.join("/"),
+      };
+    }
     case "static":
       return {
         title: `Who we are | ${SITE}`,
